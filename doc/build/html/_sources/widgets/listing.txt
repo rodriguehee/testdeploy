@@ -1,0 +1,253 @@
+.. _widgetlisting:
+
+WidgetListing
+=============
+
+Fonction
+--------
+Hérite de :ref:`widgetbase`
+
+Permet d'afficher un listing lié à un DataSet (résultant d'un DataQuery), se base sur le composant `DataTable <http://developer.yahoo.com/yui/datatable/>`_ (Cf. `Api de Yui2 <http://developer.yahoo.com/yui/docs/YAHOO.widget.DataTable.html>`_).
+
+Ce composant intègre :
+
+* La pagination (Locale ou par XHR)
+    * Locale : Le DataSet est chargé en intégralité sur le poste client et Yui2 gère l'affichage par page
+    * XHR : Seule une partie du DataSet est chargé sur le poste client et des requêtes Ajax sont envoyés pour demander une nouvelle page
+* Le tri sur une colonne précise
+* Des actions sur chaque ligne (Edition, suppression)
+* L'édition "à la volée" de cellules
+
+Attributs
+---------
+
+dataset (Obligatoire)
+^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Fonction : Indique quel DataSet (résultant d'un DataQuery) est lié au listing, le DataQuery doit être présent dans la partie <data_structure> sans quoi une erreur se produira. Le matching se fait sur l'id du DataQuery
+
+mode (Facultatif)
+^^^^^^^^^^^^^^^^^
+Type : String
+
+Valeurs autorisées : ro / rw
+
+Par défaut : ro
+
+Fonction : Indique si le listing est en Lecture seule (ro) ou en lecture/Ecriture (rw). Dans le cas du mode Lecture/Ecriture un bouton "Ajouter" sera présent au dessus du listing pour ajouter des lignes.
+
+.. note::
+    - Si le listing est en pagination XHR le bouton "Ajouter" ne sera pas présent, et ce même si le mode est égal à "rw".
+    - Tout comme l'attribut "mode" de :ref:`widgetfield` seule l'égalité à 'rw' est testée.
+
+Options
+-------
+Outre les options héritées de :ref:`widgetbase` le WidgetListing comprend son propre jeu d'options contenues dans un noeud enfant <options></options>
+
+.. code-block:: xml
+    
+    <listing dataset="foo">
+        <options>
+            <option output="html" option_name="" value=""/>
+        </options>
+        <column />
+    </listing>
+    
+
+actions_render (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : null
+
+Valeurs autorisées : context_menu_right_click / context_menu_link
+
+.. important::
+    context_menu_right_click ne semble pas être "branché" (non fonctionnel, 19/07/2012)
+    
+Fonction : Si value="context_menu_link" : Ajoute une colonne "Action" (1ère colonne) permettant la Suppression et l'Edition si les paramètres liés fournis (edit_form_id, edit_param_name et edit_param_field)
+
+edit_form_id (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+.. important::
+    Paramètre lié à "edit_form_uri", "edit_param_name", "edit_param_field" et "edit_param"
+    
+Type : Integer
+
+Défaut : null
+
+Fonction : L'identifiant de la ressource (form) à charger pour présenter le formulaire d'Edition
+
+.. note::
+    Peut être vide si edit_form_uri renseigné
+
+edit_form_uri (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. important::
+    Paramètre lié à "edit_form_id", "edit_param_name", "edit_param_field" et "edit_param"
+    
+Type : String (module/controller/action)
+
+Default : null
+
+Fonction : Si renseigné est utilisé pour charger la frame d'édition
+
+.. note::
+    Produit des url du type :
+    
+    -  [edit_form_uri]/id/[edit_form_id]/[edit_param_name]/[edit_param_field] (Si edit_form_id renseigné en même temps que edit_form_uri)
+    -  [edit_form_uri]/[edit_form_id]/[edit_param_name]/[edit_param_field] (Si edit_form_id non renseigné)
+
+edit_param_name (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. important::
+    Paramètre lié à "edit_form_id" et "edit_param_field"
+    
+Type : String
+
+Défaut : null
+
+Fonction : Nom du paramètre qui sera fourni dans l'url lors du chargement de la ressource pour l'édition
+
+edit_param_field (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. important::
+    Paramètre lié à "edit_form_id", "edit_form_uri" et "edit_param_name"
+
+Type : String
+
+Défaut : null
+
+Fonction : Field qui sera utiliser pour communiquer la valeur au paramètre edit_param_name
+
+.. note::
+    Si les trois paramètres sont renseignés (edit_form_id, edit_param_name et edit_param_field) un double clique sur une ligne du listing aura le même comportement qu'un "Editer"
+
+.. code-block:: xml
+    
+    <options>
+        <option output="html" option_name="edit_form_id" value="1301"/>
+        <option output="html" option_name="edit_param_name" value="id_refanalyse"/>
+        <option output="html" option_name="edit_param_field" value="id_data"/>
+    </options>
+    <!-- Produira une Url du type : http://urlduprojet/form/frame/get/id/1301/id_refanalyse/42 -->
+
+edit_param (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. important::
+    Paramètre lié à "edit_form_id" et "edit_form_uri"
+
+Type : String
+
+Défaut : null
+
+Fonction: remplace edit_param_name et edit_param_value. 
+
+.. note::
+
+	Permet de passer plusieurs paramètres.
+
+.. code-block:: xml
+    
+    <options>
+        <option output="html" option_name="edit_form_id" value="1301"/>
+        <option output="html" option_name="edit_param" value="id_data/{id_data}/nompatient/{nom}"/>
+    </options>
+    <!-- Produira une Url du type : http://urlduprojet/form/frame/get/id/1301/id_data/42/nompatient/foo -->
+
+rows_per_page (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Integer
+
+Défaut : null (toutes les lignes sont affichées)
+
+Fonction : Indique combien de lignes doivent être affichées par page (permet donc de calculer le nb de pages total)
+
+.. note::
+    Fixé à '20' si pagination_type est égal à 'xhr' et que rows_per_page n'est pas renseigné.
+    
+show_total_rows (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Simili-Booléen ("0" ou vide = false, autre chose = true)
+
+Défaut : false
+
+Fonction : Si true affiche le nombre total de ligne juste au dessus du listing
+
+pagination_type (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Valeurs autorisées : local / xhr
+
+Défaut : local
+
+Fonction : Indique quel mode de pagination utiliser.
+
+- Local = Toutes les lignes sont envoyées au poste client et Yui se charge d'en afficher que X par page et de gérer les demande de changement de page.
+- Xhr = Seules les lignes necessaires à l'affichage de la première page sont envoyées au poste client, lors d'une demande d'une autre page Yui effectue une requête Ajax pour récupérer les nouveaux enregistrements à afficher.
+
+.. note::
+    Fixe rows_per_page à '20' si pagination_type est égal à 'xhr' et que rows_per_page n'est pas renseigné.
+
+.. important::
+    Un pagination "local" induit le plus souvent un dataquery sans attribut begin ni range, afin de retourner toutes les lignes du Dataset et laisser la DataTable Yui effectué la pagination.
+    
+    Ne pas oublier également de fichier un "rows_per_page" lors d'une pagination "local", sans quoi toutes les lignes seront affichées sur le listing.
+
+new_record_pushed (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Booléen
+
+Valeurs autorisées : true / false / 1 / 0
+
+Défaut : true
+
+Fonction : Indique quel mode d'ajout utiliser lorsque l'utilisateur clique sur le bouton "Ajouter"
+
+- ``true`` : La méthode Javascript Array.push est utilisée, le record est ajouté en fin de tableau
+- ``false`` : La méthode Javascript Array.unshift est utilisée, le record est ajouté en début de tableau
+
+.. note::
+	Cette option est pertinente uniquement lorsque le listing est en mode ``rw`` sinon le bouton "Ajouter" n'est pas présent.
+
+Contenu
+-------
+Le WidgetListing contient un noeud enfant ``<columns>``, ce noeud contient N noeud ``<column>`` représentant les colonnes à afficher dans le listing.
+
+Chaque colonne indiquée doit faire référence à une colonne du :ref:`dataquery` (Partie ``<data_structre>``) du dataset spécifié en attribut du listing.
+
+.. code-block:: xml
+
+    <listing dataset="mon_dataset" mode="ro">
+        <columns>
+            <column field="foo" mode="ro" title="Foo" />
+            <column field="bar" mode="ro" title="Bar" />
+            <column field="id_externe" mode="ro" title="Identifiant externe" dataset="dataset_identifier" />
+        </columns>
+    </listing>
+    
+Les attributs du noeud ``<column>`` sont :
+
++-----------------------------+-----------------------+-------------------------------------------------------------------------------------------------+
+| Nom de l'attribut           | Type attendu          | Description                                                                                     |
++=============================+=======================+=================================================================================================+
+| field                       | String                | Alias de la colonne du dataquery                                                                |
++-----------------------------+-----------------------+-------------------------------------------------------------------------------------------------+
+| mode                        | String                | rw = Lecture/Ecriture, ro = Lecture seule                                                       |
++-----------------------------+-----------------------+-------------------------------------------------------------------------------------------------+
+| title                       | String                | Titre affiché pour l'entête de colonne                                                          |
++-----------------------------+-----------------------+-------------------------------------------------------------------------------------------------+
+| dataset                     | String                | Identifiant du dataset à utiliser pour effectuer le rendu d'un field de type ``fkey_varset``    |
++-----------------------------+-----------------------+-------------------------------------------------------------------------------------------------+
+
+.. note::
+	Lors de l'affichage d'une colonne liée à un field ``fkey_varset`` l'attribut ``dataset`` est requis pour effectuer un affichage correct.
+	
+	Le Dataset ciblé doit :
+	
+	- Être présent dans la partie ``<data_structure>``
+	- Avoir une clé primaire
+	- Avoir une colonne ayant comme alias ``label``. Elle sera utilisée pour l'affichage et le tri (local)
+	

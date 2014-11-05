@@ -1,0 +1,576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Librairie Javascript &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="R Statistical Computing" href="r.html" />
+    <link rel="prev" title="Internationalisation (I18N)" href="i18n.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="r.html" title="R Statistical Computing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="i18n.html" title="Internationalisation (I18N)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="librairie-javascript">
+<span id="lib-js"></span><h1>Librairie Javascript<a class="headerlink" href="#librairie-javascript" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="diagramme-de-class">
+<h2>Diagramme de class<a class="headerlink" href="#diagramme-de-class" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/diagramme_class_js.png" src="_images/diagramme_class_js.png" />
+</div>
+<div class="section" id="les-evenements">
+<h2>Les événements<a class="headerlink" href="#les-evenements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="flux">
+<h3>Flux<a class="headerlink" href="#flux" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/events_js.png" src="_images/events_js.png" />
+</div>
+<div class="section" id="liste-de-evenements">
+<h3>Liste de événements<a class="headerlink" href="#liste-de-evenements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>dataset:newRecord</li>
+<li>dataset:recordChanged</li>
+<li>datasetmanager:datasetChanged</li>
+<li>dataset:valueChanged</li>
+<li>datasetmanager:DatasetChanged</li>
+<li>dataset:newRecord</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">//dataset/dataset.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:newRecord&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+
+<span class="c1">//dataset/dataset.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:recordChanged&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+
+<span class="c1">//dataset/datasetmanager.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;datasetmanager:datasetChanged&#39;</span><span class="p">,</span> <span class="nx">oNewDataSet</span><span class="p">);</span>
+
+<span class="c1">//dataset/rowdata.js:</span>
+<span class="nx">oDataSet</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:valueChanged&#39;</span><span class="p">,</span> <span class="nx">oDataSet</span><span class="p">,</span> <span class="nx">sFieldName</span><span class="p">,</span> <span class="nx">mValue</span><span class="p">);</span>
+
+<span class="c1">//frame/frameform.js:</span>
+<span class="nx">oDataSetManager</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;datasetmanager:DatasetChanged&#39;</span><span class="p">,</span> <span class="nx">aDataSet</span><span class="p">[</span><span class="s1">&#39;sDataSetId&#39;</span><span class="p">]);</span>
+
+<span class="c1">//frame/layout/widget/widgettabs.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">DataSet</span><span class="p">().</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:newRecord&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">DataSet</span><span class="p">());</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conditions-d-affichage-javascript">
+<span id="lib-js-jsquery"></span><h2>Conditions d&#8217;affichage Javascript<a class="headerlink" href="#conditions-d-affichage-javascript" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>Le développement de &#8220;l&#8217;éditeur&#8221; Voozanoo4 a posé la problématique de condition d&#8217;affichage pour des blocs (groupes). Un système de conditions d&#8217;affichage
+est déjà en place dans le Core Voo4 mais se base sur des tables du projet :</p>
+<ul class="simple">
+<li>e5ib_query_data</li>
+<li>e5ib_queryvar_data</li>
+</ul>
+<p>Or l&#8217;éditeur ne peut utiliser de tables proprent à un projet, vu qu&#8217;il est par définition &#8220;multi-projet&#8221;.</p>
+<p>Un système de condition d&#8217;affichage basé sur Javascript à donc été implémenté au niveau du WidgetGroup (balise XML : <code class="docutils literal"><span class="pre">&lt;group&gt;&lt;/group&gt;</span></code>)</p>
+</div>
+<div class="section" id="fonctionnement">
+<h3>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h3>
+<p>Le comportement d&#8217;affichage / masquage automatique est implémenté uniquement dans le WidgetGroup pour le moment. Pour l&#8217;activer il est necessaire de fournir l&#8217;option <code class="docutils literal"><span class="pre">show_on</span></code> ou <code class="docutils literal"><span class="pre">hide_on</span></code> au niveau du <code class="docutils literal"><span class="pre">&lt;group&gt;</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Comme le nom de l&#8217;option l&#8217;indique, l&#8217;option <code class="docutils literal"><span class="pre">show_on</span></code> fera s&#8217;afficher le bloc lorsque la condition est évaluée à <code class="docutils literal"><span class="pre">true</span></code>, et cachera le bloc dans le cas inverse.</p>
+<p>L&#8217;option <code class="docutils literal"><span class="pre">hide_on</span></code> elle fera le contraire, elle cachera le bloc lorsque la condition est évaluée à <code class="docutils literal"><span class="pre">true</span></code> et l&#8217;affiche dans le cas contraire.</p>
+<p class="last"><strong>Important</strong> : Il n&#8217;est actuellement pas possible de spécifier les deux options en même temps, l&#8217;option <code class="docutils literal"><span class="pre">show_on</span></code> sera alors considérée comme prioritaire.</p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;group</span> <span class="na">title=</span><span class="s">&quot;Informations complémentaires&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;show_on&quot;</span> <span class="na">value=</span><span class="s">&quot;{project.strong_password} == 1&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/group&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Pour les variables de type dictionnaire il faut utiliser le code, exemple: {patient.sexe} = &#8216;m&#8217;</p>
+<p class="last">Pour les variable de type DICO_EXT ou SYSIDOC_EXT, c&#8217;est un tableau de code qui est renvoyé, exemple: {patient.traitement}.indexOf( &#8216;chimio&#8217; ) != -1</p>
+</div>
+<p>La condition peut contenir de 0 à N variables (symbolisées par des accolades entourant l&#8217;id du DataSet et le nom du Champ : <code class="docutils literal"><span class="pre">{dataset.field}</span></code>). Il est impératif que le DataSet soit présent dans le
+formulaire ainsi que le champ dans ce Dataset sans quoi une Exception sera lancée coté Js.</p>
+<p>La logique de vérification syntaxique de la condition et d&#8217;execution de celle-ci est dans la classe <code class="docutils literal"><span class="pre">Y.Helper.JsQuery</span></code> (Voir documentation YUI de Voo4 pour plus d&#8217;informations sur les méthodes publiques)</p>
+<p>Les méthodes <code class="docutils literal"><span class="pre">ValueChangeEvent()</span></code> et <code class="docutils literal"><span class="pre">Update()</span></code> anciennement non définies dans <code class="docutils literal"><span class="pre">Y.WidgetGroup</span></code> ont été codée pour executer la condition Javascript si besoin est (si une variable occasionnant l&#8217;appel de <code class="docutils literal"><span class="pre">ValueChangeEvent()</span></code> est dans la condition)</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>La condition étant exprimée dans le XML les caractères spéciaux ne peuvent pas être utilisés tel quel, il faut utiliser leur équivalent en &#8220;Entité HTML&#8221; :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Caractère</th>
+<th class="head">Equivalent</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&amp;</td>
+<td>&amp;amp;</td>
+</tr>
+<tr class="row-odd"><td>&amp;&amp;</td>
+<td>&amp;amp;&amp;amp;</td>
+</tr>
+<tr class="row-even"><td>&lt;</td>
+<td>&amp;lt;</td>
+</tr>
+<tr class="row-odd"><td>&gt;</td>
+<td>&amp;gt;</td>
+</tr>
+<tr class="row-even"><td>&lt;=</td>
+<td>&amp;lt;=</td>
+</tr>
+<tr class="row-odd"><td>&gt;=</td>
+<td>&amp;gt;=</td>
+</tr>
+</tbody>
+</table>
+<p>Exemple :</p>
+<div class="last highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- {patient.age} &gt;= 18 &amp;&amp; {patient.age} &lt; 60 --&gt;</span>
+<span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;show_on&quot;</span> <span class="na">value=</span><span class="s">&quot;{patient.age} &amp;gt;= 18 &amp;amp;&amp;amp; {patient.age} &amp;lt; 60&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="validateurs">
+<span id="lib-js-validateurs"></span><h2>Validateurs<a class="headerlink" href="#validateurs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>La notion de validateur peut être présente :</p>
+<ul class="simple">
+<li>Dans un <a class="reference internal" href="res/varset.html#varset-validateurs"><em>Varset</em></a></li>
+<li>Dans un <a class="reference internal" href="res/dataquery.html#dataquery"><em>DataQuery</em></a></li>
+<li>Dans un <a class="reference internal" href="res/dataset.html#dataset"><em>DataSet</em></a></li>
+</ul>
+<p>Elle permet de valider la valeur saisie par une utilisateur (coté client) dès sa saisie, puis de l&#8217;informer de l&#8217;éventuel échec de validation lors de la tentative de soumission du formulaire.</p>
+</div>
+<div class="section" id="structure">
+<h3>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h3>
+<p>Les validateurs sont stockés dans <code class="docutils literal"><span class="pre">VOOZANOO4/libs/VooLibJs/dataset/validator/</span></code> :</p>
+<ul class="simple">
+<li>Ils doivent tous hériter de <code class="docutils literal"><span class="pre">Y.Validator.Base</span></code> (ou à défaut d&#8217;une classe enfant de cette classe).</li>
+<li>Ils doivent tous être déclarés dans le namespace <code class="docutils literal"><span class="pre">Y.Validator</span></code></li>
+</ul>
+<p>Le validateur <code class="docutils literal"><span class="pre">Y.Validator.Regexp</span></code> est particulier car il ne peut être utilisé en tant que validateur classique, il doit être :</p>
+<ul class="simple">
+<li>Etendu par une classe enfant</li>
+<li>Ou être utilisé via l&#8217;attribut <code class="docutils literal"><span class="pre">regexp</span></code> coté Xml</li>
+</ul>
+<p>Les validateurs sont gérés par la classe <code class="docutils literal"><span class="pre">Y.ValidatorMgr</span></code>, cette classe gère l&#8217;instanciation à la volée du validateur demandé (si non instancié) et retourne l&#8217;objet représentant le validateur.</p>
+<p>Il n&#8217;est pas necessaire d&#8217;instancier la classe <code class="docutils literal"><span class="pre">Y.ValidatorMgr</span></code> :</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">oValidatorEmail</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">ValidatorMgr</span><span class="p">.</span><span class="nx">Validator</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span> <span class="c1">//oValidatorEmail sera une instance de Y.Validator.Email</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="y-validator-regexp">
+<h3>Y.Validator.Regexp<a class="headerlink" href="#y-validator-regexp" title="Permalink to this headline">¶</a></h3>
+<p>Ce validateur sera certainement la base de la plupart des validateurs développés prochainement. Il permet de valider la valeur fournie via une Expression régulière.</p>
+<p>Outre son utilisation implicite lors de la présence de l&#8217;attribut <code class="docutils literal"><span class="pre">regexp</span></code> dans un Varset/DataQuery/DataSet il est interessant de noter les points à retenir en cas de création d&#8217;un validateur étendant celui-ci :</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Etendre le validateur <code class="docutils literal"><span class="pre">Y.Validator.Regexp</span></code> :</dt>
+<dd><div class="first last highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">ValidatorFoo</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="nx">ValidatorFoo</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">Y</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s1">&#39;Validator&#39;</span><span class="p">).</span><span class="nx">Foo</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">ValidatorFoo</span><span class="p">,</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nx">Regexp</span><span class="p">,</span>
+<span class="p">{</span> <span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Définir l&#8217;expression régulière et optionnellement les <a class="reference external" href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">Modifiers</a> dans la méthode <code class="docutils literal"><span class="pre">initializer</span></code> :</dt>
+<dd><div class="first last highlight-js"><div class="highlight"><pre><span class="nx">initializer</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="k">this</span><span class="p">.</span><span class="nx">SetRegexp</span><span class="p">(</span><span class="s1">&#39;^[0-9]{2}[a-z0-9._-]*$&#39;</span><span class="p">)</span>
+           <span class="p">.</span><span class="nx">SetRegexpModifiers</span><span class="p">(</span><span class="s1">&#39;i&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Optionnellement redéfinir la méthode <code class="docutils literal"><span class="pre">IsValidValue</span></code> pour retourner une hash d&#8217;erreur plus pertinent que le hash <code class="docutils literal"><span class="pre">ERROR_INVALID_SYNTAX</span></code> retourné par <code class="docutils literal"><span class="pre">Y.Validator.Regexp</span></code> :</dt>
+<dd><div class="first last highlight-js"><div class="highlight"><pre><span class="nx">IsValidValue</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">mValue</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="c1">//Call parent method (Y.Validator.Regexp.IsValidValue)</span>
+   <span class="kd">var</span> <span class="nx">mResult</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nx">Foo</span><span class="p">.</span><span class="nx">superclass</span><span class="p">.</span><span class="nx">IsValidValue</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+
+   <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="p">(</span> <span class="kc">true</span> <span class="o">===</span> <span class="nx">mResult</span> <span class="p">)</span> <span class="p">)</span> <span class="c1">//If validation failed</span>
+   <span class="p">{</span>
+          <span class="c1">//Return proper error hash (and no error hash from parent class)</span>
+          <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ERROR_INVALID_FOO&#39;</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="c1">//Value was valid</span>
+   <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="validateurs-disponibles">
+<h3>Validateurs disponibles<a class="headerlink" href="#validateurs-disponibles" title="Permalink to this headline">¶</a></h3>
+<p>Les validateurs disponibles sont :</p>
+<ul class="simple">
+<li>email (<code class="docutils literal"><span class="pre">Y.Validator.Email</span></code>) : étend le validateur <code class="docutils literal"><span class="pre">Y.Validator.Regexp</span></code></li>
+</ul>
+<div class="admonition-futur admonition">
+<p class="first admonition-title">Futur</p>
+<p>On pourrait imaginer des validateurs :</p>
+<ul class="last simple">
+<li>num (Chiffres uniquement)</li>
+<li>alpha (Lettres uniquement)</li>
+<li>alnum (Lettres et chiffres uniquement)</li>
+<li>Etc...</li>
+</ul>
+</div>
+</div>
+<div class="section" id="rendu-specifique-au-validateur">
+<h3>Rendu spécifique au validateur<a class="headerlink" href="#rendu-specifique-au-validateur" title="Permalink to this headline">¶</a></h3>
+<p>Un validateur peut necessiter</p>
+</div>
+</div>
+<div class="section" id="code">
+<h2>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scope-d-une-fonction">
+<h3>Scope d&#8217;une fonction<a class="headerlink" href="#scope-d-une-fonction" title="Permalink to this headline">¶</a></h3>
+<p>Le code ci-dessous permet de définir le scope pour l&#8217;execution de la fonction passée en paramètre de setTimeout. Il ne serait pas possible de passer directement la fonction PingMonitor à setTimeout, car elle utilise this.</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span>       <span class="nx">_scope</span><span class="p">(</span><span class="nx">oWidgetGroup</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="nx">Y</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside scope function&#39;</span><span class="p">);</span>
+        <span class="kd">var</span>     <span class="nx">iSetTimeoutId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span>
+        <span class="p">{</span>
+                <span class="nx">Y</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside set timeout!!&#39;</span><span class="p">);</span>
+                <span class="nx">oWidgetGroup</span><span class="p">.</span><span class="nx">PingMonitor</span><span class="p">();</span>
+        <span class="p">},</span> <span class="nx">oWidgetGroup</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;iPingTimeOut&#39;</span><span class="p">));</span>
+        <span class="nx">oWidgetGroup</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;iSetTimeoutId&#39;</span><span class="p">,</span> <span class="nx">iSetTimeoutId</span><span class="p">);</span>
+<span class="p">}(</span><span class="k">this</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="surcharge-des-objets-javascript-natifs">
+<h3>Surcharge des objets Javascript natifs<a class="headerlink" href="#surcharge-des-objets-javascript-natifs" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="function">
+<h4>Function<a class="headerlink" href="#function" title="Permalink to this headline">¶</a></h4>
+<p>Fichier <code class="docutils literal"><span class="pre">VOOZANOO4/libs/VooLibJs/prototype/Function.js</span></code>.</p>
+<ul class="simple">
+<li>createDelegate(scope, additionalArgs, appendArgs) permettant l&#8217;exécution de la dite méthode dans un contexte différent en ajoutant/remplacant des arguments</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createDelegate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">appendArgs</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">callArgs</span> <span class="o">=</span> <span class="nx">args</span> <span class="o">||</span> <span class="nx">arguments</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">appendArgs</span> <span class="o">===</span> <span class="kc">true</span><span class="p">){</span>
+                        <span class="nx">callArgs</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                        <span class="nx">callArgs</span> <span class="o">=</span> <span class="nx">callArgs</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">YUI</span><span class="p">().</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">appendArgs</span><span class="p">)){</span>
+                        <span class="nx">callArgs</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// copy arguments first</span>
+                        <span class="kd">var</span> <span class="nx">applyArgs</span> <span class="o">=</span> <span class="p">[</span><span class="nx">appendArgs</span><span class="p">,</span> <span class="mi">0</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span> <span class="c1">// create method call params</span>
+                        <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">splice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">callArgs</span><span class="p">,</span> <span class="nx">applyArgs</span><span class="p">);</span> <span class="c1">// splice them in</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">method</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">obj</span> <span class="o">||</span> <span class="nb">window</span><span class="p">,</span> <span class="nx">callArgs</span><span class="p">);</span>
+        <span class="p">};</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">//Objet Human</span>
+<span class="kd">var</span> <span class="nx">Human</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lastName</span><span class="p">,</span> <span class="nx">firstName</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span> <span class="o">=</span> <span class="nx">lastName</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">=</span> <span class="nx">firstName</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//Fonction externe non liée à un objet</span>
+<span class="kd">var</span> <span class="nx">fnTalk</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">toSay</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="nx">toSay</span> <span class="o">=</span> <span class="nx">toSay</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Bonjour, je m&#39;appelle &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">+</span> <span class="s2">&quot;. &quot;</span> <span class="o">+</span> <span class="nx">toSay</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">//Instanciation de la calsse &quot;Human&quot; en passant le nom de famille et le prénom</span>
+<span class="kd">var</span> <span class="nx">oGSA</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Human</span><span class="p">(</span><span class="s1">&#39;Scandola&#39;</span><span class="p">,</span> <span class="s1">&#39;Guillaume&#39;</span><span class="p">);</span>
+
+<span class="c1">//Execution de la fnTalk dans le context de oHuman</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;btn&#39;</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">fnTalk</span><span class="p">.</span><span class="nx">createDelegate</span><span class="p">(</span><span class="nx">oGSA</span><span class="p">);</span> <span class="c1">//--&gt; &quot;Bonjour, je m&#39;appelle Guillaume.&quot;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;btn&#39;</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">fnTalk</span><span class="p">.</span><span class="nx">createDelegate</span><span class="p">(</span><span class="nx">oGSA</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Comment allez vous ?&#39;</span><span class="p">]);</span> <span class="c1">//-&gt; &quot;Bonjour, je m&#39;appelle Guillaume. Comment allez vous ?&quot;</span>
+
+<span class="c1">//Plus interessant encore, createDelegate peut ajouter les arguments que vous lui donnez plutot que de remplacer ceux de base par les votres</span>
+<span class="c1">//Imaginons lors du click du bouton le navigateur appelle la fonction définie en passant en premier argument l&#39;évènement (position du click etc...)</span>
+<span class="c1">//Le code :</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;btn&#39;</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">fnTalk</span><span class="p">.</span><span class="nx">createDelegate</span><span class="p">(</span><span class="nx">oGSA</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;What else ?&#39;</span><span class="p">],</span> <span class="kc">true</span><span class="p">);</span>
+<span class="c1">//Permettra l&#39;éxécution de la fonction fnTalk en passant en arguments : {Event}, {&#39;What else ?&#39;} le tout dans le contexte de GSA</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="string">
+<h4>String<a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h4>
+<p>Fichier <code class="docutils literal"><span class="pre">VOOZANOO4/libs/VooLibJs/prototype/String.js</span></code>.</p>
+<ul class="simple">
+<li>toBoolean() : Convertit la string en boolean (&#8220;false&#8221;, &#8220;f&#8221; ou &#8220;0&#8221; vaut false. Tout autre valeur vaut true)</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">sFalsy</span> <span class="o">=</span> <span class="s2">&quot;false&quot;</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="kc">true</span> <span class="o">===</span> <span class="nx">sFalsy</span><span class="p">.</span><span class="nx">toBoolean</span><span class="p">()</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;sFalsy vaut true&#39;</span><span class="p">);</span> <span class="c1">//Ne se produira pas</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+   <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;sFalsy vaut false&#39;</span><span class="p">);</span> <span class="c1">//Se produira</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Particulièrement utile lorsqu&#8217;il s&#8217;agit de tester une valeur provenant d&#8217;un Xml, vu que tous les attributs sont &#8220;String&#8221;, cette méthode permet
+de tester des valeurs booléennes sans se soucier de la véritable valeur de l&#8217;attribut.</p>
+</div>
+<ul class="simple">
+<li>pad(sString, iLength, sPadString, iPadType) : Similaire à la fonction str_pad de PHP, s&#8217;utilise de façon statique</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">sText</span> <span class="o">=</span> <span class="s1">&#39;Foo&#39;</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pad</span><span class="p">(</span><span class="nx">sText</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// &#39;Foo  &#39;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pad</span><span class="p">(</span><span class="nx">sText</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// &#39;Foo..&#39;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pad</span><span class="p">(</span><span class="nx">sText</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">PAD_LEFT</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// &#39;..Foo&#39;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>leftPad(sString, iLength, sPadString) : Alias pour appeler <code class="docutils literal"><span class="pre">pad()</span></code> avec l&#8217;option <code class="docutils literal"><span class="pre">String.prototype.PAD_LEFT</span></code></li>
+<li>rightPad(sString, iLength, sPadString) : Alias pour appeler <code class="docutils literal"><span class="pre">pad()</span></code> avec l&#8217;option <code class="docutils literal"><span class="pre">String.prototype.PAD_RIGHT</span></code></li>
+<li>ucFirst() : Retourne la string avec la première lettre en majuscule</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">sFirstName</span> <span class="o">=</span> <span class="s1">&#39;guillaume&#39;</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">sFirstName</span><span class="p">.</span><span class="nx">ucFirst</span><span class="p">()</span> <span class="p">);</span> <span class="c1">//Guillaume</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="number">
+<h4>Number<a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h4>
+<p>Idée : Mettre une vrai fonction d&#8217;arrondi, Math.round arrondissant à l&#8217;entier le plus proche</p>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/Number.js</p>
+</div>
+<div class="section" id="array">
+<h4>Array<a class="headerlink" href="#array" title="Permalink to this headline">¶</a></h4>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/Array.js</p>
+</div>
+<div class="section" id="date">
+<h4>Date<a class="headerlink" href="#date" title="Permalink to this headline">¶</a></h4>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/Date.js</p>
+</div>
+</div>
+</div>
+<div class="section" id="iframe">
+<h2>IFrame<a class="headerlink" href="#iframe" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Introduction<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Une IFrame est utilisée pour pallier à un manque des requêtes XHR: dans le cas
+où une requête provoque des redirections il n&#8217;est pas possible de passer par une requête XHR
+(théoriquement les redirections ne seront pas prises en compte).</p>
+<p>C&#8217;est dans ce contexte que les IFrames ont été intégrées à Voozanoo4.</p>
+</div>
+<div class="section" id="utilisation">
+<h3>Utilisation<a class="headerlink" href="#utilisation" title="Permalink to this headline">¶</a></h3>
+<p><strong>Récapitulatif du processus</strong></p>
+<img alt="_images/iframe.png" src="_images/iframe.png" />
+<p>Lorsqu&#8217;il est nécessaire d&#8217;envoyer la requête, instancier un objet de type Y.IFrame.</p>
+<p>Cela peut se faire dans un objet de type <strong>Y.Frame</strong> spécifique à la frame en cours.</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span>     <span class="nx">oIFrame</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">IFrame</span><span class="p">({</span>
+        <span class="s1">&#39;sRedirectUrl&#39;</span> <span class="o">:</span> <span class="s1">&#39;https://....&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sName&#39;</span><span class="o">:</span> <span class="s1">&#39;IFrame A&#39;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Ensuite, il faut déclarer l&#8217;IFrame dans la frame via la méthode addIFrame.</p>
+<p>Cela sera utile par la suite à la destruction de la frame (moment qui correpondra
+à la fin de la requête).</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">oFrame</span><span class="p">.</span><span class="nx">addIFrame</span><span class="p">(</span> <span class="nx">oIFrame</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>L&#8217;IFrame doit être supprimée lorsque tous les traitements ont été faits. Il faut
+quel le serveur renvoie le code javascript de destruction de la frame.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+        <span class="nt">&lt;head&gt;</span>
+                <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="nx">sFrameId</span> <span class="k">in</span> <span class="nb">window</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">Y</span><span class="p">.</span><span class="nx">Voozanoo</span><span class="p">.</span><span class="nx">oMainFrame</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;oFrames&#39;</span><span class="p">))</span>
+                <span class="p">{</span>
+                        <span class="kd">var</span>     <span class="nx">aFrames</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">Y</span><span class="p">.</span><span class="nx">Voozanoo</span><span class="p">.</span><span class="nx">oMainFrame</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;oFrames&#39;</span><span class="p">);</span>
+
+                        <span class="k">if</span> <span class="p">(</span> <span class="nx">aFrames</span><span class="p">[</span><span class="nx">sFrameId</span><span class="p">].</span><span class="nx">isIFrameExists</span><span class="p">(</span> <span class="nb">window</span><span class="p">.</span><span class="nx">name</span> <span class="p">)</span> <span class="p">)</span>
+                        <span class="p">{</span>
+                                <span class="nx">aFrames</span><span class="p">[</span><span class="nx">sFrameId</span><span class="p">].</span><span class="nx">deleteIFrame</span><span class="p">(</span> <span class="nb">window</span><span class="p">.</span><span class="nx">name</span> <span class="p">);</span>
+                                <span class="k">break</span><span class="p">;</span>
+                        <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="nt">&lt;/script&gt;</span>
+        <span class="nt">&lt;/head&gt;</span>
+        <span class="nt">&lt;body&gt;</span>
+
+        <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>Méthodes disponibles dans la class Y.Frame:</p>
+<ul class="simple">
+<li>addIFrame : function( oFrame )</li>
+<li>deleteIFrame : function( sName )</li>
+<li>isIFrameExists : function( sName )</li>
+<li>getIFrame : function( sName )</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Librairie Javascript</a><ul>
+<li><a class="reference internal" href="#diagramme-de-class">Diagramme de class</a></li>
+<li><a class="reference internal" href="#les-evenements">Les événements</a><ul>
+<li><a class="reference internal" href="#flux">Flux</a></li>
+<li><a class="reference internal" href="#liste-de-evenements">Liste de événements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditions-d-affichage-javascript">Conditions d&#8217;affichage Javascript</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validateurs">Validateurs</a><ul>
+<li><a class="reference internal" href="#id1">Introduction</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+<li><a class="reference internal" href="#y-validator-regexp">Y.Validator.Regexp</a></li>
+<li><a class="reference internal" href="#validateurs-disponibles">Validateurs disponibles</a></li>
+<li><a class="reference internal" href="#rendu-specifique-au-validateur">Rendu spécifique au validateur</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code">Code</a><ul>
+<li><a class="reference internal" href="#scope-d-une-fonction">Scope d&#8217;une fonction</a></li>
+<li><a class="reference internal" href="#surcharge-des-objets-javascript-natifs">Surcharge des objets Javascript natifs</a><ul>
+<li><a class="reference internal" href="#function">Function</a></li>
+<li><a class="reference internal" href="#string">String</a></li>
+<li><a class="reference internal" href="#number">Number</a></li>
+<li><a class="reference internal" href="#array">Array</a></li>
+<li><a class="reference internal" href="#date">Date</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#iframe">IFrame</a><ul>
+<li><a class="reference internal" href="#id2">Introduction</a></li>
+<li><a class="reference internal" href="#utilisation">Utilisation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="previous chapter">Internationalisation (I18N)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="r.html"
+                        title="next chapter">R Statistical Computing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/lib_js.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="r.html" title="R Statistical Computing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="i18n.html" title="Internationalisation (I18N)"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

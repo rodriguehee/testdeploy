@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Export &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Architecture" href="../architecture.html" />
+    <link rel="next" title="Frame" href="frame.html" />
+    <link rel="prev" title="Droits" href="droits.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="frame.html" title="Frame"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="droits.html" title="Droits"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" accesskey="U">Architecture</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="export">
+<span id="id1"></span><h1>Export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Le module d&#8217;export de données est géré par la classe <code class="docutils literal"><span class="pre">Core_Library_Controller_Export_Index</span></code> qui étend <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code>.</p>
+<p>Le fait d&#8217;étendre <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code> permet l&#8217;utilisation des <a class="reference internal" href="frame.html#hooks"><em>Hooks (points d&#8217;accès)</em></a> similaire à ceux présent dans la frame.
+La méthode <code class="docutils literal"><span class="pre">buildAction</span></code> de <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code> appelle statiquement la méthode <code class="docutils literal"><span class="pre">Core_Library_Export_Factory::getBuilderFor($sFormat)</span></code> qui renvoie une classe de build en fonction du format.</p>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/Export_01.png" src="../_images/Export_01.png" />
+</div>
+<div class="section" id="fonctionnement">
+<h2>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h2>
+<p>Le module d&#8217;export fonctionne conjointement avec le <a class="reference internal" href="../widgets/actionexport.html#widgetactionexport"><em>WidgetActionExport</em></a>. Pour rappel ce widget :</p>
+<ul class="simple">
+<li>Présente une liste de formats d&#8217;export</li>
+<li>Si besoin appelle une interface de paramétrage</li>
+<li>Exécute une requête XHR pour lancer la génération du fichier</li>
+<li>Propose à l&#8217;utilisateur de télécharger le fichier généré</li>
+<li>Optionnellement ordonne au serveur de supprimer le fichier généré si l&#8217;utilisateur ne le télécharge pas</li>
+</ul>
+<p>Ces trois actions sont réparties comme suit :</p>
+<ul class="simple">
+<li>buildAction : En charge d&#8217;instancier et d&#8217;exécuter le builder associé au format</li>
+<li>downloadAction : En charge de lire le fichier temporaire demandé (paramètre) pour forcer le téléchargement</li>
+<li>rmfAction : En charge de supprimer le fichier (Remove File) temporaire généré si jamais l&#8217;utilisateur ferme la fenêtre Yui sans télécharger le fichier</li>
+</ul>
+</div>
+<div class="section" id="point-d-acces-disponibles">
+<h2>Point d&#8217;accès disponibles<a class="headerlink" href="#point-d-acces-disponibles" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="methode-buildaction">
+<h3>Méthode buildAction<a class="headerlink" href="#methode-buildaction" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>Cette méthode se charge d&#8217;appeler le bon builder puis appelle les methodes :</dt>
+<dd><ul class="first last simple">
+<li>setControler</li>
+<li>setFilterData</li>
+<li>init</li>
+<li>export</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="creer-un-nouveau-format-d-export">
+<h2>Créer un nouveau format d&#8217;export<a class="headerlink" href="#creer-un-nouveau-format-d-export" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Pour créer un nouveau format d&#8217;export il faut dans l&#8217;ordre :</dt>
+<dd><ul class="first last simple">
+<li>Ajouter le format dans le widet WidgetActionExport</li>
+<li>Ajouter le format dans la classe <code class="docutils literal"><span class="pre">Core_Library_Export_Factory</span></code></li>
+<li>Créer la classe <code class="docutils literal"><span class="pre">Core_Library_Export_FormatBuilder</span></code></li>
+<li>Si besoin créer la classe <code class="docutils literal"><span class="pre">Core_Library_Export_FormatWriter</span></code></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="creation-d-un-document-google-spreadsheet">
+<h2>Création d&#8217;un document Google Spreadsheet<a class="headerlink" href="#creation-d-un-document-google-spreadsheet" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/google_export.png" src="../_images/google_export.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Export</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a></li>
+<li><a class="reference internal" href="#point-d-acces-disponibles">Point d&#8217;accès disponibles</a><ul>
+<li><a class="reference internal" href="#methode-buildaction">Méthode buildAction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creer-un-nouveau-format-d-export">Créer un nouveau format d&#8217;export</a></li>
+<li><a class="reference internal" href="#creation-d-un-document-google-spreadsheet">Création d&#8217;un document Google Spreadsheet</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="droits.html"
+                        title="previous chapter">Droits</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="frame.html"
+                        title="next chapter">Frame</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/archi/export.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="frame.html" title="Frame"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="droits.html" title="Droits"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

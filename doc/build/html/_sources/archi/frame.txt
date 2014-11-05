@@ -1,0 +1,437 @@
+﻿.. _frame:
+
+Frame
+=====
+
+Introduction
+------------
+On identifie une Frame comme étant un composant gérant :
+
+- La restitution des informations permettant l'affichage d'un formulaire / listing etc... (Données, Layout etc...)
+- La sauvegarde des données saisies par l'utilisateur
+- La demande de suppression d'enregistrements
+- L'execution de tests de cohérences (queries)
+
+C'est le composant MainFrame qui "charge" les Frames, elle le fait par l'intermédiaire d'appel Ajax avec une Uri précise (appelé DisplayPath).
+
+Anciennement seule l'Uri ``form/frame/get`` était utilisable comme DisplayPath, l'action ``get`` était en charge de la réstitution (au format JSON) :
+
+- Des données (DataQuery tranformé en DataSet)
+- Du Layout (définit via le Xml)
+- D'autre infos diverses (DataSetDico, Axis, etc...)
+
+Même si la surcharge était possible la modularité était difficilement possible. Voozanoo 4 peut gérer énormément de types formulaire, de la saisie utilisateur à la saisie administrateur pour paramétrer le système lui même.
+
+L'attribution des accès aux fonctionnalités était infaisable : soit on autorisait l'accès au module ``Form`` soit on l'interdisait, ce qui revenait à "ouvrir" ou "fermer" l'application.
+
+Il à donc été décidé de déplacer la logique liée aux formulaire afin que n'importe quel Controller puisse y accéder. De cette façon les développeurs 
+seraient à même d'écrire des Module / Controller intégrant la logique de formulaire mais cloisonés.
+
+Implémentation
+--------------
+Les anciennes méthodes de restitution, sauvegarde etc... ont été déplacées dans un controller parent : ``Core_Library_Controller_Action``. 
+Tous les controllers de Voozanoo 4 ainsi que les controllers spécifiques aux projets doivent dériver cette classe.
+
+Les méthodes sont maintenant en "protected", et peuvent être appelée de n'importe quel sous classe :
+
+.. code-block:: php
+    
+    <?php
+    class Core_Library_Controller_Action extends Zend_Controller_Action
+    {
+        protected function _getDataset()
+        {
+            //...Traitement...
+        }
+        
+        protected function _saveForm()
+        {
+            //...Traitement...
+        }
+        
+        protected function _queryProcess()
+        {
+            //...Traitement...
+        }
+        
+        protected function _deleteRecords()
+        {
+            //...Traitement...
+        }
+        
+        protected function _getFormConfiguration()
+        {
+            //...Traitement...
+        }
+    }
+
+Le refactoring de l'ancien controller Form (``Core_Library_Controller_Form_Frame``) assure la rétro-compatibilité :
+
+.. code-block:: php
+
+    <?php
+    class Core_Library_Controller_Form_Frame extends Core_Library_Controller_Action
+    {
+        public function getdatasetAction()
+        {
+            $this->_getDataset();
+        }
+
+        public function saveAction()
+        {
+            $this->_saveForm();
+        }
+
+        public function queryAction()
+        {
+            $this->_queryProcess();
+        }
+
+        public function deleteAction()
+        {
+            $this->_deleteRecords();
+        }
+
+        public function getAction()
+        {
+            $this->_getFormConfiguration();
+        }
+    }
+
+A partir de là, n'importe quel Controller spécifique est à même d'implémenter un action ZendFramework qui appel la méthode protected correspondante :
+
+.. code-block:: php
+
+    <?php
+    class Courrier_IndexController extends Core_Library_Controller_Action
+    {
+        public function getAction()
+        {
+            $this->_getFormConfiguration();
+        }
+        
+        //... Etc ...
+    }
+
+.. _hooks:
+
+Points d'accès (Hook / Events)
+------------------------------
+Introduction
+~~~~~~~~~~~~
+Lors de développements spécifiques le développeur n'avait pas d'autre choix que de surcharger la totalité de la méthode voulue (``getAction()``, ``saveAction()`` etc...), 
+le seul choix possible était d'agir **avant** ou **après** le traitement noyau.
+
+Il a été convenu de créer des points d'accès dans l'algorithme de traitement des données (restitution / sauvegarde etc...). Ces point d'accès (Hook) sont des brêches placé à des points stratégiques 
+offrant la possibilité au développeur de :
+
+- Récupérer des informations quand aux données traitées
+- Agir sur ces informations pour les altérer si besoin
+
+Fonctionnement
+~~~~~~~~~~~~~~
+Plusieurs méthodes "vides" sont créées dans ``Core_Library_Controller_Action``, elles prennent un paramètre : le Contexte d'exécution. Ces méthodes sont ensuite appelées à des endroits stratégiques du processus.
+
+.. code-block:: php
+    
+    <?php
+    class Core_Library_Controller_Action extends Zend_Controller_Action
+    {
+        protected function _foobar()
+        {
+            //... Code ...
+            
+            //Hook "beforeExecute"
+            
+            $oDataSet = $oModelManager->Execute(); //Execution de la data_structure pour génération DataSet
+            
+            //Hook "afterExecute"
+        }
+        
+        protected function beforeExecute() {}
+        protected function afterExecute() {}
+    }
+
+
+.. note::
+    Les Points d'Accès (Hooks) font souvent reférence au temps : "before" ou "after" permette d'identifier plus facilement quand ces méthodes sont appelées, c'est pourquoi elle peuvent 
+    se rapprocher de la notion "d'évènement" même s'il ne s'agit pas d'Events à proprement parlé.
+
+Le Contexte
+~~~~~~~~~~~
+Lors d'appels aux Hooks l'environnement d'exécution doit être communiqué au développeur, on parlera alors de "Contexte", ce rôle est rempli par le composant ``Core_Library_Event_Context``.
+
+Le noyau se chargera de créer une instance de la classe de Contexte. Il ajoutera N éléments nécessaires au bon déroulement du processus et utilisera **exclusivement** les élements du Contexte pour le traitement. Ce même 
+contexte sera systématiquement communiqué lors des appels aux Hooks. Le développeur pourra alors agir dessus (modification) ou l'utiliser en lecture seule.
+
+Les méthodes utiles du contexte (pour plus d'infos consultez la PHPDoc de la classe) :
+
+- add() : Ajoute un élement au contexte, attentif au fait que l'élement est peut être déjà connu
+- set() : Modifie un élement existant ou l'ajout si non connu
+- get() : Retourne un élement
+- has() : Vérifie si le context connait un élement en particulier
+- remove() : Retire un élément du contexte
+- clean() : Supprime tous les élements du contexte
+
+Points d'accès pré-définis
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Les Hooks sont présentés dans l'ordre de déroulement du processus, par conséquent un Hook B appelé **après** un Hook A disposera de tous les élements présents lors de l'appel au Hook A.
+
+Les éléments présents sous le nom du Hook sont les paramètres présents dans le Contexte (et accessibles via cette clé).
+
+.. important::
+    Le point d'accès ``_retrieveForm`` est particulier :
+    
+        - Il est commun au processus ``_getDataset()`` et ``_getFormConfiguration()``, ces deux processus nécessitant la récupération du formulaire.
+        - Il embarque déjà une logique au sein de ``Core_Library_Controller_Action``, la récupération d'un formulaire depuis son identifiant ou un nom de fichier / un chemin
+
+Relatifs à _getDataset()
+""""""""""""""""""""""""
+- _retrieveForm() : En charge de récupérer une instance de formulaire (``Core_Library_Resource_XML_Frame_Form``) à traiter
+    - ``iFormId`` {Integer} Identifiant de la ressource représentant le formulaire à utilier, est égal à 0 si la ressource est chargée depuis le disuqe
+    - ``sFormFileName`` {String} Nom du fichier à charger comme formulaire - Non pertinent si ``iFormId`` est renseigné
+    - ``FormFilePath`` {String} Chemin "de liaison" entre la directive ``voozanoo.resources.path`` et le paramètre ``sFormFileName`` fourni - Non pertinent si ``iFormId`` est renseigné et peut également
+      être vide même lorsque ``sFormFileName`` est renseigné.
+    - ``oOnStandByFrame`` {Core_Library_Frame_Form_OnStandBy | false } Contient une instance représentant un formulaire préalablement suspendu, il peut être utile d'avoir cet information pour adapter son code
+      en conséquence ou même exploiter cette instance. Dans le cas où aucun formulaire est suspendu la valeur stockée dans le Contexte sera ``false``.
+- _getdataset_beforeExecute() : Avant appel à Core_Library_Model_Manager::Execute()
+    - ``sDatasetId`` {String} Identifiant du DataSet demandé
+    - ``oForm`` {Core_Library_Entity_Form} Instance du formulaire (construit à partir de la Ressource Xml) à utiliser pour récupérer le DataSet demandé
+    - ``oDataStructure`` {Core_Library_Resource_XML_DataStructure} Une instance représentant la partie ``<data_structure>`` du Xml de formulaire
+    - ``aParams`` {Array} Un tableau de paramètres en "extra"
+- _getdataset_afterExecute() : Après appel à Core_Library_Model_Manager::Execute()
+    - ``oDataSet`` {Core_Library_Resource_XML_DataSet} Le DataSet généré
+- _getdataset_render() : Appelée à la fin du processus pour effectuer le rendu
+
+Relatifs à _saveForm()
+""""""""""""""""""""""
+- _save_beforeCommit() : Avant appel à Core_Library_Model_Manager::Commit()
+    - ``oDataJson`` {Core_Library_Resource_JSON} La représentation Json des données à sauvegarder
+- _save_afterCommit() : Après appel à Core_Library_Model_Manager::Commit()
+    - ``oCommitEnv`` {Core_Library_Resource_XML_DataSet_Commit_Environment} L'environnement de Commit
+- _save_render() : Appelée à la fin du processus pour effectuer le rendu
+    - ``oOutputJson`` {Core_Library_Resource_JSON} L'output généré
+
+Relatifs à _queryProcess()
+""""""""""""""""""""""""""
+- _query_beforeExecute() : Avant appel à Core_Library_Resource_XML_Query::Execute()
+    - ``iQueryId`` {Integer} L'id du test de cohérence / condition à executé (de la table ``xxxx_query_data``
+    - ``aFlatParams`` {Array} Un tableau "aplani" des paramètre nécessaires à l'exécution de la query
+- _query_afterExecute() : Après appel à Core_Library_Resource_XML_Query::Execute()
+    - ``mResult`` {Array} Le résultat généré après execution de la query
+- _query_render() : Appelée à la fin du processus pour effectuer le rendu
+    - ``oOutputJson`` {Core_Library_Resource_JSON} L'ouput généré (avec le résultat)
+
+Relatifs à _deleteRecords()
+"""""""""""""""""""""""""""
+- _delete_beforeDelete() : Avant appel à Core_Library_Resource_XML_VarSet::DeleteData()
+    - ``aRecordsIds`` {Array} Un tableau de records à supprimer
+    - ``sVarsetId`` {String} L'identifiant du varset d'où les enregistrement doivent être supprimé
+- _delete_afterDelete() : Après appel à Core_Library_Resource_XML_VarSet::DeleteData()
+    - ``oNotifier`` {Core_Library_Project_Notifier} Le "Notifier" rempli par DeleteData()
+- _delete_render() : Appelée à la fin du processus pour effectuer le rendu
+
+.. note::
+    Actuellement aucun rendu n'est effectué lors du processus de Delete, peut être plus tard ? En attendant la méthode existe, au cas où
+    
+Relatifs à _getFormConfiguration()
+""""""""""""""""""""""""""""""""""
+- _retrieveForm() : En charge de récupérer une instance de formulaire (``Core_Library_Resource_XML_Frame_Form``) à traiter
+    - ``iFormId`` {Integer} Identifiant de la ressource représentant le formulaire à utilier, est égal à 0 si la ressource est chargée depuis le disuqe
+    - ``sFormFileName`` {String} Nom du fichier à charger comme formulaire - Non pertinent si ``iFormId`` est renseigné
+    - ``FormFilePath`` {String} Chemin "de liaison" entre la directive ``voozanoo.resources.path`` et le paramètre ``sFormFileName`` fourni - Non pertinent si ``iFormId`` est renseigné et peut également
+      être vide même lorsque ``sFormFileName`` est renseigné.
+    - ``oOnStandByFrame`` {Core_Library_Frame_Form_OnStandBy | false } Contient une instance représentant un formulaire préalablement suspendu, il peut être utile d'avoir cet information pour adapter son code
+      en conséquence ou même exploiter cette instance. Dans le cas où aucun formulaire est suspendu la valeur stockée dans le Contexte sera ``false``.
+- _get_beforeExecute() : Avant appel à Core_Library_Model_Manager::Execute()
+    - ``iFormId`` {Integer} Id du formulaire à utiliser pour executer les DataQuery (Peut être égal à 0 si le formulaire est chargé depuis le disque)
+    - ``oForm`` {Core_Library_Entity_Form} Instance du formulaire à utiliser
+    - ``aParams`` {Array} Tableau de paramètre "en extra" fourni
+- _get_afterExecute() : Après appel à Core_Library_Model_Manager::Execute()
+    - ``aDatasets`` {Array} Tableau de DataSet (Core_Library_Resource_XML_DataSet) généré par l'execution via le ModelManager
+- _get_beforeDatasetDico() : Avant appel à Core_Library_Model_Manager::GetDataSetDico()
+- _get_afterDatasetDico() : Après appel à Core_Library_Model_Manager::GetDataSetDico()
+    - ``aDatasetDico`` {Array} Tableau de DataSet (Core_Library_Resource_XML_DataSet) représentant les dictionnaires utilisés dans les DataSets précédemment générés
+- _get_beforeQuery() : Avant appel à Core_Library_Resource_XML_Query_Manager::GetQueriesRelatedToDatasets()
+- _get_afterQuery() : Après appel à Core_Library_Resource_XML_Query_Manager::GetQueriesRelatedToDatasets()
+    - ``aQueries`` {Array} Tableau des queries "aplanies" relatives aux DataSets précédemment générés
+- _get_render() : Appelée à la fin du processus pour effectuer le rendu
+    - ``oResourceJSON`` {Core_Library_Resource_JSON} Représentation Json de toutes les données à utiliser pour rendre la configuration du Formulaire (+ données)
+
+Points d'accès "polymorphes"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Un problème est apparau sur Neodemat : Un controller spécifique disposait de plusieurs actions reprenant la logique de ``_getFormConfiguration()``.
+
+.. code-block:: php
+
+    <?php
+    class Form_FrameController extends Core_Library_Controller_Form_Frame
+    {
+        public function newAction()
+        {
+            $this->_getFormConfiguration();
+        }
+        
+        public function mobileAction()
+        {
+            $this->_getFormConfiguration();
+        }
+    }
+
+Cette classe offre donc 3 accès à la logique de récupération de formulaire : ``getAction()`` (hérité), ``newAction()`` et ``mobileAction()``. Des traitements spécifiques devant être réalisés dans chacune des trois actions.
+
+La première solution consistait à définir le Hook '_get_afterExecute()', appelé à chacune des 3 action, seulement le code à l'intérieur de ce Hook était enchevêtré :
+
+.. code-block:: php
+    
+    <?php
+    protected function _get_afterExecute( Core_Library_Event_Context $oCtx )
+    {
+        if ( 'new' == $this->getRequest()->getActionName() )
+        {
+            //Traitement spécifique
+        }
+        elseif ( 'mobile' == $this->getRequest()->getActionName() )
+        {
+            //Traitement spécifique
+        }
+        
+        //Traitement spécifique peut importe l'action appelée
+    }
+
+Pour palier à ce soucis le système de Points d'Accès gère par des Points d'Accès polymorphe, lorsque le processus Core décide d'appeler le Hook _get_afterExecute() le système :
+
+- Vérifie si un Hook nommé ``_[actionName]_get_afterExecute()`` existe
+    - Si ce Hook est trouvé c'est celui-ci qui est appelé
+    - Sinon le Hook "strandard" est appelé : ``_get_afterExecute()``
+
+Le problème précédent peut ainsi être résolu :
+
+.. code-block:: php
+    
+    <?php
+    protected function _new_get_afterExecute( Core_Library_Event_Context $oCtx )
+    {
+        //Traitement spécifique à l'action 'new'
+        
+        $this->_get_afterExecute( $oCtx );
+    }
+    
+    protected function _mobile_get_afterExecute( Core_Library_Event_Context $oCtx )
+    {
+        //Traitement spécifique à l'action 'mobile'
+        
+        $this->_get_afterExecute( $oCtx );
+    }
+    
+    protected function _get_afterExecute( Core_Library_Event_Context $oCtx )
+    {
+        //Traitement spécifique commun à toutes les action de récupération de formulaire
+    }
+    
+
+Utilisation des points d'accès
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Il faut garder à l'esprit que tout passe par le Contexte, aussi dans vos Hook vous devrez toujours :
+
+- Récupérer l'élement via le Contexte (méthode ``get()``)
+- Optionellement le modifier (si besoin)
+- Le réaffecter au Contexte (méthode ``set()``)
+
+.. code-block:: php
+    
+    <?php
+    protected function _delete_beforeDelete( Core_Library_Event_Context $oCtx )
+    {
+        $aRecordsIds = $oCtx->get('aRecordsIds');
+        $sVarsetId = $oCtx->get('sVarsetId');
+        
+        foreach( $aRecordsIds as $iRecordId )
+        {
+            //Traitement spécifique pour supprimer des données relatives à ces records
+        }
+        
+        //Conservation du premier élément uniquement (par exemple)
+        $aRecordsToDelete = array( $aRecordsIds[0] );
+        $oCtx->set('aRecordsIds', $aRecordsToDelete);
+    }
+
+.. _frame-standby:
+
+Suspendre la saisie (Stand by)
+------------------------------
+
+.. note::
+    Disponible dans une future version 2.15 de Voozanoo 4.
+    
+Objectif
+~~~~~~~~
+
+Cette fonctionnalité permet de suspendre la saisie d'un formulaire (assimilé au formulaire Principal) afin d'être rediriger vers un autre formulaire (assimilé à un formulaire Secondaire)
+sans perdre les données saisies par l'utilisateur. Les données sont ainsi "gelées" pour être restaurées ultérieurement.
+
+Le système redirige automatiquement l'utilisateur vers le formulaire Principal lorsque l'utilisateur Enregistre ou Quitte le formulaire Secondaire.
+
+Il est possible de "cascader" les suspensions de formulaires : Un formulaire Secondaire peut être suspendu pour saisir une autre formulaire (Tertiaire) etc ... chaque 
+action "Enregistrer" ou "Retour/Quitter" permettra de revenir au formulaire préalablement suspendu.
+
+Fonctionnement
+~~~~~~~~~~~~~~
+
+Ce système se base sur l'utilisation conjointe des Tokens (``Core_Library_Token``) et de la Session utilisateur pour enregistrer l'état du formulaire Principal lors de sa suspension.
+
+L'action ``standByAction()`` du Controller Frame du Module Form est en charge de sauvegarder l'état de la saisie utilisateur (Token + Session) et de retourner l'identifiant du Token 
+permettant de poursuivre la saisie.
+
+L'action ``getAction()`` du Controller Frame du Module Form est en charge de restituer une formulaire préalablement suspendu lorsqu'elle détecte le paramètre ``restore_on_stand_by_frame``.
+
+.. hint::
+    La "nouvelle" action ``standByAction()`` est en réalité une façade à la méthode protégée ``_standByFrame()`` de ``Core_Library_Controller_Action``, n'importe quel controller (même spécifique)
+    peut dont bénéficier de cette logique si besoin est.
+    
+    Aucun hook n'est disponible pour le moment (concernant cette méthode).
+
+La classe ``Core_Library_Frame_Form_Manager`` permet de manipuler les formulaires suspendus (représentés par la classe ``Core_Library_Frame_Form_OnStandBy``).
+
+L'ajout d'un ``<button action="stand_by">`` au ``<layout>`` permet d'activer l'ensemble de ce processus.
+
+Désactiver le "gèle" d'un DataSet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Comme dit précédemment la suspension de la saisie entraine le "gèle" d'un DataSet (partie MetaData, RowData, Cursor etc etc...)
+
+Il se peut que la saisie effectuée dans le formulaire Secondaire impacte un DataSet présent dans le formulaire Principal, prenons l'exemple :
+
+- Le formulaire principal permet de créer un patient et de lui attribuer une catégorie (ces dernières étant regroupées dans un Varset et non dans un dico car contenant plusieurs informations)
+- Le formulaire principal permet la sélection d'une catégorie depuis un select, pointant sur un DataSet généré depuis un DataQuery récupérant toutes les catégories
+- Si l'utilisateur ne trouve pas la catégorie qui correspond à l'utilisateur il clique sur le bouton de suspension de saisie pour aller ajouter sa catégorie
+- Une fois la catégorie ajoutée (dans le formulaire Secondaire) il sera redirigé sur le formulaire Principale
+
+Si le DataSet des catégorie est restitué tel qu'il avait été gelé la nouvelle catégorie n'apparaitra pas. C'est pourquoi on doit indiquer que ce DataSet ne doit **pas** être gelé par le processus
+de suspension de saisie.
+
+Pour ce faire il faut utiliser l'attribut ``standby`` du noeud ``<dataquery>`` en lui indiquant la valeur ``false``.
+
+.. code-block:: xml
+    
+    <dataquery id="categorie" standby="false">
+        <!-- ... -->
+    </dataquery>
+    
+Lors de la restauration du formulaire le DataQuery sera à nouveau parsé pour générer un DataSet incorporé aux autre DataSets précédemment gelés
+
+A savoir
+~~~~~~~~
+
+- Lors de l'utilisation d'un bouton ayant l'action ``stand_by`` il dotit obligatoirement avoir un noeud ``<redirection>`` enfant de ``<button>``, suspendre la saisie sans rediriger l'utilisateur
+  vers une autre Frame n'aurait aucun sens.
+- Le formulaire Secondaire, ciblé lors de la suspension de la saisie du formulaire principal, n'a aucun besoin spécifique pour fonctionner avec un formulaire préalablement suspendu. Il peut même
+  être utilisé comme formulaire "classique" utilisable de façon standard.
+- Il n'est pour le moment pas possible "d'injecter" des données saisies dans un formulaire Secondaire dans le formulaire Principal, c'est pourquoi si le formulaire Secondaire est utilisé pour
+  modifier en enregistrement lié au formulaire Principal et affiché dans ce dernier aucune rafraîchissement n'aura lieu. L'affichage pourrait semblé ne pas être à jour.
+
+
+
+
+
+

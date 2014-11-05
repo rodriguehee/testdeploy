@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>OptionsPanel.panel &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Composants graphiques" href="../widgets.html" />
+    <link rel="next" title="OptionsPanel.option" href="optionspanel.option.html" />
+    <link rel="prev" title="WidgetPage" href="page.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="optionspanel.option.html" title="OptionsPanel.option"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="page.html" title="WidgetPage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" accesskey="U">Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="optionspanel-panel">
+<span id="id1"></span><h1>OptionsPanel.panel<a class="headerlink" href="#optionspanel-panel" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fonction">
+<h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
+<p>Hérite de <code class="docutils literal"><span class="pre">Y.Panel</span></code></p>
+<p>Ce composant permet d&#8217;afficher une boite de dialogue modale contenant un ou plusieurs champs SELECT permettant à l&#8217;utilisateur définir des options.</p>
+</div>
+<div class="section" id="utilisation-exemple">
+<h2>Utilisation (Exemple)<a class="headerlink" href="#utilisation-exemple" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">_oOptionsPanelCsv</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">OptionsPanel</span><span class="p">.</span><span class="nx">Panel</span><span class="p">({</span>
+        <span class="nx">headerContent</span><span class="o">:</span> <span class="s2">&quot;Options d&#39;export CSV&quot;</span><span class="p">,</span>
+        <span class="nx">oOnOk</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">fn</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_exportCSV</span><span class="p">,</span>
+                <span class="nx">scope</span><span class="o">:</span> <span class="k">this</span>
+        <span class="p">},</span>
+        <span class="nx">aOptions</span><span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                        <span class="s1">&#39;label&#39;</span><span class="o">:</span><span class="s1">&#39;Encodage des caractères&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;varname&#39;</span><span class="o">:</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;values&#39;</span><span class="o">:</span> <span class="p">[</span>
+                                        <span class="p">{</span>
+                                                <span class="nx">label</span><span class="o">:</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">,</span>
+                                                <span class="nx">value</span><span class="o">:</span><span class="s1">&#39;utf-8&#39;</span>
+                                        <span class="p">},</span>
+                                        <span class="p">{</span>
+                                                <span class="nx">label</span><span class="o">:</span><span class="s2">&quot;ISO-8859-1&quot;</span><span class="p">,</span>
+                                                <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;iso-8859-1&quot;</span>
+                                        <span class="p">}</span>
+                        <span class="p">],</span>
+                        <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s2">&quot;select&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                        <span class="s1">&#39;label&#39;</span><span class="o">:</span><span class="s1">&#39;Séparateur de champ&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;varname&#39;</span><span class="o">:</span><span class="s1">&#39;separator&#39;</span><span class="p">,</span>
+                        <span class="s2">&quot;values&quot;</span><span class="o">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                        <span class="nx">label</span><span class="o">:</span><span class="s2">&quot;Point virgule (;)&quot;</span><span class="p">,</span>
+                                        <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;;&quot;</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                        <span class="nx">label</span><span class="o">:</span><span class="s2">&quot;Virgule (,)&quot;</span><span class="p">,</span>
+                                        <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;,&quot;</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                        <span class="nx">label</span><span class="o">:</span><span class="s2">&quot;Tabulation horizontale&quot;</span><span class="p">,</span>
+                                        <span class="nx">value</span><span class="o">:</span><span class="s2">&quot;TAB&quot;</span>
+                                <span class="p">}</span>
+                        <span class="p">],</span>
+                        <span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;select&quot;</span>
+                <span class="p">}</span>
+
+        <span class="p">]</span>
+<span class="p">});</span>
+
+<span class="k">this</span><span class="p">.</span><span class="nx">_oOptionsPanelCsv</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">_oOptionsPanelCsv</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Actuellement les options sont rendues sous la forme d&#8217;un input SELECT/OPTIONS :&#8221;type&#8221;:&#8221;select&#8221;;</li>
+<li>Voir : <a class="reference internal" href="optionspanel.option.html#optionspanel-option"><em>OptionsPanel.option</em></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="parametrage-json">
+<h2>Paramétrage JSON<a class="headerlink" href="#parametrage-json" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">headerContent</span></code> : Titre de la fenêtre</p>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">oOnOk</span></code></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">fn</span></code> : Fonction de rappel quand click sur &#8216;OK&#8217;</li>
+<li><code class="docutils literal"><span class="pre">scope</span></code> : Scope sur la classe appelante</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">aOptions</span></code></dt>
+<dd><ul class="first last">
+<li><p class="first"><code class="docutils literal"><span class="pre">label</span></code> : Label associé au champ SELECT</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">varname</span></code> : Variable associée à l&#8217;option</p>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">values</span></code> <span class="classifier-delimiter">:</span> <span class="classifier">Tableau des valeurs des différentes options</span></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">label</span></code> : Label associé à une option</li>
+<li><code class="docutils literal"><span class="pre">value</span></code> : Valeur associé à une option</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">OptionsPanel.panel</a><ul>
+<li><a class="reference internal" href="#fonction">Fonction</a></li>
+<li><a class="reference internal" href="#utilisation-exemple">Utilisation (Exemple)</a></li>
+<li><a class="reference internal" href="#parametrage-json">Paramétrage JSON</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="page.html"
+                        title="previous chapter">WidgetPage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="optionspanel.option.html"
+                        title="next chapter">OptionsPanel.option</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/optionspanel.panel.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="optionspanel.option.html" title="OptionsPanel.option"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="page.html" title="WidgetPage"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

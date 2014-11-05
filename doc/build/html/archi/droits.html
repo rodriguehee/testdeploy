@@ -1,0 +1,521 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Droits &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Architecture" href="../architecture.html" />
+    <link rel="next" title="Export" href="export.html" />
+    <link rel="prev" title="Authentification" href="auth.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="export.html" title="Export"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="auth.html" title="Authentification"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" accesskey="U">Architecture</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="droits">
+<span id="id1"></span><h1>Droits<a class="headerlink" href="#droits" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>On distingue deux types de droits :</p>
+<ul class="simple">
+<li>Ceux liés à la base de données (droit d&#8217;enregistrer, supprimer, voir des données dans un varset). Ces droits devront descendre jusqu&#8217;à la variable.</li>
+<li>Ceux liés aux fonctionnalités (pour le module listing: possibilité d&#8217;utiliser, créer et supprimer des listes).</li>
+</ul>
+</div>
+<div class="section" id="droits-sur-la-base-de-donnees">
+<h2>Droits sur la base de données<a class="headerlink" href="#droits-sur-la-base-de-donnees" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="les-groupes">
+<h3>Les groupes<a class="headerlink" href="#les-groupes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="plusieurs-parents">
+<h4>Plusieurs parents<a class="headerlink" href="#plusieurs-parents" title="Permalink to this headline">¶</a></h4>
+<p>Un groupe peut avoir plusieurs parents.</p>
+<img alt="../_images/droits_voo4.png" src="../_images/droits_voo4.png" />
+<p>Sur le schéma ci-dessus, le groupe D a pour parents A et B.</p>
+<img alt="../_images/groupes_voo4.png" src="../_images/groupes_voo4.png" />
+<p>Sur le schéma ci-dessus le département 60 est géré à la fois par la CIRE IDF et la CIRE NORD (ce cas a été vu à l&#8217;InVS). De plus, on peut aussi avoir une notion de profondeur: les départements ont comme parents les CIRE, mais aussi les régions, car une cire n&#8217;est pas obligatoirement liées au mêmes départements qu&#8217;une région (on peut imaginer un CIRE qui est chargée de deux régions).</p>
+</div>
+<div class="section" id="plusieurs-axes">
+<h4>Plusieurs axes<a class="headerlink" href="#plusieurs-axes" title="Permalink to this headline">¶</a></h4>
+<p>Un axe correspond à un ensemble de groupes (cela correspondrait à l&#8217;arbre des groupes dans Voozanoo3). Il est possible d&#8217;avoir plusieurs axes.</p>
+<img alt="../_images/gestion_des_droits_v3_1.png" src="../_images/gestion_des_droits_v3_1.png" />
+<p>Dans cet exemple sont représentés l&#8217;axe lieu, et l&#8217;axe profil. Un utilisateur doit être positionné dans tous les axes déclarés.</p>
+</div>
+<div class="section" id="lien-entre-les-donnees-d-un-varset-et-les-groupes">
+<h4>Lien entre les données d&#8217;un varset et les groupes<a class="headerlink" href="#lien-entre-les-donnees-d-un-varset-et-les-groupes" title="Permalink to this headline">¶</a></h4>
+<p>Chaque ligne d&#8217;un varset est liée à un ou plusieurs groupes. La règle est que lorsqu&#8217;une donnée est insérée dans un varset, elle est marquée comme appartenant au groupe où l&#8217;utilisateur a décidé de l&#8217;insérer, ainsi qu&#8217;à tous les parents de ce groupe.</p>
+</div>
+</div>
+<div class="section" id="les-roles">
+<h3>Les rôles<a class="headerlink" href="#les-roles" title="Permalink to this headline">¶</a></h3>
+<p>Comme les catégories dans Voozanoo3, les rôles servent à définir les droits ainsi que les autorisations d&#8217;accès pour un ensemble d&#8217;utilisateurs. Un utilisateur à un rôle par groupe.</p>
+<img alt="../_images/gestion_des_droits_v5.png" src="../_images/gestion_des_droits_v5.png" />
+<p>Dans l&#8217;exemple ci-dessus, l&#8217;utilisateur s.becquerel a le rôle stat sur le groupe IDF, qui lui permet d&#8217;analyser les données des groupes 95, 75, 93, il est également admin sur le 95, et saisie sur le 75.
+On peut avoir un utilisateur qui n&#8217;a aucun rôle sur les groupes, ce qui veut dire qu&#8217;il ne peut rien faire sur les données présentes dans la base. Cela peut servir car il est possible d&#8217;accorder des droits temporaires pour un utilisateur à un enregistrement donné.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">GSA : Il n&#8217;est plus possible de positionner un Utilisateur dans un Groupe sans lui attribuer de rôle. A voir plus tard s&#8217;il faudra de nouveau rendre possible de mécanisme</p>
+</div>
+<p>Un rôle défini les droits de l&#8217;utilisateur sur chaque varset et sur les modules. Les droits possibles sont la lecture (r), l&#8217;écriture (w) et la suppression (d) pour le Propriétaire et/ou le Groupe (Plus d&#8217;information dans <a class="reference internal" href="#notemode"><em>cette note</em></a>).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<ul class="simple">
+<li>Schéma <strong>déprécié</strong>, les droits sont maintenant spécifiés pour le Propriétaire et/ou le groupe</li>
+</ul>
+<img alt="../_images/gestion_des_droits_v5_2.png" class="last" src="../_images/gestion_des_droits_v5_2.png" />
+</div>
+<p>Définition des droits pour le rôle <code class="docutils literal"><span class="pre">saisie</span></code> sur les varsets <code class="docutils literal"><span class="pre">patient</span></code> et <code class="docutils literal"><span class="pre">suivi</span></code>.</p>
+<div class="section" id="en-base-de-donnees">
+<h4>En base de données<a class="headerlink" href="#en-base-de-donnees" title="Permalink to this headline">¶</a></h4>
+<p>Les informations relatives aux rôles sont stockées dans 3 tables :</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">xxxx_pj_role</span></code> : Les rôles (id_role, name et label).</li>
+<li><code class="docutils literal"><span class="pre">xxxx_pj_group_link</span></code> : Contient l&#8217;information <code class="docutils literal"><span class="pre">id_role</span></code> permettant de savoir qu&#8217;un &#8220;Utilisateur d&#8217;un groupe&#8221; à tel ou tel rôle, c&#8217;est ce champ
+qui est exploité pour modifier le contenu de <code class="docutils literal"><span class="pre">xxxx_pj_group_mode</span></code> lors de l&#8217;édition d&#8217;un rôle.</li>
+<li><code class="docutils literal"><span class="pre">xxxx_group_role</span></code> : Contient une &#8220;synthèse&#8221; des rôles affectés à un Utilisateur, c&#8217;est l&#8217;affectation d&#8217;un rôle à un &#8220;Utilisateur d&#8217;un groupe&#8221; qui conditionne le contenu de cette table.
+Cette table est très importante car le contrôle d&#8217;accès aux fonctionnalités est basé sur celle-ci. Plus tard c&#8217;est également cette table qui permettra de proposer à l&#8217;utilisateur, lors de sa connexion, de choisir
+le rôle désiré pendant sa session de travail.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>GSA : Il semble que la table <code class="docutils literal"><span class="pre">xxxx_group_role</span></code> soit <strong>dépréciée</strong>, plus utilisée mais maintenue à jour seulement dans certaines portions de code.</p>
+<p class="last">Un nettoyage / refactoring sera fait pour purger définitivement cette table. La table <code class="docutils literal"><span class="pre">xxxx_pj_group_link</span></code> contient déjà l&#8217;information &#8220;Quel utilisateur à quel rôle&#8221;, il faut effectuer un DISTINCT pour récupérer cette information.</p>
+</div>
+</div>
+<div class="section" id="dans-un-fichier-xml">
+<h4>Dans un fichier XML<a class="headerlink" href="#dans-un-fichier-xml" title="Permalink to this headline">¶</a></h4>
+<p>Le paramétrage du rôle, lui, est stocké dans un fichier XML sur disque. Il contient les informations relatives aux accès (droits liés aux fonctionnalités) ainsi que celles relatives aux varsets.
+Il est important de comprendre que ce fichier XML ne contient pas les droits des utilisateurs mais uniquement le paramétrage des rôles pour un projet précis.
+C&#8217;est l&#8217;admin qui, en affectant un role à un utilisateur d&#8217;un groupe, paramètre les droits de l&#8217;utilisateur.</p>
+<p>Il est à noter également qu&#8217;en temps normal le développeur n&#8217;a pas à modifier manuellement ce fichier, c&#8217;est le module de paramétrage des rôles qui le manipule.</p>
+<p>Le format de ce fichier est :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;acl_roles&gt;</span>
+    <span class="c">&lt;!-- Role admin --&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;access&gt;</span>
+            <span class="nt">&lt;allow</span> <span class="na">name=</span><span class="s">&quot;form/frame/get&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;allow</span> <span class="na">name=</span><span class="s">&quot;form/frame/save&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;allow</span> <span class="na">name=</span><span class="s">&quot;form/frame/delete&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;allow</span> <span class="na">name=</span><span class="s">&quot;project/role&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/access&gt;</span>
+        <span class="nt">&lt;varsets&gt;</span>
+            <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;dico&quot;</span> <span class="na">mode=</span><span class="s">&quot;7&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;assure&quot;</span> <span class="na">mode=</span><span class="s">&quot;7&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;prat&quot;</span> <span class="na">mode=</span><span class="s">&quot;7&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/varsets&gt;</span>
+    <span class="nt">&lt;/role&gt;</span>
+    <span class="c">&lt;!-- Role stats --&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">id=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;access&gt;</span>
+            <span class="nt">&lt;allow</span> <span class="na">name=</span><span class="s">&quot;form/frame/get&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/access&gt;</span>
+        <span class="nt">&lt;varsets&gt;</span>
+            <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;dico&quot;</span> <span class="na">mode=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;assure&quot;</span> <span class="na">mode=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;prat&quot;</span> <span class="na">mode=</span><span class="s">&quot;4&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/varsets&gt;</span>
+        <span class="nt">&lt;/role&gt;</span>
+<span class="nt">&lt;/acl_roles&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les noeuds <code class="docutils literal"><span class="pre">access</span></code> sont documentés en détail dans la partie relative aux &#8220;<a class="reference internal" href="#droitsacl"><em>ACL</em></a>&#8221;.</p>
+</div>
+</div>
+</div>
+<div class="section" id="exemple">
+<h3>Exemple<a class="headerlink" href="#exemple" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/gestion_des_droits_v6.png" src="../_images/gestion_des_droits_v6.png" />
+</div>
+<div class="section" id="structure-de-la-base-de-donnees">
+<h3>Structure de la base de données<a class="headerlink" href="#structure-de-la-base-de-donnees" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/gestion_des_droits_v4_2.png" src="../_images/gestion_des_droits_v4_2.png" />
+<img alt="../_images/gestion_des_droits_v5_3.png" src="../_images/gestion_des_droits_v5_3.png" />
+<p>La table <code class="docutils literal"><span class="pre">xxxx_xx_data_group_mode</span></code> permet d&#8217;appliquer un droit particulier pour un utilisateur sur une données pour une période (optionnel).
+Dans l&#8217;exemple ci-dessus, l&#8217;utilisateur 102 (e.sevin) déclaré dans la table <code class="docutils literal"><span class="pre">xxxx_xx_data_group</span></code> a un droit en lecture sur l&#8217;enregistrement 10001 jusqu&#8217;à la date du 01/09/2010.</p>
+<div class="admonition note" id="notemode">
+<p class="first admonition-title">Note</p>
+<p>La notion de &#8220;mode&#8221; n&#8217;est pas réellement stockée sous la forme d&#8217;une chaine &#8220;r.w.d.&#8221;.</p>
+<p>Le champ <code class="docutils literal"><span class="pre">mode</span></code> est en réalité un entier (<code class="docutils literal"><span class="pre">integer</span></code>) représentant les droits sous forme Binaire. C&#8217;est le résultat d&#8217;un OU logique des modes autorisés.</p>
+<p>Structure d&#8217;un <code class="docutils literal"><span class="pre">mode</span></code> représenté sous forme binaire :</p>
+<img alt="../_images/structure_mode.png" src="../_images/structure_mode.png" />
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="20%" />
+<col width="20%" />
+<col width="22%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Mode</th>
+<th class="head">Valeur (Dec.)</th>
+<th class="head">Valeur (Bin.)</th>
+<th class="head">Valeur (Octal)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Tous - Read (r)</td>
+<td>256</td>
+<td>100000000</td>
+<td>400</td>
+</tr>
+<tr class="row-odd"><td>Tous - Write (w)</td>
+<td>128</td>
+<td>010000000</td>
+<td>200</td>
+</tr>
+<tr class="row-even"><td>Tous - Delete (d)</td>
+<td>64</td>
+<td>001000000</td>
+<td>100</td>
+</tr>
+<tr class="row-odd"><td>Propriétaire - Read (r)</td>
+<td>32</td>
+<td>000100000</td>
+<td>040</td>
+</tr>
+<tr class="row-even"><td>Propriétaire - Write (w)</td>
+<td>16</td>
+<td>000010000</td>
+<td>020</td>
+</tr>
+<tr class="row-odd"><td>Propriétaire - Delete (d)</td>
+<td>8</td>
+<td>000001000</td>
+<td>010</td>
+</tr>
+<tr class="row-even"><td>Groupe - Read (r)</td>
+<td>4</td>
+<td>000000100</td>
+<td>004</td>
+</tr>
+<tr class="row-odd"><td>Groupe - Write (w)</td>
+<td>2</td>
+<td>000000010</td>
+<td>002</td>
+</tr>
+<tr class="row-even"><td>Groupe - Delete (d)</td>
+<td>1</td>
+<td>000000001</td>
+<td>001</td>
+</tr>
+</tbody>
+</table>
+<p>Ainsi autoriser un rôle en :</p>
+<ul class="simple">
+<li>Lecture et Ecriture et Suppression pour le propriétaire</li>
+<li>Lecture et Ecriture pour le groupe</li>
+<li>Lecture pour tous les enregistrements</li>
+</ul>
+<p>revient à faire ces OU logiques (opérateur : <code class="docutils literal"><span class="pre">|</span></code>) :</p>
+<div class="highlight-python"><div class="highlight"><pre>  000100000     //(Propriétaire - Read)
+| 000010000     //(Propriétaire - Write)
+| 000001000     //(Propriétaire - Delete)
+| 000000100     //(Groupe - Read)
+| 000000010     //(Groupe - Write)
+| 100000000     //(Tous - Read)
+= 100111110     //32+16+8+4+2+256 = 318
+</pre></div>
+</div>
+<p>Plus d&#8217;info sur l&#8217;opérateur OU logique : <a class="reference external" href="http://www.php.net/manual/fr/language.operators.bitwise.php">http://www.php.net/manual/fr/language.operators.bitwise.php</a></p>
+<div class="last admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>Il faut être très prudent lors de l&#8217;attribution d&#8217;un droit lié au niveau &#8220;Tous&#8221; car cela désactive les vérifications vis à vis de tous les groupes
+pour un utilisateur ayant un rôle contenant ce droit.</p>
+<p>L&#8217;utilisation du niveau &#8220;Tous&#8221; pour un Varset permet donc à un utilisateur (quelque soit le ou les groupes d&#8217;appartenance des enregistrements) :</p>
+<ul class="last simple">
+<li>Pour le droit &#8220;Read&#8221; : de voir tous les enregistrements du Varset</li>
+<li>Pour le droit &#8220;Write&#8221; : de modifier n&#8217;importe quel enregistrement du Varset (et d&#8217;en créer)</li>
+<li>Pour le droit &#8220;Delete&#8221; : de supprimer n&#8217;importe quel enregistrement du Varset</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="insertion-des-donnees">
+<h3>Insertion des données<a class="headerlink" href="#insertion-des-donnees" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="preparation-du-formulaire-cote-serveur">
+<h4>Préparation du formulaire coté serveur<a class="headerlink" href="#preparation-du-formulaire-cote-serveur" title="Permalink to this headline">¶</a></h4>
+<p>Il faut afficher la liste des groupes sur le formulaire. Il y a une liste par axe, et les groupes affichés sont ceux où l&#8217;utilisateur a le droit en écriture.
+Comme un formulaire peut contenir plusieurs varsets, et que les droits sont définis par varset, on peut avoir des incohérences: pour un groupe, droit en écriture pour le varset A, mais pas pour le varset B. Il faut donc récupérer les groupes où le droit d&#8217;écriture est présent pour tous les varsets du formulaire.</p>
+<p>Si un varset n&#8217;est utilisé qu&#8217;en lecture seule, alors il ne devrait pas être pris en compte pour la sélection des groupes.</p>
+<p>La sélection des groupes sur le formulaire est quasiment obligatoire. L&#8217;exception (qui pourrait être fréquente) est lorsqu&#8217;un utilisateur n&#8217;a les droit sd&#8217;écriture que sur un sul groupe.</p>
+<p>Les listes peuvent être placées n&#8217;importe où sur le layout via la balise groupe_value. Elle prend un attribut qui est le nom de l&#8217;axe.</p>
+<div class="highlight-xml"><div class="highlight"><pre>Départements: <span class="nt">&lt;group_value</span> <span class="na">axis=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+Secteurs: <span class="nt">&lt;groupe_value</span> <span class="na">axis=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>La balise group_value est transformée en appel à un plugin smarty après transformation du layout XML en layout template. Le plugin smarty génère ensuite une liste au format HTML.</p>
+<p>Il faut que les axes soient envoyés au client dans les données qui sont au format JSON.</p>
+</div>
+<div class="section" id="traitement-cote-client">
+<h4>Traitement coté client<a class="headerlink" href="#traitement-cote-client" title="Permalink to this headline">¶</a></h4>
+<p>Le changement d&#8217;une liste de groupes entraine la mise à jour de l&#8217;objet javascript frameform.
+Au moment de la sauvegarde du formulaire, les groupes sélectionnés sont ajoutés aux données à envoyer au serveur.
+Format:</p>
+<ul>
+<li><p class="first">data</p>
+</li>
+<li><dl class="first docutils">
+<dt>axis</dt>
+<dd><ul class="first last simple">
+<li>group</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>NB: à la mise à jour d&#8217;une fiche, on met dans ces champs les groupes sélectionnés (pour cela on prend le groupe le plus &#8220;bas&#8221; dans la table qui lie un enregistrement à des groupes).</p>
+</div>
+<div class="section" id="insertion-des-donnees-cote-serveur">
+<h4>Insertion des données coté serveur<a class="headerlink" href="#insertion-des-donnees-cote-serveur" title="Permalink to this headline">¶</a></h4>
+<p>Pour chaque varset présent dans les données, le système vérifie que l&#8217;utilisateur a les droits en écriture pour les groupes indiqués</p>
+<ul class="simple">
+<li>Si une erreur survient, le processus d&#8217;insertion est interrompu.</li>
+</ul>
+<p>Il met à jour la table data_group avec le group sélectionné pour un axe, ainsi que tous ses parents.</p>
+</div>
+</div>
+</div>
+<div class="section" id="droits-d-acces-aux-fonctionnalites-acl">
+<span id="droitsacl"></span><h2>Droits d&#8217;accès aux fonctionnalités (ACL)<a class="headerlink" href="#droits-d-acces-aux-fonctionnalites-acl" title="Permalink to this headline">¶</a></h2>
+<p>Pour gérer les droits d&#8217;accès aux fonctionnalités Voozanoo4 utilise les ACL (Access Control List) du <a class="reference external" href="http://framework.zend.com/manual/fr/zend.acl.html">Zend Framework</a>.</p>
+<p>Les ACL reposent sur la notion de Ressources (que nous assimilons à une fonctionnalité) et la notion de Rôle (qui est affecté à un &#8220;Utilisateur d&#8217;un groupe&#8221;).</p>
+<div class="section" id="ressources-natives">
+<h3>Ressources &#8220;Natives&#8221;<a class="headerlink" href="#ressources-natives" title="Permalink to this headline">¶</a></h3>
+<p>Les ressources nativement prises en compte par Voozanoo4 (et testées) sont :</p>
+<ul class="simple">
+<li>Les accès à <code class="docutils literal"><span class="pre">module/controller</span></code></li>
+<li>Les accès à <code class="docutils literal"><span class="pre">module/controller/action</span></code></li>
+</ul>
+<p>Ainsi lorsque le plugin Core_Plugin_Auth est appelée (méthode routeShutdown), le Zend Framework a déjà déterminé la route appelée (Module/Controller/Action). Le plugin vérifie alors :</p>
+<ul class="simple">
+<li>Si une ressource de type <code class="docutils literal"><span class="pre">module/controller</span></code> est définie, et si oui si l&#8217;utilisateur courrant est autorisé à y accéder.</li>
+<li>Si une ressource de type <code class="docutils literal"><span class="pre">module/controller/action</span></code> est définie, et si oui si l&#8217;utilisateur courrant est autorisé à y accéder.</li>
+</ul>
+<p>Dans le cas où l&#8217;utilisateur est &#8220;rejeté&#8221;, le plugin Core_Plugin_Auth change le routing de la requête pour rediriger vers <code class="docutils literal"><span class="pre">error/index/acl</span></code>.</p>
+</div>
+<div class="section" id="ressources-specifiques">
+<h3>Ressources &#8220;Spécifiques&#8221;<a class="headerlink" href="#ressources-specifiques" title="Permalink to this headline">¶</a></h3>
+<p>Il est possible de déclarer des ressources qui ne sont pas intimement liés à la notion de Module/Controller/Action.</p>
+<p>Prenons comme exemple un développement spécifique permettant de lister des dossiers, d&#8217;en éditer (enregistrement) et d&#8217;en supprimer. Le développeur mettrait en place,
+dans le module &#8220;Form&#8221;, un controller &#8220;DossierController&#8221; avec comme action :</p>
+<ul class="simple">
+<li>getdossierAction() : Appelant $this-&gt;_getFormConfiguration()</li>
+<li>savedossierAction() : Appelant $this-&gt;_saveForm()</li>
+<li>deletedossierAction() : Appelant $this-&gt;_deleteRecords()</li>
+</ul>
+<p>Ces trois actions rentrent parfaitement dans le cas des Ressources &#8220;Natives&#8221; (form/dossier/get, form/dossier/save, form/dossier/delete).</p>
+<p>En revanche dans le cadre de la validation du dossier (effectuée dans un <a class="reference internal" href="frame.html#hooks"><em>Point d&#8217;accès</em></a>) il est impossible de mettre un Contrôle d&#8217;accès avec les Ressources &#8220;Natives&#8221;.</p>
+<p>Il faut alors déclarer une ressource (au sens ACL) dans le fichier <code class="docutils literal"><span class="pre">[pj]_acl_resources.xml</span></code> :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;acl_resources&gt;</span>
+    <span class="c">&lt;!-- ... --&gt;</span>
+    <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;valider.dossier&quot;</span> <span class="na">label=</span><span class="s">&quot;Valider un dossier&quot;</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- ... --&gt;</span>
+<span class="nt">&lt;/acl_resources&gt;</span>
+</pre></div>
+</div>
+<p>Puis le développeur doit se charger de tester la Ressources (ACL) à l&#8217;endroit voulu :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">Form_DossierController</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_Action</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">_savedossier_save_beforeCommit</span><span class="p">(</span> <span class="nx">Core_Library_Event_Context</span> <span class="nv">$oCtx</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="cm">/* tests pour vérifier que le dossier devrait être validé */</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="k">false</span> <span class="o">===</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_helper</span><span class="o">-&gt;</span><span class="na">acl</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">isAllowed</span><span class="p">(</span><span class="s1">&#39;valider.dossier&#39;</span><span class="p">)</span> <span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>L&#8217;ActionHelper Core_Library_Action_Helpers_Acl change le module/controller/action de la requête courante pour rediriger vers l&#8217;erreur Acl si l&#8217;utilisateur n&#8217;a pas l&#8217;autorisation d&#8217;accès lors de l&#8217;appel à <code class="docutils literal"><span class="pre">isAllowed()</span></code>.</p>
+<p>Si la redirection ne doit pas se faire et qu&#8217;il faut laisser le soin au développeur la gestion du cas &#8220;Utilisateur non autorisé&#8221; il suffit de passer <code class="docutils literal"><span class="pre">false</span></code> en deuxième paramètre à <code class="docutils literal"><span class="pre">isAllowed()</span></code> .</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_helper</span><span class="o">-&gt;</span><span class="na">acl</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">isAllowed</span><span class="p">(</span><span class="s1">&#39;valider.dossier&#39;</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fonctionnement">
+<h3>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h3>
+<p>Comment Voozanoo4 déclare les Ressources et les Rôles (au sens ACL) :</p>
+<ol class="arabic simple">
+<li>Extraction des ressources déclarées au niveau du fichier Xml du Core (noyau)</li>
+<li>Extraction des ressources déclarées au niveau du fichier Xml du projet (optionel)</li>
+<li>Déclaration de ces ressources en tant que Zend_Acl_Resource</li>
+<li>Extraction des rôles définis au niveau du fichier Xml du projet</li>
+<li>Déclaration des rôles extrait du fichier Xml</li>
+<li>Déclaration des autorisations d&#8217;accès aux ressources par rôles</li>
+<li>Déclaration de l&#8217;utilisateur comme un rôle ayant pour parent les rôles qui lui sont affectés</li>
+</ol>
+<img alt="../_images/droits_acl.png" src="../_images/droits_acl.png" />
+</div>
+<div class="section" id="fichiers-de-ressources">
+<h3>Fichiers de Ressources<a class="headerlink" href="#fichiers-de-ressources" title="Permalink to this headline">¶</a></h3>
+<p>Les fichiers de ressources sont pour l&#8217;instant édités manuellement.</p>
+<ul class="simple">
+<li>Le fichier <code class="docutils literal"><span class="pre">core_acl_resources.xml</span></code> est stocké au niveau du noyau VOOZANOO4 dans <code class="docutils literal"><span class="pre">src/resources/xml_resources/</span></code></li>
+<li>Le fichier <code class="docutils literal"><span class="pre">[prj]_acl_resources.xml</span></code> est stocké au niveau du projet, le path utilisé est celui défini par la directive <code class="docutils literal"><span class="pre">voozanoo.resources.path</span></code> dans le fichier .ini</li>
+</ul>
+<p>Ces deux fichiers respectent la même syntaxe, le fichier de ressources lié au projet est optionel (dans le cas d&#8217;un projet sans spécificité particulière) :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;acl_resources&gt;</span>
+    <span class="nt">&lt;group</span> <span class="na">label=</span><span class="s">&quot;Formulaires généraux&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;form/frame/get&quot;</span> <span class="na">label=</span><span class="s">&quot;Afficher un formulaire&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;form/frame/save&quot;</span> <span class="na">label=</span><span class="s">&quot;Saisir une fiche&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;form/frame/delete&quot;</span> <span class="na">label=</span><span class="s">&quot;Supprimer des enregistrements&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/group&gt;</span>
+    <span class="nt">&lt;group</span> <span class="na">label=</span><span class="s">&quot;Gestion des projets&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;project/manager&quot;</span> <span class="na">label=</span><span class="s">&quot;Paramétrage des projets&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/group&gt;</span>
+    <span class="nt">&lt;group</span> <span class="na">label=</span><span class="s">&quot;Gestion des rôles&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;resource</span> <span class="na">name=</span><span class="s">&quot;project/role&quot;</span> <span class="na">label=</span><span class="s">&quot;Paramétrage des rôles&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/group&gt;</span>
+<span class="nt">&lt;/acl_resources&gt;</span>
+</pre></div>
+</div>
+<p>La possibilité de regrouper les ressources dans des groupes permet d&#8217;améliorer la présentation lors du paramétrage des rôles.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Droits</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#droits-sur-la-base-de-donnees">Droits sur la base de données</a><ul>
+<li><a class="reference internal" href="#les-groupes">Les groupes</a><ul>
+<li><a class="reference internal" href="#plusieurs-parents">Plusieurs parents</a></li>
+<li><a class="reference internal" href="#plusieurs-axes">Plusieurs axes</a></li>
+<li><a class="reference internal" href="#lien-entre-les-donnees-d-un-varset-et-les-groupes">Lien entre les données d&#8217;un varset et les groupes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#les-roles">Les rôles</a><ul>
+<li><a class="reference internal" href="#en-base-de-donnees">En base de données</a></li>
+<li><a class="reference internal" href="#dans-un-fichier-xml">Dans un fichier XML</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exemple">Exemple</a></li>
+<li><a class="reference internal" href="#structure-de-la-base-de-donnees">Structure de la base de données</a></li>
+<li><a class="reference internal" href="#insertion-des-donnees">Insertion des données</a><ul>
+<li><a class="reference internal" href="#preparation-du-formulaire-cote-serveur">Préparation du formulaire coté serveur</a></li>
+<li><a class="reference internal" href="#traitement-cote-client">Traitement coté client</a></li>
+<li><a class="reference internal" href="#insertion-des-donnees-cote-serveur">Insertion des données coté serveur</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#droits-d-acces-aux-fonctionnalites-acl">Droits d&#8217;accès aux fonctionnalités (ACL)</a><ul>
+<li><a class="reference internal" href="#ressources-natives">Ressources &#8220;Natives&#8221;</a></li>
+<li><a class="reference internal" href="#ressources-specifiques">Ressources &#8220;Spécifiques&#8221;</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a></li>
+<li><a class="reference internal" href="#fichiers-de-ressources">Fichiers de Ressources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="auth.html"
+                        title="previous chapter">Authentification</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="export.html"
+                        title="next chapter">Export</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/archi/droits.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="export.html" title="Export"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="auth.html" title="Authentification"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>R Statistical Computing &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Ressources" href="ressources.html" />
+    <link rel="prev" title="Librairie Javascript" href="lib_js.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ressources.html" title="Ressources"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lib_js.html" title="Librairie Javascript"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="r-statistical-computing">
+<span id="r"></span><h1>R Statistical Computing<a class="headerlink" href="#r-statistical-computing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>La class <code class="docutils literal"><span class="pre">Core_Library_RScriptPlayer</span></code> sert à exécuter un script &#8220;R&#8221;: elle prend en entrée un script au format
+<code class="docutils literal"><span class="pre">Core_Library_Resource_R</span></code>, ainsi qu&#8217;une source de données, qui peut être une instance de type <code class="docutils literal"><span class="pre">Core_Library_Resource_XML_DataQuery</span></code>,
+<code class="docutils literal"><span class="pre">Core_Library_Resource_XML_DataSet</span></code> ou <code class="docutils literal"><span class="pre">Core_Library_Resource_JSON</span></code>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">$oRPlayer = Core_Library_RScriptPlayer::GetInstance();</span>
+<span class="x">$sWorkingDirectory = $oRPlayer-&gt;Play( array(</span>
+<span class="x">        &#39;script&#39; =&gt; $oRScript, // Core_Library_Resource_R</span>
+<span class="x">        &#39;data_source&#39; =&gt; $oDataQuery // Core_Library_Resource_XML_DataQuery | Core_Library_Resource_XML_DataSet | Core_Library_Resource_JSON</span>
+<span class="x">));</span>
+</pre></div>
+</div>
+<p>Les ressources contenant le script et la source de données sont transformées (la source de données en fichier CSV) et passées à R
+(via l&#8217;executable Rscript). R génère ensuite dans un répertoire de travail les fichiers décrits dans le script.</p>
+<p>Chemin de l&#8217;executable RScript dans <code class="docutils literal"><span class="pre">voozanoo.ini</span></code>:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="na">voozanoo.executable.r</span> <span class="o">=</span> <span class="s">&quot;C:\Program Files\R\R-3.0.2\bin\Rscript.exe&quot;</span>
+</pre></div>
+</div>
+<p>Le module R player (mainframe/index/one/dp/r_player_index) permet, via une interface, de lancer un script en choisissant un script et une
+source de données de type dataquery.
+Le module va tenter d&#8217;afficher les fichiers générés dans le répertoire de travail en fonction de leurs noms.
+Ainsi s&#8217;il trouve un fichier nommé <code class="docutils literal"><span class="pre">output.json</span></code>,
+formaté correctement (voir l&#8217;exemple ci-dessous pour le formatage),
+il l&#8217;affichera (dans un tableau). Idem s&#8217;il trouve une image nommée <code class="docutils literal"><span class="pre">output.svg</span></code> (les formats png et jpeg sont aussi supportés).</p>
+<p>En l&#8217;abence de tous ces fichiers, le module renvoi le contenu du répertoire de travail dans un fichier zip.</p>
+<img alt="_images/flux_r.png" src="_images/flux_r.png" />
+<p>Il est possible d&#8217;afficher le résultat de la commande <code class="docutils literal"><span class="pre">summary</span></code> qui sert à obtenir des informations sur les données du data source dans
+le but de contrôler la cohérence des données ayant servies pour l&#8217;analyse.
+Il suffit de mettre le résultat de la commande dans un fichier nommé <code class="docutils literal"><span class="pre">summary.json</span></code> via la commande ci-dessous.</p>
+<div class="highlight-r"><div class="highlight"><pre>summary_file_path <span class="o">=</span> <span class="kp">paste</span><span class="p">(</span><span class="kp">args</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="s">&#39;summary.json&#39;</span><span class="p">,</span>sep<span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+summary_result <span class="o">&lt;-</span> toJSON<span class="p">(</span><span class="kp">summary</span><span class="p">(</span><span class="bp">T</span><span class="p">))</span>
+<span class="c1"># Indication de l&#39;encodage du fichier, qui serait par défaut en latin1</span>
+con <span class="o">&lt;-</span> <span class="kp">file</span><span class="p">(</span> summary_file_path<span class="p">,</span> encoding<span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">)</span>
+<span class="kp">write</span><span class="p">(</span> summary_result<span class="p">,</span> file<span class="o">=</span>con <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exemple-de-script-r">
+<h2>Exemple de script R<a class="headerlink" href="#exemple-de-script-r" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-r"><div class="highlight"><pre><span class="c1">##############################################################</span>
+<span class="c1"># chargement des librairies nécessaires pour graphiques et tableaux</span>
+<span class="kn">library</span><span class="p">(</span>RJSONIO<span class="p">)</span>
+
+<span class="c1"># Lecture de la source de données, cette partie ne doit pas être modifiée</span>
+args <span class="o">&lt;-</span> <span class="kp">commandArgs</span><span class="p">(</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="kp">setwd</span><span class="p">(</span><span class="kp">args</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
+<span class="bp">T</span> <span class="o">&lt;-</span> read.csv<span class="p">(</span>file<span class="o">=</span><span class="kp">args</span><span class="p">[</span><span class="m">2</span><span class="p">],</span>head<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span>sep<span class="o">=</span><span class="s">&quot;;&quot;</span><span class="p">,</span>fileEncoding<span class="o">=</span><span class="s">&quot;UTF-8&quot;</span><span class="p">)</span>
+
+<span class="c1">##########</span>
+<span class="c1"># Analyse</span>
+
+<span class="c1"># Analyses sur la source de données (en l&#39;occurence sur la variable age)</span>
+variable1 <span class="o">=</span> <span class="kp">eval</span><span class="p">(</span><span class="kp">parse</span><span class="p">(</span>text <span class="o">=</span> <span class="kp">paste</span><span class="p">(</span><span class="s">&#39;T$&#39;</span><span class="p">,</span><span class="s">&quot;Age&quot;</span><span class="p">,</span> sep<span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)))</span>
+variable2 <span class="o">=</span> variable1 <span class="o">+</span> rnorm<span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+
+R1 <span class="o">&lt;-</span> <span class="kp">as.numeric</span><span class="p">(</span>quantile<span class="p">(</span>variable1<span class="p">,</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> names<span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
+R2 <span class="o">&lt;-</span> <span class="kp">as.numeric</span><span class="p">(</span>quantile<span class="p">(</span>variable2<span class="p">,</span> na.rm<span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> names<span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
+
+<span class="c1"># Création du fichier output.json qui sera affiché</span>
+<span class="c1"># (args[1] est le chemin vers le répertoire de travail)</span>
+outpath <span class="o">=</span> <span class="kp">paste</span><span class="p">(</span> <span class="kp">args</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="s">&#39;output.json&#39;</span><span class="p">,</span> sep<span class="o">=</span><span class="s">&#39;/&#39;</span> <span class="p">)</span>
+
+<span class="c1"># Structure du fichier, doit toujours être la même pour pouvoir être</span>
+<span class="c1"># affichée par le module R de Voozanoo4</span>
+TITLE   <span class="o">&lt;-</span> <span class="s">&quot;Essai tableau plusieurs lignes&quot;</span>
+<span class="c1"># Libellés des colonnes</span>
+CLABELS <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;Min&quot;</span><span class="p">,</span><span class="s">&quot;Q1&quot;</span><span class="p">,</span> <span class="s">&quot;Mediane&quot;</span><span class="p">,</span> <span class="s">&quot;Q3&quot;</span><span class="p">,</span> <span class="s">&quot;Max&quot;</span><span class="p">)</span>
+<span class="c1"># Libellés des lignes</span>
+LLABELS <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;A&quot;</span><span class="p">,</span><span class="s">&quot;B&quot;</span><span class="p">)</span>
+DATA    <span class="o">&lt;-</span> <span class="kp">as.list</span><span class="p">(</span><span class="kt">data.frame</span><span class="p">(</span>R1<span class="p">,</span>R2<span class="p">))</span>
+
+<span class="c1"># Ecriture du fichier dans le répertoire de travail</span>
+output <span class="o">&lt;-</span> toJSON<span class="p">(</span><span class="kt">list</span><span class="p">(</span>E_TITLE <span class="o">=</span> TITLE<span class="p">,</span>E_CLABELS <span class="o">=</span> CLABELS<span class="p">,</span>E_LLABELS <span class="o">=</span>
+LLABELS<span class="p">,</span>E_DATA <span class="o">=</span>DATA<span class="p">))</span>
+<span class="kp">write</span><span class="p">(</span>output<span class="p">,</span> outpath<span class="p">);</span>
+
+<span class="c1">#########################</span>
+<span class="c1"># Création d&#39;un graphique</span>
+
+<span class="c1"># Titre</span>
+Title <span class="o">&lt;-</span> <span class="kp">paste</span><span class="p">(</span> <span class="s">&quot;Mediane et quantiles pour age&quot;</span> <span class="p">)</span>
+
+<span class="c1"># Nom et type du fichier généré</span>
+jpeg<span class="p">(</span> file<span class="o">=</span><span class="s">&quot;output.jpg&quot;</span> <span class="p">)</span>
+
+<span class="c1"># PARTIE GRAPHIQUE</span>
+<span class="c1"># que veut-on faire des variables ? Ici débute la partie graphique / analyse</span>
+boxplot<span class="p">(</span>variable1<span class="p">,</span> main<span class="o">=</span>Title<span class="p">,</span> col<span class="o">=</span><span class="s">&#39;#99ff99&#39;</span><span class="p">,</span> border<span class="o">=</span><span class="s">&#39;#009900&#39;</span><span class="p">)</span>
+
+<span class="c1"># fermeture du graphique</span>
+dev.off<span class="p">()</span>
+
+<span class="c1">#########################</span>
+<span class="c1"># Création du summary</span>
+
+summary_file_path <span class="o">=</span> <span class="kp">paste</span><span class="p">(</span><span class="kp">args</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="s">&#39;summary.json&#39;</span><span class="p">,</span>sep<span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+summary_result <span class="o">&lt;-</span> toJSON<span class="p">(</span><span class="kp">summary</span><span class="p">(</span><span class="bp">T</span><span class="p">))</span>
+<span class="c1"># Indication de l&#39;encodage du fichier, qui serait par défaut en latin1</span>
+con <span class="o">&lt;-</span> <span class="kp">file</span><span class="p">(</span> summary_file_path<span class="p">,</span> encoding<span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">)</span>
+<span class="kp">write</span><span class="p">(</span> summary_result<span class="p">,</span> file<span class="o">=</span>con <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">R Statistical Computing</a><ul>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#exemple-de-script-r">Exemple de script R</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="lib_js.html"
+                        title="previous chapter">Librairie Javascript</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ressources.html"
+                        title="next chapter">Ressources</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/r.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ressources.html" title="Ressources"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lib_js.html" title="Librairie Javascript"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

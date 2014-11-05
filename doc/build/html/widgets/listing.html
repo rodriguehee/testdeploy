@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WidgetListing &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Composants graphiques" href="../widgets.html" />
+    <link rel="next" title="WidgetGrid" href="grid.html" />
+    <link rel="prev" title="WidgetField" href="field.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="grid.html" title="WidgetGrid"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="field.html" title="WidgetField"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" accesskey="U">Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="widgetlisting">
+<span id="id1"></span><h1>WidgetListing<a class="headerlink" href="#widgetlisting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fonction">
+<h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
+<p>Hérite de <a class="reference internal" href="base.html#widgetbase"><em>WidgetBase</em></a></p>
+<p>Permet d&#8217;afficher un listing lié à un DataSet (résultant d&#8217;un DataQuery), se base sur le composant <a class="reference external" href="http://developer.yahoo.com/yui/datatable/">DataTable</a> (Cf. <a class="reference external" href="http://developer.yahoo.com/yui/docs/YAHOO.widget.DataTable.html">Api de Yui2</a>).</p>
+<p>Ce composant intègre :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>La pagination (Locale ou par XHR)</dt>
+<dd><ul class="first last simple">
+<li>Locale : Le DataSet est chargé en intégralité sur le poste client et Yui2 gère l&#8217;affichage par page</li>
+<li>XHR : Seule une partie du DataSet est chargé sur le poste client et des requêtes Ajax sont envoyés pour demander une nouvelle page</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Le tri sur une colonne précise</p>
+</li>
+<li><p class="first">Des actions sur chaque ligne (Edition, suppression)</p>
+</li>
+<li><p class="first">L&#8217;édition &#8220;à la volée&#8221; de cellules</p>
+</li>
+</ul>
+</div>
+<div class="section" id="attributs">
+<h2>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dataset-obligatoire">
+<h3>dataset (Obligatoire)<a class="headerlink" href="#dataset-obligatoire" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Fonction : Indique quel DataSet (résultant d&#8217;un DataQuery) est lié au listing, le DataQuery doit être présent dans la partie &lt;data_structure&gt; sans quoi une erreur se produira. Le matching se fait sur l&#8217;id du DataQuery</p>
+</div>
+<div class="section" id="mode-facultatif">
+<h3>mode (Facultatif)<a class="headerlink" href="#mode-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Valeurs autorisées : ro / rw</p>
+<p>Par défaut : ro</p>
+<p>Fonction : Indique si le listing est en Lecture seule (ro) ou en lecture/Ecriture (rw). Dans le cas du mode Lecture/Ecriture un bouton &#8220;Ajouter&#8221; sera présent au dessus du listing pour ajouter des lignes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Si le listing est en pagination XHR le bouton &#8220;Ajouter&#8221; ne sera pas présent, et ce même si le mode est égal à &#8220;rw&#8221;.</li>
+<li>Tout comme l&#8217;attribut &#8220;mode&#8221; de <a class="reference internal" href="field.html#widgetfield"><em>WidgetField</em></a> seule l&#8217;égalité à &#8216;rw&#8217; est testée.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<p>Outre les options héritées de <a class="reference internal" href="base.html#widgetbase"><em>WidgetBase</em></a> le WidgetListing comprend son propre jeu d&#8217;options contenues dans un noeud enfant &lt;options&gt;&lt;/options&gt;</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;listing</span> <span class="na">dataset=</span><span class="s">&quot;foo&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;options&gt;</span>
+        <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/options&gt;</span>
+    <span class="nt">&lt;column</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/listing&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="actions-render-facultatif">
+<h3>actions_render (Facultatif)<a class="headerlink" href="#actions-render-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : null</p>
+<p>Valeurs autorisées : context_menu_right_click / context_menu_link</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">context_menu_right_click ne semble pas être &#8220;branché&#8221; (non fonctionnel, 19/07/2012)</p>
+</div>
+<p>Fonction : Si value=&#8221;context_menu_link&#8221; : Ajoute une colonne &#8220;Action&#8221; (1ère colonne) permettant la Suppression et l&#8217;Edition si les paramètres liés fournis (edit_form_id, edit_param_name et edit_param_field)</p>
+</div>
+<div class="section" id="edit-form-id-facultatif">
+<h3>edit_form_id (Facultatif)<a class="headerlink" href="#edit-form-id-facultatif" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Paramètre lié à &#8220;edit_form_uri&#8221;, &#8220;edit_param_name&#8221;, &#8220;edit_param_field&#8221; et &#8220;edit_param&#8221;</p>
+</div>
+<p>Type : Integer</p>
+<p>Défaut : null</p>
+<p>Fonction : L&#8217;identifiant de la ressource (form) à charger pour présenter le formulaire d&#8217;Edition</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Peut être vide si edit_form_uri renseigné</p>
+</div>
+</div>
+<div class="section" id="edit-form-uri-facultatif">
+<h3>edit_form_uri (Facultatif)<a class="headerlink" href="#edit-form-uri-facultatif" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Paramètre lié à &#8220;edit_form_id&#8221;, &#8220;edit_param_name&#8221;, &#8220;edit_param_field&#8221; et &#8220;edit_param&#8221;</p>
+</div>
+<p>Type : String (module/controller/action)</p>
+<p>Default : null</p>
+<p>Fonction : Si renseigné est utilisé pour charger la frame d&#8217;édition</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Produit des url du type :</p>
+<ul class="last simple">
+<li>[edit_form_uri]/id/[edit_form_id]/[edit_param_name]/[edit_param_field] (Si edit_form_id renseigné en même temps que edit_form_uri)</li>
+<li>[edit_form_uri]/[edit_form_id]/[edit_param_name]/[edit_param_field] (Si edit_form_id non renseigné)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="edit-param-name-facultatif">
+<h3>edit_param_name (Facultatif)<a class="headerlink" href="#edit-param-name-facultatif" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Paramètre lié à &#8220;edit_form_id&#8221; et &#8220;edit_param_field&#8221;</p>
+</div>
+<p>Type : String</p>
+<p>Défaut : null</p>
+<p>Fonction : Nom du paramètre qui sera fourni dans l&#8217;url lors du chargement de la ressource pour l&#8217;édition</p>
+</div>
+<div class="section" id="edit-param-field-facultatif">
+<h3>edit_param_field (Facultatif)<a class="headerlink" href="#edit-param-field-facultatif" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Paramètre lié à &#8220;edit_form_id&#8221;, &#8220;edit_form_uri&#8221; et &#8220;edit_param_name&#8221;</p>
+</div>
+<p>Type : String</p>
+<p>Défaut : null</p>
+<p>Fonction : Field qui sera utiliser pour communiquer la valeur au paramètre edit_param_name</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Si les trois paramètres sont renseignés (edit_form_id, edit_param_name et edit_param_field) un double clique sur une ligne du listing aura le même comportement qu&#8217;un &#8220;Editer&#8221;</p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;options&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;edit_form_id&quot;</span> <span class="na">value=</span><span class="s">&quot;1301&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;edit_param_name&quot;</span> <span class="na">value=</span><span class="s">&quot;id_refanalyse&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;edit_param_field&quot;</span> <span class="na">value=</span><span class="s">&quot;id_data&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/options&gt;</span>
+<span class="c">&lt;!-- Produira une Url du type : http://urlduprojet/form/frame/get/id/1301/id_refanalyse/42 --&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="edit-param-facultatif">
+<h3>edit_param (Facultatif)<a class="headerlink" href="#edit-param-facultatif" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Paramètre lié à &#8220;edit_form_id&#8221; et &#8220;edit_form_uri&#8221;</p>
+</div>
+<p>Type : String</p>
+<p>Défaut : null</p>
+<p>Fonction: remplace edit_param_name et edit_param_value.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Permet de passer plusieurs paramètres.</p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;options&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;edit_form_id&quot;</span> <span class="na">value=</span><span class="s">&quot;1301&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;edit_param&quot;</span> <span class="na">value=</span><span class="s">&quot;id_data/{id_data}/nompatient/{nom}&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/options&gt;</span>
+<span class="c">&lt;!-- Produira une Url du type : http://urlduprojet/form/frame/get/id/1301/id_data/42/nompatient/foo --&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rows-per-page-facultatif">
+<h3>rows_per_page (Facultatif)<a class="headerlink" href="#rows-per-page-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Integer</p>
+<p>Défaut : null (toutes les lignes sont affichées)</p>
+<p>Fonction : Indique combien de lignes doivent être affichées par page (permet donc de calculer le nb de pages total)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Fixé à &#8216;20&#8217; si pagination_type est égal à &#8216;xhr&#8217; et que rows_per_page n&#8217;est pas renseigné.</p>
+</div>
+</div>
+<div class="section" id="show-total-rows-facultatif">
+<h3>show_total_rows (Facultatif)<a class="headerlink" href="#show-total-rows-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Simili-Booléen (&#8220;0&#8221; ou vide = false, autre chose = true)</p>
+<p>Défaut : false</p>
+<p>Fonction : Si true affiche le nombre total de ligne juste au dessus du listing</p>
+</div>
+<div class="section" id="pagination-type-facultatif">
+<h3>pagination_type (Facultatif)<a class="headerlink" href="#pagination-type-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Valeurs autorisées : local / xhr</p>
+<p>Défaut : local</p>
+<p>Fonction : Indique quel mode de pagination utiliser.</p>
+<ul class="simple">
+<li>Local = Toutes les lignes sont envoyées au poste client et Yui se charge d&#8217;en afficher que X par page et de gérer les demande de changement de page.</li>
+<li>Xhr = Seules les lignes necessaires à l&#8217;affichage de la première page sont envoyées au poste client, lors d&#8217;une demande d&#8217;une autre page Yui effectue une requête Ajax pour récupérer les nouveaux enregistrements à afficher.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Fixe rows_per_page à &#8216;20&#8217; si pagination_type est égal à &#8216;xhr&#8217; et que rows_per_page n&#8217;est pas renseigné.</p>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Un pagination &#8220;local&#8221; induit le plus souvent un dataquery sans attribut begin ni range, afin de retourner toutes les lignes du Dataset et laisser la DataTable Yui effectué la pagination.</p>
+<p class="last">Ne pas oublier également de fichier un &#8220;rows_per_page&#8221; lors d&#8217;une pagination &#8220;local&#8221;, sans quoi toutes les lignes seront affichées sur le listing.</p>
+</div>
+</div>
+<div class="section" id="new-record-pushed-facultatif">
+<h3>new_record_pushed (Facultatif)<a class="headerlink" href="#new-record-pushed-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Booléen</p>
+<p>Valeurs autorisées : true / false / 1 / 0</p>
+<p>Défaut : true</p>
+<p>Fonction : Indique quel mode d&#8217;ajout utiliser lorsque l&#8217;utilisateur clique sur le bouton &#8220;Ajouter&#8221;</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">true</span></code> : La méthode Javascript Array.push est utilisée, le record est ajouté en fin de tableau</li>
+<li><code class="docutils literal"><span class="pre">false</span></code> : La méthode Javascript Array.unshift est utilisée, le record est ajouté en début de tableau</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Cette option est pertinente uniquement lorsque le listing est en mode <code class="docutils literal"><span class="pre">rw</span></code> sinon le bouton &#8220;Ajouter&#8221; n&#8217;est pas présent.</p>
+</div>
+</div>
+</div>
+<div class="section" id="contenu">
+<h2>Contenu<a class="headerlink" href="#contenu" title="Permalink to this headline">¶</a></h2>
+<p>Le WidgetListing contient un noeud enfant <code class="docutils literal"><span class="pre">&lt;columns&gt;</span></code>, ce noeud contient N noeud <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> représentant les colonnes à afficher dans le listing.</p>
+<p>Chaque colonne indiquée doit faire référence à une colonne du <a class="reference internal" href="../res/dataquery.html#dataquery"><em>Dataquery</em></a> (Partie <code class="docutils literal"><span class="pre">&lt;data_structre&gt;</span></code>) du dataset spécifié en attribut du listing.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;listing</span> <span class="na">dataset=</span><span class="s">&quot;mon_dataset&quot;</span> <span class="na">mode=</span><span class="s">&quot;ro&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;columns&gt;</span>
+        <span class="nt">&lt;column</span> <span class="na">field=</span><span class="s">&quot;foo&quot;</span> <span class="na">mode=</span><span class="s">&quot;ro&quot;</span> <span class="na">title=</span><span class="s">&quot;Foo&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;column</span> <span class="na">field=</span><span class="s">&quot;bar&quot;</span> <span class="na">mode=</span><span class="s">&quot;ro&quot;</span> <span class="na">title=</span><span class="s">&quot;Bar&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;column</span> <span class="na">field=</span><span class="s">&quot;id_externe&quot;</span> <span class="na">mode=</span><span class="s">&quot;ro&quot;</span> <span class="na">title=</span><span class="s">&quot;Identifiant externe&quot;</span> <span class="na">dataset=</span><span class="s">&quot;dataset_identifier&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/columns&gt;</span>
+<span class="nt">&lt;/listing&gt;</span>
+</pre></div>
+</div>
+<p>Les attributs du noeud <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> sont :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="15%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Nom de l&#8217;attribut</th>
+<th class="head">Type attendu</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>field</td>
+<td>String</td>
+<td>Alias de la colonne du dataquery</td>
+</tr>
+<tr class="row-odd"><td>mode</td>
+<td>String</td>
+<td>rw = Lecture/Ecriture, ro = Lecture seule</td>
+</tr>
+<tr class="row-even"><td>title</td>
+<td>String</td>
+<td>Titre affiché pour l&#8217;entête de colonne</td>
+</tr>
+<tr class="row-odd"><td>dataset</td>
+<td>String</td>
+<td>Identifiant du dataset à utiliser pour effectuer le rendu d&#8217;un field de type <code class="docutils literal"><span class="pre">fkey_varset</span></code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Lors de l&#8217;affichage d&#8217;une colonne liée à un field <code class="docutils literal"><span class="pre">fkey_varset</span></code> l&#8217;attribut <code class="docutils literal"><span class="pre">dataset</span></code> est requis pour effectuer un affichage correct.</p>
+<p>Le Dataset ciblé doit :</p>
+<ul class="last simple">
+<li>Être présent dans la partie <code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code></li>
+<li>Avoir une clé primaire</li>
+<li>Avoir une colonne ayant comme alias <code class="docutils literal"><span class="pre">label</span></code>. Elle sera utilisée pour l&#8217;affichage et le tri (local)</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WidgetListing</a><ul>
+<li><a class="reference internal" href="#fonction">Fonction</a></li>
+<li><a class="reference internal" href="#attributs">Attributs</a><ul>
+<li><a class="reference internal" href="#dataset-obligatoire">dataset (Obligatoire)</a></li>
+<li><a class="reference internal" href="#mode-facultatif">mode (Facultatif)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#actions-render-facultatif">actions_render (Facultatif)</a></li>
+<li><a class="reference internal" href="#edit-form-id-facultatif">edit_form_id (Facultatif)</a></li>
+<li><a class="reference internal" href="#edit-form-uri-facultatif">edit_form_uri (Facultatif)</a></li>
+<li><a class="reference internal" href="#edit-param-name-facultatif">edit_param_name (Facultatif)</a></li>
+<li><a class="reference internal" href="#edit-param-field-facultatif">edit_param_field (Facultatif)</a></li>
+<li><a class="reference internal" href="#edit-param-facultatif">edit_param (Facultatif)</a></li>
+<li><a class="reference internal" href="#rows-per-page-facultatif">rows_per_page (Facultatif)</a></li>
+<li><a class="reference internal" href="#show-total-rows-facultatif">show_total_rows (Facultatif)</a></li>
+<li><a class="reference internal" href="#pagination-type-facultatif">pagination_type (Facultatif)</a></li>
+<li><a class="reference internal" href="#new-record-pushed-facultatif">new_record_pushed (Facultatif)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contenu">Contenu</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="field.html"
+                        title="previous chapter">WidgetField</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="grid.html"
+                        title="next chapter">WidgetGrid</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/listing.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="grid.html" title="WidgetGrid"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="field.html" title="WidgetField"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

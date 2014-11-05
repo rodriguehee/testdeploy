@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WidgetGrid &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Composants graphiques" href="../widgets.html" />
+    <link rel="next" title="WidgetReadOnly" href="readonly.html" />
+    <link rel="prev" title="WidgetListing" href="listing.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="readonly.html" title="WidgetReadOnly"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="listing.html" title="WidgetListing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" accesskey="U">Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="widgetgrid">
+<span id="id1"></span><h1>WidgetGrid<a class="headerlink" href="#widgetgrid" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fonction">
+<h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
+<p>Hérite de <a class="reference internal" href="base.html#widgetbase"><em>WidgetBase</em></a></p>
+<p>Permet d&#8217;afficher une grille de saisie à la manière d&#8217;Excel liée à un DataSet (résultant d&#8217;un DataQuery), se base sur le composant <a class="reference external" href="http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/">jqxGrid</a> (Cf. <a class="reference external" href="http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-api.htm">Api de jqxGrid</a>).</p>
+<p>Ce composant intègre :</p>
+<ul class="simple">
+<li>Le DataSet est chargé en intégralité sur le poste client et jqxGrid gère l&#8217;affichage</li>
+<li>Le tri sur une colonne précise</li>
+<li>Le filtrage sur une ou plusieurs colonnes</li>
+<li>La suppression de la ligne sur laquelle se trouve le curseur</li>
+<li>L&#8217;édition &#8220;à la volée&#8221; de cellules</li>
+<li>La saisie en mode clavier avec les flèches de direction et la touche Entrée</li>
+<li>Les données sont sauvegardées à chaque changement de cellule du tableur</li>
+</ul>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Il est indispensable de définir la balise config de la ressource XML située sous la balise racine ainsi:</p>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;config&gt;</span>
+    <span class="nt">&lt;display_path&gt;</span>form/frame/get/<span class="nt">&lt;/display_path&gt;</span>
+    <span class="nt">&lt;save_path&gt;</span>form/frame/save<span class="nt">&lt;/save_path&gt;</span>
+    <span class="nt">&lt;frame_js_class_name&gt;</span>FrameFormNoDialog<span class="nt">&lt;/frame_js_class_name&gt;</span>
+    <span class="nt">&lt;getdataset_path&gt;</span>form/frame/getdataset<span class="nt">&lt;/getdataset_path&gt;</span>
+<span class="nt">&lt;/config&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="attributs">
+<h2>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dataset-obligatoire">
+<h3>dataset (Obligatoire)<a class="headerlink" href="#dataset-obligatoire" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Fonction : Indique quel DataSet (résultant d&#8217;un DataQuery) est lié au tableur, le DataQuery doit être présent dans la partie &lt;data_structure&gt; sans quoi une erreur se produira. Le matching se fait sur l&#8217;id du DataQuery</p>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<p>Outre les options héritées de <a class="reference internal" href="base.html#widgetbase"><em>WidgetBase</em></a> le WidgetGrid comprend son propre jeu d&#8217;options contenues dans un noeud enfant &lt;options&gt;&lt;/options&gt;</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;grid</span> <span class="na">dataset=</span><span class="s">&quot;foo&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;options&gt;</span>
+        <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;&quot;</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/options&gt;</span>
+    <span class="nt">&lt;columns</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/grid&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="addrow-btn-label-facultatif">
+<h3>addrow_btn_label (Facultatif)<a class="headerlink" href="#addrow-btn-label-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : Add row</p>
+<p>Fonction : La chaîne de caractères lié au bouton d&#8217;ajout d&#8217;une nouvelle ligne</p>
+</div>
+<div class="section" id="columnsheight-facultatif">
+<h3>columnsheight (Facultatif)<a class="headerlink" href="#columnsheight-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Integer</p>
+<p>Défaut : 25</p>
+<p>Fonction : La hauteur en pixel de la ligne d&#8217;entête</p>
+</div>
+<div class="section" id="columnresize-facultatif">
+<h3>columnresize (Facultatif)<a class="headerlink" href="#columnresize-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Boolean</p>
+<p>Défaut : false</p>
+<p>Fonction : Permet de redimensionner la largeur des colonnes du tableur avec la souris</p>
+</div>
+<div class="section" id="deleterow-btn-label-facultatif">
+<h3>deleterow_btn_label (Facultatif)<a class="headerlink" href="#deleterow-btn-label-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : Delete row</p>
+<p>Fonction : La chaîne de caractères liée au bouton de suppression d&#8217;une ligne</p>
+</div>
+<div class="section" id="deleterow-warning-facultatif">
+<h3>deleterow_warning (Facultatif)<a class="headerlink" href="#deleterow-warning-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : Confirm the deletion ?</p>
+<p>Fonction : Le message de confirmation associé à la fonction de suppression d&#8217;une ligne</p>
+</div>
+<div class="section" id="export-btn-label-facultatif">
+<h3>export_btn_label (Facultatif)<a class="headerlink" href="#export-btn-label-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : Excel Export</p>
+<p>Fonction : La chaîne de caractères liée au bouton d&#8217;export au format Excel</p>
+</div>
+<div class="section" id="height-facultatif">
+<h3>height (Facultatif)<a class="headerlink" href="#height-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Integer</p>
+<p>Défaut : 400</p>
+<p>Fonction : La hauteur en pixel de la grille, ce paramètre jouera donc sur le nombre de lignes visibles sans utilisation des barres de défilement.</p>
+</div>
+<div class="section" id="print-btn-label-facultatif">
+<h3>print_btn_label (Facultatif)<a class="headerlink" href="#print-btn-label-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : Print</p>
+<p>Fonction: Définit le libellé lié à la fonction d&#8217;impression</p>
+</div>
+<div class="section" id="rowsheight-facultatif">
+<h3>rowsheight (Facultatif)<a class="headerlink" href="#rowsheight-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Integer</p>
+<p>Défaut : 25</p>
+<p>Fonction : La hauteur en pixel d&#8217;une ligne</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Cela ne définit pas la hauteur de la ligne d&#8217;entête</p>
+</div>
+</div>
+<div class="section" id="showaggregates-facultatif">
+<h3>showaggregates (Facultatif)<a class="headerlink" href="#showaggregates-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Boolean</p>
+<p>Défaut : false</p>
+<p>Fonction : Gère l&#8217;affichage de la ligne située sous la grille contenant les résultats des calculs aggrégés</p>
+</div>
+<div class="section" id="showfilterrow-facultatif">
+<h3>showfilterrow (Facultatif)<a class="headerlink" href="#showfilterrow-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Boolean</p>
+<p>Défaut : false</p>
+<p>Fonction : Gère l&#8217;affichage des filtres situés sous la ligne d&#8217;entête</p>
+</div>
+<div class="section" id="sortable-facultatif">
+<h3>sortable (Facultatif)<a class="headerlink" href="#sortable-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Boolean</p>
+<p>Défaut : false</p>
+<p>Fonction : Permet d&#8217;effectuer un tri ascendant ou descendant sur les colonnes</p>
+</div>
+<div class="section" id="theme-facultatif">
+<h3>theme (Facultatif)<a class="headerlink" href="#theme-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Défaut : null</p>
+<p>Fonction : Définit le thème du widget</p>
+<p>Valeurs attendues : android / arctic / black / blackberry / bootstrap / energyblue / fresh / highcontrast / metro / metrodark / mobile / office / orange / shinyblack / summer / web / windowsphone</p>
+</div>
+<div class="section" id="width-facultatif">
+<h3>width (Facultatif)<a class="headerlink" href="#width-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : Integer</p>
+<p>Défaut : 600</p>
+<p>Fonction : La largeur en pixel de la grille</p>
+</div>
+</div>
+<div class="section" id="contenu">
+<h2>Contenu<a class="headerlink" href="#contenu" title="Permalink to this headline">¶</a></h2>
+<p>Le WidgetGrid contient un noeud enfant <code class="docutils literal"><span class="pre">&lt;columns&gt;</span></code>, ce noeud contient N noeud <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> représentant les colonnes à afficher dans le tableur.</p>
+<p>Chaque colonne indiquée doit faire référence à une colonne du <a class="reference internal" href="../res/dataquery.html#dataquery"><em>Dataquery</em></a> (Partie <code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code>) du dataset spécifié en attribut du tableur.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;grid</span> <span class="na">dataset=</span><span class="s">&quot;mon_dataset&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;columns&gt;</span>
+        <span class="nt">&lt;column</span> <span class="na">field=</span><span class="s">&quot;foo&quot;</span> <span class="na">title=</span><span class="s">&quot;Foo&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;column</span> <span class="na">field=</span><span class="s">&quot;bar&quot;</span> <span class="na">title=</span><span class="s">&quot;Bar&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/columns&gt;</span>
+<span class="nt">&lt;/grid&gt;</span>
+</pre></div>
+</div>
+<p>Le type des colonnes est définit dans le dataset associé au tableur. A chaque type sera associé un composant de saisie faisant partie de la librairie jqxWidgets et non les composants de saisie de Voozanoo. C&#8217;est pourquoi, en raison de l&#8217;absence de composants graphiques, les champs textes multilignes ou heure n&#8217;existent pas dans le module.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Type du champ</th>
+<th class="head">Composant graphique</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>String</td>
+<td>TextBox</td>
+</tr>
+<tr class="row-odd"><td>Numérique</td>
+<td>TextBox avec défilement vertical pour incrémenter ou décrémenter les valeurs</td>
+</tr>
+<tr class="row-even"><td>Date</td>
+<td>Calendrier</td>
+</tr>
+<tr class="row-odd"><td>Dico</td>
+<td>Combobox</td>
+</tr>
+<tr class="row-even"><td>Dico à choix multiple</td>
+<td>Combobox incluant des Checkbox sur les items</td>
+</tr>
+</tbody>
+</table>
+<p>Les attributs du noeud <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> sont :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="18%" />
+<col width="54%" />
+<col width="7%" />
+<col width="4%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Nom de l&#8217;attribut</th>
+<th class="head">Type attendu</th>
+<th class="head">Description</th>
+<th class="head">Obligatoire</th>
+<th class="head">Défaut</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>field</td>
+<td>String</td>
+<td>Alias de la colonne du dataquery</td>
+<td>Oui</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>title</td>
+<td>String</td>
+<td>Titre affiché pour l&#8217;entête de colonne</td>
+<td>Oui</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>width</td>
+<td>Integer</td>
+<td>Largeur en pixel de la colonne</td>
+<td>Non</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>cellsalign</td>
+<td>&#8220;left&#8221; ou &#8220;right&#8221; ou &#8220;center&#8221;</td>
+<td>Définit l&#8217;alignement des valeurs dans les cellules de la colonne</td>
+<td>Non</td>
+<td>left</td>
+</tr>
+<tr class="row-even"><td>cellsformat</td>
+<td>String</td>
+<td>Définit le format d&#8217;une colonne de type date ou de type numérique</td>
+<td>Non</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>pinned</td>
+<td>&#8220;true&#8221; ou &#8220;false&#8221;</td>
+<td>Fige une colonne, la position de la colonne n&#8217;est pas impactée par la barre de défilement</td>
+<td>Non</td>
+<td>false</td>
+</tr>
+<tr class="row-even"><td>readonly</td>
+<td>&#8220;true&#8221; ou &#8220;false&#8221;</td>
+<td>Définit une colonne en lecture seule</td>
+<td>Non</td>
+<td>false</td>
+</tr>
+<tr class="row-odd"><td>aggregate</td>
+<td>String</td>
+<td>Définit une fonction d&#8217;aggrégation sur une colonne</td>
+<td>Non</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>formula</td>
+<td>String</td>
+<td>Définit la fonction de calcul d&#8217;une colonne</td>
+<td>Non</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">L&#8217;attribut <code class="docutils literal"><span class="pre">field</span></code> est obligatoire même dans le cas d&#8217;une formule calculée, car le résultat du calcul est stocké dans la colonne de destination.</p>
+</div>
+<p>Les valeurs possibles de l&#8217;attribut <code class="docutils literal"><span class="pre">aggregate</span></code> sont: <code class="docutils literal"><span class="pre">avg</span></code>, <code class="docutils literal"><span class="pre">count</span></code>, <code class="docutils literal"><span class="pre">min</span></code>, <code class="docutils literal"><span class="pre">max</span></code>, <code class="docutils literal"><span class="pre">sum</span></code>, <code class="docutils literal"><span class="pre">product</span></code>, <code class="docutils literal"><span class="pre">stdev</span></code>, <code class="docutils literal"><span class="pre">stdevp</span></code>, <code class="docutils literal"><span class="pre">varp</span></code> et <code class="docutils literal"><span class="pre">var</span></code>. Seule <code class="docutils literal"><span class="pre">count</span></code> peut s&#8217;appliquer à des colonnes non numériques. Enfin, on ne peut définir qu&#8217;une seule fonction d&#8217;aggrégation par colonne.</p>
+<p>Les valeurs possibles de l&#8217;attribut <code class="docutils literal"><span class="pre">cellsformat</span></code> sont documentées dans l&#8217;<a class="reference external" href="http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-api.htm">API</a> (cf <code class="docutils literal"><span class="pre">Behavior</span></code> &gt; <code class="docutils literal"><span class="pre">columns</span></code> &gt; <code class="docutils literal"><span class="pre">cellsformat</span></code>).</p>
+<p>L&#8217;attribut <code class="docutils literal"><span class="pre">formula</span></code> est un calcul défini par une fonction Javascript. Il est donc important que la syntaxe soit valide, sinon le module ne fonctionnera pas correctement. Par exemple, pour un total résultant de la multiplication de la quantité d&#8217;articles (<code class="docutils literal"><span class="pre">quantite</span></code>) par le prix unitaire d&#8217;un article (<code class="docutils literal"><span class="pre">montant</span></code>), on pourra utiliser la syntaxe suivante:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">rowdata</span><span class="p">.</span><span class="nx">montant</span><span class="p">)</span> <span class="o">*</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">rowdata</span><span class="p">.</span><span class="nx">quantite</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WidgetGrid</a><ul>
+<li><a class="reference internal" href="#fonction">Fonction</a></li>
+<li><a class="reference internal" href="#attributs">Attributs</a><ul>
+<li><a class="reference internal" href="#dataset-obligatoire">dataset (Obligatoire)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#addrow-btn-label-facultatif">addrow_btn_label (Facultatif)</a></li>
+<li><a class="reference internal" href="#columnsheight-facultatif">columnsheight (Facultatif)</a></li>
+<li><a class="reference internal" href="#columnresize-facultatif">columnresize (Facultatif)</a></li>
+<li><a class="reference internal" href="#deleterow-btn-label-facultatif">deleterow_btn_label (Facultatif)</a></li>
+<li><a class="reference internal" href="#deleterow-warning-facultatif">deleterow_warning (Facultatif)</a></li>
+<li><a class="reference internal" href="#export-btn-label-facultatif">export_btn_label (Facultatif)</a></li>
+<li><a class="reference internal" href="#height-facultatif">height (Facultatif)</a></li>
+<li><a class="reference internal" href="#print-btn-label-facultatif">print_btn_label (Facultatif)</a></li>
+<li><a class="reference internal" href="#rowsheight-facultatif">rowsheight (Facultatif)</a></li>
+<li><a class="reference internal" href="#showaggregates-facultatif">showaggregates (Facultatif)</a></li>
+<li><a class="reference internal" href="#showfilterrow-facultatif">showfilterrow (Facultatif)</a></li>
+<li><a class="reference internal" href="#sortable-facultatif">sortable (Facultatif)</a></li>
+<li><a class="reference internal" href="#theme-facultatif">theme (Facultatif)</a></li>
+<li><a class="reference internal" href="#width-facultatif">width (Facultatif)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contenu">Contenu</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="listing.html"
+                        title="previous chapter">WidgetListing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="readonly.html"
+                        title="next chapter">WidgetReadOnly</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/grid.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="readonly.html" title="WidgetReadOnly"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="listing.html" title="WidgetListing"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

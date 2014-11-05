@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Index.php : version générique &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Développement" href="../dev.html" />
+    <link rel="next" title="Structure dossier application Voo4" href="structure.html" />
+    <link rel="prev" title="Documentation javascript" href="doc_js.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structure.html" title="Structure dossier application Voo4"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="doc_js.html" title="Documentation javascript"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../dev.html" accesskey="U">Développement</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="index-php-version-generique">
+<span id="indexphp"></span><h1>Index.php : version générique<a class="headerlink" href="#index-php-version-generique" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principe">
+<h2>Principe<a class="headerlink" href="#principe" title="Permalink to this headline">¶</a></h2>
+<p>Exemple d&#8217;un fichier public/index.php :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$sVersionVoo4</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="nb">dirname</span><span class="p">(</span><span class="k">__FILE__</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;/../ressources/deploy/voozanoo4.txt&#39;</span><span class="p">);</span>
+<span class="k">require_once</span> <span class="nb">sprintf</span><span class="p">(</span><span class="nx">PATH_VOO4_CORE</span><span class="p">,</span> <span class="nv">$sVersionVoo4</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;library/PublicHelper.php&#39;</span><span class="p">;</span>
+<span class="nv">$application</span> <span class="o">=</span> <span class="nx">PublicHelper</span><span class="p">(</span><span class="k">__FILE__</span><span class="p">,</span> <span class="nv">$sVersionVoo4</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Remarques :</p>
+<ul class="simple">
+<li>le fichier /ressources/deploy/voozanoo4.txt doit contenir la version Voo4 sous une forme normalisée<ul>
+<li>trunk : tant qu&#8217;on n&#8217;a pas livré plus de versions stables</li>
+<li>x.y.z : forme classique utilisée pour Voozanoo3 déjà</li>
+</ul>
+</li>
+<li>le but est de ne plus avoir sur nos postes et serveurs de différence dans les fichiers public/index.php. On limite les différences au &lt;application&gt;.ini, voozanoo.ini et éventuellement à la configuration apache (.htaccess ou fichier dans /etc/apache2/conf.d/)</li>
+<li>la version était à l&#8217;origine dans le index.php, elle en a été sortie<ul>
+<li>pour alimenter les informations de dépendances du système de déploiement</li>
+<li>pour que les tests unitaires de l&#8217;application utilisent systèmatiquement le même coeur que l&#8217;application (ce qui n&#8217;existe pas actuellement sous Voo3)</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="configuration-necessaire">
+<h2>Configuration nécessaire<a class="headerlink" href="#configuration-necessaire" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Machine avec juste le trunk:</p>
+<div class="highlight-python"><div class="highlight"><pre>define(&#39;PATH_VOO4_CORE&#39;, CHEMIN_WWWEC . &#39;VOOZANOO4/src/&#39;);
+define(&#39;PATH_VOO4_EXTLIB&#39;, CHEMIN_WWWEC . &#39;VOOZANOO4/libs/&#39;);
+</pre></div>
+</div>
+</li>
+<li><p class="first">Machine avec plusieurs coeurs Voo4:</p>
+<div class="highlight-python"><div class="highlight"><pre>define(&#39;PATH_VOO4_CORE&#39;, PATH_VOO4 . &#39;/%s/src/&#39;);
+define(&#39;PATH_VOO4_EXTLIB&#39;, PATH_VOO4 . &#39;/%s/libs/&#39;);
+</pre></div>
+</div>
+<ul>
+<li><p class="first">les dossiers contenu dans PATH_VOO4 devront être de la forme 4.0.0, 4.0.1, 4.1.5 ...</p>
+</li>
+<li><p class="first">mais tant que le numéro de version apparait sous cette forme, aucun problème. On peut avoir par exemple:</p>
+<div class="highlight-python"><div class="highlight"><pre>define(&#39;PATH_VOO4_CORE&#39;, PATH_VOO4 . &#39;/voozanoo4-%s-stable/src/&#39;);
+define(&#39;PATH_VOO4_EXTLIB&#39;, PATH_VOO4 . &#39;/voozanoo4-%s-stable/libs/&#39;);
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Index.php : version générique</a><ul>
+<li><a class="reference internal" href="#principe">Principe</a></li>
+<li><a class="reference internal" href="#configuration-necessaire">Configuration nécessaire</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="doc_js.html"
+                        title="previous chapter">Documentation javascript</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structure.html"
+                        title="next chapter">Structure dossier application Voo4</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/dev/indexphp.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structure.html" title="Structure dossier application Voo4"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="doc_js.html" title="Documentation javascript"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../dev.html" >Développement</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

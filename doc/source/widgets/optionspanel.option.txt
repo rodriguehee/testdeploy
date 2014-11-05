@@ -1,0 +1,8 @@
+.. _optionspanel.option:
+
+OptionsPanel.option
+===================
+
+Sous composant utilisé par :ref:`OptionsPanel.panel` affichant une boite SELECT contenant différentes options.
+
+Ce composant n'est pas instanciable directement. C'est le composant :ref:`OptionsPanel.panel` qui se charge de sa création et de son initialisation.

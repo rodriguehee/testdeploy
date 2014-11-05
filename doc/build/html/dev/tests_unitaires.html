@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tests unitaires &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Développement" href="../dev.html" />
+    <link rel="next" title="Code source" href="code_source.html" />
+    <link rel="prev" title="Développement" href="../dev.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="code_source.html" title="Code source"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../dev.html" title="Développement"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../dev.html" accesskey="U">Développement</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tests-unitaires">
+<span id="id1"></span><h1>Tests unitaires<a class="headerlink" href="#tests-unitaires" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>lancement identique à voozanoo3 via l&#8217;url &lt;projet&gt;/testsUnitaires/index.php, ou en ligne de commande sur le serveur de développement
+stockés dans le dossier testsUnitaires, en copiant l&#8217;arborescence du code pour situer les classes de tests &#8220;en face&#8221; des classes de code projet
+lancement d&#8217;une classe de test directement dans Eclipse : ajout la lib PHPUnit3 au projet, ouvrir la classe de test et utiliser le raccourcis alt-shift-x + u
+le bootstrap des tests unitaires doit initialiser la base de données avec la structure complète utilisée par l&#8217;application et fournir aux tests une fonction permettant de la ré-initialiser (A FINIR)</p>
+<p><strong>Notes</strong>: il est important de configurer le PHP du ZendServer en error_reporting = E_ALL | E_STRICT et error_display à On sinon certaines erreurs ne seront pas visibles .</p>
+</div>
+<div class="section" id="exemple">
+<h2>Exemple<a class="headerlink" href="#exemple" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">/**</span>
+<span class="x">* Unit test</span>
+<span class="x">* @package UnitTest</span>
+<span class="x">* @copyright Copyright (c) 2010 Epiconcept (http://www.epiconcept.fr)</span>
+<span class="x">*/</span>
+<span class="x">require_once dirname(FILE) . &#39;/../../tests.inc.php&#39;;</span>
+
+<span class="x">class projectTest extends Voo4TestCase</span>
+<span class="x">{</span>
+<span class="x">  private $CoreLibrary_Project_project;</span>
+<span class="x">  protected function setUp()</span>
+<span class="x">  {</span>
+<span class="x">    parent::setUp();</span>
+<span class="x">    $this-&gt;CoreLibrary_Project_project = new CoreLibrary_Project_project();</span>
+<span class="x">  }</span>
+
+<span class="x">  protected function tearDown()</span>
+<span class="x">  {</span>
+<span class="x">    parent::tearDown();</span>
+<span class="x">  }</span>
+
+<span class="x">  public function testIsValidProject()</span>
+<span class="x">  {</span>
+<span class="x">    $this-&gt;assertFalse($this-&gt;CoreLibrary_Project_project-&gt;isValidProject(&#39;&#39;));</span>
+<span class="x">    $this-&gt;assertFalse($this-&gt;CoreLibrary_Project_project-&gt;isValidProject(&#39;existe_pas&#39;));</span>
+<span class="x">    $this-&gt;assertFalse($this-&gt;CoreLibrary_Project_project-&gt;isValidProject(&#39;test&#39;));</span>
+<span class="x">    CManipDB::Charger(DB_TESTS, dirname(FILE) . &#39;/projectTest.sql&#39;);</span>
+<span class="x">    $this-&gt;assertEquals(&#39;aaaa&#39;, $this-&gt;CoreLibrary_Project_project-&gt;isValidProject(&#39;test&#39;));</span>
+<span class="x">  }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Voo4TestCase est une classe qui surcharge la classe PHPUnit classique pour prendre nos besoins spécifiques en compte. Ne pas oublier d&#8217;appeler le SetUp et le TearDown parents si vous surchargez ces fonctions dans vos classes de test.</li>
+<li>Les tirets de FILE doivent être remplacé par des underscores</li>
+<li>Il n&#8217;est pas utile d&#8217;inclure explicitement les classes de la library, l&#8217;autoloader s&#8217;en charge</li>
+<li>Seul le premier chemin est en relatif à la racine du dossier testsUnitaires, on peut ensuite utiliser la constante CHEMIN_CODE4 qui pointe vers le dossier racine du projet.</li>
+<li>Setup recréé un objet neuf pour chaque test, ce qui garanti l&#8217;absence d&#8217;effets de bord.</li>
+<li>La classe CManipDB est disponible pour vider la base ou y charger un fichier SQL (stocké au plus proche du ou des tests qui l&#8217;utilisent).</li>
+<li>Par défaut est chargée une base vide basée sur le fichier ressources/sql/structure_sys.sql</li>
+<li>La constante PATH_CODE4 donne le chemin &#8220;racine&#8221; de l&#8217;application</li>
+<li>Les fichiers annexes (SQL par exemple) sont situés dans le même dossier que la classe de test, nommé comme elle ou comme l&#8217;un de ses tests, et se charge à l&#8217;aide d&#8217;un dirname(FILE) . &#8216;IndexControllerTest.sql&#8217;</li>
+</ul>
+</div>
+<div class="section" id="ressources">
+<h2>Ressources<a class="headerlink" href="#ressources" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://www.epiconcept.fr/outils_internes/utilitaires/include">phpunit-testing-zend-framework-controllers</a></p>
+</div>
+<div class="section" id="calcul-couverture-de-code-sous-windows">
+<h2>Calcul couverture de code sous Windows<a class="headerlink" href="#calcul-couverture-de-code-sous-windows" title="Permalink to this headline">¶</a></h2>
+<p>Les scripts se trouve dans <a class="reference external" href="https://www.epiconcept.fr/outils_internes/utilitaires/include">https://www.epiconcept.fr/outils_internes/utilitaires/include</a></p>
+<p>Le générique, couverture.bat, demande à être configuré sur chaque poste</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">set php=&quot;C:\wamp2\bin\php\php5.2.9-1\php.exe&quot;</span>
+<span class="x">set phpini=&quot;C:\Program Files\Zend\ZendServer\etc\php_xdebug.ini&quot;</span>
+<span class="x">set chemin=&quot;C:\wamp2\www\couverture_tests&quot;</span>
+<span class="x">set phpunit=&quot;C:\wamp2\www\utilitaires\include\PHPUnit&quot;</span>
+</pre></div>
+</div>
+<p>Comme suit:</p>
+<ul class="simple">
+<li>php : chemin d&#8217;un exécutable PHP (je n&#8217;ai pas réussi à utiliser celui fourni avec le ZendServer 4)</li>
+<li>phpini : chemin vers un fichier php.ini sans aucun outil Zend chargé (celui utilisé par Wamp, en mettant le prepend.php discuté précédemment dans son auto_prepend_file, convient très bien)</li>
+<li>chemin : dossier dans lequel le résultat sera stocké</li>
+<li>phpunit : dossier de la lib, celle du SVN utilitaires fonctionne</li>
+</ul>
+<p>le problème avec le PHP fourni par Zend (et son php.ini donc) est que le calcul repose sur XDebug, avec lequel le ZendDebugger est incompatible.
+Il faut également rajouter en fin du php.ini utilisé la ligne suivante : zend_extension_ts=&#8221;C:/wamp2/bin/php_xdebug-2.0.5-5.2.dll&#8221;
+en adaptant le chemin (dll trouvable à l&#8217;adresse directe : http://xdebug.org/files/php_xdebug-2.0.5-5.2.dll (external link) )</p>
+<p>On fait ensuite un batch par projet
+&#64;echo off
+call couverture.bat VOOZANOO4 C:ZendStdwwwvoo4trunkunitTests</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tests unitaires</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#exemple">Exemple</a></li>
+<li><a class="reference internal" href="#ressources">Ressources</a></li>
+<li><a class="reference internal" href="#calcul-couverture-de-code-sous-windows">Calcul couverture de code sous Windows</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../dev.html"
+                        title="previous chapter">Développement</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="code_source.html"
+                        title="next chapter">Code source</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/dev/tests_unitaires.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="code_source.html" title="Code source"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../dev.html" title="Développement"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../dev.html" >Développement</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

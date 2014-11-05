@@ -1,0 +1,145 @@
+﻿.. _lib_js:
+
+Librairie Javascript
+====================
+Diagramme de class
+------------------
+
+.. image:: ../images/diagramme_class_js.png
+
+Les événements
+--------------
+Flux
+~~~~
+
+.. image:: ../images/events_js.png
+
+Liste de événements
+~~~~~~~~~~~~~~~~~~~
+
+* dataset:newRecord
+* dataset:recordChanged
+* datasetmanager:datasetChanged
+* dataset:valueChanged
+* datasetmanager:DatasetChanged
+* dataset:newRecord 
+
+.. code-block:: js
+
+	//dataset/dataset.js:					
+	this.fire('dataset:newRecord', this);
+	
+	//dataset/dataset.js:					
+	this.fire('dataset:recordChanged', this);
+	
+	//dataset/datasetmanager.js:        		
+	this.fire('datasetmanager:datasetChanged', oNewDataSet);
+
+	//dataset/rowdata.js:					
+	oDataSet.fire('dataset:valueChanged', oDataSet, sFieldName, mValue);
+	
+	//frame/frameform.js:					
+	oDataSetManager.fire('datasetmanager:DatasetChanged', aDataSet['sDataSetId']);
+	
+	//frame/layout/widget/widgettabs.js:		
+	this.DataSet().fire('dataset:newRecord', this.DataSet());
+	
+Code
+----
+Scope d'une fonction
+~~~~~~~~~~~~~~~~~~~~
+Le code ci-dessous permet de définir le scope pour l'execution de la fonction passée en paramètre de setTimeout. Il ne serait pas possible de passer directement la fonction PingMonitor à setTimeout, car elle utilise this.
+
+.. code-block:: js
+
+	(function	_scope(oWidgetGroup)
+	{
+		Y.log('Inside scope function');
+		var	iSetTimeoutId = setTimeout(function()
+		{
+			Y.log('Inside set timeout!!');
+			oWidgetGroup.PingMonitor();
+		}, oWidgetGroup.get('iPingTimeOut'));
+		oWidgetGroup.set('iSetTimeoutId', iSetTimeoutId);
+	}(this));
+	
+Surcharge des objets Javascript natifs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+VOOZANOO4/libs/VooLibJs/prototype/Function.js
+"""""""""""""""""""""""""""""""""""""""""""""
+* createDelegate(scope, additionalArgs, appendArgs) permettant l'exécution de la dite méthode dans un contexte différent en ajoutant/remplacant des arguments 
+
+.. code-block:: js
+
+	Function.prototype.createDelegate = function(obj, args, appendArgs) {
+		var method = this;
+		return function() {
+			var callArgs = args || arguments;
+			if (appendArgs === true){
+				callArgs = Array.prototype.slice.call(arguments, 0);
+				callArgs = callArgs.concat(args);
+			}else if (YUI().Lang.isNumber(appendArgs)){
+				callArgs = Array.prototype.slice.call(arguments, 0); // copy arguments first
+				var applyArgs = [appendArgs, 0].concat(args); // create method call params
+				Array.prototype.splice.apply(callArgs, applyArgs); // splice them in
+			}
+			return method.apply(obj || window, callArgs);
+		};
+	};
+	
+.. code-block:: js
+	
+	//Objet Human
+	var Human = function(lastName, firstName)
+	{
+		this.lastName = lastName;
+		this.firstName = firstName;
+	}
+
+	//Fonction externe non liée à un objet
+	var fnTalk = function(toSay)
+	{
+		toSay = toSay || "que je n'ai rien qui vient à l'esprit";
+		alert("Je m'appelle " + this.firstName + " et je tiens à dire " + toSay);
+	}
+
+	//Instanciation de la calsse "Human" en passant le nom de famille et le prénom
+	var oGSA = new Human('Scandola', 'Guillaume');
+
+	//Execution de la fnTalk dans le context de oHuman
+	document.getElementById('btn').onclick = fnTalk.createDelegate(oGSA); //--> "Je m'appelle Guillaume et je tiens à dire que je n'ai rien qui vient à l'esprit"
+	document.getElementById('btn').onclick = fnTalk.createDelegate(oGSA, ['Bonjour']); //-> "Je m'appelle Guillaume et je tiens à dire Bonjour"
+
+	//Plus interessant encore, createDelegate peut ajouter les arguments que vous lui donnez plutot que de remplacer ceux de base par les votres
+	//Imaginons lors du click du bouton le navigateur appelle la fonction définie en passant en premier arg l'évènement (position du click etc...)
+	//Le code :
+	document.getElementById('btn').onclick = fnTalk.createDelegate(oGSA, ['Bonjour'], true);
+	//Permettra l'éxécution de la fonction fnTalk en passant en arguments : {Event}, {'Bonjour'} le tout dans le contexte de GSA
+	
+String
+""""""
+Idée : Mettre des fonctions de padding (LeftPad, RightPad ?)
+
+**Inexistant pour le moment**
+
+Chemin: VOOZANOO4/libs/VooLibJs/prototype/String.js
+
+Number
+""""""
+Idée : Mettre une vrai fonction d'arrondi, Math.round arrondissant à l'entier le plus proche
+
+**Inexistant pour le moment**
+
+Chemin: VOOZANOO4/libs/VooLibJs/prototype/Number.js
+
+Array
+"""""
+**Inexistant pour le moment**
+
+Chemin: VOOZANOO4/libs/VooLibJs/prototype/Array.js
+
+Date
+""""
+**Inexistant pour le moment**
+
+Chemin: VOOZANOO4/libs/VooLibJs/prototype/Date.js

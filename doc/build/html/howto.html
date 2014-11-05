@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How To / Comment faire &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Voozanoo FAQ" href="faq.html" />
+    <link rel="prev" title="Documentation javascript" href="dev/doc_js.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="faq.html" title="Voozanoo FAQ"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dev/doc_js.html" title="Documentation javascript"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-comment-faire">
+<span id="howto"></span><h1>How To / Comment faire<a class="headerlink" href="#how-to-comment-faire" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="windows-utiliser-mysql-depuis-l-invite-de-commande">
+<span id="howto-mysqlcmd"></span><h2>Windows - Utiliser mysql depuis l&#8217;invite de commande<a class="headerlink" href="#windows-utiliser-mysql-depuis-l-invite-de-commande" title="Permalink to this headline">¶</a></h2>
+<p>Pour utiliser Mysql depuis l&#8217;invite de commande windows il faut bien sûr que Mysql soit installé sur le poste grâce, par exemple, à
+Wamp Server ou EasyPhp mais aussi (et pourquoi pas) en &#8220;standalone&#8221; en téléchargeant Mysql directement (néanmoins plus rare).</p>
+<p><em>La démarche se basera sur une installation préalable de Wamp Server mais reste valide dans les autres cas.</em></p>
+<p>En ouvrant une invite de commande si vous tapez <cite>mysql</cite> vous aurez un message d&#8217;erreur :</p>
+<div class="highlight-python"><div class="highlight"><pre>C:\Users\admin&gt;mysql
+&#39;mysql&#39; n&#39;est pas reconnu en tant que commande interne
+ou externe, un programme exécutable ou un fichier de commandes.
+</pre></div>
+</div>
+<p>Il faut alors :</p>
+<ul>
+<li><p class="first">Accéder aux &#8220;Variables d&#8217;environnement système&#8221; (Normalement depuis le panneau de configuration)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Modifier la variable d&#8217;environnement <code class="docutils literal"><span class="pre">Path</span></code> pour ajouter le répertoire contenant l&#8217;executable mysql.exe</dt>
+<dd><ul class="first last simple">
+<li>Exemple : <code class="docutils literal"><span class="pre">C:\wamp\bin\mysql\mysql5.1.36\bin</span></code></li>
+<li>Attention à bien séparer les chemins par un point virgule et d&#8217;entourer le chemin par des doubles quotes s&#8217;il contient un espace</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Appliquer les modifications et ouvrir une nouvelle fenêtre d&#8217;invite de commande</p>
+</li>
+</ul>
+<p>Vous pourrez alors accéder à Mysql :</p>
+<div class="highlight-python"><div class="highlight"><pre>C:\Users\admin&gt;mysql -uroot
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 32
+Server version: 5.1.36-community-log MySQL Community Server (GPL)
+
+Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.
+
+mysql&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows-utiliser-php-depuis-l-invite-de-commande">
+<span id="howto-phpcmd"></span><h2>Windows - Utiliser PHP depuis l&#8217;invite de commande<a class="headerlink" href="#windows-utiliser-php-depuis-l-invite-de-commande" title="Permalink to this headline">¶</a></h2>
+<p>Tout comme l&#8217;utilisation de Mysql en ligne de commande vous devez avoir PHP installé sur votre poste.</p>
+<p><em>La démarche se basera sur une installation préalable de Wamp Server mais reste valide dans les autres cas.</em></p>
+<p>En ouvrant une invite de commande si vous tapez <cite>php</cite> vous aurez un message d&#8217;erreur :</p>
+<div class="highlight-python"><div class="highlight"><pre>C:\Users\admin&gt;php
+&#39;php&#39; n&#39;est pas reconnu en tant que commande interne
+ou externe, un programme exécutable ou un fichier de commandes.
+</pre></div>
+</div>
+<p>Il faut alors :</p>
+<ul>
+<li><p class="first">Accéder aux &#8220;Variables d&#8217;environnement système&#8221; (Normalement depuis le panneau de configuration)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Modifier la variable d&#8217;environnement <code class="docutils literal"><span class="pre">Path</span></code> pour ajouter le répertoire contenant l&#8217;executable php.exe</dt>
+<dd><ul class="first last simple">
+<li>Exemple : <code class="docutils literal"><span class="pre">C:\wamp\bin\php\php5.3.5</span></code></li>
+<li>Attention à bien séparer les chemins par un point virgule et d&#8217;entourer le chemin par des doubles quotes s&#8217;il contient un espace</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Appliquer les modification et ouvrir une nouvelle fenêtre d&#8217;invite de commande</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Si vous avez déjà l&#8217;exécutable php.exe présent depuis ZendServer vous pouvez ajouter celui de Wamp, Windows utilisera le premier Path contenant php.exe pour l&#8217;éxecution de PHP (de gauche à droite)</p>
+</div>
+<p>Vous pourrez alors accéder à Php :</p>
+<div class="highlight-python"><div class="highlight"><pre>C:\Users\admin&gt;php -v
+PHP 5.3.5 (cli) (built: Jan  6 2011 17:54:09)
+Copyright (c) 1997-2010 The PHP Group
+Zend Engine v2.3.0, Copyright (c) 1998-2010 Zend Technologies
+        with Xdebug v2.1.0, Copyright (c) 2002-2010, by Derick Rethans
+</pre></div>
+</div>
+</div>
+<div class="section" id="verifier-quel-php-ini-est-utilise">
+<span id="howto-usedphpini"></span><h2>Vérifier quel php.ini est utilisé<a class="headerlink" href="#verifier-quel-php-ini-est-utilise" title="Permalink to this headline">¶</a></h2>
+<p>Il arrive qu&#8217;un développeur ait besoin de savoir quel fichier php.ini est réellement chargé par l&#8217;interpréteur PHP (merci Wamp), cette vérification
+est facile dans un contexte &#8220;Web&#8221; (Apache &gt; Php), un simple fichier php contenant :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nb">phpinfo</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Suffit à afficher, via le navigateur, toutes les informations relatives à PHP dont le chemin complet vers le fichier php.ini utilisé.</p>
+<p>Cependant lorsqu&#8217;il s&#8217;agit de vérifier quel fichier est utilisé dans un environnement CLI (Ligne de commande) c&#8217;est un peu plus compliqué car l&#8217;accès à notre page
+via navigateur se fait obligatoire sans passer par le mode CLI (logique).</p>
+<p>Il faut alors :</p>
+<ul>
+<li><p class="first">Ouvrir un terminal / un(e) invite de commande</p>
+</li>
+<li><dl class="first docutils">
+<dt>Executer <span class="classifier-delimiter">:</span> <span class="classifier"><code class="docutils literal"><span class="pre">php</span> <span class="pre">-r</span> <span class="pre">&quot;phpinfo();&quot;</span> <span class="pre">&gt;</span> <span class="pre">phpinfo.txt</span></code></span></dt>
+<dd><ul class="first last simple">
+<li>Pour que ce code fonctionne sous Windows vous devez avoir accès à l&#8217;exécutable PHP depuis l&#8217;invite de commande (Voir <a class="reference internal" href="#howto-phpcmd"><em>Windows - Utiliser PHP depuis l&#8217;invite de commande</em></a>)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Vous pourrez alors visualiser le fichier phpinfo.txt créé et localiser le fichier ini utilisé :</p>
+<div class="highlight-python"><div class="highlight"><pre>phpinfo()
+PHP Version =&gt; 5.3.5
+
+System =&gt; Windows NT GSA-WKS 6.1 build 7601 (Unknow Windows version Business Edition Service Pack 1) i586
+Build Date =&gt; Jan  6 2011 17:50:45
+Compiler =&gt; MSVC6 (Visual C++ 6.0)
+Architecture =&gt; x86
+Server API =&gt; Command Line Interface
+Virtual Directory Support =&gt; enabled
+Configuration File (php.ini) Path =&gt; C:\Windows
+Loaded Configuration File =&gt; C:\wamp\bin\php\php5.3.5\php.ini
+Scan this dir for additional .ini files =&gt; (none)
+Additional .ini files parsed =&gt; (none)
+PHP API =&gt; 20090626
+PHP Extension =&gt; 20090626
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="ajouter-la-librairie-zend-framework-a-l-include-path-de-php">
+<span id="howto-zfincludepath"></span><h2>Ajouter la librairie Zend Framework à l&#8217;include_path de PHP<a class="headerlink" href="#ajouter-la-librairie-zend-framework-a-l-include-path-de-php" title="Permalink to this headline">¶</a></h2>
+<p>Si vous utilisez ZendServer cet article est superflu, ZendServer intégrant déjà la librairie ZendFramework dans l&#8217;include_path.</p>
+<p>En revanche dans le cas d&#8217;une utilisation de Wamp / Mamp / EasyPhp ou d&#8217;une installation classique LAMP il peut être utile d&#8217;intégrer la librairie ZendFramework directement dans votre include_path.</p>
+<p>Pour ce faire vous devez tout d&#8217;abord localiser quel php.ini est utilisé (Mode Apache et/ou Mode Cli en fonction de vos besoins, voir <a class="reference internal" href="#howto-usedphpini"><em>Vérifier quel php.ini est utilisé</em></a>)</p>
+<p>Uns fois ceci effectué il faudra éditer le/les fichiers php.ini afin de modifier la valeur de <code class="docutils literal"><span class="pre">include_path</span></code> :</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">; Paths and Directories ;</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">; UNIX: &quot;/path1:/path2&quot;</span>
+<span class="c1">;include_path = &quot;.:/php/includes&quot;</span>
+<span class="c1">;</span>
+<span class="c1">; Windows: &quot;\path1;\path2&quot;</span>
+<span class="na">include_path</span> <span class="o">=</span> <span class="s">&quot;.;C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library&quot;</span>
+<span class="c1">;</span>
+<span class="c1">; PHP&#39;s default setting for include_path is &quot;.;/path/to/php/pear&quot;</span>
+<span class="c1">; http://php.net/include-path</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How To / Comment faire</a><ul>
+<li><a class="reference internal" href="#windows-utiliser-mysql-depuis-l-invite-de-commande">Windows - Utiliser mysql depuis l&#8217;invite de commande</a></li>
+<li><a class="reference internal" href="#windows-utiliser-php-depuis-l-invite-de-commande">Windows - Utiliser PHP depuis l&#8217;invite de commande</a></li>
+<li><a class="reference internal" href="#verifier-quel-php-ini-est-utilise">Vérifier quel php.ini est utilisé</a></li>
+<li><a class="reference internal" href="#ajouter-la-librairie-zend-framework-a-l-include-path-de-php">Ajouter la librairie Zend Framework à l&#8217;include_path de PHP</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dev/doc_js.html"
+                        title="previous chapter">Documentation javascript</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="faq.html"
+                        title="next chapter">Voozanoo FAQ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="faq.html" title="Voozanoo FAQ"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dev/doc_js.html" title="Documentation javascript"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

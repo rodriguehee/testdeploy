@@ -1,0 +1,78 @@
+Authentification
+================
+
+Topographie
+-----------
+
+* Classes
+
+  * classe centrale sur l'authentification : Core_Library_Auth
+
+    * constantes sur les modes de connexion
+
+  * classe de connexion : Core_Library_Auth_CPS
+
+    * gestion des variables passées par Apache
+    * moteur masquant l'implémentation spécifique à la CPS
+
+  * classe d'authentification Core_Library_Auth_Adapter_Cps
+
+    * dérive de Zend_Auth_Adapter_Interface
+    * gestion effective de la connexion en fonction de la présence d'une CPS, et de sa liaison avec un compte de l'application
+
+  * modification de Core_Library_Controller_Auth_Index pour intégrer les différents modes CPS
+
+    * booléen $_bCPSAutoconnect : auto-connexion activée
+    * méthode _computeAuthMode() : initialisation des éléments de la vue, calcul des affichages en fonction du mode de connexion choisi
+    * méthode d'action cpsAction() : redirection vers l'index du contrôleur Auth, avec le paramètre forçant la CPS à TRUE
+    * méthode _HandleAuthCPS() : gestion de la connexion en fonction de la présence d'une CPS, et de sa liaison avec un compte de l'application (via Core_Library_Auth_Adapter_Cps)
+
+* Base de données
+
+  * ajout du champ cps_id dans la table _pj_group, stockant l'identifiant du propriétaire de la CPS
+  * ajout d'un champ dans la table projects, donnant le mode de connexion utilisé
+
+* Configuration
+
+  * saisie dans sys_project.auth_mode du mode de connexion : 'PASSWORD','CPS_MIXTE','CPS_STRICT','CPS_MIXTE_CHOIX'
+  * saisie dans _pj_group.cps_id des identifiants CPS
+
+* Session
+
+  * la variable sCpsId contient l'identifiant de la CPS insérée lors de la connexion (permet de détecter le changement de carte)
+
+.. note::
+	Il est désormais possible de s'authentifier à Voozanoo4 grâce à un Token de Connexion (``Core_Library_Token_Conn``). Un utilisateur temporaire est ainsi artificiellement créé (Via le User_Manager) et les
+	droits (accès Acl + droits sur varsets) sont récupérés depuis le Token.
+
+	Plus d'informations dans la partie relative aux :ref:`Tokens <lib_php_tokens>`.
+
+Configuration
+-------------
+
+* le champ sys_project.auth_mode est une énumération :
+
+  * 'PASSWORD' : mode classique par login et mot de passe (mode par défaut)
+  * 'CPS_MIXTE' : accès par CPS si présente (mode autoconnexion), login et mot de passe sinon
+  * 'CPS_STRICT' : accès uniquement par CPS
+  * 'CPS_MIXTE_CHOIX' : accès au choix de l'utilisateur par CPS ou login/mdp
+
+* les quatre valeurs sont reprises dans les constantes de Core_Library_Auth
+
+Spécificité de la CPS
+---------------------
+
+Détails techniques
+~~~~~~~~~~~~~~~~~~
+
+* du fait de l'utilisation de mod_rewrite, les noms des variables dans $_SERVER utilisées pour accéder aux informations de la CPS transmises à Apache sont préfixées d'un REDIRECT_REDIRECT. Il ne faut alors pas prendre en compte celles dans ce double REDIRECT, elles peuvent être vides alors que les vraies sont bien remplies. Le code gère cela. Cf http://stackoverflow.com/questions/9154695/accessing-environment-variables-set-using-mod-rewrite-in-php
+
+OAuth / SSO
+-----------
+
+Flux
+~~~~~
+
+.. image:: ../images/oauth_flux.png
+
+

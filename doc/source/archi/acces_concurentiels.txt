@@ -1,0 +1,50 @@
+﻿.. _acces_concurentiels:
+
+Accès concurentiels
+===================
+Introduction
+------------
+La problématique est de gérer l'accès simultané de plusieurs utilisateurs aux mêmes données, ainsi que les actions autorisées pour chaque utilisateur à ces données et à un temps bien défini.
+
+Fonctionnement
+--------------
+
+Dans le XML layout de la page, on définit des zones éditables (attribut des éléments group). 
+
+.. code-block:: xml
+
+	<group editable="1">...</group> => Le groupe est éditable
+	<group editable="0">...</group> => Le groupe n'est pas éditable
+	<group>...</group> => Le groupe n'est pas éditable (absence de l'attribut "editable")
+
+Lorsqu'un utilisateur accède à une page en mode modification:
+
+* On notifie son accès par un enregistrement dans la table tableau de bord 
+
+.. image:: ../images/access_concurentiels_tableau.png
+
+* On récupère sur le client l'état du tableau de bord (on récupère uniquement les informations concernant les enregistrements contenus dans la page) 
+* On charge la page en verrouillant tous les champs en lecture seule. Un bouton "EDIT" apparaît sur les blocs marqués comme éditable dans le XML du layout. Par la suite, on peut faire en sorte que le bouton "EDIT" apparaît uniquement lorsqu'on survole la zone éditable avec la souris. 
+
+.. image:: ../images/acces_concurentiels_form.png
+
+Une fois sur la page, une requête AJAX est envoyée régulièrement vers le serveur.
+Cette requête permet de mettre à jour le statut de l'utilisateur dans la table tableau de bord (date de dernier accès) et de récupérer l'état du tableau de bord. 
+Si l'utilisateur "ne donne pas de nouvel" au bout d'un certain temps, on considère qu'il a quitté la page et ses entrées dans la table seront effacées. 
+Cette fonctionnalité pourra être étendue plus tard à la gestion globale de la connexion de l'utilisateur et donc à la gestion du timeout. 
+
+.. image:: ../images/access_concurentiels_tableau2.png
+ 
+Lorsque l'utilisateur clique le bouton d'édition, on vérifie l'état du tableau de bord.
+
+.. image:: ../images/access_concurentiels_tableau3.png
+
+Si un autre utilisateur est déjà en cours d'édition de l'enregistrement, on refuse la demande de l'utilisateur actuel
+Sinon :
+
+* On vérifie l'état du tableau de bord
+* Si une modification a eu lieu depuis le dernier chargement de la page, on notifie l'utilisateur actuel (ex. libellé en gras, étole, champ sur fond jaune, ...)
+* On recharge la page avec les données à jour et on déverrouille tous les champs éditables (attention, il faut tenir compte des droits de l'utilisateur et du mode d'accès défini dans le XML du layout)
+* On affiche un bouton "SAVE" et "CANCEL" dans la zone éditable
+	* Le bouton "SAVE" fonctionne exactement comme le bouton "SAVE" actuel qui permet d'enregistrer la page entière
+	* Le bouton "CANCEL" remet tous les champs en mode lecture seule (HTML) 

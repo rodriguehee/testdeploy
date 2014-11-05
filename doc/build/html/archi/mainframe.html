@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Mainframe &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Architecture" href="../architecture.html" />
+    <link rel="next" title="Model Manager" href="model_manager.html" />
+    <link rel="prev" title="Frame" href="frame.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model_manager.html" title="Model Manager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="frame.html" title="Frame"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" accesskey="U">Architecture</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mainframe">
+<span id="id1"></span><h1>Mainframe<a class="headerlink" href="#mainframe" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>La page MainFrame est le point d&#8217;entrée de l&#8217;utilisateur dans le système de listing/formulaire générés par Voozanoo4.</p>
+<p>La page MainFrame est une page envoyée par le serveur au navigateur. Cette page est découpée en zone dont le contenu varie: listing, formulaire, tableau de bord, graph, etc.
+La page d&#8217;accueil de Google (iGoogle) est un exemple de MainFrame. Cette page nous servira de modèle.
+NB: la plupart des modules Voozanoo devraient pouvoir tenir dans une frame.</p>
+<p>Il faut au maximum éviter le rechargement de cette page, ainsi les actions produites par l&#8217;utilisateur (sauvegarde de formulaire, modification du tri d&#8217;un tableau, etc.)
+seront traitées par le serveur via des requêtes AJAX. La plupart des composants de la lib YUI fonctionnent de cette manière.</p>
+<p>Il existe actuellement 2 types de MainFrame :</p>
+<ul class="simple">
+<li>La MainFrame &#8216;one&#8217;, permettant l&#8217;affichage d&#8217;une seule frame dans la page</li>
+<li>La MainFrame &#8216;two&#8217;, permettant l&#8217;affiche de deux frames : une à gauche et une à droite</li>
+</ul>
+</div>
+<div class="section" id="cinetique">
+<h2>Cinétique<a class="headerlink" href="#cinetique" title="Permalink to this headline">¶</a></h2>
+<p>L&#8217;utilisateur accède à la MainFrame avec les paramètres nécessaires à l&#8217;initialisation d&#8217;une (ou plusieurs) frames, la MainFrame se charge de déterminer
+le(s) Display Path necessaire(s) à l&#8217;affichage de la / des frame(s) et effectue le rendu de la vue pour :</p>
+<ul class="simple">
+<li>Initialiser le moteur Javascript de Voozanoo 4</li>
+<li>Positioner les conteneurs des frames à afficher</li>
+<li>Effectuer les appels Ajax necessaires à l&#8217;obtention des données et du layout à afficher</li>
+<li>Construire les frames (le moteur JS de Voo4 se charge d&#8217;effectuer le rendu Html)</li>
+</ul>
+</div>
+<div class="section" id="fonctionnement">
+<h2>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h2>
+<p>L&#8217;accès à la MainFrame se fait via le Module &#8220;mainframe&#8221;, le Controller &#8220;index&#8221; et les actions &#8220;one&#8221; et &#8220;two&#8221;. Chaque action requiert des paramètres :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>MainFrame de type &#8216;one&#8217; (l&#8217;un ou l&#8217;autre des paramètres)</dt>
+<dd><ul class="first last simple">
+<li>Paramètre <code class="docutils literal"><span class="pre">id</span></code> : L&#8217;id_resource à afficher</li>
+<li>Paramètre <code class="docutils literal"><span class="pre">dp</span></code> : Le &#8220;Display Path&#8221; à utiliser pour afficher la Frame (Sous la forme Module_Controller_Action)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>MainFrame de type &#8216;two&#8217;</dt>
+<dd><ul class="first last simple">
+<li>Paramètre <code class="docutils literal"><span class="pre">lid</span></code> : L&#8217;id_resource à afficher dans la partie gauche</li>
+<li>Paramètre <code class="docutils literal"><span class="pre">rid</span></code> : L&#8217;id_resource à afficher dans la partie droite</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Prenons l&#8217;exemple d&#8217;un lien <code class="docutils literal"><span class="pre">mainframe/index/one/id/27</span></code>, voici le fonctionnement de la MainFrame :</p>
+<ul>
+<li><p class="first">Analyse des paramètres fournis : <code class="docutils literal"><span class="pre">id</span></code> ou <code class="docutils literal"><span class="pre">dp</span></code> ?</p>
+</li>
+<li><dl class="first docutils">
+<dt>Déduction du Display Path à utiliser (sera utilisé pour l&#8217;appel Ajax) :</dt>
+<dd><ul class="first last simple">
+<li>Si paramètre <code class="docutils literal"><span class="pre">id</span></code> fourni : Le <code class="docutils literal"><span class="pre">&lt;display_path&gt;</span></code> définit dans le Xml de la Frame (Xml), ou celui par défaut (<code class="docutils literal"><span class="pre">form/frame/get</span></code>)</li>
+<li>Si paramètre <code class="docutils literal"><span class="pre">dp</span></code> fourni : Le paramètre recomposé sous forme d&#8217;Uri (<code class="docutils literal"><span class="pre">module/controller/action</span></code>)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Adjonction d&#8217;eventuels paramètres fournis via l&#8217;url afin de les communiquer à la frame</p>
+</li>
+<li><p class="first">Affectation des Url à appeler via Ajax</p>
+</li>
+<li><p class="first">Rendu de la vue &#8216;mainframe.phtml&#8217; en renseignant le Partiel à utiliser (one.phtml / two.phtml)</p>
+</li>
+</ul>
+<p>Le moteur Js de Voozanoo4 prend ensuite le relais pour effectuer et traiter les appels Ajax.</p>
+<p>Exemples de liens :</p>
+<ul class="simple">
+<li>mainframe/index/one/dp/project_roles_getroles : Appel de /project/roles/getroles pour récupérer la configuration de la frame</li>
+<li>mainframe/index/one/id/85/foo/bar/a/b : Appel de /form/frame/get/id/85 (par défaut) en passant les paramètres foo = bar et a = b (dans l&#8217;url)</li>
+<li>mainframe/index/two/lid/17/rid/24 : 2 appels Ajax (1 par frame) /form/frame/get/id/17 &amp; /form/frame/get/id/24</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">La MainFrame de type &#8216;two&#8217; est très peu (pas du tout) utiliséd pour l&#8217;instant, il est possible qu&#8217;il manque quelques fonctionnalités, ou que des comportements ne soient pas prévus pour l&#8217;instant.</p>
+</div>
+<img alt="../_images/MainFrame.png" src="../_images/MainFrame.png" />
+<div class="section" id="chargement-d-une-frame-sans-requete-xhr">
+<h3>Chargement d&#8217;une frame sans requête XHR<a class="headerlink" href="#chargement-d-une-frame-sans-requete-xhr" title="Permalink to this headline">¶</a></h3>
+<p>Il est possible d&#8217;afficher une frame dans une page sans nécessairement faire de
+requête XHR pour récupérer le JSON décrivant la frame.</p>
+<p>Pour cela il faut utiliser le partiel <em>frame_creator.phtml</em>, et assigner le JSON
+de la frame dans la méthode de rendu <em>_get_render</em>.</p>
+<p>Exemple, <strong>Vue</strong>:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+        <span class="nt">&lt;head&gt;</span>
+                <span class="nt">&lt;title&gt;</span><span class="cp">&lt;?php echo $this-&gt;sPageTitle ?&gt;</span><span class="nt">&lt;/title&gt;</span>
+                <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span> <span class="nt">/&gt;</span>
+                <span class="cp">&lt;?php</span>
+<span class="cp">                        //Display Style markup</span>
+<span class="cp">                        echo $this-&gt;headLink();</span>
+<span class="cp">                        echo &quot;\n\n&quot;;</span>
+
+<span class="cp">                        //Display Script markup</span>
+<span class="cp">                        echo $this-&gt;headScript();</span>
+
+<span class="cp">                        //Display Frame creator parial</span>
+<span class="cp">                        echo $this-&gt;partial( &#39;frame/frame_creator.phtml&#39;, $this-&gt;getVars() );</span>
+<span class="cp">                ?&gt;</span>
+        <span class="nt">&lt;/head&gt;</span>
+        <span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;yui3-skin-sam  yui-skin-sam&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;page&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;header&gt;</span>
+                                <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;logo&quot;</span><span class="nt">&gt;</span>
+                                        <span class="nt">&lt;h1&gt;</span>
+                                                <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;&lt;?php echo $this-&gt;sProjectUrl; ?&gt;&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
+                                        <span class="nt">&lt;/h1&gt;</span>
+                                <span class="nt">&lt;/div&gt;</span>
+                        <span class="nt">&lt;/header&gt;</span>
+                        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;main&quot;</span><span class="nt">&gt;</span>
+                                        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;waiting-message&quot;</span><span class="nt">&gt;</span>Chargement en cours...<span class="nt">&lt;/div&gt;</span>
+                                <span class="nt">&lt;/div&gt;</span>
+                        <span class="nt">&lt;/div&gt;</span>
+                        <span class="nt">&lt;footer&gt;&lt;/footer&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p><strong>Envoie de la frame au format JSON:</strong></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">protected function _provideruserlistcallback_get_render( Core_Library_Event_Context $oCtx )</span>
+<span class="x">{</span>
+<span class="x">        $this-&gt;view-&gt;oFrameCfg = $oCtx-&gt;get(&#39;oResourceJSON&#39;)-&gt;GetContent();</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p><em>Code source provenant du controleur Oauth_ConsumerController</em></p>
+</div>
+<div class="section" id="mise-a-jour-des-frames">
+<h3>Mise à jour des frames<a class="headerlink" href="#mise-a-jour-des-frames" title="Permalink to this headline">¶</a></h3>
+<p><strong>TODO</strong> à mettre à jour</p>
+<div class="section" id="interaction-entre-les-frames">
+<h4>Intéraction entre les frames<a class="headerlink" href="#interaction-entre-les-frames" title="Permalink to this headline">¶</a></h4>
+<p>D&#8217;après la maquette ci-dessus, nous remarquons des intéractions entre les frames:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Si on sélectionne une nouvelle table, alors la liste des variables doit se mettre à jour pour afficher les variables de la table sélectionnée</dt>
+<dd><ul class="first last simple">
+<li>Intéraction directe entre les deux frames</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Si on ajoute une nouvelle variable dans la frame de définition d&#8217;une variable, alors la liste des variables doit se mettre à jour pour afficher la nouvelle variable.</dt>
+<dd><ul class="first last simple">
+<li>Une requête est d&#8217;abord envoyée au serveur pour créer la variable, ensuite la frame se met à jour. Soit la frame1 avertit la frame3 de se mettre à jour, soit le serveur indique à la frame3 de le faire.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="changements-cote-serveur">
+<h4>Changements coté serveur<a class="headerlink" href="#changements-cote-serveur" title="Permalink to this headline">¶</a></h4>
+<p>Les éléments affichés dans les frames peuvent représenter des données qui sont sur le serveur, comme les listings. Il peut y avoir des modifications sur ces données qui sont faites par d&#8217;autres utilisateurs (ajout d&#8217;une nouvelle fiche, modification de variables, etc.). Dans ce cas on peut avoir une différence entre les données affichées dans la frame, et celles qui sont sur le serveurs. Cet effet est accentué par le fait que le système de MainFrame var conduire à moins de rechargement des pages web que sur des applications classiques (comme sur Voozanoo3). Il faut donc mettre en place un système de rafraichissement des données.</p>
+<p>Dans certains cas il ne sera pas possible de rafraichir les frames: prenons l&#8217;exemple d&#8217;une analyse sur un ensemble de donnée. Si on doit vérifier régulièrement qu&#8217;au moins une donnée utilisée dans le calcul a changé, alors nous risquons d&#8217;avoir des problèmes de performance. C&#8217;est pourquoi il faudra avoir pour certains éléments une mise à jour manuelle.</p>
+<p>Il faudra lister les éléments qui nécessitent une mise à jour, et parmi ces éléments, ceux qui doivent être rafraichis automatiquement, et ceux manuellement.</p>
+<p>Les frames communiquent entre elles pour se mettre à jour</p>
+<img alt="../_images/mainframe2.png" src="../_images/mainframe2.png" />
+<p>Un système de synchronisation permet de mettre à jour les frames en interogeant régulièrement le serveur pour savoir si des données ont changé</p>
+<img alt="../_images/mainframe3.png" src="../_images/mainframe3.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Mainframe</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#cinetique">Cinétique</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a><ul>
+<li><a class="reference internal" href="#chargement-d-une-frame-sans-requete-xhr">Chargement d&#8217;une frame sans requête XHR</a></li>
+<li><a class="reference internal" href="#mise-a-jour-des-frames">Mise à jour des frames</a><ul>
+<li><a class="reference internal" href="#interaction-entre-les-frames">Intéraction entre les frames</a></li>
+<li><a class="reference internal" href="#changements-cote-serveur">Changements coté serveur</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="frame.html"
+                        title="previous chapter">Frame</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model_manager.html"
+                        title="next chapter">Model Manager</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/archi/mainframe.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="model_manager.html" title="Model Manager"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="frame.html" title="Frame"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

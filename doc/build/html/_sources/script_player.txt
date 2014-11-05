@@ -1,0 +1,472 @@
+.. _script_player:
+
+Script Player
+=============
+
+Description
+-----------
+
+Le Script player correspond au module d'import Voozanoo3. Il a été ré-écrit pour se baser sur les class Zend et Voozanoo4.
+
+L'objectif est d'étendre les possibilité de cette class pour qu'elle ne serve pas uniquement à faire des imports, d'où
+son nom plus générique de script player.
+
+Intégration
+-----------
+
+.. code-block:: php
+	
+	<?php
+	// Instancier un objet de type Core_Library_Resource_Xml et lire le script
+	$oScript = new Core_Library_Resource_XML();
+	$oScript->LoadFromFile( APPLICATION_PATH . '/resources/xml/script_import_test.xml' );
+
+	$oScriptPlayer = Core_Library_ScriptPlayer::GetInstance();
+	$oScriptPlayer->Play( array(
+		'script' => $oScript,
+		'settings' => array(
+			'real_path' => APPLICATION_PATH . '/resources/csv/test_import.csv'
+		)
+	));
+
+**Exemple de script**
+
+.. code-block:: xml
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<script>
+		<actions>
+
+			<load_file type="csv" label="Chargement" file="$real_path" delimiter=";" start_position="1">
+				<field position="2" target="ddn" type="date"/>
+				<field position="1" target="prenom"/>
+				<field position="0" target="nom"/>
+			</load_file>
+
+			<fill_tmp_table table="import_table" label="Transfert" temporary_table="false" />
+
+		</actions>
+	</script>
+
+Actions
+-------
+
+void
+~~~~
+
+Action vide, utile pour faire des tests.
+
+.. code-block:: xml
+
+	<void label="Void action" />
+
+load_file
+~~~~~~~~~
+
+Chargement dans le datasource du script player d'un fichier.
+
+.. code-block:: xml
+
+	<load_file type="csv" label="Chargement" file="$real_path" delimiter=";" start_position="1">
+		<field position="2" target="ddn" type="date"/>
+		<field position="1" target="prenom"/>
+		<field position="0" target="nom"/>
+	</load_file>
+
+	<load_file type="fixed_len" label="Chargement" file="$real_path" start_position="1">
+		<field position="2" target="ddn" type="date" length="12"/>
+		<field position="1" target="prenom" length="16"/>
+		<field position="0" target="nom" length="10"/>
+	</load_file>
+
+fill_tmp_table
+~~~~~~~~~~~~~~
+
+Remplissage d'une table temporaire à partir des données présente dans le datasource du scriptplayer.
+
+.. code-block:: xml
+
+	<fill_tmp_table table="import_table" label="Transfert" temporary_table="false" />
+
+exec_code
+~~~~~~~~~
+
+Cette action est utilisée pour excuter du code de l'application. Cela permet d'exploiter les class métier développées pour une application.
+
+.. code-block:: xml
+
+	<exec_code label="[LABEL]" class="[CLASS NAME]" method="[METHO NAME]" [PARAM1]="[VALUE]" [PARAM2]="[VALUE]" ... />
+
+Les paramètres sont passés sous la forme d'un tableau d'option dans le constructeur de la class.
+
+Exemple:
+
+.. code-block:: xml
+
+	<exec_code label="Appel SAGA" class="Saga_Lib_Save_Manager" method="ImportSaveFile" save_file="$file1" />
+
+.. code-block:: php
+	
+	<?php
+	class	Saga_Lib_Save_Manager extends Core_Library_Project_BaseObject
+	{
+		/**
+		 *
+		 */
+		public function SetSaveFile( $sSaveFile ) {
+
+		}
+
+		/**
+		 *
+		 */
+		public function ImportSaveFile( ) {
+
+		}
+	}
+
+import_users
+~~~~~~~~~~~~
+
+Importe les utilisateurs qui se trouvent dans le datasource. 
+
+Dans le cas où le script est exécuté sur un Provider (OAuth), il est possible de 
+spécifier des consumers, pour leur rattacher automatiquement les utilisateurs importés.
+Si le mode de synchronisation automatique est activé sur les consumers, les utilisateurs
+seront aussi créés sur les consumers.
+
+.. code-block:: xml
+
+	<import_users label="[Label]" default_group="[Group name]" default_role="[Role Name]" >		
+		<consumers>
+			<consumer>[Consumer A name]</consumer>
+			<consumer>[Consumer B name]</consumer>
+		</consumers>
+	</import_users>	
+
+Champs attendus dans le datasource:
+
+	* user_name (obligatoire)
+	* firstname
+	* lastname
+	* email
+	* status
+	* locale
+	* password (obligatoire)
+	* cps_id
+
+Exemple complet:
+
+.. code-block:: xml
+
+	<load_file label="Load file" file="$file1" type="csv" delimiter=";" start_position="0" zipped="true">
+		<field position="0" target="user_name"/>
+		<field position="2" target="lastname"/>
+		<field position="3" target="firstname"/>
+		<field position="11" target="email"/>
+		<field position="12" target="password"/>
+		<field position="13" target="group"/>
+		<field position="14" target="role"/>
+	</load_file>
+
+
+	<import_users label="Insert users" default_group="main" default_role="admin" >
+		<consumers>
+			<consumer>Neonetidf</consumer>
+		</consumers>
+	</import_users>	
+
+
+Créer une action propre à l'application
+---------------------------------------
+
+Créer une class dans la librairie de l'application de la forme qui étend Core_Library_Resource_XML_ScriptPlayer_Action :
+
+[ app lib prefixe ]_Resource_XML_ScriptPlayer_Action_[ nom de l'action ]
+
+
+Exemple:
+
+.. code-block:: xml
+
+	<hello label="Hello world" param1="value" />
+
+.. code-block:: php
+	
+	<?php
+	class Saga_Lib_Resource_XML_ScriptPlayer_Action_Hello extends Core_Library_Resource_XML_ScriptPlayer_Action
+	{
+		public function Exec() {
+			error_log( __CLASS__ . ' ' . $this->GetAttribute( 'param1' ) );
+		}
+	}
+
+Pilotage d'une application
+--------------------------
+
+Voozanoo4 dispose d'un mécanisme permettant à une application de transmettre des fichiers à une autre application pour
+qu'elle les traite. Le traitement est fait par le script player (l'application source transmet le script qui sera executé par le script player).
+
+Ce mécanisme est utile pour faire des imports de données par exemple. Il a été mis en place dans le cadre du projet
+BUDI (Bulk Dispatcher), et il repose sur un webservice.
+
+Intégration
+~~~~~~~~~~~
+
+Le controller est présent uniquement dans le répertoire library/Controller/Ws/Script.php, il n'y a pas de module.
+Pour l'utiliser, il faut donc créer un module dans l'application:
+
+Créer un module ``ws`` avec un controller ``Script`` dans l’application cible ( APPLICATION_PATH/modules/ws/controllers/ScriptController.php ),
+et hériter le controller ``Ws_ScriptController`` de ``Core_Library_Controller_Ws_Script``.
+
+Les fichiers à traiter sont transmis par POST au webservice.
+
+.. note::
+
+	Le temps d'attente de la réponse du ``POST`` est limité par un timeout, il est possible de l'augmenter si nécessaire.
+
+	.. code-block:: php
+		
+		<?php
+		// 120s
+		$oClient->getHttpClient()->setConfig( array( 'timeout' => 120 ) );
+
+Paramètres attendus:
+
+* ``zip_file_content``: fichier zip contenant le ou les fichiers à traiter, ainsi que le script destiné à être utilisé par le script player
+* ``signature_file``: une signature garantissant que les fichiers transmis l'ont bien été par une source reconnue
+* ``script_filename``: nom du script à l'intérieur du zip, cela permet de le retrouver et de le différencier des fichiers à traiter
+* ``id_task``: identifiant unique, à faire varier s'il faut exécuter plusieurs tâches sur l'application
+
+.. code-block:: php
+	
+	<?php
+	$oClient = new Zend_Rest_Client( $this->GetUrlWithAuth() );
+	$oClient->zip_file_content( base64_encode( file_get_contents( '/path/to/file.zip' ) ) );
+	$oClient->signature_file( base64_encode( file_get_contents( '/path/to/signature' ) ) );
+	$oClient->script_filename( 'script.xml' );
+	$oClient->id_task( 42 );
+	$oClient->post();
+
+.. note::
+
+	le fichier zip est transmis via la requête HTTP, ce qui est inutile au cas où les deux applications communiquantes sont sur la même machine.
+	Dans ce cas, il est possible de remplacer ce paramètre par ``zip_file_path``, le système fera une recopie du zip dans le répertoire ``storage``
+	de l'application.
+
+	.. code-block:: php
+	
+	<?php
+		$oClient->zip_file_path( $zipFile );
+
+.. note::
+
+	Le webservice décompresse le fichier zip dans le répertoire storage de l'application, dans un sous répertoire qui porte comme nom la valeur de ``id_task``.
+	Ce répertoire est automatiquement supprimé par le WS en fonction du contexte (temps réel, ou processus parallèle).
+
+La création du fichier Zip et de la signature se fait en utilisant la class ``Core_Library_File_Manager``
+
+.. code-block:: php
+	
+	<?php
+	$aFiles[] = '/path/to/file1';
+	$aFiles[] = '/path/to/file2';
+	$aFiles[] = '/path/to/script.xml';
+
+	// Compression des fichiers récupérés
+	$oFileManager->ZipFiles( $aFiles, '/path/to/file.zip' );
+
+	// Création de la signature
+	$oFileManager->CreateFilesSignature(
+		$aFiles,
+		'/path/to/signature',
+		$destinationProjectKey
+	);
+
+
+Réponses du webservice
+
+* ``idle``: l'application est disponible
+* ``done``: la tâche est terminée
+* ``failed``: la tâche est terminée mais a généré une erreur
+* ``running``: la tâche est en cours de traitement
+
+.. code-block:: php
+	
+	<?php
+	$oResult = $oClient->post();
+
+	/* @var $oResult Zend_Rest_Client_Result */
+	if ( false === $oResult->isSuccess() ) {
+		throw new Core_Library_Exception( sprintf( 'Consumer webservice return error %s', $oResult->message ) );
+	}
+
+	// $sStatus = 'idle' | 'done' | 'failed' | 'running'
+	$sStatus = (string) $oResult->response->status;
+
+	// En cas d'erreur, le message est présent dans la réponse
+	$oResult->response->error_message
+
+
+Il est possible de récupérer le statut d'une tâche en interrogeant le ``Webservice`` via ``GET``, et en lui
+indiquant l'identifiant de la tâche. La réponse est la même que pour un ``POST``, c'est à dire le statut de
+la tâche, et selon, un message d'erreur.
+
+.. code-block:: php
+	
+	<?php
+	$oClient = new Zend_Rest_Client( $sWsUrl . '/id_task/42' );
+
+	$oResult = $oClient->get();
+
+Execution du traitement en parallèle
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**fork (compatible windows)**
+
+Le code ci-dessous permet de créer un nouveau processus.
+
+.. code-block:: php
+	
+	<?php
+	protected function _execInBackground( $sCmd )
+	{
+		if ( substr( php_uname(), 0, 7 ) == "Windows" ) {
+			pclose( popen( "start /B " . $sCmd, "r" ) );
+		}
+		else {
+			exec( $sCmd . " > /dev/null &" );
+		}
+	}
+
+Source: `PHP.net <http://fr2.php.net/manual/fr/function.exec.php#86329>`_
+
+
+Dans le controller ``Ws_ScriptController`` de ``Core_Library_Controller_Ws_Script``, surcharger la méthode ``_executeScript`` qui lance le processus parallèle,
+et répond en transmettant le statut ``running``. Le nouveau processus correspond au script ``[application]_cli.php``, qui redispatche vers la class ``[Application]CliApi``.
+(ajouter ces scripts s’il n’existent pas).
+
+.. code-block:: php
+	
+	<?php
+	protected function _executeScript()
+	{
+		$sScriptPath =
+			APPLICATION_PATH . DIRECTORY_SEPARATOR .
+			'resources' . DIRECTORY_SEPARATOR .
+			'cron' . DIRECTORY_SEPARATOR .
+			'saga_cli.php';
+
+		if ( ! file_exists( $sScriptPath ) ) {
+			throw new Core_Library_Exception( sprintf( "Script not found (%s)", $sScriptPath ) );
+		}
+
+		$sCmd = sprintf(
+			"php \"%s\" mtd=execTask script_file=%s id=%d",
+			$sScriptPath,
+			escapeshellarg( $this->_getScriptWsManager()->GetScriptFile() ),
+			$this->_getScriptWsManager()->GetId()
+		);
+
+		$this->_execInBackground( $sCmd );
+
+		return array( 'status' => Core_Library_ScriptPlayer_Ws_Manager::STATUS_RUNNING );
+	}
+
+Dans la class ``[Application]CliApi``, déclarer la méthode ``execTask`` dans laquelle sera fait le traitement en utilisant le script player
+( le traitement avec le script player est encapsulé dans la class ``Core_Library_ScriptPlayer_Ws_Manager`` ).
+
+.. code-block:: php
+	
+	<?php
+	public function execTask()
+	{
+		$oScriptManager = new Core_Library_ScriptPlayer_Ws_Manager( array(
+			'project' => Core_Library_Account::GetInstance()->GetCurrentProject(),
+			'script_file' => $this->getParamValue( 'script_file' ),
+			'id' => $this->getParamValue( 'id' )
+		));
+
+		try {
+			$aResult = $oScriptManager->ExecuteScript();
+			$oScriptManager->SaveStatusInStorage(
+				$aResult[ 'status' ],
+				( isset( $aResult[ 'error_message'] ) ? $aResult[ 'error_message'] : '' )
+			);
+		} catch ( Exception $e ) {
+			$oScriptManager->SaveStatusInStorage(
+			   Core_Library_ScriptPlayer_Ws_Manager::STATUS_FAILED,
+			   $e->getMessage()
+			);
+		}
+	}
+
+**Système de plugin (uniquement sur les serveurs d'Epiconcept)**
+
+Ce système se base sur le système de ``proxy``/``plugin``: l’application demande au ``proxy`` de charger le ``plugin`` de l’application, et de lui transmettre une action à executer.
+
+.. code-block:: php
+	
+	<?php
+	protected function _executeScript()
+	{
+		$oClient = new Core_Library_Zmq_Client();
+		$oClient->connect();
+		$sMSG = $oClient->loadPlugin(
+			'pexec1',
+			array( APPLICATION_PATH . "/resources/cron/pexec_cli.php", "mtd=loadPlugin" )
+		);
+		if ( 'OK' == $sMSG ) {
+			$sRep = $oClient->sendWork(
+					'pexec1',
+					'QOFF',
+					array(
+						'script_file' => $this->_getScriptWsManager()->GetScriptFile(),
+						'id' => $this->_getScriptWsManager()->GetId()
+					)
+			);
+			return array( ‘'status' => Core_Library_ScriptPlayer_Ws_Manager::STATUS_RUNNING );
+		}
+		return array( 'status' => Core_Library_ScriptPlayer_Ws_Manager::STATUS_FAILED );
+	}
+
+Comme précédemment, il faut utiliser l’API CLI pour executer le code qui charge le ``plugin``.
+
+.. code-block:: php
+	
+	<?php
+	public function loadPlugin()
+	{
+		$oPlugin = new Core_Library_Zmq_Plugin( 'pexec1' );
+		$oPlugin->registerPlugin();
+		$oPlugin->waitWork( array( $this, '_exec' ) );
+	}
+
+Une fois le ``plugin`` chargé, la callback ``_exec`` est appelée, c’est ici que se trouve le code de traitement des fichiers.
+
+.. code-block:: php
+	
+	<?php
+	public function _exec( $sJson )
+	{
+		$aData = Zend_Json::decode( $sJson );
+
+		$oScriptManager = new Core_Library_ScriptPlayer_Ws_Manager( array(
+				'project' => Core_Library_Account::GetInstance()->GetCurrentProject(),
+				'script_file' => $aData[ 'script_file' ],
+				'id' => $aData[ 'id' ]
+		));
+
+		try {
+				$aResult = $oScriptManager->ExecuteScript();
+				$oScriptManager->SaveStatusInStorage(
+						$aResult[ 'status' ],
+						( isset( $aResult[ 'error_message'] ) ? $aResult[ 'error_message'] : '' )
+				);
+		} catch ( Exception $e ) {
+				$oScriptManager->SaveStatusInStorage(
+						Core_Library_ScriptPlayer_Ws_Manager::STATUS_FAILED,
+						 $e->getMessage()
+				);
+		}
+	}

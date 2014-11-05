@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Librairie Javascript &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="librairie-javascript">
+<span id="lib-js"></span><h1>Librairie Javascript<a class="headerlink" href="#librairie-javascript" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="diagramme-de-class">
+<h2>Diagramme de class<a class="headerlink" href="#diagramme-de-class" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/diagramme_class_js.png" src="../_images/diagramme_class_js.png" />
+</div>
+<div class="section" id="les-evenements">
+<h2>Les événements<a class="headerlink" href="#les-evenements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="flux">
+<h3>Flux<a class="headerlink" href="#flux" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/events_js.png" src="../_images/events_js.png" />
+</div>
+<div class="section" id="liste-de-evenements">
+<h3>Liste de événements<a class="headerlink" href="#liste-de-evenements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>dataset:newRecord</li>
+<li>dataset:recordChanged</li>
+<li>datasetmanager:datasetChanged</li>
+<li>dataset:valueChanged</li>
+<li>datasetmanager:DatasetChanged</li>
+<li>dataset:newRecord</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">//dataset/dataset.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:newRecord&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+
+<span class="c1">//dataset/dataset.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:recordChanged&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+
+<span class="c1">//dataset/datasetmanager.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;datasetmanager:datasetChanged&#39;</span><span class="p">,</span> <span class="nx">oNewDataSet</span><span class="p">);</span>
+
+<span class="c1">//dataset/rowdata.js:</span>
+<span class="nx">oDataSet</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:valueChanged&#39;</span><span class="p">,</span> <span class="nx">oDataSet</span><span class="p">,</span> <span class="nx">sFieldName</span><span class="p">,</span> <span class="nx">mValue</span><span class="p">);</span>
+
+<span class="c1">//frame/frameform.js:</span>
+<span class="nx">oDataSetManager</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;datasetmanager:DatasetChanged&#39;</span><span class="p">,</span> <span class="nx">aDataSet</span><span class="p">[</span><span class="s1">&#39;sDataSetId&#39;</span><span class="p">]);</span>
+
+<span class="c1">//frame/layout/widget/widgettabs.js:</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">DataSet</span><span class="p">().</span><span class="nx">fire</span><span class="p">(</span><span class="s1">&#39;dataset:newRecord&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">DataSet</span><span class="p">());</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="code">
+<h2>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scope-d-une-fonction">
+<h3>Scope d&#8217;une fonction<a class="headerlink" href="#scope-d-une-fonction" title="Permalink to this headline">¶</a></h3>
+<p>Le code ci-dessous permet de définir le scope pour l&#8217;execution de la fonction passée en paramètre de setTimeout. Il ne serait pas possible de passer directement la fonction PingMonitor à setTimeout, car elle utilise this.</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span>       <span class="nx">_scope</span><span class="p">(</span><span class="nx">oWidgetGroup</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="nx">Y</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside scope function&#39;</span><span class="p">);</span>
+        <span class="kd">var</span>     <span class="nx">iSetTimeoutId</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span>
+        <span class="p">{</span>
+                <span class="nx">Y</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside set timeout!!&#39;</span><span class="p">);</span>
+                <span class="nx">oWidgetGroup</span><span class="p">.</span><span class="nx">PingMonitor</span><span class="p">();</span>
+        <span class="p">},</span> <span class="nx">oWidgetGroup</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;iPingTimeOut&#39;</span><span class="p">));</span>
+        <span class="nx">oWidgetGroup</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;iSetTimeoutId&#39;</span><span class="p">,</span> <span class="nx">iSetTimeoutId</span><span class="p">);</span>
+<span class="p">}(</span><span class="k">this</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="surcharge-des-objets-javascript-natifs">
+<h3>Surcharge des objets Javascript natifs<a class="headerlink" href="#surcharge-des-objets-javascript-natifs" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="voozanoo4-libs-voolibjs-prototype-function-js">
+<h4>VOOZANOO4/libs/VooLibJs/prototype/Function.js<a class="headerlink" href="#voozanoo4-libs-voolibjs-prototype-function-js" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>createDelegate(scope, additionalArgs, appendArgs) permettant l&#8217;exécution de la dite méthode dans un contexte différent en ajoutant/remplacant des arguments</li>
+</ul>
+<div class="highlight-js"><div class="highlight"><pre><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createDelegate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">appendArgs</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">callArgs</span> <span class="o">=</span> <span class="nx">args</span> <span class="o">||</span> <span class="nx">arguments</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">appendArgs</span> <span class="o">===</span> <span class="kc">true</span><span class="p">){</span>
+                        <span class="nx">callArgs</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                        <span class="nx">callArgs</span> <span class="o">=</span> <span class="nx">callArgs</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span>
+                <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">YUI</span><span class="p">().</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">appendArgs</span><span class="p">)){</span>
+                        <span class="nx">callArgs</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// copy arguments first</span>
+                        <span class="kd">var</span> <span class="nx">applyArgs</span> <span class="o">=</span> <span class="p">[</span><span class="nx">appendArgs</span><span class="p">,</span> <span class="mi">0</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span> <span class="c1">// create method call params</span>
+                        <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">splice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">callArgs</span><span class="p">,</span> <span class="nx">applyArgs</span><span class="p">);</span> <span class="c1">// splice them in</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">method</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">obj</span> <span class="o">||</span> <span class="nb">window</span><span class="p">,</span> <span class="nx">callArgs</span><span class="p">);</span>
+        <span class="p">};</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">//Objet Human</span>
+<span class="kd">var</span> <span class="nx">Human</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lastName</span><span class="p">,</span> <span class="nx">firstName</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span> <span class="o">=</span> <span class="nx">lastName</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">=</span> <span class="nx">firstName</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//Fonction externe non liée à un objet</span>
+<span class="kd">var</span> <span class="nx">fnTalk</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">toSay</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="nx">toSay</span> <span class="o">=</span> <span class="nx">toSay</span> <span class="o">||</span> <span class="s2">&quot;que je n&#39;ai rien qui vient à l&#39;esprit&quot;</span><span class="p">;</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Je m&#39;appelle &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">+</span> <span class="s2">&quot; et je tiens à dire &quot;</span> <span class="o">+</span> <span class="nx">toSay</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">//Instanciation de la calsse &quot;Human&quot; en passant le nom de famille et le prénom</span>
+<span class="kd">var</span> <span class="nx">oGSA</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Human</span><span class="p">(</span><span class="s1">&#39;Scandola&#39;</span><span class="p">,</span> <span class="s1">&#39;Guillaume&#39;</span><span class="p">);</span>
+
+<span class="c1">//Execution de la fnTalk dans le context de oHuman</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;btn&#39;</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">fnTalk</span><span class="p">.</span><span class="nx">createDelegate</span><span class="p">(</span><span class="nx">oGSA</span><span class="p">);</span> <span class="c1">//--&gt; &quot;Je m&#39;appelle Guillaume et je tiens à dire que je n&#39;ai rien qui vient à l&#39;esprit&quot;</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;btn&#39;</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">fnTalk</span><span class="p">.</span><span class="nx">createDelegate</span><span class="p">(</span><span class="nx">oGSA</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Bonjour&#39;</span><span class="p">]);</span> <span class="c1">//-&gt; &quot;Je m&#39;appelle Guillaume et je tiens à dire Bonjour&quot;</span>
+
+<span class="c1">//Plus interessant encore, createDelegate peut ajouter les arguments que vous lui donnez plutot que de remplacer ceux de base par les votres</span>
+<span class="c1">//Imaginons lors du click du bouton le navigateur appelle la fonction définie en passant en premier arg l&#39;évènement (position du click etc...)</span>
+<span class="c1">//Le code :</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;btn&#39;</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">fnTalk</span><span class="p">.</span><span class="nx">createDelegate</span><span class="p">(</span><span class="nx">oGSA</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Bonjour&#39;</span><span class="p">],</span> <span class="kc">true</span><span class="p">);</span>
+<span class="c1">//Permettra l&#39;éxécution de la fonction fnTalk en passant en arguments : {Event}, {&#39;Bonjour&#39;} le tout dans le contexte de GSA</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="string">
+<h4>String<a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h4>
+<p>Idée : Mettre des fonctions de padding (LeftPad, RightPad ?)</p>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/String.js</p>
+</div>
+<div class="section" id="number">
+<h4>Number<a class="headerlink" href="#number" title="Permalink to this headline">¶</a></h4>
+<p>Idée : Mettre une vrai fonction d&#8217;arrondi, Math.round arrondissant à l&#8217;entier le plus proche</p>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/Number.js</p>
+</div>
+<div class="section" id="array">
+<h4>Array<a class="headerlink" href="#array" title="Permalink to this headline">¶</a></h4>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/Array.js</p>
+</div>
+<div class="section" id="date">
+<h4>Date<a class="headerlink" href="#date" title="Permalink to this headline">¶</a></h4>
+<p><strong>Inexistant pour le moment</strong></p>
+<p>Chemin: VOOZANOO4/libs/VooLibJs/prototype/Date.js</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Librairie Javascript</a><ul>
+<li><a class="reference internal" href="#diagramme-de-class">Diagramme de class</a></li>
+<li><a class="reference internal" href="#les-evenements">Les événements</a><ul>
+<li><a class="reference internal" href="#flux">Flux</a></li>
+<li><a class="reference internal" href="#liste-de-evenements">Liste de événements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code">Code</a><ul>
+<li><a class="reference internal" href="#scope-d-une-fonction">Scope d&#8217;une fonction</a></li>
+<li><a class="reference internal" href="#surcharge-des-objets-javascript-natifs">Surcharge des objets Javascript natifs</a><ul>
+<li><a class="reference internal" href="#voozanoo4-libs-voolibjs-prototype-function-js">VOOZANOO4/libs/VooLibJs/prototype/Function.js</a></li>
+<li><a class="reference internal" href="#string">String</a></li>
+<li><a class="reference internal" href="#number">Number</a></li>
+<li><a class="reference internal" href="#array">Array</a></li>
+<li><a class="reference internal" href="#date">Date</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/archi/lib_js.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

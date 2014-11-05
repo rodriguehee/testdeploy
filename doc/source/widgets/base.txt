@@ -1,0 +1,197 @@
+.. _widgetbase:
+
+WidgetBase
+==========
+
+Fonction
+--------
+Hérite de `Y.Base <http://yuilibrary.com/yui/docs/api/classes/Base.html>`_
+
+Ce composant WidgetBase n'est jamais instancié directement, c'est une classe abstraite dérivée par tous les Widgets Voozanoo4. Il définit 
+par conséquent plusieurs méthodes devant être implémentées par les classes filles et certaines communes à tous les Widgets.
+
+.. important::
+	Suite à l'important refactoring effectué concernant la structure du JSON contenant la définition du formulaire l'initialisation (instanciation ou non) 
+	et le rendu des Widgets est très différents de précédemment :
+	
+	- La détermination du Widget à utiliser se fait coté serveur.
+	- L'identifiant du Widget, si non spécifié, se fait coté serveur.
+	- La structure du Layout n'est plus encapsulée sur N niveaux mais est applatie (Exception faite du composant WidgetPages).
+	- L'ensemble des Widgets présents dans le Layout seront stockés dans l'attribut ``oWidgets`` de Y.Layout.
+		* Cette "collection" de widget se présentera sous la forme clé = Identifiant du Widget, valeur = Instance du widget (Sauf en cas de Widget statique où la valeur sera l'identifiant du Widget parent)
+
+L'initialisation et le rendu des Widgets composants la Frame se fait dans la méthode InitializeWidgets() de la classe Layout :
+
+- Affinage du Widget à rendre si le Widget actuellement spécifié est "WidgetField" ou "WidgetButton" et que l'action vaut "export"
+- Vérification présence d'une méthode statique "Render" spécifiant que le Widget n'est pas nécessairement instanciable
+	- Si oui : Appel de cete méthode statique "Render" puis la méthode statique "PostRender" et ajout du widget à la collection ``oWidgets``
+	- Si non :
+		- Instanciation du Widget
+			.. code-block:: javascript
+			
+				var oWidget = oWidgetFactory.InstantiateWidgetClass(oWidgetDef, oParentWidget);
+		
+		- Enregistrement de l'instance du widget dans la collection ``oWidgets``
+			.. code-block:: javascript
+			
+				oWidgets[oWidgetDef.id] = oWidget;
+			
+		- PreRender()
+			.. code-block:: javascript
+			
+				oWidget.PreRender();
+			
+		- Render()
+			.. code-block:: javascript
+			
+				oWidget.Render(oWidgetDef.pid);
+			
+		- PostRender()
+			.. code-block:: javascript
+			
+				oWidget.PostRender();
+			
+		- Update()
+			.. code-block:: javascript
+			
+				oWidget.Update();
+			
+		- Dans le cas d'un WidgetPages / WidgetPage des traitements complémentaires sont appliqués
+
+
+
+.. warning::
+	@deprecated
+	
+	Le fonctionnement d'initialisation et de rendu des Widgets est systématiquement le même (Cf. méthode InitializeWidgets() de la classe Layout) :
+
+	- Instanciation du widget
+		.. code-block:: javascript
+		
+			var oWidget = oWidgetFactory.GetWidget(sWidgetName, aMetaData[iIndex], oParentWidget);
+		
+		* La méthode GetWidget instancie le widget en fournissant le Layout (2e param) et les metadata (3e param)
+		
+			.. code-block:: javascript
+			
+				eval('oWidget = new Y.' + sWidgetName + '(null, this.get(\'oLayout\'), aMetaData);');
+			
+	- PreRender()
+		.. code-block:: javascript
+		
+			oWidget.PreRender();
+		
+	- Render()
+		.. code-block:: javascript
+		
+			oWidget.Render(sNodeId);
+		
+	- PostRender()
+		.. code-block:: javascript
+		
+			oWidget.PostRender(bDisabled, oOptMgr.Exists('focus'));
+		
+	- Update()
+		.. code-block:: javascript
+		
+			oWidget.Update();
+		
+	- Sauvegarde du Widget en cache
+		.. code-block:: javascript
+			
+			this.get('oWidgetCache').SaveWidget(oWidget.Family(), oWidget.UniqId(), oWidget);
+
+
+Attributs
+---------
+
+id (Facultatif)
+^^^^^^^^^^^^^^^
+
+Type : String
+
+Par défaut :  Identifiant auto-généré coté serveur sous la forme "vzn8f35dc..."
+
+Fonction : utilisé en tant que id="" sur la balise HTML "Racine" du widget.
+
+.. code-block:: xml
+
+    <group id="foobar">
+        ...
+    </group>
+
+Produira :
+
+.. code-block:: html
+
+    <div id="foobar">
+        <div></div>
+        <span></span>
+        ...
+    </div>
+
+
+class (Facultatif)
+^^^^^^^^^^^^^^^^^^
+
+Type : String
+
+Par défaut : Attribut class non placé
+
+Fonction : Utilisé en tant que class="" sur la balise HTML "Racine" du widget
+
+Exemple :
+
+.. code-block:: xml
+
+    <group class="red">
+        ...
+    </group>
+
+Produira :
+
+.. code-block:: html
+
+    <div class="red">
+        <div></div>
+        <span></span>
+        ...
+    </div>
+
+tooltip (Facultatif)
+^^^^^^^^^^^^^^^^^^^^
+
+Type : String
+
+Par défaut : -
+
+Fonction : Utilisé en tant qu'attribut du noeud "Racine" du Widget (celui ayant l'uniqId) pour être parsé comme tooltip avec le composant gallery-yui-tooltip
+
+Exemple :
+
+.. code-block:: xml
+	
+	<value dataset="foo" field="bar" tooltip="Saisir la valeur sans espace et en minuscule" />
+
+Options
+-------
+
+tooltip_alignment
+^^^^^^^^^^^^^^^^^
+
+Type : String
+
+Par défaut : top
+
+Valeurs possibles : top, right, bottom, left
+
+Fonction : Précise l'alignement de la tooltip, au dessus du noeud, à droite, en dessous ou à gauche
+
+Exemple :
+
+.. code-block:: xml
+	
+	<value dataset="foo" field="bar" tooltip="Lorem Ipsum">
+	   <option output="html" option_name="tooltip_alignment" value="right" />
+	</value>
+

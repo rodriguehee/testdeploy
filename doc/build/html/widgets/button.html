@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WidgetButton &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Composants graphiques" href="../widgets.html" />
+    <link rel="next" title="WidgetField" href="field.html" />
+    <link rel="prev" title="WidgetBitsField" href="bitsfield.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="field.html" title="WidgetField"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bitsfield.html" title="WidgetBitsField"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" accesskey="U">Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="widgetbutton">
+<span id="id1"></span><h1>WidgetButton<a class="headerlink" href="#widgetbutton" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fonction">
+<h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
+<p>Hérite de <a class="reference internal" href="base.html#widgetbase"><em>WidgetBase</em></a></p>
+<p>Ce composant est utilisé pour représenter un bouton à l&#8217;écran, plusieurs comportements (actions) sont nativement supporté(e)s (exit, save ...).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">En utilisant l&#8217;action <code class="docutils literal"><span class="pre">exit</span></code> avec le noeud <code class="docutils literal"><span class="pre">&lt;redirection&gt;</span></code> adéquat ce composant peut effectuer des redirections vers des frames spécifiques.</p>
+</div>
+<p>Ce composant intègre deux templates de rendu :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Template utilisé en l&#8217;absence d&#8217;option <code class="docutils literal"><span class="pre">glyphicon</span></code> ou <code class="docutils literal"><span class="pre">fa</span></code> (pour FontAwesome) :</dt>
+<dd><div class="first last highlight-html"><div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick=</span><span class="s">&quot;return false;&quot;</span> <span class="na">id=</span><span class="s">&quot;{idUnique}&quot;</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span> <span class="na">value=</span><span class="s">&quot;{sLabel}&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Template utilisé si l&#8217;option <code class="docutils literal"><span class="pre">glyphicon</span></code> ou <code class="docutils literal"><span class="pre">fa</span></code> est présente :</dt>
+<dd><div class="first last highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;{idUnique}&quot;</span> <span class="na">class=</span><span class="s">&quot;btn btn-default&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;{sIconType} {sIconClass}&quot;</span><span class="nt">&gt;&lt;/span&gt;</span> {sValue}
+<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Le marqueur <code class="docutils literal"><span class="pre">{sIconType}</span></code> est remplacé par <code class="docutils literal"><span class="pre">glyphicon</span></code> si l&#8217;option <code class="docutils literal"><span class="pre">glyphicon</span></code> est présente, il est remplacé par <code class="docutils literal"><span class="pre">fa</span></code> si l&#8217;option <code class="docutils literal"><span class="pre">fa</span></code> est présente. (Cf. documentation de
+<a class="reference external" href="http://getbootstrap.com/components/#glyphicons-how-to-use">Glyphicons - How to use</a> ou de <a class="reference external" href="http://fortawesome.github.io/Font-Awesome/examples/">FontAwesome - Examples</a>)</li>
+<li>Le marqueur <code class="docutils literal"><span class="pre">{sIconClass}</span></code> est remplacé par la valeur de l&#8217;option (Ex: <code class="docutils literal"><span class="pre">glyphicon-star</span></code> pour Glypicon <code class="docutils literal"><span class="pre">fa-camera-retro</span></code> pour FontAwesome)</li>
+<li>Ces deux options (<code class="docutils literal"><span class="pre">glyphicon</span></code> et <code class="docutils literal"><span class="pre">fa</span></code>) étant exclusifs la priorité est donnée à Glyphicon si elle sont toutes les deux présentes.</li>
+</ul>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<ul class="last simple">
+<li>La <code class="docutils literal"><span class="pre">class</span></code> du bouton (<code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> ou <code class="docutils literal"><span class="pre">&lt;button&gt;</span></code>) est déduite en combinant la classe &#8216;btn&#8217; et la valeur de l&#8217;attribut class fournie depuis le Xml, en l&#8217;absence d&#8217;attribut class &#8216;btn-default&#8217; est utilisée.
+Il est donc possible d&#8217;utiliser d&#8217;autre classes de bouton que Bootstrap <a class="reference external" href="http://getbootstrap.com/css/#buttons">met à disposition</a>.</li>
+<li>Le positionnement de l&#8217;icône est à gauche du libellé par défaut, il est possible de la mettre à droite grâce à l&#8217;option <code class="docutils literal"><span class="pre">glyphicon_align</span></code> décrite ci-après.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="attributs">
+<h2>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="action-obligatoire">
+<h3>action (Obligatoire)<a class="headerlink" href="#action-obligatoire" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Valeurs autorisées : save / exit / refresh_dataset / stand_by / reset</p>
+<p>Fonction : Indique quelle action faire lorsque l&#8217;utilisateur clique sur le bouton</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">action=</span><span class="s">&quot;save&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Dans le cas d&#8217;un <code class="docutils literal"><span class="pre">refresh_dataset</span></code> un paramètre supplémentaire est requis : <code class="docutils literal"><span class="pre">dataset</span></code>.</p>
+<p class="last">Dans le cas d&#8217;un <code class="docutils literal"><span class="pre">stand_by</span></code> le noeud enfant <code class="docutils literal"><span class="pre">&lt;redirection&gt;</span></code> est requis, plus d&#8217;infos : <a class="reference internal" href="../archi/frame.html#frame-standby"><em>Suspendre la saisie (Stand by)</em></a></p>
+</div>
+</div>
+<div class="section" id="label-facultatif">
+<h3>label (Facultatif)<a class="headerlink" href="#label-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Fonction : Le texte à afficher sur le bouton</p>
+<p>Par défaut : Prend la valeur de l&#8217;attribut &#8220;action&#8221;, pas vraiment pertinent de le laisser à vide par conséquent.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">action=</span><span class="s">&quot;save&quot;</span> <span class="na">label=</span><span class="s">&quot;Enregistrer&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dataset-facultatif">
+<h3>dataset (Facultatif)<a class="headerlink" href="#dataset-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Fonction : le dataset lié aux actions <code class="docutils literal"><span class="pre">save</span></code> ou <code class="docutils literal"><span class="pre">refresh_dataset</span></code>. Le rôle du dataset varie en fonction de l&#8217;action.</p>
+<p>Action <code class="docutils literal"><span class="pre">save</span></code> : seul le dataset indiqué sera envoyé au serveur pour être sauvegardé (par défaut tous les datasets sont envoyés).
+Il est recommandé de faire référence à un dataset qui n&#8217;a pas de dépendance.</p>
+<p>Action <code class="docutils literal"><span class="pre">refresh_dataset</span></code> : le dataset indiqué est mis à jour, pour cette action l&#8217;attribut est obligatoire.</p>
+<p>Par défaut : undefined</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">action=</span><span class="s">&quot;save&quot;</span> <span class="na">label=</span><span class="s">&quot;Enregistrer le patient&quot;</span> <span class="na">dataset=</span><span class="s">&quot;patient&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;button</span> <span class="na">action=</span><span class="s">&quot;refresh_dataset&quot;</span> <span class="na">label=</span><span class="s">&quot;Actualiser&quot;</span> <span class="na">dataset=</span><span class="s">&quot;patient&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dlg-title-success">
+<h3>dlg_title_success<a class="headerlink" href="#dlg-title-success" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Fonction: Permet de forcer un Titre pour la fenêtre (dialogBox) qui informe du succès de la sauvegarde</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;dlg_title_success&quot;</span> <span class="na">value=</span><span class="s">&quot;Information&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dlg-msg-success">
+<h3>dlg_msg_success<a class="headerlink" href="#dlg-msg-success" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Fonction: Permet de forcer un Message pour la fenêtre (dialogBox) qui informe du succès de la sauvegarde</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;dlg_msg_success&quot;</span> <span class="na">value=</span><span class="s">&quot;Fiche patient enregistrée en base de données&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="glyphicon">
+<h3>glyphicon<a class="headerlink" href="#glyphicon" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Fonction: Permet l&#8217;utilisation d&#8217;une icône <a class="reference external" href="http://getbootstrap.com/components/#glyphicons">glyphicon de Bootstrap</a> dans le bouton, renforçant l&#8217;identification de l&#8217;action.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;glyphicon&quot;</span> <span class="na">value=</span><span class="s">&quot;glyphicon-refresh&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Rendu :</p>
+<img alt="../_images/widget_button_glypicon_1.png" src="../_images/widget_button_glypicon_1.png" />
+</div>
+<div class="section" id="fa">
+<h3>fa<a class="headerlink" href="#fa" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Fonction: Permet l&#8217;utilisation d&#8217;une icône <a class="reference external" href="http://fortawesome.github.io/Font-Awesome/icons/">FontAwesome</a> dans le bouton, renforçant l&#8217;identification de l&#8217;action.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;fa&quot;</span> <span class="na">value=</span><span class="s">&quot;fa-comments&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Rendu :</p>
+<img alt="../_images/widget_button_font-awesome_1.png" src="../_images/widget_button_font-awesome_1.png" />
+</div>
+<div class="section" id="glyphicon-align">
+<h3>glyphicon_align<a class="headerlink" href="#glyphicon-align" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Valeurs autorisées : <code class="docutils literal"><span class="pre">left</span></code> ou <code class="docutils literal"><span class="pre">right</span></code></p>
+<p>Valeur par défaut : <code class="docutils literal"><span class="pre">left</span></code></p>
+<p>Fonction: Indique l&#8217;aligment de la glyphicon</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;glyphicon_align&quot;</span> <span class="na">value=</span><span class="s">&quot;right&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Rendu :</p>
+<img alt="../_images/widget_button_glypicon_2.png" src="../_images/widget_button_glypicon_2.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Bien que le nom de l&#8217;option soit <code class="docutils literal"><span class="pre">glyphicon_align</span></code> cette option peut influer également lors de l&#8217;utilisation des FontAwesome pour modifier l&#8217;alignement de l&#8217;icône.</p>
+</div>
+</div>
+</div>
+<div class="section" id="contenu">
+<h2>Contenu<a class="headerlink" href="#contenu" title="Permalink to this headline">¶</a></h2>
+<p>Le widget Button peut contenir un noeud enfant : <code class="docutils literal"><span class="pre">&lt;redirection&gt;</span></code>. Ce noeud permet d&#8217;indiquer au noyau un Uri spécifique pour effectuer l&#8217;action demandée.</p>
+<p>Rappel : Ce noeud est <strong>obligatoire</strong> si l&#8217;attribut <code class="docutils literal"><span class="pre">action</span></code> est &#8220;stand_by``. La syntaxe de ce noeud n&#8217;est pas modifiée</p>
+<p>Il devient par conséquent simple de rediriger un utilisateur avec ce code :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;redirection</span> <span class="na">module=</span><span class="s">&quot;form&quot;</span> <span class="na">ctrl=</span><span class="s">&quot;frame&quot;</span> <span class="na">action=</span><span class="s">&quot;get&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;params&gt;</span>
+        <span class="nt">&lt;value</span> <span class="na">alias=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>104<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/params&gt;</span>
+<span class="nt">&lt;/redirection&gt;</span>
+</pre></div>
+</div>
+<p>Un clique sur le bouton lié à cette redirection entrainera un remplacement de la frame courante par la frame récupérer en exécutant
+un appel XHR vers : form/frame/get/id/104 (Récupération de la ressource id = 104)</p>
+<p>Les attributs reconnus du noeud <code class="docutils literal"><span class="pre">&lt;redirection&gt;</span></code> sont :</p>
+<ul>
+<li><p class="first">module : (Obligatoire) Le module à utiliser pour construire l&#8217;url de redirection</p>
+</li>
+<li><p class="first">ctrl : (Obligatoire) Le controller à utiliser pour construire l&#8217;url de redirection</p>
+</li>
+<li><p class="first">action : (Obligatoire) L&#8217;action à utiliser pour construire l&#8217;url de redirection</p>
+</li>
+<li><dl class="first docutils">
+<dt>type <span class="classifier-delimiter">:</span> <span class="classifier">(Facultatif, par défaut &#8220;frame&#8221;) Le type de redirection à effectuer :</span></dt>
+<dd><ul class="first last simple">
+<li>frame : La redirection effectuera un remplacement de la frame courante, l&#8217;url appelée devra donc retourner un JSON de configuration de formulaire</li>
+<li>window : La redirection sera un redirection &#8220;classique&#8221; de l&#8217;url courante (<code class="docutils literal"><span class="pre">document.location.href</span></code>)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">En réalité seule l&#8217;égalité <code class="docutils literal"><span class="pre">type</span></code> == &#8220;frame&#8221; est testée, par conséquent toute autre valeur que &#8220;frame&#8221; sera considérée comme étant équivalente à &#8220;window&#8221;</p>
+</div>
+<p>Les paramètres (<code class="docutils literal"><span class="pre">&lt;params&gt;</span></code>) reconnus sont :</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">&lt;value&gt;</span></code> <span class="classifier-delimiter">:</span> <span class="classifier">le contenu de ce noeud sera la valeur transmise</span></dt>
+<dd><ul class="first last simple">
+<li>L&#8217;attribut <code class="docutils literal"><span class="pre">alias</span></code> correspond au nom du paramètre qui sera fournit</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">&lt;dataset&gt;</span></code> <span class="classifier-delimiter">:</span> <span class="classifier">Aucun contenu pour ce noeud (balise XML auto-fermante</span></dt>
+<dd><ul class="first last simple">
+<li>L&#8217;attribut <code class="docutils literal"><span class="pre">dataset_name</span></code> correspond à l&#8217;id du dataset résultant de l&#8217;execution du DataQuery de la partie <code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code></li>
+<li>L&#8217;attribut <code class="docutils literal"><span class="pre">field</span></code> correspond au nom du champ qui sera utilisé pour extraire la valeur de la ligne courante</li>
+<li>L&#8217;attribut <code class="docutils literal"><span class="pre">alias</span></code> correspond au nom du paramètre qui sera envoyé lors de la redirection</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Exemple complet :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">action=</span><span class="s">&quot;exit&quot;</span> <span class="na">label=</span><span class="s">&quot;Editer fiche patient&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;redirection</span> <span class="na">module=</span><span class="s">&quot;form&quot;</span> <span class="na">ctrl=</span><span class="s">&quot;frame&quot;</span> <span class="na">action=</span><span class="s">&quot;get&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;params&gt;</span>
+            <span class="nt">&lt;dataset</span> <span class="na">dataset_name=</span><span class="s">&quot;dos&quot;</span> <span class="na">field=</span><span class="s">&quot;id_data&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_dossier&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;value</span> <span class="na">alias=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>104<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/params&gt;</span>
+    <span class="nt">&lt;/redirection&gt;</span>
+<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WidgetButton</a><ul>
+<li><a class="reference internal" href="#fonction">Fonction</a></li>
+<li><a class="reference internal" href="#attributs">Attributs</a><ul>
+<li><a class="reference internal" href="#action-obligatoire">action (Obligatoire)</a></li>
+<li><a class="reference internal" href="#label-facultatif">label (Facultatif)</a></li>
+<li><a class="reference internal" href="#dataset-facultatif">dataset (Facultatif)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#dlg-title-success">dlg_title_success</a></li>
+<li><a class="reference internal" href="#dlg-msg-success">dlg_msg_success</a></li>
+<li><a class="reference internal" href="#glyphicon">glyphicon</a></li>
+<li><a class="reference internal" href="#fa">fa</a></li>
+<li><a class="reference internal" href="#glyphicon-align">glyphicon_align</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contenu">Contenu</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bitsfield.html"
+                        title="previous chapter">WidgetBitsField</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="field.html"
+                        title="next chapter">WidgetField</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/button.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="field.html" title="WidgetField"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bitsfield.html" title="WidgetBitsField"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

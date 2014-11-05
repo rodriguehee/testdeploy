@@ -1,0 +1,153 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Librairie &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="librairie">
+<span id="lib"></span><h1>Librairie<a class="headerlink" href="#librairie" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>La lib Voozanoo est en ensemble d&#8217;objets PHP qui vont permettre de manipuler les entitées telles que les projets, questionnaires, question, ...</p>
+</div>
+<div class="section" id="regles-de-programmation">
+<h2>Règles de programmation<a class="headerlink" href="#regles-de-programmation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="syntaxe">
+<h3>Syntaxe<a class="headerlink" href="#syntaxe" title="Permalink to this headline">¶</a></h3>
+<p>Exemple d&#8217;un code Voozanoo4:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">$Account-&gt;ProjectCount();</span>
+<span class="x">$Account-&gt;Project[&#39;vaccilab&#39;]-&gt;Table[&#39;patient&#39;]-&gt;Select();</span>
+<span class="x">$Account-&gt;Project[&#39;vaccilab&#39;]-&gt;Table[&#39;patient&#39;]-&gt;RealName();</span>
+<span class="x">$Account-&gt;Project[&#39;vaccilab&#39;]-&gt;Table[&#39;patient&#39;]-&gt;Fields[&#39;nom&#39;]-&gt;type;</span>
+
+<span class="x">$Account-&gt;Project[&#39;vaccilab&#39;]-&gt;Table[&#39;patient&#39;]-&gt;Where(&#39;nom=Seb&#39;)-&gt;Table[&#39;bilan&#39;]-&gt;where(&#39;date=2010-02-24&#39;);</span>
+</pre></div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">$sProjectName = « vaccilab »;</span>
+<span class="x">$sTableName = « patient »;</span>
+
+<span class="x">$Account-&gt;Project[$sProjectName]-&gt;Table[$sTableName]-&gt;Select();</span>
+
+<span class="x">//Récupération du dernier bilan d&#39;un patient</span>
+<span class="x">$object = $Account-&gt;Project[$sProjectName]-&gt;Table[$sTableName]-&gt;Where($iRecordId);</span>
+<span class="x">$object-&gt;ShowOnForm();</span>
+
+<span class="x">$object2 = $Table[&#39;bilan&#39;]-&gt;last();</span>
+<span class="x">$object2-&gt;ShowOnForm();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="stockage-des-objets">
+<h3>Stockage des objets<a class="headerlink" href="#stockage-des-objets" title="Permalink to this headline">¶</a></h3>
+<p>Tous les objets seront définis par XML stockés en DB. Les ressources statiques (XSD, XSLT, TPL, SQL, ...) partagées par tous les comptes et tous les projets seront elles stockées sur le disque.</p>
+</div>
+<div class="section" id="coherence-des-objets">
+<h3>Cohérence des objets<a class="headerlink" href="#coherence-des-objets" title="Permalink to this headline">¶</a></h3>
+<p>Description du cas: plusieurs objets décrits sous forme de XML, utilisent une variable X, cette variable X est supprimée par l&#8217;utilisateur. Comment trouver ces objets rapidement?
+Test de la cohérence des données en utilisant les XSD. Les XML (quelque soit leur structure) seront transformés (xslt) en XML de même structure pour pouvoir les valider avec le même XSD.</p>
+</div>
+</div>
+<div class="section" id="diagramme-de-class">
+<h2>Diagramme de class<a class="headerlink" href="#diagramme-de-class" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/voo4_class_v4.png" src="../_images/voo4_class_v4.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Librairie</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#regles-de-programmation">Règles de programmation</a><ul>
+<li><a class="reference internal" href="#syntaxe">Syntaxe</a></li>
+<li><a class="reference internal" href="#stockage-des-objets">Stockage des objets</a></li>
+<li><a class="reference internal" href="#coherence-des-objets">Cohérence des objets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#diagramme-de-class">Diagramme de class</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/archi/lib.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

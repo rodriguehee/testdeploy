@@ -1,0 +1,27 @@
+﻿.. _noyau:
+
+Noyau
+=====
+Introduction
+------------
+Les modules standards de Voozanoo sont dans un noyau mutualisé.
+
+Arborescence du noyau
+---------------------
+* library: contient l'API de Voozanoo4.
+* modules
+	* auth: authentificaiton
+	* error: affichage des erreurs
+	* form: affichage et gestion des formulaires
+	* mainframe: module permettant le découpage d'une page en plusieurs frames
+	* style: récupération des CSS
+* plugins: contient un plugin (auth) qui test la connexion de l'utilisateur et les droits d'accès aux modules
+
+Arborescence d'une application
+------------------------------
+* controllers: contient le controller index pour la page d'accueil
+* library: librairie dédiée au projet
+* modules: modules propres au projet
+* public: contient l'index, et les ressources accessibles directement par le navigateur
+* views: vues liées aux controllers qui sont dans le répertoire controllers de la racine
+

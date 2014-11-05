@@ -1,0 +1,32 @@
+.. _widgetactionlist:
+
+WidgetActionList
+================
+
+Fonction
+--------
+Hérite de :ref:`widgetbutton`
+
+Ce composant permet d'afficher une liste d'actions et d'exécuter l'action sélectionnée.
+Ce composant ne doit pas être instancié directement.
+
+Le template de rendu est :
+
+.. code-block:: html
+
+	<div class="actionlist" id="{idUnique}" name="{idUnique}">
+		<input type="button" class="btactionlist" value="{label}" name="BT_{idUnique}" id="BT_{idUnique}"/>
+		<ul id="action-list-{idUnique}">
+			<li value="0">{action_label}</li>
+			<li value="1">{action_label}</li>
+			...
+		</ul>
+
+.. note::
+    Ce composant ne doit pas être instancié directement. (voir WidgetActionList).
+
+
+Attributs
+---------
+
+Les attributs sont le tableau aAction et la chaine label

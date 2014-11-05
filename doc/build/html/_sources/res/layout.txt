@@ -1,0 +1,272 @@
+﻿.. _layout:
+
+Layout
+======
+Description
+-----------
+Le layout décrit le contenu de la vue.
+
+Dans le cadre d'un layout ciblant le rendu HTML :
+
+- L'intégration du framework CSS `Bootstrap <http://getbootstrap.com/>`_ facilite l'intégration du concept de Responsive Design 
+  dans la présentation du formulaire.
+- Chaque formulaire présent dans Voozanoo4 est désormais considéré comme un `Horizontal Form <http://getbootstrap.com/css/#forms-horizontal>`_
+- Ce type de formulaire se comportant comme une grid, il est donc fortement conseillé d'assimiler et d'utiliser le 
+  concept de `Grid <http://getbootstrap.com/css/#grid>`_ pour rendre le mise en page fluide.
+
+
+Balise root
+-----------
+
+.. code-block:: xml
+
+	<layout title="Déclaration d'un nouveau cas index" short_title="Déclaration" />
+
+* ``title`` : titre de la page
+* ``short_title`` : titre court de la page
+
+.. note::
+	Le titre court est utilisé coté navigateur pour définir le titre de la page.
+	C'est ce titre qui apparait dans l'onglet. Si le titre court est absent, le 
+	système prendra alors le titre, et si ce dernier est aussi absent il sera affiché
+	le nom du projet.
+
+Title
+-----
+
+.. code-block:: xml
+
+	<title value="Identification du patient"/>
+
+Clear
+-----
+Saut de ligne
+
+.. code-block:: xml
+
+	<clear/>
+
+Label
+-----
+Libellé d'une variable. Pour cibler la variable on indique son nom et le dataset où elle se trouve.
+
+.. code-block:: xml
+
+	<label dataset="datatable_patient" field="nom"/>
+
+Dans le cadre d'un rendu HTML : correspond à l'élément Html ``<label>``.
+
+.. hint::
+    En l'absence de classes relatives au système de grid de bootstrap les classes appliquées à l'élément label seront ``col-lg-2 col-md-3``.
+
+Value
+-----
+Représentation d'une variable en saisie ou lecture seule.
+
+.. code-block:: xml
+
+	<value dataset="datatable_patient" field="nom" mode="rw" size="10" />
+
+Dans le cadre d'un rendu HTML, génère le code Html en fonction de la variable à représenter, exemple :
+
+- Un ``<input>`` dans le cas d'une variable simple, de type String
+- Un ``<textarea>`` dans le cas d'une variable de type Text
+- Plusieurs ``<input>`` dans le cas d'une variable de type Date ou Heure
+- Un structure plus complexe avec des ``<input>`` dans le cas de variable à réponse multiple (Checkbox) ou liée à un dictionnaire (Radio)
+
+- ``dataset`` : Identifiant du dataset
+- ``field`` : Nom du champ
+- ``mode`` : r (read) ou rw (read/write)
+- ``size`` (optionnel) : Dans le cas d'un rendu ``<input>`` sera placé comme attribut "size"
+
+Options
+~~~~~~~
+Il est possible d'ajouter des options pour la présentation de la valeur. Ces options sont soit interprétables par tous les moteurs de rendu (HTML, PDF, etc.), soit dédiées à un moteur.
+
+.. code-block:: xml
+
+	<value datatable="datatable_patient" field="nom" mode="rw">
+	  <option output="pdf" option_name="font-weight" value="bold"/>
+	  <option output="html" option_name="render" value="radio"/>
+	  <option output="all" option_name="order" value="position"/>
+	</value>
+
+    
+Form Row
+--------
+Cet élément, directement lié à l'intégration de Bootstrap CSS, permet de de déclarer une "ligne" dans un formulaire. Il permet 
+d'encapsuler N élément enfants (label, value, statictext). Cet élément reflète l'élément ``<div class="form-group">`` de Bootstrap.
+
+Exemple d'utilisation :
+
+.. code-block:: xml
+    
+    <form_row>
+        <label dataset="foo" field="bar" />
+        <value dataset="foo" field="bar" mode="rw" />
+    </form_row>
+    
+Il faut bien garder à l'esprit que N éléments encapsulés dans une Form Row seront indissociables et se suivront toujours (sur plusieurs lignes si besoin).
+
+.. note::
+    L'élément Form Row inclus des marges supérieures et inférieurs pour espacer les éléments d'un formulaire et le rendre 
+    moins dense, augmentant ainsi la lisibilité.
+    
+.. image:: ../images/layout_formrow_bootstrap.png
+
+Tabs
+----
+Affiche les enregistrements sous forme d'onglets.
+
+.. code-block:: xml
+
+	<tabs id="tabs_enquetes" dataset="datatable_enquete">
+	  [...]
+	</tabs>
+
+* id: identifiant du composant
+* dataset: nom d'un dataset
+
+Listing
+-------
+Permet l'affichage d'un dataset sous la forme d'une liste.
+
+.. code-block:: xml
+
+	<listing id="listing_contacts" dataset="datatable_contact"/>
+
+Il est possible de sélectionner les données à afficher dans le dataset:
+
+.. code-block:: xml
+
+	<listing id="listing_contacts" dataset="datatable_contact">
+	  <column field="nom"/>
+	  <column field="prenom"/>
+	  <column field="year_ddn" title="Année de naissance"/>
+	  <column field="sexe"/>
+	  <column field="date_contact"/>
+	  <column field="relation"/>
+	</listing>
+
+Canvas
+------
+Permet l'insertion d'un tableau.
+
+.. code-block:: xml
+
+	<canvas border="0">
+	  <row>
+	    <cell width="50%">
+	      <label dataset="datatable_patient" field="nom"/>
+	    </cell>
+	    <cell>
+	      <value dataset="datatable_patient" field="nom" mode="rw"/>
+	    </cell>
+	  </row>
+	  <row>
+	    <cell>
+	      <label dataset="datatable_patient" field="prenom"/>
+	    </cell>
+	    <cell>
+	      <value dataset="datatable_patient" field="prenom" mode="rw"/>
+	    </cell>
+	  </row>
+	</canvas>
+
+Il est possible de forcer une largeur sur les cellule. D'autre part, le système n'interdit pas de mettre un nombre de cellule différent par ligne.
+NB: utilisation du terme canvas car le terme table est déjà utilisé.
+
+Group
+-----
+Regroupement des éléments
+
+.. code-block:: xml
+
+	<group title="Identification du patient">
+	  <label dataset="patient" field="nom" />
+	  <value dataset="patient" field="nom" mode="rw" />
+	  <clear/>
+	  <label dataset="patient" field="prenom" />
+	  <value dataset="patient" field="prenom" mode="rw"/>
+	</group>
+
+Le titre est optionnel.
+
+Options
+~~~~~~~
+Il est possible de spécifier l'option ``show_on`` ou ``hide_on`` pour conditionner l'affichage de ce group à l'aide d'une condition Javascript. L'utilisation d'une telle condition préconisée uniquement dans le cas
+du développement de la partie "éditeur" de Voozanoo4 ou lors de développement très spécifique à un projet.
+
+Il est de la responsabilité du développeur de ne pas écrire du code syntaxiquement invalide, cette condition étant directement évaluée (``eval()``) coté javascript.
+
+Plus d'informations sur la page ":ref:`lib_js-jsquery`".
+
+.. code-block:: xml
+
+	<group title="Paramètres">
+	   <option output="html" option_name="show_on" value="{foo.bar} == 5"/>
+	</group>
+
+Il est également possible de cacher le style qui est appliqué aux groupes, pour qu'on ne voit pas l'encadrement qui les caractérise. Cette option est utile
+lorsque le groupe sert pour conditionner l'affichage de certaines variables, et non pas pour regrouper des variables.
+
+.. code-block:: xml
+
+	<group title="Paramètres">
+	   <option output="html" option_name="transparent_group" value="true"/>
+	</group>
+
+.. note::
+	Techniquement, la class CSS "group" qui est normalement appliquée est remplacée par la class "group-transparent".
+
+UserGroup
+---------
+Affiche la liste des groupes où l'utilisateur peut enregistrer le formulaire. Les groupes sont ceux d'un axe en particulier, il faut par conséquent mettre autant de balises que d'axes.
+
+.. code-block:: xml
+
+	<user_group axis="1"/>//Géo localisation
+	<user_group axis="2"/>//Profils
+
+StaticText
+----------
+Affiche du texte
+
+.. code-block:: xml
+
+	<statictext>
+	  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet justo mi, a interdum magna. [...]
+	</statictext>
+
+La balise peut prendre le paramètre width:
+
+.. code-block:: xml
+
+	<statictext width="20%">Hello world</statictext>
+    
+.. note::
+    Il est conseillé, autant que possible, d'utiliser les classes CSS de Bootstrap relatives au système de grid (col-(lg|md|sm|xs)-[1-12]) pour indiquer une largeur. L'exemple ci-dessous montre comment positionner un texte pour qu'il soit présenté de la même manière qu'un libellé de question.
+
+.. code-block:: xml
+
+	<form_row>
+		<statictext class="col-md-2 control-label">Département</statictext>
+		<value dataset="settings" field="departement_name" mode="r" />
+	</form_row>	
+    
+Box
+---
+Injecte une "boîte" / "section" neutre, sans aucune style particulier. Pratique dans un contexte de rendu Html : Elle permet d'injecter des boîtes / sections avec des classes
+particulières.
+
+Utilisé pour styiliser une section de manière spécifique ou pour utiliser des concepts de Bootstrap.
+
+.. code-block:: xml
+    
+    <box class="summary_visit">
+        <statictext class="h2-like">Récapitulatif des visites</statictext>
+        <form_row>
+            <label dataset="visite" field="date_debut" />
+            <value dataset="visite" field="date_debut" mode="r" />
+        </form_row>
+    </box>

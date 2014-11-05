@@ -1,0 +1,79 @@
+.. _glossary:
+
+Glossaire
+=========
+Utilisateur final
+-----------------
+
+.. glossary::
+	:sorted:
+
+	Voozanoo
+		Editeur en ligne de questionnaires en ligne
+	
+	Compte (en: account)
+		Application Voozanoo4 hébergeant un ou plusieurs projets, utilisant une seule base de données.
+		
+	Condition d'affichage (en: display condition)
+		Définit sous quelle condition un bloc de questions apparait sur le questionnaire.
+	
+	Editeur (en: editor)
+		Permet de construire des questionnaires.
+	
+	Noyau (en: core)
+		Il s'agit du noyau de l'application, il peut être mutualisé pour simplifier les mises à jour.
+		Traduction anglaise: acceptable values
+	
+	Projet (en: project)
+		Ensemble de questionnaires, listing, filtres, et autres ressource (correspond à l'enquête dans Voozanoo3)
+		
+	Question
+		Contenu du questionnaire
+	
+	Questionnaire
+		Référence aux questionnaires papier qui peuvent contenir plusieurs tables d'une base de données (exemple: patient + une matrice qui liste plusieurs bilans sur la même page). 
+		
+	Table
+		Un questionnaire est divisé en une ou plusieurs table.
+	
+	Test de cohérence (en:  acceptable values)
+		Sert à valider les données entrées par l'utilisateur. Un test peut être bloquant (impossible d'enregistrer le formulaire), ou bien être un simple avertissement.	
+		
+Technique
+---------
+
+.. glossary::
+	:sorted:
+	
+	Form
+		Formulaire
+		
+	Varset
+		Correspond aux questionnaires Voozanoo3
+		
+	Var
+		Variables
+		
+	Table
+		Table dans la base de données
+		
+	Dataset
+		Contient les données avec leur structure
+	
+	Metadata
+		Partie du dataset définissant les variables
+		
+	Rowdata
+		Partie du dataset contenant les données
+	
+	Dataquery
+		Ficher XML qui permet de définir un dataset
+		
+	Query
+		Requête SQL utilisée dans les tests de cohérence et les conditions d'affichage des blocs
+		
+	Acceptable values
+		Test de cohérence
+		
+	Display condition
+		Condition d'affichage d'un bloc

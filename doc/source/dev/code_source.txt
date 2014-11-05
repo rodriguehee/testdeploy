@@ -1,0 +1,72 @@
+.. _code_source:
+
+Code source
+============
+PHP
+---
+
+.. code-block:: php
+
+	/**
+	* Voozanoo4 library base class
+	*
+	* @author Fidinirina RANDRIA <f.randria@epiconcept.fr>
+	* @author Stéphane PREVOT <s.prevot@epiconcept.fr>
+	* @category VooLib
+	* @copyright Copyright (c) 2010 Epiconcept (http://www.epiconcept.fr)
+	* @filesource
+	*/
+
+**TODO**: compléter avec les autres cartouches (méthodes, constantes, ...).
+
+Javascript
+----------
+Module
+~~~~~~
+
+.. code-block:: js
+
+	/**
+	* Layout
+	*
+	* @module layout
+	* @submodule widget
+	*/
+
+Class
+~~~~~
+
+.. code-block:: js
+
+	/**
+	* WidgetDate
+	*
+	* @class WidgetDate
+	* @extends WidgetField
+	* @constructor
+	*/
+
+Attribut
+~~~~~~~~
+
+.. code-block:: js
+
+	/**
+	* @attribute FIELD_DAY_ID_TPL
+	* @description id template of day field
+	* @type {string}
+	* @value "voo_date_day"
+	*/
+		
+Method
+~~~~~~
+
+.. code-block:: js
+
+	/**
+	* get a dom field name from the period
+	* @method FieldName
+	* @public
+	* @param period {string} period for the field (day, month, year or ONE)
+	* @return {string} name of the field
+	*/

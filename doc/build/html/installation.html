@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Paramétrage" href="parametrage.html" />
+    <link rel="prev" title="Webservices" href="webservices.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parametrage.html" title="Paramétrage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="webservices.html" title="Webservices"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ferme-d-application">
+<h2>Ferme d&#8217;application<a class="headerlink" href="#ferme-d-application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="conventions-d-ecriture">
+<h3>Conventions d&#8217;écriture<a class="headerlink" href="#conventions-d-ecriture" title="Permalink to this headline">¶</a></h3>
+<p>la marque TODO signale un mécanisme qui est encore à créer/mettre en place
+les chemins sont notés à partir de la racine du projet ferme, et débutent par un slash</p>
+</div>
+<div class="section" id="modes-de-fonctionnement">
+<h3>Modes de fonctionnement<a class="headerlink" href="#modes-de-fonctionnement" title="Permalink to this headline">¶</a></h3>
+<p>Le programme de &#8220;ferme&#8221; gère le DocumentRoot, et redirige vers l&#8217;application demandée en fonction de son nom.
+Il gère aussi la localisation des fichiers de configuration et l&#8217;espace pour les fichiers de travail de chaque application.</p>
+<p>Le fichier prepend.php défini les chemins nécessaires</p>
+<ul>
+<li><dl class="first docutils">
+<dt>CHEMIN_BASE <span class="classifier-delimiter">:</span> <span class="classifier">dossier dans lequel on trouve (le Bootstrap.php en dépend pour configurer son autoloader)</span></dt>
+<dd><ul class="first last simple">
+<li>la ferme</li>
+<li>applis : contenant les applications installées</li>
+<li>librairies externes</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">APPLICATION_ENV : défini le mode de configuration utilisé par la configuration ZF pour toutes les applications</p>
+</li>
+<li><p class="first">CHEMIN_EXTLIB : chemin de la librairie externe</p>
+</li>
+<li><p class="first">CHEMIN_VOO4 : chemin où sont stockés les cores de Voozanoo4</p>
+</li>
+<li><p class="first">CHEMIN_APPLIS : chemin contenant les applications installées</p>
+</li>
+<li><p class="first">CHEMIN_CONF : fichiers de configurations</p>
+</li>
+<li><p class="first">CHEMIN_TRAVAIL : chemin pour les fichiers de travail des applications</p>
+</li>
+</ul>
+<p>Mode de fonctionnement &#8220;développement&#8221; par défaut (mais librement modifiable)</p>
+<ul class="simple">
+<li>les dossiers de travail et de configuration sont dans le dossier de la ferme (pour faire simple et ne pas disperser les choses)</li>
+</ul>
+<p>Mode de fonctionnement &#8220;production&#8221;</p>
+<ul class="simple">
+<li>le dossier de travail est le seul sur lequel Apache à le droit d&#8217;écrire, il doit donc être sorti du /home (en prime cela évitera de sauvegarder les fichiers de travail)</li>
+<li>le dossier des fichiers de configuration doit être sauvegardé (Apache n&#8217;a pas les droits d&#8217;écriture dessus)</li>
+<li>les dossiers &#8220;ferme&#8221; et applications ne sont pas en écriture pour Apache</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h3>Installation<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">déployer le logiciel sur le serveur</p>
+</li>
+<li><dl class="first docutils">
+<dt>ajouter le contenu du fichier /documentation/conf_apache.txt au Virtualhost utilisé, en changeant</dt>
+<dd><ul class="first last simple">
+<li>le port d&#8217;écoute (directives Listen et VirtualHost)</li>
+<li>éventuellement l&#8217;IP du virtualhost</li>
+<li>le DocumentRoot qui doit pointer vers /public/</li>
+<li>les chemins utilisés dans les directives RewriteCond / RewriteRule, qui doivent pointer vers le dossier des applications</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">dans le php.ini mettre le fichier /prepend.php dans la directive auto_prepend_file (avec son chemin complet)</p>
+</li>
+</ul>
+</div>
+<div class="section" id="dossier-de-travail">
+<h3>Dossier de travail<a class="headerlink" href="#dossier-de-travail" title="Permalink to this headline">¶</a></h3>
+<p>Le but est d&#8217;avoir un seul dossier accessible pour Apache, où l&#8217;on stockera</p>
+<ul class="simple">
+<li>le cache de Smarty et tout autre cache</li>
+<li>les fichiers temporaires, uploadés, en cours de compression/décompression</li>
+</ul>
+<p>Ce dossier n&#8217;aura pas besoin d&#8217;être partagé entre les frontaux dans le cas d&#8217;un load-balancing, ni d&#8217;être sauvegardé.
+Il ne gère notamment pas le cas où une application devrait stocker de manière permanente des données sur disque.
+_TODO_ Chaque application devra y créer un dossier à son nom pour isoler ses fichiers des autres, et isoler les fichiers par session utilisateur pour permettre la concurrence.
+Une librairie devra être développé dans Voozanoo4 pour s&#8217;assurer d&#8217;une manière centralisée et unique qu&#8217;aucune faille ne permet d&#8217;accéder aux fichiers d&#8217;une autre application (la solution absolue étant d&#8217;isoler par utilisateur Unix mais cela demande une revue complète du serveur et impose des choix techniques non négligeables).</p>
+</div>
+<div class="section" id="dossier-de-configuration">
+<h3>Dossier de configuration<a class="headerlink" href="#dossier-de-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Le but est d&#8217;avoir tous les fichiers au même endroit pour avoir facilement une vue d&#8217;ensemble, et faciliter la reconstruction d&#8217;un serveur.
+Il contient tous les éléments de configuration propre à une application (base de données, chemins d&#8217;inclusion, etc).
+Actuellement une application charge le fichier ini portant son nom.
+_TODO_ L&#8217;idée est de détacher le fichier ini du dossier de l&#8217;application, pour pouvoir librement déterminer en fonction de l&#8217;URL le dossier de code à utiliser et la configuration propre, ce qui permettrait notamment de n&#8217;installer qu&#8217;une seule version du pool d&#8217;enquête générique mais d&#8217;avoir un fichier de configuration par application.</p>
+</div>
+<div class="section" id="references">
+<h3>Références<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>SVN : <a class="reference external" href="https://www.epiconcept.fr/outils_internes/ferme/">https://www.epiconcept.fr/outils_internes/ferme/</a> (external link)</li>
+</ul>
+</div>
+<div class="section" id="documentation-rewriting-utilisee">
+<h3>Documentation rewriting utilisée<a class="headerlink" href="#documentation-rewriting-utilisee" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html">http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html</a></li>
+<li><a class="reference external" href="http://httpd.apache.org/docs/2.0/misc/rewriteguide.html">http://httpd.apache.org/docs/2.0/misc/rewriteguide.html</a></li>
+<li><a class="reference external" href="http://httpd.apache.org/docs/2.0/rewrite/rewrite_guide_advanced.html">http://httpd.apache.org/docs/2.0/rewrite/rewrite_guide_advanced.html</a></li>
+</ul>
+<p>Sur la correction du / final manquant sur les URL</p>
+<ul class="simple">
+<li><a class="reference external" href="http://enarion.net/web/apache/htaccess/trailing-slash/">http://enarion.net/web/apache/htaccess/trailing-slash/</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="initialisation-d-un-projet-voo4">
+<h2>Initialisation d&#8217;un projet  Voo4<a class="headerlink" href="#initialisation-d-un-projet-voo4" title="Permalink to this headline">¶</a></h2>
+<p>Le noyau dispose d&#8217;un outil permettant l&#8217;initialisation d&#8217;un projet Voo4 (partie Base de données uniquement). Il existe deux versions de l&#8217;outil, init.bat (Windows) et init.sh (Linux).
+Cet outil est présent dans <code class="docutils literal"><span class="pre">src/tools/</span></code></p>
+<div class="section" id="pre-requis">
+<h3>Pré-requis<a class="headerlink" href="#pre-requis" title="Permalink to this headline">¶</a></h3>
+<p>Comme dit précédemment cet outil s&#8217;occupe uniquement de l&#8217;initialisation coté Base de données, que ce soit depuis une base vierge ou depuis une base contenant déjà une projet Voozanoo4.</p>
+<p>Avant de lancer l&#8217;outil d&#8217;initialisation assurez-vous :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>(S&#8217;il s&#8217;agit d&#8217;une initialisation depuis zéro)</dt>
+<dd><ul class="first last simple">
+<li>D&#8217;avoir &#8220;extrait&#8221; le squelette d&#8217;une Appli Voo4 depuis le Svn sur votre poste / le serveur (Url : <a class="reference external" href="https://svn.epiconcept.fr/squelette/voo4_vide/">https://svn.epiconcept.fr/squelette/voo4_vide/</a>)</li>
+<li>D&#8217;avoir créé la base de données qui accueillera l&#8217;Application Voo4</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>D&#8217;avoir accès à l&#8217;interpréteur php depuis le Terminal (Linux) / l&#8217;invite de commande (Windows)</dt>
+<dd><ul class="first last simple">
+<li>Pour Linux c&#8217;est normalement déjà fait si Php est installé (présent dans /usr/bin et par conséquent reconnu lors de l&#8217;appel à <code class="docutils literal"><span class="pre">php</span></code>)</li>
+<li>Pour Windows vous devez modifier la variable d&#8217;environnement <code class="docutils literal"><span class="pre">Path</span></code> afin d&#8217;ajouter le chemin vers le répertoire contenant php.exe (Voir <a class="reference internal" href="howto.html#howto-phpcmd"><em>Windows - Utiliser PHP depuis l&#8217;invite de commande</em></a>)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">D&#8217;avoir la librairie Zend Framework dans votre <cite>include_path</cite> (Voir <a class="reference internal" href="howto.html#howto-zfincludepath"><em>Ajouter la librairie Zend Framework à l&#8217;include_path de PHP</em></a>)</p>
+</li>
+<li><p class="first">Pour Linux : D&#8217;avoir les droits d&#8217;exécution sur le Shell <code class="docutils literal"><span class="pre">init.sh</span></code></p>
+</li>
+</ul>
+</div>
+<div class="section" id="utilisation">
+<h3>Utilisation<a class="headerlink" href="#utilisation" title="Permalink to this headline">¶</a></h3>
+<p>Les scripts (Batch / Shell) ont été conçus pour être relativement intuitifs, pour lancer l&#8217;initialisation d&#8217;un Projet Voo4 :</p>
+<ul>
+<li><p class="first">Ouvrez un terminal / un(e) invite de commande et placez vous dans le répertoire <code class="docutils literal"><span class="pre">src/tools</span></code> du noyau Voozanoo4</p>
+</li>
+<li><p class="first">Lancez le script correspondant à votre OS (<code class="docutils literal"><span class="pre">init.bat</span></code> ou <code class="docutils literal"><span class="pre">init.sh</span></code>)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Suivez les indications à l&#8217;écran qui permettront de collecter :</dt>
+<dd><ul class="first last simple">
+<li>Le chemin absolu vers le répertoire des ressources de votre application (nécessaire pour la génération du fichier Xml des Acl/Rôles)</li>
+<li>Les paramètres de connexion à la base de données</li>
+<li>Les paramètres du projet à ajouter</li>
+<li>Les paramètres de l&#8217;utilisateur &#8220;Administrateur&#8221; à créer pour le projet</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="fonctionnement">
+<h3>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h3>
+<p>Schéma du fonctionnement de l&#8217;outil d&#8217;initialisation :</p>
+<img alt="_images/schema_outil_init_pjVoo4.png" src="_images/schema_outil_init_pjVoo4.png" />
+</div>
+</div>
+<div class="section" id="acces-aux-fichiers-javascript">
+<h2>Accès aux fichiers javascript<a class="headerlink" href="#acces-aux-fichiers-javascript" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Lien symbolique</div>
+<div class="line"><a class="reference external" href="https://www.voozanoo.net/javascript/formframe.js">https://www.voozanoo.net/javascript/formframe.js</a></div>
+<div class="line">Sur le serveur on ajoute dans le répertoire publique du projet un lien symbolique vers le répertoire qui centralise les fichiers javascript de Voozanoo4 /home/www.voozanoo.fr/www/public/javascript =&gt; lien symbolique vers /home/www.voozanoo.fr/www/voozanoo4/javascript</div>
+<div class="line">NB: pour windows il faudra passer par un alias</div>
+</div>
+<div class="line-block">
+<div class="line">Répertoire accessible par le serveur</div>
+<div class="line"><a class="reference external" href="https://www.voozanoo.net/javascript/1.0.1/formframe.js">https://www.voozanoo.net/javascript/1.0.1/formframe.js</a></div>
+<div class="line">Les fichiers javascripts sont contenus dans un répertoire qui est accessible par Apache (/home/www/voozanoo.fr/www/javascript/1.0.1). Il s&#8217;agit du mode actuellement en place pour Voozanoo3 sur nos serveurs.</div>
+</div>
+<div class="line-block">
+<div class="line">Controller de récupération des javascript</div>
+<div class="line"><a class="reference external" href="https://www.voozanoo.net/vaccilab/javascript/get/file/formframe.js">https://www.voozanoo.net/vaccilab/javascript/get/file/formframe.js</a></div>
+<div class="line">Les fichiers javascripts sont centralisés (/home/www.voozanoo.fr/www/voozanoo4/javascript) et renvoyés au client en faisant appel à un controller dédié.</div>
+</div>
+</div>
+</div>
+<div class="section" id="packaging-deploiement">
+<h1>Packaging &amp; Déploiement<a class="headerlink" href="#packaging-deploiement" title="Permalink to this headline">¶</a></h1>
+<p>Cette section décrit comment packager une application ou un coeur Voozanoo4 et comment l&#8217;installer sur un serveur Linux.
+Packager signifie donc créer un package Debian .deb</p>
+<div class="section" id="nomenclature-des-tags">
+<h2>Nomenclature des TAGS<a class="headerlink" href="#nomenclature-des-tags" title="Permalink to this headline">¶</a></h2>
+<p>Les packages sont construits à partir d&#8217;une extraction d&#8217;un tag sur SVN. Un tag doit être construit selon la forme suivante :</p>
+<p>YYYYMMDD-XX.XX-NN</p>
+<div class="section" id="exemple">
+<h3>Exemple<a class="headerlink" href="#exemple" title="Permalink to this headline">¶</a></h3>
+<p>20130812-01.13-04 : Définit la version 1.13 release 4.</p>
+</div>
+</div>
+<div class="section" id="packaging-voozanoo4-core">
+<h2>Packaging VOOZANOO4 CORE<a class="headerlink" href="#packaging-voozanoo4-core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="contraintes-developpement">
+<h3>Contraintes développement<a class="headerlink" href="#contraintes-developpement" title="Permalink to this headline">¶</a></h3>
+<p>Le fichier APPINFOS doit ètre présent dans src/configs.</p>
+<p>Ce fichier JSON doit contenir à minima les infos suivantes :</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+        <span class="nt">&quot;PACKAGING&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;INF_PACKAGE&quot;</span><span class="p">:</span><span class="s2">&quot;VOOZANOO4&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_VERSION&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_PRIORITY&quot;</span><span class="p">:</span><span class="s2">&quot;optional&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_ARCHITECTURE&quot;</span><span class="p">:</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_DEPENDS&quot;</span><span class="p">:[</span>
+                        <span class="s2">&quot;epi-zendframework-1.12.0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;epi-yui-3.10.2&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;epi-yui-2.9.0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;epi-jquery&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;epi-bootstrap&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;epiconcept-arborescence&quot;</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;INF_SECTION&quot;</span><span class="p">:</span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_MAINTENER&quot;</span><span class="p">:</span><span class="s2">&quot;Team FrameWork &lt;framework@epiconcept.fr&gt;&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_DESCRIPTION&quot;</span><span class="p">:</span><span class="s2">&quot;Core Voozanoo4&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_HOMEPAGE&quot;</span><span class="p">:</span><span class="s2">&quot;http://www.epiconcept.fr&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;DEPENDENCIES&quot;</span><span class="p">:{</span>
+                <span class="nt">&quot;ZF&quot;</span><span class="p">:</span><span class="s2">&quot;1.12.3&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;YUI3&quot;</span><span class="p">:</span> <span class="s2">&quot;3.10.2&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;YUI2&quot;</span><span class="p">:</span> <span class="s2">&quot;2.9.0&quot;</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Attention, il doit y avoir une cohérence entre les versions des paquets indiqués dans <cite>INF_DEPENDS`</cite> et celle présentes dans``DEPENDENCIES`` (ZendFramework, Yui2 et Yui3).</p>
+</div>
+</div>
+<div class="section" id="creer-le-package">
+<h3>Créer le package<a class="headerlink" href="#creer-le-package" title="Permalink to this headline">¶</a></h3>
+<p>Se rendre sur le serveur de build.</p>
+<div class="highlight-bash"><div class="highlight"><pre>ssh -A epiconcept_build@debian-build
+</pre></div>
+</div>
+<p>Si il y a une demande de password, demander à Thierry ou à Cédric de mettre votre clé dans l&#8217;authorized_key de l&#8217;utilisateur.
+Une fois loggé, rendez vous directement dans le répertoire bin/</p>
+<p>Exécutez la commande suivante :</p>
+<div class="highlight-bash"><div class="highlight"><pre>./mkpack.voo4core TAG
+./debenvoi votre_compte_linux
+</pre></div>
+</div>
+<p>Exemple:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> /var/epiconcept_build/bin
+./mkpack.voo4core 20140429-02.13-01
+./debenvoi john
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="deploiement-voozanoo4-core">
+<h2>Déploiement VOOZANOO4 CORE<a class="headerlink" href="#deploiement-voozanoo4-core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gestion-des-repositories">
+<h3>Gestion des repositories<a class="headerlink" href="#gestion-des-repositories" title="Permalink to this headline">¶</a></h3>
+<p>Si on procède sur un nouveau serveur sur lequel rien n&#8217;a été installé, il nous faut déclarer le repository de nos
+packages dans la base Debian</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">echo</span> -e <span class="s1">&#39;/debsums/s/sp \/var/sp=\/var/\nwq&#39;</span> <span class="p">|</span> ed /etc/apt/apt.conf.d/90debsums
+<span class="nb">echo</span> <span class="s2">&quot;deb http://files.epiconcept.fr/repositories_apt/epiconcept squeeze main&quot;</span> &gt; /etc/apt/sources.list.d/epiconcept.list
+</pre></div>
+</div>
+</div>
+<div class="section" id="installer-un-coeur-voozanoo4">
+<h3>Installer un coeur Voozanoo4<a class="headerlink" href="#installer-un-coeur-voozanoo4" title="Permalink to this headline">¶</a></h3>
+<p>exemple :</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo ecdep up VOOZANOO4-0.0.1
+</pre></div>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre>/space
+├── Archives
+├── Work
+└── www
+        ├── apps
+        ├── configuration
+        ├── libs
+        │   ├── VOOZANOO3
+        │   ├── VOOZANOO4
+        │   │   └── 0.0.1
+        │   │       ├── libs
+        │   │       └── src
+        │   ├── YUI
+        │   │   ├── 2.9.0
+        │   │   │   ├── assets
+        │   │   │   ├── build
+        │   │   │   └── index.html
+        │   │   └── 3.10.2
+        │   │       ├── build
+        │   │       ├── LICENSE.md
+        │   │       └── README.md
+        │   └── ZendFramework
+        │       └── 1.12.0
+        │           └── Zend
+        └── tools
+</pre></div>
+</div>
+<p>L&#8217;installation place donc le coeur dans /space/www/libs/VOOZANOO4/VERSION_DU_COEUR</p>
+</div>
+</div>
+<div class="section" id="packaging-d-une-application-voozanoo4">
+<h2>Packaging d&#8217;une application VOOZANOO4<a class="headerlink" href="#packaging-d-une-application-voozanoo4" title="Permalink to this headline">¶</a></h2>
+<p>Se rendre sur le serveur de build.</p>
+<div class="highlight-bash"><div class="highlight"><pre>ssh -A epiconcept_build@debian-build
+</pre></div>
+</div>
+<div class="section" id="id3">
+<h3>Contraintes développement<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Le fichier APPINFOS doit ètre présent dans src/configs.</p>
+<p>Ce fichier JSON doit contenir à minima les infos suivantes (exemple) :</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+        <span class="nt">&quot;PACKAGING&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;INF_PACKAGE&quot;</span><span class="p">:</span><span class="s2">&quot;NEONAT_WEB&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_VERSION&quot;</span><span class="p">:</span><span class="s2">&quot;01.01&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_PRIORITY&quot;</span><span class="p">:</span><span class="s2">&quot;optional&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_ARCHITECTURE&quot;</span><span class="p">:</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_DEPENDS&quot;</span><span class="p">:</span><span class="s2">&quot;voozanoo4-2.14&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_SECTION&quot;</span><span class="p">:</span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_MAINTENER&quot;</span><span class="p">:</span><span class="s2">&quot;Team FrameWork &lt;framework@epiconcept.fr&gt;&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_DESCRIPTION&quot;</span><span class="p">:</span><span class="s2">&quot;Neonat Web&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_HOMEPAGE&quot;</span><span class="p">:</span><span class="s2">&quot;http://www.epiconcept.fr&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;DEPENDENCIES&quot;</span><span class="p">:{</span>
+                <span class="nt">&quot;VOOZANOO4&quot;</span><span class="p">:</span><span class="s2">&quot;2.14&quot;</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Dans le cas où l&#8217;application nécessite des dépendances spécifiques autres que celle définies par Voozanoo4,
+il faut que INF_DEPENDS soit sous la forme d&#8217;un tableau. Exemple :</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+        <span class="nt">&quot;PACKAGING&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;INF_PACKAGE&quot;</span><span class="p">:</span><span class="s2">&quot;NEONAT_WEB&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_VERSION&quot;</span><span class="p">:</span><span class="s2">&quot;01.01&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_PRIORITY&quot;</span><span class="p">:</span><span class="s2">&quot;optional&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_ARCHITECTURE&quot;</span><span class="p">:</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_DEPENDS&quot;</span><span class="p">:[</span>
+                        <span class="s2">&quot;voozanoo4-2.14&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;imagemagick-3.4&quot;</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;INF_SECTION&quot;</span><span class="p">:</span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_MAINTENER&quot;</span><span class="p">:</span><span class="s2">&quot;Team FrameWork &lt;framework@epiconcept.fr&gt;&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_DESCRIPTION&quot;</span><span class="p">:</span><span class="s2">&quot;Neonat Web&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;INF_HOMEPAGE&quot;</span><span class="p">:</span><span class="s2">&quot;http://www.epiconcept.fr&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;DEPENDENCIES&quot;</span><span class="p">:{</span>
+                <span class="nt">&quot;VOOZANOO4&quot;</span><span class="p">:</span><span class="s2">&quot;2.14&quot;</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Créer le package<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Exécutez la commande suivante :</p>
+<div class="highlight-bash"><div class="highlight"><pre>./mkpack.voo4appli <span class="o">[</span>release_name<span class="o">]</span> APP_NAME TAG
+./debenvoi votre_compte_linux
+</pre></div>
+</div>
+<p>Le release_name est facultatif, ce serait le nom de l&#8217;application une fois installée si il est présent.</p>
+<p>Exemple avec un repository qui se nomme SIGL:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd</span> /var/epiconcept_build/bin
+./mkpack.voo4appli NEONATLABO SIGL 20140429-01.01-01
+./debenvoi john
+</pre></div>
+</div>
+</div>
+<div class="section" id="contraintes-a-respecter-avant-l-installation">
+<h3>Contraintes à respecter avant l&#8217;installation<a class="headerlink" href="#contraintes-a-respecter-avant-l-installation" title="Permalink to this headline">¶</a></h3>
+<p>Le fichier JSON space/www/configuration/server/INFOS doit exister et ètre un minimum configuré.
+Par exemple, si le serveur est un serveur de développement :</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+        <span class="nt">&quot;default_db_host&quot;</span>       <span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;default_db_user&quot;</span>       <span class="p">:</span> <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;default_db_pwd&quot;</span>        <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;default_http_port&quot;</span>     <span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+        <span class="nt">&quot;default_https_port&quot;</span>    <span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+        <span class="nt">&quot;default_server_ip&quot;</span>     <span class="p">:</span> <span class="s2">&quot;192.168.1.16&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;default_server_tld&quot;</span>    <span class="p">:</span> <span class="s2">&quot;voozanoo.net&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;default_server_env&quot;</span>    <span class="p">:</span> <span class="s2">&quot;development&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;default_httpd_logdir&quot;</span>  <span class="p">:</span> <span class="s2">&quot;/var/log/apps/&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installer-l-application">
+<h3>Installer l&#8217;application<a class="headerlink" href="#installer-l-application" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>sudo ecdep up <span class="o">[</span>epi<span class="o">]</span>-<span class="o">[</span>nom_du_package<span class="o">]</span>-<span class="o">[</span>version<span class="o">]</span>
+</pre></div>
+</div>
+<p>Exemple:</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo ecdep up epi-neonatlabo-1.01
+</pre></div>
+</div>
+<p>Exemple d&#8217;arborescence générée avec ecdep up mysaga-0.0.02</p>
+<div class="highlight-bash"><div class="highlight"><pre>/space
+├── Archives
+├── Work
+└── www
+        ├── apps
+        │   └── mysaga
+        │       └── mysaga_0.0.02
+        ├── configuration
+        ├── htdocs
+        │   └── javascript
+        │       ├── voo3
+        │       └── voo3yui
+        ├── libs
+        │   ├── VOOZANOO3
+        │   ├── VOOZANOO4
+        │   │   └── 0.0.1
+        │   │       ├── libs
+        │   │       └── src
+        │   ├── YUI
+        │   │   ├── 2.9.0
+        │   │   │   ├── assets
+        │   │   │   ├── build
+        │   │   │   └── index.html
+        │   │   └── 3.10.2
+        │   │       ├── build
+        │   │       ├── LICENSE.md
+        │   │       └── README.md
+        │   └── ZendFramework
+        │       └── 1.12.0
+        │           └── Zend
+        └── tools
+</pre></div>
+</div>
+<p>Dans cet exemple l&#8217;application s&#8217;intalle dans /space/www/apps/mysaga/mysaga_0.0.02</p>
+<p>NB: Modifications apportées aux configs :</p>
+<blockquote>
+<div><ul class="simple">
+<li>CONF appli voo4 (ce qu&#8217;on a surchargé dans le application.ini)</li>
+<li>voozanoo.resources.path = APPLICATION_PATH &#8220;/resources&#8221;</li>
+<li>voozanoo.baseurl = &#8220;/&#8221;</li>
+<li>lib.voozanoo.javascript.url = &#8220;/VooLibJs&#8221;</li>
+<li>lib.voozanoo.assets.url = &#8220;/VooLibAssets&#8221;</li>
+<li>lib.yui.url = &#8220;/yui&#8221;</li>
+<li>lib.yui2.url = &#8220;/yui2&#8221;</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#ferme-d-application">Ferme d&#8217;application</a><ul>
+<li><a class="reference internal" href="#conventions-d-ecriture">Conventions d&#8217;écriture</a></li>
+<li><a class="reference internal" href="#modes-de-fonctionnement">Modes de fonctionnement</a></li>
+<li><a class="reference internal" href="#id2">Installation</a></li>
+<li><a class="reference internal" href="#dossier-de-travail">Dossier de travail</a></li>
+<li><a class="reference internal" href="#dossier-de-configuration">Dossier de configuration</a></li>
+<li><a class="reference internal" href="#references">Références</a></li>
+<li><a class="reference internal" href="#documentation-rewriting-utilisee">Documentation rewriting utilisée</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#initialisation-d-un-projet-voo4">Initialisation d&#8217;un projet  Voo4</a><ul>
+<li><a class="reference internal" href="#pre-requis">Pré-requis</a></li>
+<li><a class="reference internal" href="#utilisation">Utilisation</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#acces-aux-fichiers-javascript">Accès aux fichiers javascript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#packaging-deploiement">Packaging &amp; Déploiement</a><ul>
+<li><a class="reference internal" href="#nomenclature-des-tags">Nomenclature des TAGS</a><ul>
+<li><a class="reference internal" href="#exemple">Exemple</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#packaging-voozanoo4-core">Packaging VOOZANOO4 CORE</a><ul>
+<li><a class="reference internal" href="#contraintes-developpement">Contraintes développement</a></li>
+<li><a class="reference internal" href="#creer-le-package">Créer le package</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deploiement-voozanoo4-core">Déploiement VOOZANOO4 CORE</a><ul>
+<li><a class="reference internal" href="#gestion-des-repositories">Gestion des repositories</a></li>
+<li><a class="reference internal" href="#installer-un-coeur-voozanoo4">Installer un coeur Voozanoo4</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#packaging-d-une-application-voozanoo4">Packaging d&#8217;une application VOOZANOO4</a><ul>
+<li><a class="reference internal" href="#id3">Contraintes développement</a></li>
+<li><a class="reference internal" href="#id4">Créer le package</a></li>
+<li><a class="reference internal" href="#contraintes-a-respecter-avant-l-installation">Contraintes à respecter avant l&#8217;installation</a></li>
+<li><a class="reference internal" href="#installer-l-application">Installer l&#8217;application</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="webservices.html"
+                        title="previous chapter">Webservices</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parametrage.html"
+                        title="next chapter">Paramétrage</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parametrage.html" title="Paramétrage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="webservices.html" title="Webservices"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

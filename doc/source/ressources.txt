@@ -1,0 +1,104 @@
+.. _ressources:
+
+Ressources
+============
+
+Introduction
+------------
+
+Les ressources représentent les varsets, les formulaires, ..., et sont au format XML.
+
+Stockage
+--------
+
+Les ressources sont référencés dans la table des ressources (xxx_pj_resource) de chage projet.
+Cette table peut contenir la ressource (champ content), ou bien le chemin vers le fichier (champ filename).
+Le chemin est construit à partir de la constante voozanoo.resources.path déclarée dans le fichier ini du projet (ou du noyau).
+
+Ex:
+voozanoo.resources.path	= APPLICATION_PATH "/ressources"
+
+NB: le programme va d'abord vérfier si filename est renseigné, puis content (une exception est levée si les deux champs sont à NULL).
+
+Accès direct
+------------
+
+Il est possible d'accéder directement à une ressource sur le disque, sans la stocker dans la table, en passant le paramètre "file".
+
+Ex:
+http://localhost/VOO4_PROJECTX/public/vaccilab/mainframe/index/one/file/form.new_user
+
+Le système va chercher dans le répertoire des ressources (défini dans le fichier ini sous la constante "voozanoo.resources.path")
+le fichier portant le nom form.new_user.xml (l'extension xml est ajoutéé automatiquement si rien n'est indiqué).
+
+On peut aussi saisir un chemin avec le paramètre "path" (les répertoires doivent être séparés par des underscore).
+
+Ex:
+http://localhost/VOO4_PROJECTX/public/vaccilab/mainframe/index/one/file/form.new_user/path/xml_form
+
+Le système va chercher la ressource dans: [voozanoo.resources.path]/xml/form/form.new_user.xml
+
+Description
+-----------
+
+:ref:`varset`
+^^^^^^^^^^^^^
+
+Contient la description d'un ensemble de variables. C'est ce qui ce rapproche du "Questionnaire" en Voozanoo3. 
+
+:ref:`form`
+^^^^^^^^^^^
+
+Contient la description d'un formulaire regroupant :
+
+- Les données nécessaires au formulaire (``<data_structure>``)
+- La présentation du formulaire  (``<layout>``)
+
+:ref:`dataquery`
+^^^^^^^^^^^^^^^^
+
+Représente une requête de récupération de données (l'équivalent d'une requête SQL).
+
+.. hint::
+	Cette ressource peut exister en "standalone" (pour les exports) mais est très généralement présente dans une ressource de type ``form`` (partie ``<data_structure>``)
+
+.. important::
+	Après exécution un DataQuery donne un DataSet
+
+:ref:`layout`
+^^^^^^^^^^^^^
+
+Contient la description de la partie présentation d'un formulaire (Interface graphique)
+
+.. hint::
+	Cette ressource n'existe **pas** en "standalone" elle est systématiquement incluse dans une ressource de type ``form``
+
+
+:ref:`dataset`
+^^^^^^^^^^^^^^
+
+Représent un ensemble de données, résultant principale de l'exécution d'un DataQuery. Cependant il est possible, dans une ressource ``form``, de créer directement un DataSet.
+
+.. tip::
+	Lorsqu'on créer un "Filtre" sur un formulaire on utilise systématiquement un DataSet et non un DataQuery, le filtre n'étant (par nature) pas une récupération de données mais directement un ensemble de données.
+	
+	De plus on spécifiera fréquemment l'attribut ``type="filter"`` sur le noeud ``<dataset>`` pour activer la persistence des valeurs de filtre saisies.
+
+:ref:`invokable_dataset`
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Représente un DataSet "déjà construit" et utilisable directement.
+
+
+Liste
+-----
+
+.. toctree::
+	:maxdepth: 1
+
+	res/varset
+	res/form
+	res/dataquery
+	res/layout
+	res/dataset
+	res/invokable_dataset

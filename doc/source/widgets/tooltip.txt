@@ -1,0 +1,30 @@
+.. _widgettooltip:
+
+WidgetTooltip
+=============
+
+Fonction
+--------
+Hérite de :ref:`widgetbase`
+
+Ce composant est utilisé rendre une icône d'information afin d'afficher une Tooltip au survol de la souris
+
+Le template de rendu est :
+
+.. code-block:: html
+	
+	<span class="tooltip" id="{idUnique}"></span>
+
+.. note::
+	L'attribut ``tooltip`` et l'option ``tooltip_alignment`` seront pris en charge par le composant parent : :ref:`widgetbase`
+
+    
+Attributs
+---------
+
+Même attibut que le composant parent (``tooltip``)
+    
+Options
+-------
+
+Même option sur le composant parent (``tooltip_alignment``)

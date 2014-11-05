@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WidgetSelect &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Composants graphiques" href="../widgets.html" />
+    <link rel="next" title="WidgetTable" href="table.html" />
+    <link rel="prev" title="WidgetSearch" href="search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="table.html" title="WidgetTable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="search.html" title="WidgetSearch"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" accesskey="U">Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="widgetselect">
+<span id="id1"></span><h1>WidgetSelect<a class="headerlink" href="#widgetselect" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fonction">
+<h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
+<p>Hérite de <a class="reference internal" href="field.html#widgetfield"><em>WidgetField</em></a></p>
+<p>Ce composant sert pour l&#8217;affichage des champs de type dictionnaire, mais il peut aussi être utilisé sur n&#8217;importe quel autre
+type de champ si on lui passe en option un dataset. La balise HTML générée est select.</p>
+<p>Le template de rendu est :</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;field&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;{idUnique}&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">name=</span><span class="s">&quot;{idUnique}&quot;</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/option&gt;</span>
+                    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;{valueItem1}&quot;</span><span class="nt">&gt;</span>{labelItem1}<span class="nt">&lt;/option&gt;</span>
+                    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;{valueItem2}&quot;</span><span class="nt">&gt;</span>{labelItem2}<span class="nt">&lt;/option&gt;</span>
+                    ...
+            <span class="nt">&lt;/select&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Par défaut les items sont affichés en fonction de la position des élements du dictionnaire.</p>
+</div>
+</div>
+<div class="section" id="attributs">
+<h2>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h2>
+<p>Les attributs sont les mêmes que pour <a class="reference internal" href="field.html#widgetfield"><em>WidgetField</em></a></p>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="alpha-sort">
+<h3>alpha_sort<a class="headerlink" href="#alpha-sort" title="Permalink to this headline">¶</a></h3>
+<p>Type: boolean</p>
+<p>Fonction: force le tri par ordre alphabétique (le tri se fait sur le libellé)</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;alpha_sort&quot;</span> <span class="na">value=</span><span class="s">&quot;true|false&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dataset">
+<h3>dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Fonction: détermine le dataset qui sera utilisé pour récupérer les items à afficher</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;dataset&quot;</span> <span class="na">value=</span><span class="s">&quot;{datasetName}&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Le dataset doit avoir un champ de type clé primaire qui sera utilisé comme
+valeur, et une colonne &#8220;label&#8221; pour l&#8217;affichage (il est possible
+de passer une option pour nommer le libellé, voir &#8220;label_column&#8221;)</p>
+</div>
+</div>
+<div class="section" id="label-column">
+<h3>label_column<a class="headerlink" href="#label-column" title="Permalink to this headline">¶</a></h3>
+<p>Type: string</p>
+<p>Fonction: permet de modifier le nom de la colonne qui sera utilisée pour afficher le
+libellé.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;label_column&quot;</span> <span class="na">value=</span><span class="s">&quot;{labelColumn}&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Il peut être envisagé d&#8217;utiliser cette option sur un dictionnaire pour afficher
+le libellé court &#8220;short_label&#8221;, ou le code &#8220;code&#8221;.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WidgetSelect</a><ul>
+<li><a class="reference internal" href="#fonction">Fonction</a></li>
+<li><a class="reference internal" href="#attributs">Attributs</a></li>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#alpha-sort">alpha_sort</a></li>
+<li><a class="reference internal" href="#dataset">dataset</a></li>
+<li><a class="reference internal" href="#label-column">label_column</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="search.html"
+                        title="previous chapter">WidgetSearch</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="table.html"
+                        title="next chapter">WidgetTable</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/select.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="table.html" title="WidgetTable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="search.html" title="WidgetSearch"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

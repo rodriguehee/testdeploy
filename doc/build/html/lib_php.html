@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Librairie PHP &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Exemples" href="exemples.html" />
+    <link rel="prev" title="Liens utiles" href="liens.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="exemples.html" title="Exemples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="liens.html" title="Liens utiles"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="librairie-php">
+<span id="lib-php"></span><h1>Librairie PHP<a class="headerlink" href="#librairie-php" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>La lib Voozanoo est en ensemble d&#8217;objets PHP qui vont permettre de manipuler les entitées telles que les projets, questionnaires, question, ...</p>
+</div>
+<div class="section" id="regles-de-programmation">
+<h2>Règles de programmation<a class="headerlink" href="#regles-de-programmation" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong> : à mettre à jour</p>
+<div class="section" id="syntaxe">
+<h3>Syntaxe<a class="headerlink" href="#syntaxe" title="Permalink to this headline">¶</a></h3>
+<p>Exemple d&#8217;un code Voozanoo4:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">ProjectCount</span><span class="p">();</span>
+<span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">Project</span><span class="p">[</span><span class="s1">&#39;vaccilab&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="s1">&#39;patient&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Select</span><span class="p">();</span>
+<span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">Project</span><span class="p">[</span><span class="s1">&#39;vaccilab&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="s1">&#39;patient&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">RealName</span><span class="p">();</span>
+<span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">Project</span><span class="p">[</span><span class="s1">&#39;vaccilab&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="s1">&#39;patient&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Fields</span><span class="p">[</span><span class="s1">&#39;nom&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">type</span><span class="p">;</span>
+
+<span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">Project</span><span class="p">[</span><span class="s1">&#39;vaccilab&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="s1">&#39;patient&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Where</span><span class="p">(</span><span class="s1">&#39;nom=Seb&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="s1">&#39;bilan&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">&#39;date=2010-02-24&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$sProjectName</span> <span class="o">=</span> <span class="s2">&quot;vaccilab&quot;</span><span class="p">;</span>
+<span class="nv">$sTableName</span> <span class="o">=</span> <span class="s2">&quot;patient&quot;</span><span class="p">;</span>
+
+<span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">Project</span><span class="p">[</span><span class="nv">$sProjectName</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="nv">$sTableName</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Select</span><span class="p">();</span>
+
+<span class="c1">//Récupération du dernier bilan d&#39;un patient</span>
+<span class="nv">$object</span> <span class="o">=</span> <span class="nv">$Account</span><span class="o">-&gt;</span><span class="na">Project</span><span class="p">[</span><span class="nv">$sProjectName</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Table</span><span class="p">[</span><span class="nv">$sTableName</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">Where</span><span class="p">(</span><span class="nv">$iRecordId</span><span class="p">);</span>
+<span class="nv">$object</span><span class="o">-&gt;</span><span class="na">ShowOnForm</span><span class="p">();</span>
+
+<span class="nv">$object2</span> <span class="o">=</span> <span class="nv">$Table</span><span class="p">[</span><span class="s1">&#39;bilan&#39;</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">last</span><span class="p">();</span>
+<span class="nv">$object2</span><span class="o">-&gt;</span><span class="na">ShowOnForm</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="stockage-des-objets">
+<h3>Stockage des objets<a class="headerlink" href="#stockage-des-objets" title="Permalink to this headline">¶</a></h3>
+<p>Tous les objets seront définis par XML stockés en DB. Les ressources statiques (XSD, XSLT, TPL, SQL, ...) partagées par tous les comptes et tous les projets seront elles stockées sur le disque.</p>
+</div>
+<div class="section" id="coherence-des-objets">
+<h3>Cohérence des objets<a class="headerlink" href="#coherence-des-objets" title="Permalink to this headline">¶</a></h3>
+<p>Description du cas: plusieurs objets décrits sous forme de XML, utilisent une variable X, cette variable X est supprimée par l&#8217;utilisateur. Comment trouver ces objets rapidement?
+Test de la cohérence des données en utilisant les XSD. Les XML (quelque soit leur structure) seront transformés (xslt) en XML de même structure pour pouvoir les valider avec le même XSD.</p>
+</div>
+</div>
+<div class="section" id="nom-des-tables-de-la-base">
+<h2>Nom des tables de la base<a class="headerlink" href="#nom-des-tables-de-la-base" title="Permalink to this headline">¶</a></h2>
+<p>Les noms des différentes tables présentes dans Voozanoo4 comportent très souvent des fragments/portions de caractères à remplacer par le prefix du projet (ou le prefix du varset utilisé) :</p>
+<ul class="simple">
+<li>xxxx_pj_group, xxxx_pj_resource ...</li>
+<li>xxxx_nn_data, xxxx_nn_data_group ...</li>
+</ul>
+<p>Afin d&#8217;éviter la ré-écriture de cette logique à différents endroits de la librarie une classe a été créée pour centraliser les noms des tables et la logique de &#8220;parsing&#8221; : <code class="docutils literal"><span class="pre">Core_Library_TName</span></code> (~TableName)</p>
+<p>Cette classe possède de nombreuses méthodes statiques permettant la récupération du nom de table à utiliser. Les méthodes liées aux tables utilisant le prefix du projet (<code class="docutils literal"><span class="pre">sigl</span></code>, <code class="docutils literal"><span class="pre">ndmt</span></code>) acceptent un paramètre de type
+Core_Library_Project, il sera utilisé pour le parsing de la table. Si ce dernier n&#8217;est pas fourni la classe utilisera le projet courant (<code class="docutils literal"><span class="pre">Core_Library_Account::getInstance()-&gt;GetCurrentProject()</span></code>).</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nx">Core_Library_TName</span><span class="o">::</span><span class="na">GetSysProject</span><span class="p">();</span> <span class="c1">//retournera &quot;sys_project&quot;</span>
+<span class="nx">Core_Library_TName</span><span class="o">::</span><span class="na">GetPjGroup</span><span class="p">();</span> <span class="c1">//retournera &quot;ndmt_pj_group&quot; si le projet courant est Neodemat</span>
+<span class="nx">Core_Library_TName</span><span class="o">::</span><span class="na">GetPjGroup</span><span class="p">(</span> <span class="nv">$oProjectSigl</span> <span class="p">);</span> <span class="c1">//retournera &quot;sigl_pj_group&quot;, même si le projet courant est Neodemat</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les noms de table relatifs au projet se récupèreront via des méthodes GetPj*** (GetPjAxis, GetPjGroup, ...), les noms de table relatifs à des varset se récupèreront via des méthodes GetVarset*** (GetVarsetData, GetVarsetDataGroup).</p>
+</div>
+</div>
+<div class="section" id="tokens-simples-jetons">
+<span id="lib-php-tokens"></span><h2>Tokens Simples (Jetons)<a class="headerlink" href="#tokens-simples-jetons" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>La notion de Token de Voozanoo4 se rapproche de la notion de CDataContainer présente dans Voo3 : La possibilité de stocker à un instant T un ensemble de variables (Context) ayant
+une date de péremption (optionnel) et liées à une session php précise (optionnel).</p>
+<p>La seule façon de récupérer les informations relatives au Token est de connaitre l&#8217;identifiant du Token. Les données qui lui sont liées de ne peuvent pas être altérées par l&#8217;utilisateur.</p>
+</div>
+<div class="section" id="fonctionnement">
+<h3>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h3>
+<p>La scénario type serait de placer un lien permettant de télécharger un PDF, les paramètres necéssaires à sa génération fournis en GET :</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;export/index/download/id/18/type/pdf/mode/full/foo/bar&quot;</span><span class="nt">&gt;</span>Télécharger<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>Un problème majeur survient : la possibilité que l&#8217;utilisateur manipule ces données (en remplacement pdf par html ou de l&#8217;id etc...). C&#8217;est là que l&#8217;utilisation du Token s&#8217;avère utile :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oToken</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_Token</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+   <span class="c1">//Variable du context</span>
+   <span class="s1">&#39;context&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+      <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="mi">18</span>
+      <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;pdf&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;mode&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;full&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;foo&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;bar&#39;</span>
+   <span class="p">),</span>
+   <span class="c1">//Expiration du token au bout d&#39;un jour</span>
+   <span class="s1">&#39;expiration_time&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span>
+<span class="p">));</span>
+
+<span class="c1">//$sTokenIdentifier contiendra l&#39;identifiant auto-généré du token (8 caractères), exemple &quot;80D0DF5F&quot;</span>
+<span class="nv">$sTokenIdentifier</span> <span class="o">=</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">getInstance</span><span class="p">()</span>
+                     <span class="o">-&gt;</span><span class="na">getCurrentProject</span><span class="p">()</span>
+                     <span class="o">-&gt;</span><span class="na">TokenManager</span><span class="p">()</span>
+                     <span class="o">-&gt;</span><span class="na">Create</span><span class="p">(</span> <span class="nv">$oToken</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>Le lien sera alors placé  :</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;export/index/download/t/80D0DF5F&quot;</span><span class="nt">&gt;</span>Télécharger<span class="nt">&lt;/a&gt;</span>
+</pre></div>
+</div>
+<p>Le code coté serveur sera en charge de la récupération du paramètre &#8216;t&#8217; pour instancier un Token et récupérer les informations relatives au Token :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oToken</span> <span class="o">=</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">getInstance</span><span class="p">()</span>
+            <span class="o">-&gt;</span><span class="na">getCurrentProject</span><span class="p">()</span>
+            <span class="o">-&gt;</span><span class="na">TokenManager</span><span class="p">()</span>
+            <span class="o">-&gt;</span><span class="na">GetAvailable</span><span class="p">(</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">GetRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetParam</span><span class="p">(</span><span class="s1">&#39;t&#39;</span><span class="p">)</span> <span class="p">);</span>
+<span class="nv">$oToken</span><span class="o">-&gt;</span><span class="na">GetContext</span><span class="p">();</span> <span class="c1">//Contient un tableau représentant les variables données lors de la création du token</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">La méthode GetAvailable() retourne false si jamais le token ne peut être retourné car il est périmé ou si sa session ne correspond pas à la session courante.</p>
+</div>
+</div>
+</div>
+<div class="section" id="les-tokens-de-connexion">
+<h2>Les Tokens de connexion<a class="headerlink" href="#les-tokens-de-connexion" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Introduction<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Le Token de connexion (<code class="docutils literal"><span class="pre">Core_Library_Token_Conn</span></code>) à été créé pour répondre au besoin d&#8217;une authentification temporaire et limitative (accès à certaines ressources Acl et sur certains Varsets) sans pour
+autant créer un &#8220;vrai&#8221; utilisateur.</p>
+<p>Il est par conséquent possible de créer un Token de connexion communicable à l&#8217;utilisateur par email (dans un lien) afin que ce dernier vienne changer son mot de passe.</p>
+</div>
+<div class="section" id="id3">
+<h3>Fonctionnement<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>La création d&#8217;une Token de connexion est identique à celle d&#8217;un Token simple, il réclame juste :</p>
+<ul class="simple">
+<li>Obligatoirement une option &#8216;acl_resources&#8217; : Un tableau représentant les ressources Acl autorisées</li>
+<li>Obligatoirement une option &#8216;user&#8217; : L&#8217;id de l&#8217;utilisateur créateur du token</li>
+<li>Facultativement une option &#8216;group_mode&#8217; : Un tableau récapitulant ses droits vis à vis d&#8217;un groupe parent et par rapport à des Varsets</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Selon les spécifications techniques : <code class="docutils literal"><span class="pre">Ce</span> <span class="pre">sera</span> <span class="pre">de</span> <span class="pre">la</span> <span class="pre">responsabilité</span> <span class="pre">de</span> <span class="pre">l’action</span> <span class="pre">d’envoyer</span> <span class="pre">le</span> <span class="pre">token</span> <span class="pre">au</span> <span class="pre">client</span> <span class="pre">(donc</span> <span class="pre">pas</span> <span class="pre">d’envoie</span> <span class="pre">automatique</span> <span class="pre">du</span> <span class="pre">token).</span></code>.</p>
+<p>Par conséquent dans le cas où le token doit être utilisé pour plus d&#8217;une action il est necéssaire que l&#8217;Action (au sens ZendFramework) communique le token à la Frame.</p>
+<p>L&#8217;idéal est d&#8217;utiliser le hook <code class="docutils literal"><span class="pre">_&lt;actionName&gt;_get_render</span></code> pour charger un paramètre <code class="docutils literal"><span class="pre">sToken</span></code> dans le contexte</p>
+<div class="last highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">protected</span> <span class="k">function</span> <span class="nf">_foo_get_render</span><span class="p">(</span> <span class="nx">Core_Library_Event_Context</span> <span class="nv">$oContext</span> <span class="p">)</span>
+<span class="p">{</span>
+        <span class="nv">$oProject</span> <span class="o">=</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetCurrentProject</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="k">true</span> <span class="o">===</span> <span class="nv">$oProject</span><span class="o">-&gt;</span><span class="na">HasConnectionToken</span><span class="p">()</span> <span class="p">)</span> <span class="c1">//Connection token available ?</span>
+        <span class="p">{</span>
+                <span class="nv">$oToken</span> <span class="o">=</span> <span class="nv">$oProject</span><span class="o">-&gt;</span><span class="na">GetConnectionToken</span><span class="p">();</span>
+
+                <span class="nv">$oResourceJSON</span> <span class="o">=</span> <span class="nv">$oContext</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span> <span class="s1">&#39;oResourceJSON&#39;</span> <span class="p">);</span>
+                <span class="nv">$aJson</span> <span class="o">=</span> <span class="nv">$oResourceJSON</span><span class="o">-&gt;</span><span class="na">GetJSON</span><span class="p">();</span>
+                <span class="nv">$aJson</span><span class="p">[</span><span class="s1">&#39;sToken&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$oToken</span><span class="o">-&gt;</span><span class="na">GetToken</span><span class="p">();</span> <span class="c1">//Put sToken inside Frame configuration ready to be sent</span>
+                <span class="nv">$oResourceJSON</span><span class="o">-&gt;</span><span class="na">SetJSON</span><span class="p">(</span> <span class="nv">$aJson</span> <span class="p">);</span> <span class="c1">//Refresh JSON content</span>
+        <span class="p">}</span>
+
+        <span class="k">parent</span><span class="o">::</span><span class="na">_get_render</span><span class="p">(</span><span class="nv">$oContext</span><span class="p">);</span> <span class="c1">//Call parent method to keep original behavior</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="monitoring">
+<span id="lib-php-monitoring"></span><h2>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>Introduction<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Le monitoring liste les événements qui se produisent sur un projet, tels que la mise à jour
+d&#8217;une données, la connexion d&#8217;un utilisateur, un changement de structure, ...</p>
+<p>Pour monitorer ces évenements, deux class ont été mises en place, l&#8217;une monitore les événements qui
+se produisent sur les données d&#8217;un varset (insertion, mise à jour, suppression, ...), et l&#8217;autre
+sur les événements tels que la connexion, la mise à jour des groupes, ...</p>
+<p>La méthode GetLog de Core_Library_Project donne accès au logger.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">// Log d&#39;un événement sur un varset</span>
+<span class="x">$this-&gt;GetProject()-&gt;GetLog()-&gt;logRecordEvt( $sMsg, $iEvtType, $iVarSetId, $iRecordId, $aValues, $aMultiplesValues = array() );</span>
+
+<span class="x">// Log d&#39;un événement</span>
+<span class="x">$this-&gt;GetProject()-&gt;GetLog()-&gt;logVznEvt( $sMsg, $iEvtType, array $aExtras = array() );</span>
+</pre></div>
+</div>
+<p>Les données du monitoring sont stockées dans les tables [PROJECT]_varsetmonitor_data
+(pour les événements sur varset) et [PROJECT]_evtlog_data (pour les autres événements).</p>
+<p>NB: le système se base sur le composant Zend_Log, avec des writers spécifiques Voozanoo.</p>
+</div>
+<div class="section" id="recordevt">
+<h3>RecordEvt<a class="headerlink" href="#recordevt" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">$this-&gt;GetProject()</span>
+<span class="x">        -&gt;GetLog()</span>
+<span class="x">        -&gt;logRecordEvt(</span>
+<span class="x">                __METHOD__,</span>
+<span class="x">                Core_Library_Log::VZN_REC_INSERT,</span>
+<span class="x">                $this-&gt;_iIdVarset,</span>
+<span class="x">                $aResult[&#39;insert_id&#39;],</span>
+<span class="x">                $aColumnKeyValue,</span>
+<span class="x">                $aColumnKeyMultipleValue</span>
+<span class="x">) ;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="vznevt">
+<h3>VznEvt<a class="headerlink" href="#vznevt" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">$this-&gt;GetProject()-&gt;GetLog()-&gt;logVznEvt(</span>
+<span class="x">        sprintf(</span>
+<span class="x">                &quot;Add \&quot;%s\&quot; (%d) child of \&quot;%s\&quot; (%d), axis = %d&quot;,</span>
+<span class="x">                $sName,</span>
+<span class="x">                $iIdGroup,</span>
+<span class="x">                $this-&gt;GetGroup($iIdParent)-&gt;GetName(),</span>
+<span class="x">                $iIdParent,</span>
+<span class="x">                $iIdAxis</span>
+<span class="x">        ),</span>
+<span class="x">        Core_Library_Log::VZN_EVT_GRP_ADD</span>
+<span class="x">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="declaration-d-un-nouvel-evenement">
+<h3>Déclaration d&#8217;un nouvel événement<a class="headerlink" href="#declaration-d-un-nouvel-evenement" title="Permalink to this headline">¶</a></h3>
+<p>1- Déclarer dans la class Core_Library_Log une constante décrivant l&#8217;événement VZN_EVT_*</p>
+<p>2- Ajouter dans le dictionnaire système &#8220;type_evt&#8221; (table sys_dico_data) une entrée pour
+l&#8217;événement, dont le code doit correspondre à la valeur du code.</p>
+</div>
+</div>
+<div class="section" id="diagramme-de-class">
+<h2>Diagramme de class<a class="headerlink" href="#diagramme-de-class" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong> : à mettre à jour</p>
+<img alt="_images/voo4_class_v4.png" src="_images/voo4_class_v4.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Librairie PHP</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#regles-de-programmation">Règles de programmation</a><ul>
+<li><a class="reference internal" href="#syntaxe">Syntaxe</a></li>
+<li><a class="reference internal" href="#stockage-des-objets">Stockage des objets</a></li>
+<li><a class="reference internal" href="#coherence-des-objets">Cohérence des objets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#nom-des-tables-de-la-base">Nom des tables de la base</a></li>
+<li><a class="reference internal" href="#tokens-simples-jetons">Tokens Simples (Jetons)</a><ul>
+<li><a class="reference internal" href="#id1">Introduction</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#les-tokens-de-connexion">Les Tokens de connexion</a><ul>
+<li><a class="reference internal" href="#id2">Introduction</a></li>
+<li><a class="reference internal" href="#id3">Fonctionnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring">Monitoring</a><ul>
+<li><a class="reference internal" href="#id4">Introduction</a></li>
+<li><a class="reference internal" href="#recordevt">RecordEvt</a></li>
+<li><a class="reference internal" href="#vznevt">VznEvt</a></li>
+<li><a class="reference internal" href="#declaration-d-un-nouvel-evenement">Déclaration d&#8217;un nouvel événement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#diagramme-de-class">Diagramme de class</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="liens.html"
+                        title="previous chapter">Liens utiles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="exemples.html"
+                        title="next chapter">Exemples</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/lib_php.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="exemples.html" title="Exemples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="liens.html" title="Liens utiles"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

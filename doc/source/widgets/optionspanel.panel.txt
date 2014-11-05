@@ -1,0 +1,82 @@
+.. _optionspanel.panel:
+
+OptionsPanel.panel
+==================
+
+Fonction
+---------
+Hérite de ``Y.Panel``
+
+Ce composant permet d'afficher une boite de dialogue modale contenant un ou plusieurs champs SELECT permettant à l'utilisateur définir des options.
+
+
+Utilisation (Exemple)
+---------------------
+.. code-block:: javascript
+
+	this._oOptionsPanelCsv = new Y.OptionsPanel.Panel({
+		headerContent: "Options d'export CSV",
+		oOnOk : {
+			fn: this._exportCSV,
+			scope: this
+		},
+		aOptions: [
+			{
+				'label':'Encodage des caractères',
+				'varname':'encoding',
+				'values': [
+						{
+							label:'UTF-8',
+							value:'utf-8'
+						},
+						{
+							label:"ISO-8859-1",
+							value:"iso-8859-1"
+						}
+				],
+				'type':"select"
+			},
+			{
+				'label':'Séparateur de champ',
+				'varname':'separator',
+				"values": [
+					{
+						label:"Point virgule (;)",
+						value:";"
+					},
+					{
+						label:"Virgule (,)",
+						value:","
+					},
+					{
+						label:"Tabulation horizontale",
+						value:"TAB"
+					}
+				],
+				"type":"select"
+			}
+
+		]
+	});
+
+	this._oOptionsPanelCsv.render();
+	this._oOptionsPanelCsv.show();
+
+.. note::
+	- Actuellement les options sont rendues sous la forme d'un input SELECT/OPTIONS :"type":"select";
+	- Voir : :ref:`OptionsPanel.option`
+
+Paramétrage JSON
+----------------
+
+	- ``headerContent`` : Titre de la fenêtre
+	- ``oOnOk``
+		- ``fn`` : Fonction de rappel quand click sur 'OK'
+		- ``scope`` : Scope sur la classe appelante
+	- ``aOptions``
+		- ``label`` : Label associé au champ SELECT
+		- ``varname`` : Variable associée à l'option
+		- ``values`` : Tableau des valeurs des différentes options
+			- ``label`` : Label associé à une option
+			- ``value`` : Valeur associé à une option
+

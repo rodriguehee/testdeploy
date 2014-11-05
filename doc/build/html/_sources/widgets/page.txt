@@ -1,0 +1,45 @@
+.. _widgetpage:
+
+WidgetPage
+==========
+
+Fonction
+--------
+Hérite de :ref:`widgetbase`
+
+Ce composant est utilisé pour restituer un onglet à l'écran. Il doit être utilisé conjointement avec le composant ``Y.WidgetPages`` (noeud ``<pages>``).
+
+Attributs
+---------
+
+title
+^^^^^
+
+Type: string
+
+Fonction : Indique le titre de l'onglet à afficher
+
+.. code-block:: xml
+    
+    <pages>
+        <page title="Données administratives">
+            <group title="Identité">
+            </group>
+            <group title="Adresse">
+            </group>
+        </page>
+        <page title="Données spécifiques">
+            <group title="Antécédents chirurgicaux">
+            </group>
+        </page>
+    </pages>
+
+Options
+-------
+
+Aucune option disponible pour ce widget
+
+Contenu
+-------
+
+Ce widget contient tout le contenu standard pouvant être présent dans un noeud de type ``<group>`` puisqu'il s'agit s'implement de représenter un formulaire classique dans un onglet.

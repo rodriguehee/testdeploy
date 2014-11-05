@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Invokable Dataset &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Ressources" href="../ressources.html" />
+    <link rel="next" title="Script Player" href="../script_player.html" />
+    <link rel="prev" title="Dataset" href="dataset.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../script_player.html" title="Script Player"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dataset.html" title="Dataset"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" accesskey="U">Ressources</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="invokable-dataset">
+<span id="id1"></span><h1>Invokable Dataset<a class="headerlink" href="#invokable-dataset" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Il s&#8217;agit d&#8217;un système qui permet de transformer un dataset après sa création
+par le model manager.</p>
+<p>La transformation peut consister dans l&#8217;initialisation de variables, le remplissage
+du dataset, voir sa création complète.</p>
+<p>Dans l&#8217;exemple ci-dessous, les datasets ne sont pas définis (la partie metadata
+n&#8217;est pas décrite), c&#8217;est le système &#8220;invoke&#8221; qui va se charger de décrire la structure
+et remplir les données.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Groups list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;groups&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;IndentedGroups&quot;</span><span class="nt">/&gt;</span>
+
+<span class="c">&lt;!-- Roles list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;roles&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;Roles&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="templates-existants">
+<h2>Templates existants<a class="headerlink" href="#templates-existants" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="indentedgroups">
+<h3>IndentedGroups<a class="headerlink" href="#indentedgroups" title="Permalink to this headline">¶</a></h3>
+<p>Récupération de la liste de tous les groupes, avec le niveau de profondeur où se situe chaque groupe.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Roles list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;groups&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;IndentedGroups&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Dataset généré:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;groups&quot;</span>
+        <span class="s2">&quot;total_rows&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;begin&quot;</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;fields&quot;</span><span class="o">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;id_group&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;primary_key&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;primary_key&quot;</span><span class="o">:</span> <span class="p">[]</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;default_label&quot;</span><span class="o">:</span> <span class="s2">&quot;Groupe&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;string&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                        <span class="s2">&quot;length&quot;</span><span class="o">:</span> <span class="mi">50</span>
+                                <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;level&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;integer&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                        <span class="s2">&quot;max&quot;</span><span class="o">:</span> <span class="s2">&quot;999&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;min&quot;</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span>
+                                <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;id_axis&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;integer&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                        <span class="s2">&quot;max&quot;</span><span class="o">:</span> <span class="s2">&quot;999&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;min&quot;</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span>
+                                <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;id_parent&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;integer&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                        <span class="s2">&quot;max&quot;</span><span class="o">:</span> <span class="s2">&quot;9999999999&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;min&quot;</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span>
+                                <span class="p">}</span>
+                        <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;variables&quot;</span><span class="o">:</span> <span class="p">[]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;rowdata&quot;</span><span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;id_group&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;Main&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;id_axis&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;level&quot;</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s2">&quot;id_parent&quot;</span><span class="o">:</span> <span class="kc">null</span>
+                <span class="p">}</span>
+        <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="roles">
+<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h3>
+<p>Récupération de tous les rôles</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Roles list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;roles&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;Roles&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Dataset généré:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;roles&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;total_rows&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;begin&quot;</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;metadata&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;fields&quot;</span><span class="o">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;id_role&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;primary_key&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;primary_key&quot;</span><span class="o">:</span> <span class="p">[]</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;label&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mandatory&quot;</span><span class="o">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;string&quot;</span><span class="o">:</span> <span class="p">{</span>
+                                                <span class="s2">&quot;length&quot;</span><span class="o">:</span> <span class="mi">100</span>
+                                        <span class="p">}</span>
+                                <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;variables&quot;</span><span class="o">:</span> <span class="p">[]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;rowdata&quot;</span><span class="o">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                        <span class="s2">&quot;id_role&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;label&quot;</span><span class="o">:</span> <span class="s2">&quot;Administrator&quot;</span>
+                <span class="p">}</span>
+        <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="users">
+<h3>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h3>
+<p>Récupération de tous les utilisateurs actifs.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Roles list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;users&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;Users&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>Le dataset généré contient deux variables: id_user (clé primaire) et label.</p>
+</div>
+</div>
+<div class="section" id="declaration-d-un-invokable-dataset">
+<h2>Déclaration d&#8217;un invokable dataset<a class="headerlink" href="#declaration-d-un-invokable-dataset" title="Permalink to this headline">¶</a></h2>
+<p>Créer une class &#8221; Core_Library_Model_InvokableDataSet_[Nom] &#8221; dans library/Model/InvokableDataSet qui implémente l&#8217;interface Core_Library_Model_InvokableDataSet_Interface.</p>
+<p>[Nom] correspond au nom de l&#8217; &#8220;invokable&#8221;, et doit être en CamelCase.</p>
+<p>Liste des méthodes qui doivent être définies dans la class:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>public function checkFormat(Core_Library_Resource_XML_DataSet $oDataSet);</dt>
+<dd><ul class="first last simple">
+<li>Vérification du format du dataset. Si le format n&#8217;est pas celui attendu, il faut générer un exception.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>public function transform(Core_Library_Resource_XML_DataSet $oDataSet);</dt>
+<dd><ul class="first last simple">
+<li>Transformation du dataset, elle renvoie le dataset transformé.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Dans le cas de &#8220;IndentedGroups&#8221; et &#8220;Roles&#8221;, la transformation consiste à créer un
+nouveau dataset décrit par un dataquery (ou un dataset) XML se trouvant dans le
+même répertoire que la class.</p>
+<p>C&#8217;est pourquoi il n&#8217;est pas nécessaire de décrire la partie metadata à l&#8217;utilisation
+de ces invokables, par ailles la méthode checkFormat est inutile dans ce cas.</p>
+<p>Méthode _executeXMLDataStructure de la class Core_Library_Model_Manager qui traite l&#8217;attribut &#8220;invokable&#8221;:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">foreach ($aDataSets as $oDataset)</span>
+<span class="x">{</span>
+<span class="x">        // Test la présence de l&#39;attribut invoke from dans le dataset. Si présent,</span>
+<span class="x">        // alors il remplir le dataset à partir d&#39;une class présente dans InvokableDataSet.</span>
+<span class="x">        // Une exception est renvoyée sur la class n&#39;existe pas</span>
+<span class="x">        if ( isset( $oDataset-&gt;GetXml()-&gt;attributes()-&gt;invoke_from ) )</span>
+<span class="x">        {</span>
+<span class="x">                // On utilise GetXml au lieu de GetSimpleXml, avec cette dernière l&#39;attribut invoke_from disparait, car l&#39;objet</span>
+<span class="x">                // simplexml est entièrement reconstruit.</span>
+<span class="x">                $sClassName = &#39;Core_Library_Model_InvokableDataSet_&#39; . ucfirst($oDataset-&gt;GetXml()-&gt;attributes()-&gt;invoke_from);</span>
+
+<span class="x">                // Vérification de l&#39;existence de de la class $sClassName</span>
+<span class="x">                if ( false === Zend_Loader_Autoloader::autoload($sClassName) )</span>
+<span class="x">                {</span>
+<span class="x">                        throw new Core_Library_Exception(sprintf(&#39;Invokable dataset class %s not found&#39;, $sClassName));</span>
+<span class="x">                }</span>
+<span class="x">                $oInvokableDasetSet = new $sClassName();</span>
+
+<span class="x">                //Si le dataset n&#39;a pas le format attendu pour la transformation, check format renvoie une exception</span>
+<span class="x">                $oInvokableDasetSet-&gt;checkFormat( $oDataset );</span>
+
+<span class="x">                //Transformation du dataset, en général remplissage des données</span>
+<span class="x">                $oDataset = $oInvokableDasetSet-&gt;transform( $oDataset );</span>
+<span class="x">        }</span>
+
+<span class="x">        [...]</span>
+
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exemple">
+<h2>Exemple<a class="headerlink" href="#exemple" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre>Partie data_structure:
+
+<span class="c">&lt;!-- Groups list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;groups&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;IndentedGroups&quot;</span><span class="nt">/&gt;</span>
+
+<span class="c">&lt;!-- Roles list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;roles&quot;</span> <span class="na">invoke_from=</span><span class="s">&quot;Roles&quot;</span><span class="nt">/&gt;</span>
+
+
+<span class="c">&lt;!-- Selected role and group --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;rights&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;metadata&gt;</span>
+                <span class="nt">&lt;fields&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;id_role&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">default_label=</span><span class="s">&quot;ID role&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;ID role&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;id_group&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">default_label=</span><span class="s">&quot;ID group&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;ID group&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/fields&gt;</span>
+        <span class="nt">&lt;/metadata&gt;</span>
+        <span class="nt">&lt;rowdata/&gt;</span>
+<span class="nt">&lt;/dataset&gt;</span>
+
+Partie layout:
+
+<span class="nt">&lt;group&gt;</span>
+        <span class="nt">&lt;label</span> <span class="na">dataset=</span><span class="s">&quot;rights&quot;</span> <span class="na">field=</span><span class="s">&quot;id_group&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;value</span> <span class="na">dataset=</span><span class="s">&quot;rights&quot;</span> <span class="na">field=</span><span class="s">&quot;id_group&quot;</span> <span class="na">mode=</span><span class="s">&quot;rw&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;widget&quot;</span> <span class="na">value=</span><span class="s">&quot;WidgetProjectGroup&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;dataset&quot;</span> <span class="na">value=</span><span class="s">&quot;groups&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;clear/&gt;</span>
+
+        <span class="nt">&lt;label</span> <span class="na">dataset=</span><span class="s">&quot;rights&quot;</span> <span class="na">field=</span><span class="s">&quot;id_role&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;value</span> <span class="na">dataset=</span><span class="s">&quot;rights&quot;</span> <span class="na">field=</span><span class="s">&quot;id_role&quot;</span> <span class="na">mode=</span><span class="s">&quot;rw&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;widget&quot;</span> <span class="na">value=</span><span class="s">&quot;WidgetSelect&quot;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;dataset&quot;</span> <span class="na">value=</span><span class="s">&quot;roles&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;clear/&gt;</span>
+<span class="nt">&lt;/group&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Invokable Dataset</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#templates-existants">Templates existants</a><ul>
+<li><a class="reference internal" href="#indentedgroups">IndentedGroups</a></li>
+<li><a class="reference internal" href="#roles">Roles</a></li>
+<li><a class="reference internal" href="#users">Users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#declaration-d-un-invokable-dataset">Déclaration d&#8217;un invokable dataset</a></li>
+<li><a class="reference internal" href="#exemple">Exemple</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dataset.html"
+                        title="previous chapter">Dataset</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../script_player.html"
+                        title="next chapter">Script Player</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/res/invokable_dataset.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../script_player.html" title="Script Player"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dataset.html" title="Dataset"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" >Ressources</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

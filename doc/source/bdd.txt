@@ -1,0 +1,501 @@
+﻿.. _bdd:
+
+Base de données
+===============
+Règle de nommage des tables
+---------------------------
+Introduction
+^^^^^^^^^^^^
+Chaque questionnaire est représenté par un identifiant. L'intérêt de cet identifiant est de pouvoir déplacer une enquête dans une autre base qui contient aussi des enquêtes, sans avoir à faire des recodages de nom de table.
+L'identifiant sera le même pour les tables de l'enquête et les tables des questionnaires. Pour différencier les questionnaires, on ajoutera un incrément sur deux caractères. 
+Pour les tables au niveau projet on mettra le libellé "pj".
+La longeur de l'identifiant sera de 4 caractères. Pour conserver un nombre de combinaisons important, on utilisera des caractères alpha-numériques.
+
+Format de l'identifiant
+^^^^^^^^^^^^^^^^^^^^^^^
+Pour éviter de confondre certains caractères, les caractères i, 1, l, 0, o seront exlus de l'identifiant.
+Tous les caractères seront en minuscules.
+La longueur de l'identifiant sera de 4 caractères.
+Le premier caractère est compris entre les lettes a-z, avec exclusion des lettres i,l,o
+Les autres sont compris entre a-z et 0-1, avec exclusion des caractères i, 1, l, 0, o
+Si le premier caractère est composé uniquement de lettres, c'est justement pour éviter que le nom d'une table commence par un numérique, ce qui pourrait provoquer des erreurs dans certains moteurs de base de données.
+
+Nombre de combinaisons possibles: 23 x 31 x 31 x 31 = 685 193
+NB: si on ajoute un caractère en plus, on passe à 21 240 983 combinaisons possibles.
+
+Exemples
+^^^^^^^^
+
+* e5y7_pj_globals
+* e5y7_pj_users
+* e5y7_01_data
+* e5y7_02_data 
+
+Table pour les relations N-N
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Pour une relation de type N-N entre deux tables, Voozanoo crée une table spécifique qui contient toutes les relations.
+Structure de la table: id_link, id_upstream, id_downstream
+Nommage de cette table: e6y7_01_02_link (relation N-N entre la table préfixé 01, et la table 02).
+
+Tables globales
+---------------
+Description
+^^^^^^^^^^^
+Comme dans Voozanoo3, certaines tables ne seront liées à aucune enquête.
+Ces tables pourront être utilisées par l'éditeur, et parfois par certains modules des enquêtes (exemple: la table qui liste toutes les enquêtes d'une base de données Voozanoo4).
+
+Format
+^^^^^^
+Toutes les tables commenceront par les caractères "sys".
+Exemple: sys_projects
+
+Jointures
+---------
+1-N
+^^^
+Ajout d'une clé étrangère dans la table.
+Par exemple, si nous souhaitons faire une jointure entre la table patient et la table des communes, il faudra ajouter la clé étrangère id_commune dans la table patient.
+Voir le type fkey_varset dans la page varset.
+
+N-N
+^^^
+Création d'une table de liaison pour chaque relation N-N. La table contient les identifiants des deux tables.
+Voir le type fkey_varset_ext dans la page varset.
+
+Statut de la jointure
+^^^^^^^^^^^^^^^^^^^^^
+Dans Voozanoo3 nous avons un problème lié aux fiches archivées:
+Un patient est lié à plusieurs suivis qui ont été supprimés (rec_status = 3), dans ce cas il ne ressort pas dans les exports ou les listings. Cela vient du fait qu'on indique dans la jointure de ne pas renvoyer les suivis supprimés. Le patient sort uniquement dans le cas où il a au moins un suivi non supprimé.
+
+Nous avons remarqué que dans Sugar il y avait une table pour les jointures N-N, avec en particulier une variable qui indique si la jointure est toujours valide.
+Nous devons étudier ce système pour voir s'il faut ajouter dans la table de liaison des variables supplémentaires.
+
+Dictionnaires
+-------------
+Réponse simple
+^^^^^^^^^^^^^^
+On conserve une table qui contient la définition de tous les dictionnaires (code + label). Cette table est un questionnaire. La valeur stockée dans la table des données est l'id_data.
+Voir le type fkey_dico dans la page varset.
+
+Réponse multiple
+^^^^^^^^^^^^^^^^
+Les dictionnaires à réponse multiple se basent sur une table de jointure contenant l'identifiant de l'enregistrement, et l'identifiant du dictionnaire.
+Voir le type fkey_dico_ext dans la page varset.
+
+Description des tables Voozanoo4
+--------------------------------
+sys_project
+^^^^^^^^^^^
+Introduction
+""""""""""""
+Cette table liste tous les projets qui se trouvent dans la base de données. Elle a le même rôle que la table sb_enquete de voozanoo3 (liste des enquêtes).
+Il s'agit donc d'une table qui est globale et qui est toujours présente dans une base de données Voozanoo4.
+
+Structure
+"""""""""
+
+* id_sys_project
+	* INT INSIGNED NOT NULL
+	* Auto_increment PRIMARY 
+* label
+	* VARCHAR (200)
+	* Nom du projet (ex. Surveillance de la grippe) 
+* name
+	* VARCHAR (20) UNIQUE
+	* Nom à utiliser en programmation (ex. grippe)
+	* Regexp : ^[[a-z][[a-z0-1] 
+* tables_prefix
+	* VARCHAR (4) UNIQUE
+	* Identifiant des tables du projet (ex. aey4)
+	* Auto généré par Voozanoo
+	* Regexp : -- ^[a-km-np-z][a-km-np-z2-9]{3}$ 
+* lang
+	* CHAR (10)
+	* Code langage par défaut (ex. fr, en_us, ...)
+	* code fourni par Zend_Locale 
+
+sys_module
+^^^^^^^^^^
+Introduction
+""""""""""""
+Liste des modules installés dans le système (module noyau + module application)
+
+Structure
+"""""""""
+
+* id_sys_module
+	* INTEGER AUTO INCREMENT 
+* name
+	* VARCHAR(50) NOT NULL 
+* version
+	* VARCHAR(20) 
+
+sys_module_acl
+^^^^^^^^^^^^^^
+Introduction
+""""""""""""
+Liste des droits pour chaque module.
+
+Structure
+"""""""""
+
+* id_sys_module_acl
+	* INTEGER NOT NULL AUTO_INCREMENT 
+* id_sys_module
+	* INTEGER NOT NULL 
+* code
+	* VARCHAR(45) NOT NULL 
+* label
+	* VARCHAR(50) NOT NULL 
+
+aey4_pj_module
+^^^^^^^^^^^^^^
+Introduction
+""""""""""""
+Liste des modules activés dans le projet (jointure sur sys_module).
+
+Structure
+"""""""""
+
+* id_module
+	* INTEGER NOT NULL AUTO_INCREMENT 
+* id_sys_module
+	* INTEGER NOT NULL 
+
+aey4_pj_module_acl
+^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Liste des droits activés dans le projet (jointure sur sys_module_acl).
+
+Structure
+"""""""""
+
+* id_module_acl
+	* INTEGER NOT NULL AUTO_INCREMENT, 
+* id_sys_module_acl
+	* INTEGER NOT NULL 
+
+aey4_pj_role
+^^^^^^^^^^^^
+Description
+"""""""""""
+Liste des rôles.
+
+Structure
+"""""""""
+
+* id_role
+	* INTEGER UNSIGNED NOT NULL AUTO_INCREMENT 
+* name
+	* VARCHAR(50) NOT NULL 
+
+aey4_pj_role_acl
+^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Table de jointure entre la table des rôle et la tabel des module_acl. Permet de définir les droits pour chaque rôle.
+
+Structure
+"""""""""
+
+* id_role_acl
+	* INTEGER NOT NULL AUTO_INCREMENT 
+* id_role
+	* INTEGER NOT NULL 
+* id_module_acl
+	* INTEGER NOT NULL 
+
+aey4_pj_group_role
+^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Attribution des rôles aux groupes (un utilisateur = un groupe). Un groupe peut avoir plusieurs rôles.
+
+Structure
+"""""""""
+
+* id_group_role
+	* INTEGER NOT NULL AUTO_INCREMENT 
+* id_group
+	* INTEGER NOT NULL 
+* id_role
+	* INTEGER NOT NULL 
+
+aey4_pj_resource
+^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Contient la définition des objets au format XML.
+
+Structure
+"""""""""
+
+* id_resource
+	* INT auto_increment PRIMARY 
+* name
+	* CHAR (200) 
+* type
+	* char (20)
+		* mainframe
+		* listing
+		* etc. 
+* content
+	* BLOB 
+
+aey4_pj_varset
+^^^^^^^^^^^^^^
+Description
+"""""""""""
+Contient la liste des varsets (c.f. sb_queges de Voo3).
+
+Structure
+"""""""""
+
+* id_varset
+	* INT auto_increment PRIMARY 
+* label
+	* char (200) 
+* name
+	* CHAR (20) 
+* varset_table_prefix
+	* CHAR (10) (ex. [01 - 99], user) 
+* id_resource
+	* Identifiant qui pointe sur la ressource XML qui définit le contenu du varset. 
+
+aey4_pj_globals
+^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Cette table contient les variables globales du projet. On pourrait faire un parallèle avec les variables MySQL (show variables).
+Exemples de variables globales:
+
+* Durée du timeout
+* Type de connexion 
+
+Structure
+"""""""""
+A compléter
+
+aey4_pj_axis
+^^^^^^^^^^^^
+Description
+"""""""""""
+Contient la liste de tous les axes. Un axes correspond à un arbre de groupes.
+
+Structure
+"""""""""
+
+* id_axis
+	* INT auto_increment PRIMARY 
+* name
+	* VARCHAR(45) 
+* id_group
+	* INT 
+
+aey4_pj_group
+^^^^^^^^^^^^^
+Description
+"""""""""""
+Contient la liste de tous les groupes, ainsi que les utilisateurs.
+
+Structure
+"""""""""
+
+* id_group
+	* INT auto_increment PRIMARY 
+* name
+	* VARCHAR(50) 
+
+.. code-block:: sql
+	
+	CREATE TABLE IF NOT EXISTS `0000_pj_group` (
+	  `id_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	  `name` varchar(45) NOT NULL,
+	  PRIMARY KEY (`id_group`),
+	  UNIQUE KEY `name` (`name`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+aey4_pj_group_link
+^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Cette table décrit les relations entre chaque groupe (y compris les utilisateurs).
+
+Structure
+"""""""""
+
+* id_group_link
+	* INT auto_increment PRIMARY 
+* id_group
+	* INT(10) 
+* id_group_parent
+	* INT(10) 
+
+.. code-block:: sql
+	
+	CREATE TABLE IF NOT EXISTS `aey4_pj_group_link` (
+	  `id_group_link` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	  `id_group` int(10) unsigned NOT NULL,
+	  `id_group_parent` int(10) unsigned DEFAULT NULL,
+	  PRIMARY KEY (`id_group_link`),
+	  UNIQUE KEY `id_group` (`id_group`,`id_group_parent`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+aey4_pj_group_mode
+^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Définition des droits de l'utilisateur dans chaque groupe auxquels il peut accéder.
+
+Structure
+"""""""""
+
+* id_group_mode
+	* INT auto_increment PRIMARY 
+* id_group_link
+	* INT(10) 
+* id_varset
+	* INT(10) 
+* mode
+	* INT(10) 
+
+.. code-block:: sql
+	
+	CREATE TABLE IF NOT EXISTS `aey4_pj_group_mode` (
+	`id_group_mode` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	`id_group_link` int(10) unsigned NOT NULL,
+	`id_varset` int(10) unsigned NOT NULL,
+	`mode` int(10) unsigned NOT NULL,
+	PRIMARY KEY (`id_group_mode`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+aey4_pj_query
+^^^^^^^^^^^^^
+Description
+"""""""""""
+Liste des requêtes. Une requête peut être un test de cohérence, une variable calculée, une condition de bloc, ...
+
+Structure
+"""""""""
+
+* id_query
+	* INT auto_increment PRIMARY 
+* type
+	* CHAR(20)
+		* consistency_test
+			* Test de cohérence 
+		* condition
+			* Condition sur les bloc 
+		* calc
+			* Variable calculée 
+		* trigger 
+	* id_resource
+		* INT(10) 
+
+aey4_pj_query_var
+^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Liste des variables utilisées dans chaque test de cohérence
+
+Structure
+"""""""""
+
+* id_query_var
+	* INT auto_increment PRIMARY 
+* id_query
+	* INT(10) 
+* id_varset
+	* INT(10) 
+* id_var
+	* CHAR(100) 
+
+aey4_01_data
+^^^^^^^^^^^^
+Description
+"""""""""""
+Table qui va contenir les données d'un varset.
+
+Structure
+"""""""""
+
+* id_data
+	* INT auto_increment PRIMARY 
+* id_user
+	* INT(10) 
+
+aey4_01_data_group
+^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Liste des groupes où se trouvent chaque enregistrement
+
+Structure
+"""""""""
+
+* id_data_group
+	* INT auto_increment PRIMARY 
+* id_data
+	* INT(10) 
+* id_group
+	* INT(10) 
+
+aey4_01_data_group_mode
+^^^^^^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Permet de surcharger les droits d'un enregistrement + groupe (ou utilisateur).
+
+Structure
+"""""""""
+
+* id_data_group_mode
+	* INT auto_increment PRIMARY 
+* id_data_group
+	* INT(10) 
+* mode
+	* INT(10) 
+* date_valid
+	* DATE 
+
+aey4_user_data
+^^^^^^^^^^^^^^
+Description
+"""""""""""
+Stockage des utilisateurs
+
+Structure
+"""""""""
+A compléter
+
+aey4_dico_data
+^^^^^^^^^^^^^^
+Description
+"""""""""""
+Stockage des dictionnaires
+
+Structure
+"""""""""
+A compléter
+
+aey4_01_02_data
+^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Table pour la relation de type N-N entre les varset 01 et 02.
+
+Structure
+"""""""""
+A compléter
+
+aey4_01_dico_ttt_data
+^^^^^^^^^^^^^^^^^^^^^
+Description
+"""""""""""
+Table de relation pour les variables à réponse multiple.
+
+Structure
+"""""""""
+A compléter
+

@@ -1,0 +1,52 @@
+.. _widgettext:
+
+WidgetText
+===========
+
+Fonction
+--------
+Hérite de :ref:`widgetfield`
+
+Ce composant sert pour l'affichage des champs de type texte (champs multi-ligne). La balise HTML générée est textarea.
+
+Le template de rendu est :
+
+.. code-block:: html
+
+    <div class="field">
+		<textarea rows="{nbLigne}" cols="{nbColonne}" id="{idUnique}" name="{nomField}">{valeurField}</textarea>
+    </div>
+
+.. note::
+    Les valeurs nbLigne et nbColonne sont des options, par défaut elles valent 50 pour nbColonne et 5 pour nbLigne.
+        
+    
+Attributs
+---------
+
+Les attributs sont les mêmes que pour :ref:`widgetfield`
+    
+Options
+-------
+
+rows
+^^^^
+
+Type: integer
+
+Fonction: détermine le nombre de lignes à afficher
+
+.. code-block:: xml
+
+	<option output="html" option_name="rows" value="50" />
+
+cols
+^^^^
+
+Type: integer
+
+Fonction: détermine le nombre de colonnes à afficher
+
+.. code-block:: xml
+
+	<option output="html" option_name="cols" value="100" />

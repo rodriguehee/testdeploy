@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Voozanoo FAQ &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Glossaire" href="glossaire.html" />
+    <link rel="prev" title="How To / Comment faire" href="howto.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="glossaire.html" title="Glossaire"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="howto.html" title="How To / Comment faire"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="voozanoo-faq">
+<span id="faq"></span><h1>Voozanoo FAQ<a class="headerlink" href="#voozanoo-faq" title="Permalink to this headline">¶</a></h1>
+<p>This is a list of Frequently Asked Questions about Voozanoo.  Feel free to
+suggest new entries!</p>
+<div class="section" id="how-do-i">
+<h2>How do I...<a class="headerlink" href="#how-do-i" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>... Où se trouve l&#8217;éditeur de Voozanoo?</dt>
+<dd>Il n&#8217;est pas encore développé, la structure des questionnaires doit être faite à la main.</dd>
+<dt>... Comment obtenir le libellé de la valeur dans mon champ pour un champ sur dictionnaire?</dt>
+<dd><dl class="first last docutils">
+<dt>La classe Dicomanager récupére un dictionnaire avec la méthode GetDico et le nom du dico.</dt>
+<dd><dl class="first last docutils">
+<dt>La méthode GetItems retourne toutes les valeurs du dictionnaire.</dt>
+<dd>On recherche via le code pour obtenir le libellé</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">protected function getDicoFromLabel( $sDicoName, $sDicoEntryId )</span>
+<span class="x">{</span>
+<span class="x">        $aDb = Core_Library_Account::GetInstance()-&gt;GetCurrentProject()-&gt;DicoManager()-&gt;GetDico(&#39;myDictionnary&#39;)-&gt;GetItems();</span>
+<span class="x">        foreach ($aDb as $id=&gt;$record ) {</span>
+<span class="x">                if ( $sDicoEntryId == $id ) {</span>
+<span class="x">                        return $record[&#39;label&#39;];</span>
+<span class="x">                }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>... Comment charger un formulaire avec des valeurs par défaut dans mes champs ?</dt>
+<dd><dl class="first last docutils">
+<dt>Le jeu de données peut être intercepté avant le chargement du formulaire.</dt>
+<dd>On réaffecte les valeurs par défaut en agissant sur le metadata</dd>
+</dl>
+</dd>
+</dl>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">protected function _overrideFieldDefaultValue( Core_Library_Resource_XML_DataSet $oDataset )    {</span>
+<span class="x">        $aAuthorizedFields = array (&#39;myParamName&#39; =&gt; &#39;myFieldName&#39;);</span>
+<span class="x">        $aParams = $this-&gt;getRequest()-&gt;getParams();</span>
+<span class="x">        foreach( $aParams as $sKey=&gt;$sValue) {</span>
+<span class="x">                if( array_key_exists($sKey, $aAuthorizedFields) ) {</span>
+<span class="x">                        $oDataset-&gt;GetMetaData()-&gt;OverrideFieldDefaultValue($aAuthorizedFields[$sKey], $sValue);</span>
+<span class="x">                }</span>
+<span class="x">        }</span>
+
+<span class="x">}</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>... Comment intercepter le jeu de données avant le chargement du formulaire ?</dt>
+<dd><dl class="first last docutils">
+<dt>La méthode _get_afterExecute dans le FrameController est déroulée après rapatriement des données et avant génération du formulaire.</dt>
+<dd>On la dérive pour y jouer les actions souhaitées.</dd>
+</dl>
+</dd>
+</dl>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">protected function _get_afterExecute( Core_Library_Event_Context $oContext )</span>
+<span class="x">{</span>
+<span class="x">        parent::_get_afterExecute($oContext);</span>
+<span class="x">        $aDatasets = $oContext-&gt;get(&#39;aDatasets&#39;);</span>
+<span class="x">        $sDataSetId = &#39;myDataSet&#39;;</span>
+<span class="x">        foreach ($aDatasets as $oDataset) {</span>
+<span class="x">                if ( $oDataset-&gt;Id() == $sDataSetId ) {</span>
+<span class="x">                        $this-&gt;_overrideFieldDefaultValue($oDataset);</span>
+<span class="x">                }</span>
+<span class="x">        }</span>
+<span class="x">        $oContext-&gt;set(&#39;aDatasets&#39;,$aDatasets);</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>... Comment récupérer plusieurs clés primaires dans mon dataquery ?</dt>
+<dd>Actuellement, Voozanoo 4 ne permet pas de récupérer plus d&#8217;une clé primaire par Dataquery.
+En revanche, il est possible de récupérer d&#8217;autres id_data en utilisant la balise &#8220;column&#8221;. De cette manière, si il sera possible de l&#8217;exploiter &#8220;manuellement&#8221; dans un widget personnalisé ou autre, vous ne pourrez pas utiliser ces valeurs comme des clés primaires dans les fonctionnalités système</dd>
+</dl>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{id_data}&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_data_lecture1&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;l1&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_data&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_data&quot;</span>  <span class="na">mode=</span><span class="s">&quot;r&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/column&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Voozanoo FAQ</a><ul>
+<li><a class="reference internal" href="#how-do-i">How do I...</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto.html"
+                        title="previous chapter">How To / Comment faire</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glossaire.html"
+                        title="next chapter">Glossaire</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/faq.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="glossaire.html" title="Glossaire"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="howto.html" title="How To / Comment faire"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

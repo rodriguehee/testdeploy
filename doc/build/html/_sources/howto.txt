@@ -1,0 +1,153 @@
+﻿.. _howto:
+
+How To / Comment faire
+======================
+
+.. _howto-mysqlcmd:
+
+Windows - Utiliser mysql depuis l'invite de commande
+----------------------------------------------------
+Pour utiliser Mysql depuis l'invite de commande windows il faut bien sûr que Mysql soit installé sur le poste grâce, par exemple, à 
+Wamp Server ou EasyPhp mais aussi (et pourquoi pas) en "standalone" en téléchargeant Mysql directement (néanmoins plus rare).
+
+*La démarche se basera sur une installation préalable de Wamp Server mais reste valide dans les autres cas.*
+
+En ouvrant une invite de commande si vous tapez `mysql` vous aurez un message d'erreur :
+
+::
+
+	C:\Users\admin>mysql
+	'mysql' n'est pas reconnu en tant que commande interne
+	ou externe, un programme exécutable ou un fichier de commandes.
+	
+Il faut alors :
+
+- Accéder aux "Variables d'environnement système" (Normalement depuis le panneau de configuration)
+- Modifier la variable d'environnement ``Path`` pour ajouter le répertoire contenant l'executable mysql.exe 
+	- Exemple : ``C:\wamp\bin\mysql\mysql5.1.36\bin``
+	- Attention à bien séparer les chemins par un point virgule et d'entourer le chemin par des doubles quotes s'il contient un espace
+- Appliquer les modifications et ouvrir une nouvelle fenêtre d'invite de commande
+
+Vous pourrez alors accéder à Mysql :
+
+::
+
+	C:\Users\admin>mysql -uroot
+	Welcome to the MySQL monitor.  Commands end with ; or \g.
+	Your MySQL connection id is 32
+	Server version: 5.1.36-community-log MySQL Community Server (GPL)
+
+	Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+	mysql>
+
+.. _howto-phpcmd:
+
+Windows - Utiliser PHP depuis l'invite de commande
+--------------------------------------------------
+Tout comme l'utilisation de Mysql en ligne de commande vous devez avoir PHP installé sur votre poste.
+
+*La démarche se basera sur une installation préalable de Wamp Server mais reste valide dans les autres cas.*
+
+En ouvrant une invite de commande si vous tapez `php` vous aurez un message d'erreur :
+
+::
+
+	C:\Users\admin>php
+	'php' n'est pas reconnu en tant que commande interne
+	ou externe, un programme exécutable ou un fichier de commandes.
+	
+	
+Il faut alors :
+
+- Accéder aux "Variables d'environnement système" (Normalement depuis le panneau de configuration)
+- Modifier la variable d'environnement ``Path`` pour ajouter le répertoire contenant l'executable php.exe 
+	- Exemple : ``C:\wamp\bin\php\php5.3.5``
+	- Attention à bien séparer les chemins par un point virgule et d'entourer le chemin par des doubles quotes s'il contient un espace
+- Appliquer les modification et ouvrir une nouvelle fenêtre d'invite de commande
+
+.. note::
+	Si vous avez déjà l'exécutable php.exe présent depuis ZendServer vous pouvez ajouter celui de Wamp, Windows utilisera le premier Path contenant php.exe pour l'éxecution de PHP (de gauche à droite)
+	
+Vous pourrez alors accéder à Php :
+
+::
+
+	C:\Users\admin>php -v
+	PHP 5.3.5 (cli) (built: Jan  6 2011 17:54:09)
+	Copyright (c) 1997-2010 The PHP Group
+	Zend Engine v2.3.0, Copyright (c) 1998-2010 Zend Technologies
+		with Xdebug v2.1.0, Copyright (c) 2002-2010, by Derick Rethans
+
+.. _howto-usedphpini:
+
+Vérifier quel php.ini est utilisé
+---------------------------------
+Il arrive qu'un développeur ait besoin de savoir quel fichier php.ini est réellement chargé par l'interpréteur PHP (merci Wamp), cette vérification 
+est facile dans un contexte "Web" (Apache > Php), un simple fichier php contenant :
+
+.. code-block:: php
+
+	<?php
+	phpinfo();
+	
+Suffit à afficher, via le navigateur, toutes les informations relatives à PHP dont le chemin complet vers le fichier php.ini utilisé.
+
+Cependant lorsqu'il s'agit de vérifier quel fichier est utilisé dans un environnement CLI (Ligne de commande) c'est un peu plus compliqué car l'accès à notre page 
+via navigateur se fait obligatoire sans passer par le mode CLI (logique).
+
+Il faut alors :
+
+- Ouvrir un terminal / un(e) invite de commande
+- Executer : ``php -r "phpinfo();" > phpinfo.txt``
+	- Pour que ce code fonctionne sous Windows vous devez avoir accès à l'exécutable PHP depuis l'invite de commande (Voir :ref:`howto-phpcmd`)
+
+Vous pourrez alors visualiser le fichier phpinfo.txt créé et localiser le fichier ini utilisé :
+
+::
+	
+	phpinfo()
+	PHP Version => 5.3.5
+
+	System => Windows NT GSA-WKS 6.1 build 7601 (Unknow Windows version Business Edition Service Pack 1) i586
+	Build Date => Jan  6 2011 17:50:45
+	Compiler => MSVC6 (Visual C++ 6.0)
+	Architecture => x86
+	Server API => Command Line Interface
+	Virtual Directory Support => enabled
+	Configuration File (php.ini) Path => C:\Windows
+	Loaded Configuration File => C:\wamp\bin\php\php5.3.5\php.ini
+	Scan this dir for additional .ini files => (none)
+	Additional .ini files parsed => (none)
+	PHP API => 20090626
+	PHP Extension => 20090626
+	...
+
+.. _howto-zfincludepath:
+
+Ajouter la librairie Zend Framework à l'include_path de PHP
+-----------------------------------------------------------
+Si vous utilisez ZendServer cet article est superflu, ZendServer intégrant déjà la librairie ZendFramework dans l'include_path.
+
+En revanche dans le cas d'une utilisation de Wamp / Mamp / EasyPhp ou d'une installation classique LAMP il peut être utile d'intégrer la librairie ZendFramework directement dans votre include_path.
+
+Pour ce faire vous devez tout d'abord localiser quel php.ini est utilisé (Mode Apache et/ou Mode Cli en fonction de vos besoins, voir :ref:`howto-usedphpini`)
+
+Uns fois ceci effectué il faudra éditer le/les fichiers php.ini afin de modifier la valeur de ``include_path`` :
+
+.. code-block:: ini
+	
+	;;;;;;;;;;;;;;;;;;;;;;;;;
+	; Paths and Directories ;
+	;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	; UNIX: "/path1:/path2"
+	;include_path = ".:/php/includes"
+	;
+	; Windows: "\path1;\path2"
+	include_path = ".;C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library"
+	;
+	; PHP's default setting for include_path is ".;/path/to/php/pear"
+	; http://php.net/include-path
+
+

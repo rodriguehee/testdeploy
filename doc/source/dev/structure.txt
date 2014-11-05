@@ -1,0 +1,35 @@
+.. _structuredossiers:
+
+Structure dossier application Voo4
+==================================
+
+* Bootstrap.php
+* controllers
+* documentation
+* infostests.inc.php
+* models
+* modules
+* plugins
+* projet.inc.php
+* public
+* ressources
+
+  * deploy
+
+    * voozanoo.txt : numéro de la version, trunk ou x.y.z
+
+  * sql
+  * xml
+
+* views
+
+  * helpers
+  * scripts
+
+    * error
+
+      * error.phtml
+
+    * index
+
+      * index.phtml

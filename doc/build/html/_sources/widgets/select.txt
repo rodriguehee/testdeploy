@@ -1,0 +1,79 @@
+.. _widgetselect:
+
+WidgetSelect
+============
+
+Fonction
+--------
+Hérite de :ref:`widgetfield`
+
+Ce composant sert pour l'affichage des champs de type dictionnaire, mais il peut aussi être utilisé sur n'importe quel autre
+type de champ si on lui passe en option un dataset. La balise HTML générée est select.
+
+Le template de rendu est :
+
+.. code-block:: html
+
+    <div class="field">
+		<select id="{idUnique}" class="form-control" name="{idUnique}">
+			<option value=""></option>
+			<option value="{valueItem1}">{labelItem1}</option>
+			<option value="{valueItem2}">{labelItem2}</option>
+			...
+		</select>
+    </div>
+
+.. note::
+    Par défaut les items sont affichés en fonction de la position des élements du dictionnaire.
+
+
+Attributs
+---------
+
+Les attributs sont les mêmes que pour :ref:`widgetfield`
+
+Options
+-------
+
+alpha_sort
+^^^^^^^^^^
+
+Type: boolean
+
+Fonction: force le tri par ordre alphabétique (le tri se fait sur le libellé)
+
+.. code-block:: xml
+
+	<option output="html" option_name="alpha_sort" value="true|false" />
+
+dataset
+^^^^^^^
+
+Type: string
+
+Fonction: détermine le dataset qui sera utilisé pour récupérer les items à afficher
+
+.. code-block:: xml
+
+	<option output="html" option_name="dataset" value="{datasetName}" />
+
+.. note::
+	Le dataset doit avoir un champ de type clé primaire qui sera utilisé comme
+	valeur, et une colonne "label" pour l'affichage (il est possible
+	de passer une option pour nommer le libellé, voir "label_column")
+
+label_column
+^^^^^^^^^^^^
+
+Type: string
+
+Fonction: permet de modifier le nom de la colonne qui sera utilisée pour afficher le
+libellé.
+
+.. code-block:: xml
+
+	<option output="html" option_name="label_column" value="{labelColumn}" />
+
+.. note::
+	Il peut être envisagé d'utiliser cette option sur un dictionnaire pour afficher
+	le libellé court "short_label", ou le code "code".

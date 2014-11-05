@@ -1,0 +1,27 @@
+.. _widgettoggle:
+
+WidgetToggle
+============
+
+Fonction
+--------
+Hérite de :ref:`widgetfield`
+
+Ce composant sert pour l'affichage des valeurs de type booléen. Il peut prendre la valeur null, 0 ou 1
+
+Le template de rendu est :
+
+.. code-block:: html
+
+    <input type="button" id="{idUnique}" value="0" onclick="return false;"/>
+
+    
+Attributs
+---------
+
+Les attributs sont les mêmes que pour :ref:`widgetfield`
+    
+Options
+-------
+
+Pas d'option

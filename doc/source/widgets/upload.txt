@@ -1,0 +1,255 @@
+.. _widgetupload:
+
+WidgetUpload
+=============
+
+TODO
+----
+
+Devs à prévoir :
+    * Option filtre sur les extensions de fichier (dev commenté dans le widgetupload.js) : Cette fonctionnalité pour la version HTML5 de l'uploader n'est gérée que dans la version 3.6 de Yui
+      (actuellement en pré-release uniquement), et est mal gérée avec la dernière version (actuelle) de firefox (après quelques tests, l'attribut "accept" d'une "input" de type
+      "file" ne comprend que "image/\*" OU "video/\*" OU "audio/\*"). Le souci avec la version HTML5 est que l'option "tous les fichiers" est toujours disponible sur la fenêtre de sélection des fichiers.
+      L'idée serait d'ajouter un contrôle manuel supplémentaire pour filtrer les extensions.
+    * Revoir le style des liens "Télécharger le fichier" et "Supprimer" ?
+
+
+Fonction
+--------
+Hérite de :ref:`WidgetBase`
+
+Ce widget affiche un module d'upload, basé sur l'uploader HTML5 de la librairie Yui3.
+Le widget gère :
+
+* Un bouton de sélection des fichiers
+* Un bouton d'upload
+* La liste des fichiers présents dans le dataset (avec un lien "télécharger" et un lien "supprimer")
+
+
+Fonctionnnement
+---------------
+
+Le composant est obligatoirement lié à un varset principal.
+
+Workflow lors de la sélection d'un fichier :
+
+* (**Pas encore implementé**) Filtre sur l'extension du fichier, la taille et le nombre max (si les options correspondantes sont renseignées).
+* Mise à jour de la liste des fichiers sur le formulaire (si l'option ``show_filelist`` est à true dans le layout).
+* En fonction de l'option ``auto_upload`` :
+
+	* ``false`` : Les fichiers sélectionnés sont dans la liste de l'uploader et sont marqués "en attente" dans la filelist
+	* ``true`` : les fichiers sont ajoutés à la liste et l'upload commence immédiatement (cf. point suivant)
+
+* Clic sur le bouton upload (ou chargement immédiat avec l'option ``auto_upload``):
+
+	* Les fichiers sont enregistrés un à un côté serveur dans la base de données, avec un statut 0 (cf. chapitre Varsets)
+	* Le dataset de la page courante est mis à jour avec les nouveaux fichiers ajoutés
+
+* Enregistrement de la page : Voozanoo ira automatiquement ajouter les enregistrements dans la table du varset cible, du varset de jointure, et mettra à jour les enregistrements du varset file, notamment en changeant le statut à 1.
+
+.. caution::
+	Si la page n'est pas enregistrée, le statut du fichier reste à 0 et la jointure n'est pas créée.
+
+.. hint::
+	Chaque fois que le controller upload est sollicité, une requête de "nettoyage" de la base est lancée pour supprimer les fichiers dont le statut est différent de 1.
+
+
+Pré requis
+----------
+
+Directives du fichier .ini
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: ini
+
+	voozanoo.upload.directory         = "C:\Program Files (x86)\Zend\Apache2\htdocs\voo4\storage"
+	voozanoo.upload.chunk.directory   = "C:\Program Files (x86)\Zend\Apache2\htdocs\voo4\tmp"
+
+* ``voozanoo.upload.directory`` est le répertoire "final" d'upload, il est utilisé pour identifier un "Storage"
+* ``voozanoo.upload.chunk.directory`` est le répertoire temporaire où sont entreposés les chunks des fichiers fragmentés pour l'upload
+
+Varset Storage
+^^^^^^^^^^^^^^
+
+Ce varset contiendra les répertoires utilisés lors de l'upload d'un fichier, il est automatiquement géré par le système et s'auto-alimente en fonction de la directive ``voozanoo.upload.directory``
+
+.. code-block:: xml
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<varset name="storage" prefix="storage" type="sys" label="Storage">
+	   <var uid="1" id="path" type="string">
+	      <string length="255" />
+	   </var>
+	</varset>
+
+.. hint::
+	L'utilité d'avoir ce principe de "Storage" réside dans la possibilité, à terme, d'avoir plusieurs disques et d'utiliser celui de "disponible" pour écrire nos fichiers.
+
+
+Varset File
+^^^^^^^^^^^
+
+Un varset qui va contenir le détail de tous les fichiers uploadés pour le projet
+
+.. code-block:: xml
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<varset name="file" prefix="file" type="sys" label="Uploaded files">
+	   <var uid="1" id="status" type="integer" default_label="Status du fichier" default_short_label="Status">
+	      <integer min="0" max="2" />
+	   </var>
+	   <var uid="2" id="date_creation" type="datetime" default_label="Date création" default_short_label="Date création" />
+	   <var uid="3" id="original_name" type="string" default_label="Nom du fichier" default_short_label="Nom">
+	      <string length="128" />
+	   </var>
+	   <var uid="4" id="generated_name" type="string" default_label="Nom généré" default_short_label="Nom généré">
+	      <string length="32" />
+	   </var>
+	   <var uid="5" id="size" type="integer" default_label="Taille du fichier" default_short_label="Taille">
+	      <integer min="1" max="9999999999"/>
+	   </var>
+	   <var uid="6" id="hash" type="string" default_label="Hash" default_short_label="Hash">
+	      <string length="32" />
+	   </var>
+	   <var uid="7" id="ext" type="string" default_label="Extension" default_short_label="Ext">
+	      <string length="8" />
+	   </var>
+	   <var uid="8" id="content_type" type="string" default_label="Content-type" default_short_label="Type">
+	      <string length="100" />
+	   </var>
+	   <var uid="9" id="id_storage" type="fkey_varset" default_label="Dépôt" default_short_label="Dépôt">
+	      <fkey_varset varset_name="storage" />
+	   </var>
+	   <var uid="10" id="path" type="string" default_label="Path" default_short_label="Path">
+	      <string length="6" />
+	   </var>
+	</varset>
+
+Détail des variables :
+
+* ``status`` : statut du fichier :
+
+	* ``0`` : nouveau fichier en attente : fichier uploadé mais le formulaire n'a pas été enregistré
+	* ``1`` : fichier valide : la page a été enregistrée, le fichier est présent et la jointure a été créée
+	* ``2`` : fichier supprimé (pas utilisé ?)
+
+* ``date_creation`` : date d'envoi du fichier (YYYY-mm-dd HH:mm:ss)
+* ``orignal_name`` : nom du fichier d'origine
+* ``generated_name``: nom du fichier sur le disque (généré aléatoirement)
+* ``size`` : taille du fichier (en octets)
+* ``hash``: hash du fichier (Md5)
+* ``ext`` : extension (sans le '.')
+* ``content_type`` : type de contenu (Mime Type)
+* ``id_storage`` : Identifie le Storage utilisé (répertoire) pour l'upload
+* ``path`` : Contient le chemin (imbrication de répertoires) depuis le Path du Storage jusqu'au fichier (Exemple : ``fd/92``)
+
+Varset de jointure
+^^^^^^^^^^^^^^^^^^
+
+Ce fait le lien entre le fichier uploadé et la fiche (record) liée au fichier uploadé.
+
+Son nom dépendra du contexte métier du projet, mais les variable ``id_ext`` et ``id_file`` seront systématiquement présentes
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <varset name="lecture1_file" prefix="05_file" type="join" label="Corres L1 Fichiers">
+        <var uid="1" id="id_ext" type="fkey_varset">
+            <fkey_varset varset_name="lecture1" />
+        </var>
+        <var uid="2" id="id_file" type="fkey_varset">
+            <fkey_varset varset_name="file" />
+        </var>
+    </varset>
+
+Détail des variables :
+
+* ``id_ext`` : identifiant du varset cible
+* ``id_file`` : identifiant du varset file
+
+Options
+-------
+
+.. note::
+	Pour rappel les options d'un widget sont passées via un noeud ``<option>`` en tant qu'enfant du noeud Widget :
+
+	.. code-block:: xml
+
+		<option output="html" option_name="foo" value="bar" />
+
+* ``auto_upload`` : Lorsque l'option vaut ``true`` les fichiers sont chargés dans la base dès qu'ils sont sélectionnés, le bouton d'upload n'appraîtra pas.
+	* Par défaut : ``false``
+* ``btn_select_label`` : Libellé à afficher sur le bouton de sélection des fichiers
+	* Par défaut : ``Parcourir``
+* ``btn_send_label`` : Libellé à afficher sur le bouton d'upload
+	* Par défaut : ``Upload``
+* ``show_filelist`` : Lorsque l'option vaut ``true`` affiche la liste des fichiers présents dans la dataset (attribut ``dataset`` du widget) dans un tableau.
+	* Par défaut : ``true``
+
+  .. note::
+	Peut être revoir l'affichage quand l'option est à "false", actuellement on affiche le fichier sélectionné, et le résultat lors du chargement.
+
+* ``select_multifile`` : Lorsque l'option vaut ``true`` permet de sélectionner plusieurs fichiers dans la fenêtre de sélection.
+	* Par défaut : ``true``
+* ``download_link`` : Lorsque l'option vaut ``true`` le lien de téléchargement du fichier est présent dans la colonne "Action" du tableau de la liste des fichiers, sinon le lien est directement sur le nom du fichier.
+	* Par défaut : ``true``
+
+  .. note::
+	Cette option est pertinente que lorsque l'option ``show_filelist`` est à ``true``
+
+* ``max_size`` : Taille maximale d'un fichier à uploader.
+	* Par défaut : ``null`` (La taille maximum n'est pas contrôlée côté client)
+* ``max_files`` : Nombre maximal de fichiers à uploader par manifeste.
+	* Par défaut : ``null`` (Le nombre maximum de fichiers n'est pas contrôlé)
+
+Exemple :
+
+.. code-block:: xml
+
+	<upload dataset="mfiles">
+		<option output="html" option_name="auto_upload" value="true" />
+		<option output="html" option_name="btn_select_label" value="Parcourir..." />
+		<option output="html" option_name="btn_send_label" value="Upload" />
+		<option output="html" option_name="show_filelist" value="true" />
+		<option output="html" option_name="select_multifile" value="true" />
+		<option output="html" option_name="download_link" value="false" />
+		<option output="html" option_name="max_size" value="200" />
+		<option output="html" option_name="max_files" value="10" />
+	</upload>
+
+.. caution::
+	L'option permettant de filtrer les extensions autorisées n'est pas encore implémentée
+
+Exmple de dataquery exploitant l'uploader
+-----------------------------------------
+
+.. code-block:: xml
+
+    <!-- Dataset fichiers upload -->
+        <dataquery id="upload" table_name="ndmt_05_file_data" varset_name="lecture1_file" table_alias="upload">
+            <condition sql="{id_l1}={id}">
+                <field field_name="id_ext" table_name="upload" alias="id_l1"/>
+                <variable alias="id" default="NULL">
+                    <entry type="dataset" name="lecture_1" field="id_data" row="current" />
+                    <entry type="param" name="id_lecture1" />
+                </variable>
+            </condition>
+
+            <join detail_table="ndmt_file_data" detail_varset_name="file" detail_alias="f" sql="{id_file}={id_data}" type="left" mode="rw">
+                <field table_name="upload" field_name="id_file" alias="id_file"/>
+                <field table_name="f" field_name="id_data" alias="id_data"/>
+            </join>
+
+            <column_simple field_name="id_data" table_name="upload"/>
+            <column_simple field_name="id_ext" table_name="upload"/>
+            <column_simple field_name="id_file" table_name="upload"/>
+
+            <column_simple field_name="original_name" table_name="f"/>
+            <column_simple field_name="status" table_name="f"/>
+
+            <variables>
+                <variable alias="idl1" default="NULL" target_column="id_ext">
+                    <entry type="dataset" name="lecture_1" field="id_data" row="current"/>
+                </variable>
+            </variables>
+        </dataquery>

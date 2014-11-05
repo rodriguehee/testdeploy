@@ -1,0 +1,92 @@
+﻿.. _tests_unitaires:
+
+Tests unitaires
+===============
+Introduction
+------------
+
+lancement identique à voozanoo3 via l'url <projet>/testsUnitaires/index.php, ou en ligne de commande sur le serveur de développement 
+stockés dans le dossier testsUnitaires, en copiant l'arborescence du code pour situer les classes de tests "en face" des classes de code projet
+lancement d'une classe de test directement dans Eclipse : ajout la lib PHPUnit3 au projet, ouvrir la classe de test et utiliser le raccourcis alt-shift-x + u
+le bootstrap des tests unitaires doit initialiser la base de données avec la structure complète utilisée par l'application et fournir aux tests une fonction permettant de la ré-initialiser (A FINIR) 
+
+**Notes**: il est important de configurer le PHP du ZendServer en error_reporting = E_ALL | E_STRICT et error_display à On sinon certaines erreurs ne seront pas visibles .
+
+Exemple
+-------
+
+.. code-block:: php
+
+	/**
+	* Unit test
+	* @package UnitTest
+	* @copyright Copyright (c) 2010 Epiconcept (http://www.epiconcept.fr)
+	*/
+	require_once dirname(FILE) . '/../../tests.inc.php';
+
+	class projectTest extends Voo4TestCase
+	{
+	  private $CoreLibrary_Project_project;
+	  protected function setUp()
+	  {
+	    parent::setUp();
+	    $this->CoreLibrary_Project_project = new CoreLibrary_Project_project();
+	  }
+
+	  protected function tearDown()
+	  {
+	    parent::tearDown();
+	  }
+
+	  public function testIsValidProject()
+	  {
+	    $this->assertFalse($this->CoreLibrary_Project_project->isValidProject(''));
+	    $this->assertFalse($this->CoreLibrary_Project_project->isValidProject('existe_pas'));
+	    $this->assertFalse($this->CoreLibrary_Project_project->isValidProject('test'));
+	    CManipDB::Charger(DB_TESTS, dirname(FILE) . '/projectTest.sql');
+	    $this->assertEquals('aaaa', $this->CoreLibrary_Project_project->isValidProject('test'));
+	  }
+	}
+
+* Voo4TestCase est une classe qui surcharge la classe PHPUnit classique pour prendre nos besoins spécifiques en compte. Ne pas oublier d'appeler le SetUp et le TearDown parents si vous surchargez ces fonctions dans vos classes de test.
+* Les tirets de FILE doivent être remplacé par des underscores
+* Il n'est pas utile d'inclure explicitement les classes de la library, l'autoloader s'en charge
+* Seul le premier chemin est en relatif à la racine du dossier testsUnitaires, on peut ensuite utiliser la constante CHEMIN_CODE4 qui pointe vers le dossier racine du projet.
+* Setup recréé un objet neuf pour chaque test, ce qui garanti l'absence d'effets de bord.
+* La classe CManipDB est disponible pour vider la base ou y charger un fichier SQL (stocké au plus proche du ou des tests qui l'utilisent).
+* Par défaut est chargée une base vide basée sur le fichier ressources/sql/structure_sys.sql
+* La constante PATH_CODE4 donne le chemin "racine" de l'application
+* Les fichiers annexes (SQL par exemple) sont situés dans le même dossier que la classe de test, nommé comme elle ou comme l'un de ses tests, et se charge à l'aide d'un dirname(FILE) . 'IndexControllerTest.sql' 
+
+Ressources
+----------
+`phpunit-testing-zend-framework-controllers <https://www.epiconcept.fr/outils_internes/utilitaires/include>`_
+
+Calcul couverture de code sous Windows
+--------------------------------------
+Les scripts se trouve dans `https://www.epiconcept.fr/outils_internes/utilitaires/include <https://www.epiconcept.fr/outils_internes/utilitaires/include>`_
+
+Le générique, couverture.bat, demande à être configuré sur chaque poste
+
+.. code-block:: php
+
+	set php="C:\wamp2\bin\php\php5.2.9-1\php.exe"
+	set phpini="C:\Program Files\Zend\ZendServer\etc\php_xdebug.ini"
+	set chemin="C:\wamp2\www\couverture_tests"
+	set phpunit="C:\wamp2\www\utilitaires\include\PHPUnit"
+
+Comme suit:
+
+* php : chemin d'un exécutable PHP (je n'ai pas réussi à utiliser celui fourni avec le ZendServer 4)
+* phpini : chemin vers un fichier php.ini sans aucun outil Zend chargé (celui utilisé par Wamp, en mettant le prepend.php discuté précédemment dans son auto_prepend_file, convient très bien)
+* chemin : dossier dans lequel le résultat sera stocké
+* phpunit : dossier de la lib, celle du SVN utilitaires fonctionne 
+
+
+le problème avec le PHP fourni par Zend (et son php.ini donc) est que le calcul repose sur XDebug, avec lequel le ZendDebugger est incompatible.
+Il faut également rajouter en fin du php.ini utilisé la ligne suivante : zend_extension_ts="C:/wamp2/bin/php_xdebug-2.0.5-5.2.dll"
+en adaptant le chemin (dll trouvable à l'adresse directe : http://xdebug.org/files/php_xdebug-2.0.5-5.2.dll (external link) )
+
+On fait ensuite un batch par projet
+@echo off
+call couverture.bat VOOZANOO4 C:\ZendStd\www\voo4\trunk\unitTests\

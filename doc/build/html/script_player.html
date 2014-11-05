@@ -1,0 +1,550 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Script Player &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Webservices" href="webservices.html" />
+    <link rel="prev" title="Invokable Dataset" href="res/invokable_dataset.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="webservices.html" title="Webservices"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="res/invokable_dataset.html" title="Invokable Dataset"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="script-player">
+<span id="id1"></span><h1>Script Player<a class="headerlink" href="#script-player" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Le Script player correspond au module d&#8217;import Voozanoo3. Il a été ré-écrit pour se baser sur les class Zend et Voozanoo4.</p>
+<p>L&#8217;objectif est d&#8217;étendre les possibilité de cette class pour qu&#8217;elle ne serve pas uniquement à faire des imports, d&#8217;où
+son nom plus générique de script player.</p>
+</div>
+<div class="section" id="integration">
+<h2>Intégration<a class="headerlink" href="#integration" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">// Instancier un objet de type Core_Library_Resource_Xml et lire le script</span>
+<span class="nv">$oScript</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_Resource_XML</span><span class="p">();</span>
+<span class="nv">$oScript</span><span class="o">-&gt;</span><span class="na">LoadFromFile</span><span class="p">(</span> <span class="nx">APPLICATION_PATH</span> <span class="o">.</span> <span class="s1">&#39;/resources/xml/script_import_test.xml&#39;</span> <span class="p">);</span>
+
+<span class="nv">$oScriptPlayer</span> <span class="o">=</span> <span class="nx">Core_Library_ScriptPlayer</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">();</span>
+<span class="nv">$oScriptPlayer</span><span class="o">-&gt;</span><span class="na">Play</span><span class="p">(</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;script&#39;</span> <span class="o">=&gt;</span> <span class="nv">$oScript</span><span class="p">,</span>
+        <span class="s1">&#39;settings&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">&#39;real_path&#39;</span> <span class="o">=&gt;</span> <span class="nx">APPLICATION_PATH</span> <span class="o">.</span> <span class="s1">&#39;/resources/csv/test_import.csv&#39;</span>
+        <span class="p">)</span>
+<span class="p">));</span>
+</pre></div>
+</div>
+<p><strong>Exemple de script</strong></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+        <span class="nt">&lt;actions&gt;</span>
+
+                <span class="nt">&lt;load_file</span> <span class="na">type=</span><span class="s">&quot;csv&quot;</span> <span class="na">label=</span><span class="s">&quot;Chargement&quot;</span> <span class="na">file=</span><span class="s">&quot;$real_path&quot;</span> <span class="na">delimiter=</span><span class="s">&quot;;&quot;</span> <span class="na">start_position=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;2&quot;</span> <span class="na">target=</span><span class="s">&quot;ddn&quot;</span> <span class="na">type=</span><span class="s">&quot;date&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;1&quot;</span> <span class="na">target=</span><span class="s">&quot;prenom&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;0&quot;</span> <span class="na">target=</span><span class="s">&quot;nom&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/load_file&gt;</span>
+
+                <span class="nt">&lt;fill_tmp_table</span> <span class="na">table=</span><span class="s">&quot;import_table&quot;</span> <span class="na">label=</span><span class="s">&quot;Transfert&quot;</span> <span class="na">temporary_table=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;/actions&gt;</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="actions">
+<h2>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="void">
+<h3>void<a class="headerlink" href="#void" title="Permalink to this headline">¶</a></h3>
+<p>Action vide, utile pour faire des tests.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;void</span> <span class="na">label=</span><span class="s">&quot;Void action&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="load-file">
+<h3>load_file<a class="headerlink" href="#load-file" title="Permalink to this headline">¶</a></h3>
+<p>Chargement dans le datasource du script player d&#8217;un fichier.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;load_file</span> <span class="na">type=</span><span class="s">&quot;csv&quot;</span> <span class="na">label=</span><span class="s">&quot;Chargement&quot;</span> <span class="na">file=</span><span class="s">&quot;$real_path&quot;</span> <span class="na">delimiter=</span><span class="s">&quot;;&quot;</span> <span class="na">start_position=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;2&quot;</span> <span class="na">target=</span><span class="s">&quot;ddn&quot;</span> <span class="na">type=</span><span class="s">&quot;date&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;1&quot;</span> <span class="na">target=</span><span class="s">&quot;prenom&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;0&quot;</span> <span class="na">target=</span><span class="s">&quot;nom&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/load_file&gt;</span>
+
+<span class="nt">&lt;load_file</span> <span class="na">type=</span><span class="s">&quot;fixed_len&quot;</span> <span class="na">label=</span><span class="s">&quot;Chargement&quot;</span> <span class="na">file=</span><span class="s">&quot;$real_path&quot;</span> <span class="na">start_position=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;2&quot;</span> <span class="na">target=</span><span class="s">&quot;ddn&quot;</span> <span class="na">type=</span><span class="s">&quot;date&quot;</span> <span class="na">length=</span><span class="s">&quot;12&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;1&quot;</span> <span class="na">target=</span><span class="s">&quot;prenom&quot;</span> <span class="na">length=</span><span class="s">&quot;16&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;0&quot;</span> <span class="na">target=</span><span class="s">&quot;nom&quot;</span> <span class="na">length=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/load_file&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fill-tmp-table">
+<h3>fill_tmp_table<a class="headerlink" href="#fill-tmp-table" title="Permalink to this headline">¶</a></h3>
+<p>Remplissage d&#8217;une table temporaire à partir des données présente dans le datasource du scriptplayer.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;fill_tmp_table</span> <span class="na">table=</span><span class="s">&quot;import_table&quot;</span> <span class="na">label=</span><span class="s">&quot;Transfert&quot;</span> <span class="na">temporary_table=</span><span class="s">&quot;false&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exec-code">
+<h3>exec_code<a class="headerlink" href="#exec-code" title="Permalink to this headline">¶</a></h3>
+<p>Cette action est utilisée pour excuter du code de l&#8217;application. Cela permet d&#8217;exploiter les class métier développées pour une application.</p>
+<div class="highlight-xml"><div class="highlight"><pre>&lt;exec_code label=&quot;[LABEL]&quot; class=&quot;[CLASS NAME]&quot; method=&quot;[METHO NAME]&quot; [PARAM1]=&quot;[VALUE]&quot; [PARAM2]=&quot;[VALUE]&quot; ... /&gt;
+</pre></div>
+</div>
+<p>Les paramètres sont passés sous la forme d&#8217;un tableau d&#8217;option dans le constructeur de la class.</p>
+<p>Exemple:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;exec_code</span> <span class="na">label=</span><span class="s">&quot;Appel SAGA&quot;</span> <span class="na">class=</span><span class="s">&quot;Saga_Lib_Save_Manager&quot;</span> <span class="na">method=</span><span class="s">&quot;ImportSaveFile&quot;</span> <span class="na">save_file=</span><span class="s">&quot;$file1&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">class</span>   <span class="nc">Saga_Lib_Save_Manager</span> <span class="k">extends</span> <span class="nx">Core_Library_Project_BaseObject</span>
+<span class="p">{</span>
+        <span class="sd">/**</span>
+<span class="sd">         *</span>
+<span class="sd">         */</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">SetSaveFile</span><span class="p">(</span> <span class="nv">$sSaveFile</span> <span class="p">)</span> <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="sd">/**</span>
+<span class="sd">         *</span>
+<span class="sd">         */</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">ImportSaveFile</span><span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
+
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-users">
+<h3>import_users<a class="headerlink" href="#import-users" title="Permalink to this headline">¶</a></h3>
+<p>Importe les utilisateurs qui se trouvent dans le datasource.</p>
+<p>Dans le cas où le script est exécuté sur un Provider (OAuth), il est possible de
+spécifier des consumers, pour leur rattacher automatiquement les utilisateurs importés.
+Si le mode de synchronisation automatique est activé sur les consumers, les utilisateurs
+seront aussi créés sur les consumers.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;import_users</span> <span class="na">label=</span><span class="s">&quot;[Label]&quot;</span> <span class="na">default_group=</span><span class="s">&quot;[Group name]&quot;</span> <span class="na">default_role=</span><span class="s">&quot;[Role Name]&quot;</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;consumers&gt;</span>
+                <span class="nt">&lt;consumer&gt;</span>[Consumer A name]<span class="nt">&lt;/consumer&gt;</span>
+                <span class="nt">&lt;consumer&gt;</span>[Consumer B name]<span class="nt">&lt;/consumer&gt;</span>
+        <span class="nt">&lt;/consumers&gt;</span>
+<span class="nt">&lt;/import_users&gt;</span>
+</pre></div>
+</div>
+<p>Champs attendus dans le datasource:</p>
+<blockquote>
+<div><ul class="simple">
+<li>user_name (obligatoire)</li>
+<li>firstname</li>
+<li>lastname</li>
+<li>email</li>
+<li>status</li>
+<li>locale</li>
+<li>password (obligatoire)</li>
+<li>cps_id</li>
+</ul>
+</div></blockquote>
+<p>Exemple complet:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;load_file</span> <span class="na">label=</span><span class="s">&quot;Load file&quot;</span> <span class="na">file=</span><span class="s">&quot;$file1&quot;</span> <span class="na">type=</span><span class="s">&quot;csv&quot;</span> <span class="na">delimiter=</span><span class="s">&quot;;&quot;</span> <span class="na">start_position=</span><span class="s">&quot;0&quot;</span> <span class="na">zipped=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;0&quot;</span> <span class="na">target=</span><span class="s">&quot;user_name&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;2&quot;</span> <span class="na">target=</span><span class="s">&quot;lastname&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;3&quot;</span> <span class="na">target=</span><span class="s">&quot;firstname&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;11&quot;</span> <span class="na">target=</span><span class="s">&quot;email&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;12&quot;</span> <span class="na">target=</span><span class="s">&quot;password&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;13&quot;</span> <span class="na">target=</span><span class="s">&quot;group&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;field</span> <span class="na">position=</span><span class="s">&quot;14&quot;</span> <span class="na">target=</span><span class="s">&quot;role&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/load_file&gt;</span>
+
+
+<span class="nt">&lt;import_users</span> <span class="na">label=</span><span class="s">&quot;Insert users&quot;</span> <span class="na">default_group=</span><span class="s">&quot;main&quot;</span> <span class="na">default_role=</span><span class="s">&quot;admin&quot;</span> <span class="nt">&gt;</span>
+        <span class="nt">&lt;consumers&gt;</span>
+                <span class="nt">&lt;consumer&gt;</span>Neonetidf<span class="nt">&lt;/consumer&gt;</span>
+        <span class="nt">&lt;/consumers&gt;</span>
+<span class="nt">&lt;/import_users&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="creer-une-action-propre-a-l-application">
+<h2>Créer une action propre à l&#8217;application<a class="headerlink" href="#creer-une-action-propre-a-l-application" title="Permalink to this headline">¶</a></h2>
+<p>Créer une class dans la librairie de l&#8217;application de la forme qui étend Core_Library_Resource_XML_ScriptPlayer_Action :</p>
+<p>[ app lib prefixe ]_Resource_XML_ScriptPlayer_Action_[ nom de l&#8217;action ]</p>
+<p>Exemple:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;hello</span> <span class="na">label=</span><span class="s">&quot;Hello world&quot;</span> <span class="na">param1=</span><span class="s">&quot;value&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">Saga_Lib_Resource_XML_ScriptPlayer_Action_Hello</span> <span class="k">extends</span> <span class="nx">Core_Library_Resource_XML_ScriptPlayer_Action</span>
+<span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">Exec</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nb">error_log</span><span class="p">(</span> <span class="nx">__CLASS__</span> <span class="o">.</span> <span class="s1">&#39; &#39;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">GetAttribute</span><span class="p">(</span> <span class="s1">&#39;param1&#39;</span> <span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pilotage-d-une-application">
+<h2>Pilotage d&#8217;une application<a class="headerlink" href="#pilotage-d-une-application" title="Permalink to this headline">¶</a></h2>
+<p>Voozanoo4 dispose d&#8217;un mécanisme permettant à une application de transmettre des fichiers à une autre application pour
+qu&#8217;elle les traite. Le traitement est fait par le script player (l&#8217;application source transmet le script qui sera executé par le script player).</p>
+<p>Ce mécanisme est utile pour faire des imports de données par exemple. Il a été mis en place dans le cadre du projet
+BUDI (Bulk Dispatcher), et il repose sur un webservice.</p>
+<div class="section" id="id2">
+<h3>Intégration<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Le controller est présent uniquement dans le répertoire library/Controller/Ws/Script.php, il n&#8217;y a pas de module.
+Pour l&#8217;utiliser, il faut donc créer un module dans l&#8217;application:</p>
+<p>Créer un module <code class="docutils literal"><span class="pre">ws</span></code> avec un controller <code class="docutils literal"><span class="pre">Script</span></code> dans l’application cible ( APPLICATION_PATH/modules/ws/controllers/ScriptController.php ),
+et hériter le controller <code class="docutils literal"><span class="pre">Ws_ScriptController</span></code> de <code class="docutils literal"><span class="pre">Core_Library_Controller_Ws_Script</span></code>.</p>
+<p>Les fichiers à traiter sont transmis par POST au webservice.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Le temps d&#8217;attente de la réponse du <code class="docutils literal"><span class="pre">POST</span></code> est limité par un timeout, il est possible de l&#8217;augmenter si nécessaire.</p>
+<div class="last highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">// 120s</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">getHttpClient</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">setConfig</span><span class="p">(</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;timeout&#39;</span> <span class="o">=&gt;</span> <span class="mi">120</span> <span class="p">)</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<p>Paramètres attendus:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">zip_file_content</span></code>: fichier zip contenant le ou les fichiers à traiter, ainsi que le script destiné à être utilisé par le script player</li>
+<li><code class="docutils literal"><span class="pre">signature_file</span></code>: une signature garantissant que les fichiers transmis l&#8217;ont bien été par une source reconnue</li>
+<li><code class="docutils literal"><span class="pre">script_filename</span></code>: nom du script à l&#8217;intérieur du zip, cela permet de le retrouver et de le différencier des fichiers à traiter</li>
+<li><code class="docutils literal"><span class="pre">id_task</span></code>: identifiant unique, à faire varier s&#8217;il faut exécuter plusieurs tâches sur l&#8217;application</li>
+</ul>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Zend_Rest_Client</span><span class="p">(</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">GetUrlWithAuth</span><span class="p">()</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">zip_file_content</span><span class="p">(</span> <span class="nb">base64_encode</span><span class="p">(</span> <span class="nb">file_get_contents</span><span class="p">(</span> <span class="s1">&#39;/path/to/file.zip&#39;</span> <span class="p">)</span> <span class="p">)</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">signature_file</span><span class="p">(</span> <span class="nb">base64_encode</span><span class="p">(</span> <span class="nb">file_get_contents</span><span class="p">(</span> <span class="s1">&#39;/path/to/signature&#39;</span> <span class="p">)</span> <span class="p">)</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">script_filename</span><span class="p">(</span> <span class="s1">&#39;script.xml&#39;</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">id_task</span><span class="p">(</span> <span class="mi">42</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>le fichier zip est transmis via la requête HTTP, ce qui est inutile au cas où les deux applications communiquantes sont sur la même machine.
+Dans ce cas, il est possible de remplacer ce paramètre par <code class="docutils literal"><span class="pre">zip_file_path</span></code>, le système fera une recopie du zip dans le répertoire <code class="docutils literal"><span class="pre">storage</span></code>
+de l&#8217;application.</p>
+<div class="highlight-php"><div class="highlight"><pre>
+</pre></div>
+</div>
+<dl class="last docutils">
+<dt>&lt;?php</dt>
+<dd>$oClient-&gt;zip_file_path( $zipFile );</dd>
+</dl>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Le webservice décompresse le fichier zip dans le répertoire storage de l&#8217;application, dans un sous répertoire qui porte comme nom la valeur de <code class="docutils literal"><span class="pre">id_task</span></code>.
+Ce répertoire est automatiquement supprimé par le WS en fonction du contexte (temps réel, ou processus parallèle).</p>
+</div>
+<p>La création du fichier Zip et de la signature se fait en utilisant la class <code class="docutils literal"><span class="pre">Core_Library_File_Manager</span></code></p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$aFiles</span><span class="p">[]</span> <span class="o">=</span> <span class="s1">&#39;/path/to/file1&#39;</span><span class="p">;</span>
+<span class="nv">$aFiles</span><span class="p">[]</span> <span class="o">=</span> <span class="s1">&#39;/path/to/file2&#39;</span><span class="p">;</span>
+<span class="nv">$aFiles</span><span class="p">[]</span> <span class="o">=</span> <span class="s1">&#39;/path/to/script.xml&#39;</span><span class="p">;</span>
+
+<span class="c1">// Compression des fichiers récupérés</span>
+<span class="nv">$oFileManager</span><span class="o">-&gt;</span><span class="na">ZipFiles</span><span class="p">(</span> <span class="nv">$aFiles</span><span class="p">,</span> <span class="s1">&#39;/path/to/file.zip&#39;</span> <span class="p">);</span>
+
+<span class="c1">// Création de la signature</span>
+<span class="nv">$oFileManager</span><span class="o">-&gt;</span><span class="na">CreateFilesSignature</span><span class="p">(</span>
+        <span class="nv">$aFiles</span><span class="p">,</span>
+        <span class="s1">&#39;/path/to/signature&#39;</span><span class="p">,</span>
+        <span class="nv">$destinationProjectKey</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<p>Réponses du webservice</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">idle</span></code>: l&#8217;application est disponible</li>
+<li><code class="docutils literal"><span class="pre">done</span></code>: la tâche est terminée</li>
+<li><code class="docutils literal"><span class="pre">failed</span></code>: la tâche est terminée mais a généré une erreur</li>
+<li><code class="docutils literal"><span class="pre">running</span></code>: la tâche est en cours de traitement</li>
+</ul>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oResult</span> <span class="o">=</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">();</span>
+
+<span class="cm">/* @var $oResult Zend_Rest_Client_Result */</span>
+<span class="k">if</span> <span class="p">(</span> <span class="k">false</span> <span class="o">===</span> <span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">isSuccess</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">Core_Library_Exception</span><span class="p">(</span> <span class="nb">sprintf</span><span class="p">(</span> <span class="s1">&#39;Consumer webservice return error %s&#39;</span><span class="p">,</span> <span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">message</span> <span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// $sStatus = &#39;idle&#39; | &#39;done&#39; | &#39;failed&#39; | &#39;running&#39;</span>
+<span class="nv">$sStatus</span> <span class="o">=</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">response</span><span class="o">-&gt;</span><span class="na">status</span><span class="p">;</span>
+
+<span class="c1">// En cas d&#39;erreur, le message est présent dans la réponse</span>
+<span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">response</span><span class="o">-&gt;</span><span class="na">error_message</span>
+</pre></div>
+</div>
+<p>Il est possible de récupérer le statut d&#8217;une tâche en interrogeant le <code class="docutils literal"><span class="pre">Webservice</span></code> via <code class="docutils literal"><span class="pre">GET</span></code>, et en lui
+indiquant l&#8217;identifiant de la tâche. La réponse est la même que pour un <code class="docutils literal"><span class="pre">POST</span></code>, c&#8217;est à dire le statut de
+la tâche, et selon, un message d&#8217;erreur.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Zend_Rest_Client</span><span class="p">(</span> <span class="nv">$sWsUrl</span> <span class="o">.</span> <span class="s1">&#39;/id_task/42&#39;</span> <span class="p">);</span>
+
+<span class="nv">$oResult</span> <span class="o">=</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="execution-du-traitement-en-parallele">
+<h3>Execution du traitement en parallèle<a class="headerlink" href="#execution-du-traitement-en-parallele" title="Permalink to this headline">¶</a></h3>
+<p><strong>fork (compatible windows)</strong></p>
+<p>Le code ci-dessous permet de créer un nouveau processus.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">protected</span> <span class="k">function</span> <span class="nf">_execInBackground</span><span class="p">(</span> <span class="nv">$sCmd</span> <span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="nb">substr</span><span class="p">(</span> <span class="nb">php_uname</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span> <span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nb">pclose</span><span class="p">(</span> <span class="nb">popen</span><span class="p">(</span> <span class="s2">&quot;start /B &quot;</span> <span class="o">.</span> <span class="nv">$sCmd</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span> <span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+                <span class="nb">exec</span><span class="p">(</span> <span class="nv">$sCmd</span> <span class="o">.</span> <span class="s2">&quot; &gt; /dev/null &amp;&quot;</span> <span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Source: <a class="reference external" href="http://fr2.php.net/manual/fr/function.exec.php#86329">PHP.net</a></p>
+<p>Dans le controller <code class="docutils literal"><span class="pre">Ws_ScriptController</span></code> de <code class="docutils literal"><span class="pre">Core_Library_Controller_Ws_Script</span></code>, surcharger la méthode <code class="docutils literal"><span class="pre">_executeScript</span></code> qui lance le processus parallèle,
+et répond en transmettant le statut <code class="docutils literal"><span class="pre">running</span></code>. Le nouveau processus correspond au script <code class="docutils literal"><span class="pre">[application]_cli.php</span></code>, qui redispatche vers la class <code class="docutils literal"><span class="pre">[Application]CliApi</span></code>.
+(ajouter ces scripts s’il n’existent pas).</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">protected</span> <span class="k">function</span> <span class="nf">_executeScript</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="nv">$sScriptPath</span> <span class="o">=</span>
+                <span class="nx">APPLICATION_PATH</span> <span class="o">.</span> <span class="nx">DIRECTORY_SEPARATOR</span> <span class="o">.</span>
+                <span class="s1">&#39;resources&#39;</span> <span class="o">.</span> <span class="nx">DIRECTORY_SEPARATOR</span> <span class="o">.</span>
+                <span class="s1">&#39;cron&#39;</span> <span class="o">.</span> <span class="nx">DIRECTORY_SEPARATOR</span> <span class="o">.</span>
+                <span class="s1">&#39;saga_cli.php&#39;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="o">!</span> <span class="nb">file_exists</span><span class="p">(</span> <span class="nv">$sScriptPath</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">Core_Library_Exception</span><span class="p">(</span> <span class="nb">sprintf</span><span class="p">(</span> <span class="s2">&quot;Script not found (%s)&quot;</span><span class="p">,</span> <span class="nv">$sScriptPath</span> <span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nv">$sCmd</span> <span class="o">=</span> <span class="nb">sprintf</span><span class="p">(</span>
+                <span class="s2">&quot;php </span><span class="se">\&quot;</span><span class="s2">%s</span><span class="se">\&quot;</span><span class="s2"> mtd=execTask script_file=%s id=%d&quot;</span><span class="p">,</span>
+                <span class="nv">$sScriptPath</span><span class="p">,</span>
+                <span class="nb">escapeshellarg</span><span class="p">(</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_getScriptWsManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetScriptFile</span><span class="p">()</span> <span class="p">),</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_getScriptWsManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetId</span><span class="p">()</span>
+        <span class="p">);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_execInBackground</span><span class="p">(</span> <span class="nv">$sCmd</span> <span class="p">);</span>
+
+        <span class="k">return</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="o">::</span><span class="na">STATUS_RUNNING</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Dans la class <code class="docutils literal"><span class="pre">[Application]CliApi</span></code>, déclarer la méthode <code class="docutils literal"><span class="pre">execTask</span></code> dans laquelle sera fait le traitement en utilisant le script player
+( le traitement avec le script player est encapsulé dans la class <code class="docutils literal"><span class="pre">Core_Library_ScriptPlayer_Ws_Manager</span></code> ).</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">execTask</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="nv">$oScriptManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="p">(</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">&#39;project&#39;</span> <span class="o">=&gt;</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetCurrentProject</span><span class="p">(),</span>
+                <span class="s1">&#39;script_file&#39;</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getParamValue</span><span class="p">(</span> <span class="s1">&#39;script_file&#39;</span> <span class="p">),</span>
+                <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getParamValue</span><span class="p">(</span> <span class="s1">&#39;id&#39;</span> <span class="p">)</span>
+        <span class="p">));</span>
+
+        <span class="k">try</span> <span class="p">{</span>
+                <span class="nv">$aResult</span> <span class="o">=</span> <span class="nv">$oScriptManager</span><span class="o">-&gt;</span><span class="na">ExecuteScript</span><span class="p">();</span>
+                <span class="nv">$oScriptManager</span><span class="o">-&gt;</span><span class="na">SaveStatusInStorage</span><span class="p">(</span>
+                        <span class="nv">$aResult</span><span class="p">[</span> <span class="s1">&#39;status&#39;</span> <span class="p">],</span>
+                        <span class="p">(</span> <span class="nb">isset</span><span class="p">(</span> <span class="nv">$aResult</span><span class="p">[</span> <span class="s1">&#39;error_message&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$aResult</span><span class="p">[</span> <span class="s1">&#39;error_message&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span>
+                <span class="p">);</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">Exception</span> <span class="nv">$e</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$oScriptManager</span><span class="o">-&gt;</span><span class="na">SaveStatusInStorage</span><span class="p">(</span>
+                   <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="o">::</span><span class="na">STATUS_FAILED</span><span class="p">,</span>
+                   <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">()</span>
+                <span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Système de plugin (uniquement sur les serveurs d&#8217;Epiconcept)</strong></p>
+<p>Ce système se base sur le système de <code class="docutils literal"><span class="pre">proxy</span></code>/<code class="docutils literal"><span class="pre">plugin</span></code>: l’application demande au <code class="docutils literal"><span class="pre">proxy</span></code> de charger le <code class="docutils literal"><span class="pre">plugin</span></code> de l’application, et de lui transmettre une action à executer.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">protected</span> <span class="k">function</span> <span class="nf">_executeScript</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="nv">$oClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_Zmq_Client</span><span class="p">();</span>
+        <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">();</span>
+        <span class="nv">$sMSG</span> <span class="o">=</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">loadPlugin</span><span class="p">(</span>
+                <span class="s1">&#39;pexec1&#39;</span><span class="p">,</span>
+                <span class="k">array</span><span class="p">(</span> <span class="nx">APPLICATION_PATH</span> <span class="o">.</span> <span class="s2">&quot;/resources/cron/pexec_cli.php&quot;</span><span class="p">,</span> <span class="s2">&quot;mtd=loadPlugin&quot;</span> <span class="p">)</span>
+        <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="s1">&#39;OK&#39;</span> <span class="o">==</span> <span class="nv">$sMSG</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$sRep</span> <span class="o">=</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">sendWork</span><span class="p">(</span>
+                                <span class="s1">&#39;pexec1&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;QOFF&#39;</span><span class="p">,</span>
+                                <span class="k">array</span><span class="p">(</span>
+                                        <span class="s1">&#39;script_file&#39;</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_getScriptWsManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetScriptFile</span><span class="p">(),</span>
+                                        <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_getScriptWsManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetId</span><span class="p">()</span>
+                                <span class="p">)</span>
+                <span class="p">);</span>
+                <span class="k">return</span> <span class="k">array</span><span class="p">(</span> <span class="nx">‘</span><span class="s1">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="o">::</span><span class="na">STATUS_RUNNING</span> <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="o">::</span><span class="na">STATUS_FAILED</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Comme précédemment, il faut utiliser l’API CLI pour executer le code qui charge le <code class="docutils literal"><span class="pre">plugin</span></code>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">loadPlugin</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="nv">$oPlugin</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_Zmq_Plugin</span><span class="p">(</span> <span class="s1">&#39;pexec1&#39;</span> <span class="p">);</span>
+        <span class="nv">$oPlugin</span><span class="o">-&gt;</span><span class="na">registerPlugin</span><span class="p">();</span>
+        <span class="nv">$oPlugin</span><span class="o">-&gt;</span><span class="na">waitWork</span><span class="p">(</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;_exec&#39;</span> <span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Une fois le <code class="docutils literal"><span class="pre">plugin</span></code> chargé, la callback <code class="docutils literal"><span class="pre">_exec</span></code> est appelée, c’est ici que se trouve le code de traitement des fichiers.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">_exec</span><span class="p">(</span> <span class="nv">$sJson</span> <span class="p">)</span>
+<span class="p">{</span>
+        <span class="nv">$aData</span> <span class="o">=</span> <span class="nx">Zend_Json</span><span class="o">::</span><span class="na">decode</span><span class="p">(</span> <span class="nv">$sJson</span> <span class="p">);</span>
+
+        <span class="nv">$oScriptManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="p">(</span> <span class="k">array</span><span class="p">(</span>
+                        <span class="s1">&#39;project&#39;</span> <span class="o">=&gt;</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetCurrentProject</span><span class="p">(),</span>
+                        <span class="s1">&#39;script_file&#39;</span> <span class="o">=&gt;</span> <span class="nv">$aData</span><span class="p">[</span> <span class="s1">&#39;script_file&#39;</span> <span class="p">],</span>
+                        <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="nv">$aData</span><span class="p">[</span> <span class="s1">&#39;id&#39;</span> <span class="p">]</span>
+        <span class="p">));</span>
+
+        <span class="k">try</span> <span class="p">{</span>
+                        <span class="nv">$aResult</span> <span class="o">=</span> <span class="nv">$oScriptManager</span><span class="o">-&gt;</span><span class="na">ExecuteScript</span><span class="p">();</span>
+                        <span class="nv">$oScriptManager</span><span class="o">-&gt;</span><span class="na">SaveStatusInStorage</span><span class="p">(</span>
+                                        <span class="nv">$aResult</span><span class="p">[</span> <span class="s1">&#39;status&#39;</span> <span class="p">],</span>
+                                        <span class="p">(</span> <span class="nb">isset</span><span class="p">(</span> <span class="nv">$aResult</span><span class="p">[</span> <span class="s1">&#39;error_message&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$aResult</span><span class="p">[</span> <span class="s1">&#39;error_message&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span>
+                        <span class="p">);</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span> <span class="nx">Exception</span> <span class="nv">$e</span> <span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$oScriptManager</span><span class="o">-&gt;</span><span class="na">SaveStatusInStorage</span><span class="p">(</span>
+                                        <span class="nx">Core_Library_ScriptPlayer_Ws_Manager</span><span class="o">::</span><span class="na">STATUS_FAILED</span><span class="p">,</span>
+                                         <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">()</span>
+                        <span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Script Player</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#integration">Intégration</a></li>
+<li><a class="reference internal" href="#actions">Actions</a><ul>
+<li><a class="reference internal" href="#void">void</a></li>
+<li><a class="reference internal" href="#load-file">load_file</a></li>
+<li><a class="reference internal" href="#fill-tmp-table">fill_tmp_table</a></li>
+<li><a class="reference internal" href="#exec-code">exec_code</a></li>
+<li><a class="reference internal" href="#import-users">import_users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creer-une-action-propre-a-l-application">Créer une action propre à l&#8217;application</a></li>
+<li><a class="reference internal" href="#pilotage-d-une-application">Pilotage d&#8217;une application</a><ul>
+<li><a class="reference internal" href="#id2">Intégration</a></li>
+<li><a class="reference internal" href="#execution-du-traitement-en-parallele">Execution du traitement en parallèle</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="res/invokable_dataset.html"
+                        title="previous chapter">Invokable Dataset</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="webservices.html"
+                        title="next chapter">Webservices</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/script_player.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="webservices.html" title="Webservices"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="res/invokable_dataset.html" title="Invokable Dataset"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

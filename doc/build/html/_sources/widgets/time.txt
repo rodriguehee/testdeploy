@@ -1,0 +1,45 @@
+.. _widgettime:
+
+WidgetTime
+==========
+
+Fonction
+--------
+Hérite de :ref:`widgetfield`
+
+Ce composant sert pour l'affichage des champs de type time.
+
+Le template de rendu est :
+
+.. code-block:: html
+
+	<div id="{idUnique}" class="field time-fields form-inline">
+		<input id="voo_time_{idUnique}_hour" class="voo_time time-field-hour form-control" type="text" placeholder="H" name="{nomFile}_hour" value="" size="2" maxlength="2">
+		:
+		<input id="voo_time_{idUnique}_minute" class="voo_time time-field-minute form-control" type="text" placeholder="H" name="{nomFile}_minute" value="" size="2" maxlength="2">
+		:
+		<input id="voo_time_{idUnique}_second" class="voo_time time-field-second form-control" type="text" placeholder="H" name="{nomFile}_second" value="" size="2" maxlength="2">
+    </div>
+
+.. note::
+    Le champ dédié aux secondes peut être ignoré en passant l'option "short" (voir les options).
+        
+    
+Attributs
+---------
+
+Les attributs sont les mêmes que pour :ref:`widgetfield`
+    
+Options
+-------
+
+short
+^^^^^
+
+Type: boolean
+
+Fonction: indique de ne pas afficher le champ pour saisir les secondes
+
+.. code-block:: xml
+
+	<option output="html" option_name="short" value="true" />

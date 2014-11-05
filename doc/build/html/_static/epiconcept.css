@@ -1,0 +1,45 @@
+/**
+ * Feuille de style pour la documentation Sphynx de Voozanoo pour Epiconcept
+ *
+ * L'inclusion de cette feuille est réalisé grâce à la surcharge effectuer dans '/source/_templates/page.html'
+ */
+
+/* 
+@see http://sphinx-doc.org/rest.html?highlight=admonition#directives
+Admonition connus : attention, caution, danger, error, hint, important, note, tip, warning
+Généralement les thèmes inclus des styles pour "note" et "warning" uniquement
+*/
+
+div.important, div.caution, div.danger, div.error, div.hint, div.tip, div.warning {
+	padding-left: 45px;
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+	min-height: 40px;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+div.important {
+	background-image: url('epi-important.png');
+	background-color: #d9edf7;
+	border: 1px solid #bce8f1;
+}
+
+div.caution {
+	background-image: url('epi-caution.png');
+	background-color: #F5D0A9;
+	border: 1px solid #FAAC58;
+}
+
+div.warning, div.danger, div.error {
+	background-image: url('epi-warning.png');
+	background-color: #ffe4e4;
+	border: 2px solid #f66;
+}
+
+div.hint, div.tip {
+	background-image: url('epi-hint.png');
+	background-color: #F2F5A9;
+	border: 1px solid #FAAC58
+}

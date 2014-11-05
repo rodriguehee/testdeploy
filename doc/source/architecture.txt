@@ -1,0 +1,49 @@
+.. _architecture:
+
+Architecture
+============
+
+.. toctree::
+	:maxdepth: 1
+
+	archi/acces_concurentiels
+	archi/auth
+	archi/droits
+	archi/export
+	archi/frame	
+	archi/mainframe
+	archi/model_manager
+	archi/noyau
+	archi/session
+	archi/style
+	archi/template_ined
+
+XML vs Base de données
+----------------------
+
+Il faut une règle claire pour choisir entre stocker l’information dans un fichier XML, ou dans une table de la base de données.
+
+Avantages / inconvénients
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+L’avantage du XML:
+
+* Structure plus riche pour stocker l’information (attention, il est difficile de représenter une arborescence où les noeuds peuvent avoir plusieurs parents)
+* Donne une meilleur lisibilité de l’information contrairement au cas où elle est contenue dans plusieurs tables, ce qui oblige à faire des jointures.
+* XSD pour valider la structure du XML. On peut déterminer si les ressources sont compatibles avec le noyau de Voozanoo.
+* Versionnement
+
+L’avantage de la base de données:
+
+* Performances
+* Simplicité d’exploitation des données (insert, update et select)
+
+Règle proposée
+~~~~~~~~~~~~~~
+
+La priorité est la solution XML, en raison des avantages données dans le chaptire précédent.
+Les conditions pour utiliser le XML:
+
+Le XML doit décrire la structure d’un objet: formulaire, filtre, varset, profil, module, ...
+Ecriture quasi inexistante dans le XML (en dehors des modules d’édition pour la création)
+Les performances ne doivent pas être trop faible en comparaison de la solution base de données.

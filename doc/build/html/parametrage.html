@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Paramétrage &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Amorçage d’une application Voozanoo4" href="amorcage.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="amorcage.html" title="Amorçage d’une application Voozanoo4"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parametrage">
+<span id="id1"></span><h1>Paramétrage<a class="headerlink" href="#parametrage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principe-de-fonctionnement">
+<h2>Principe de fonctionnement<a class="headerlink" href="#principe-de-fonctionnement" title="Permalink to this headline">¶</a></h2>
+<p>La configuration d&#8217;une application Voozanooo4 se fait via deux fichiers <code class="docutils literal"><span class="pre">.ini</span></code> (Noyau et Application) lus et parsés par
+<a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.config.adapters.ini.html">Zend_Config_Ini</a>.</p>
+<p>Ce système permet l&#8217;utilisation de l&#8217;héritage de configuration entre sections.</p>
+<p>Pour éviter tout conflit (Svn/Local/Serveur) dans les fichiers d&#8217;initialisation (Core Voozanoo &amp; Application) une section se rattache :</p>
+<ul class="simple">
+<li>A un contexte d&#8217;éxécution (Ex : Production, Staging - preprod, Testing - Recette, Development)</li>
+<li>A un de nos serveur en particulier (Ex : php53a, php53b, preprod3, recette17)</li>
+<li>A un poste de développement précis (Ex : GSA, JDS, SBL, CGD)</li>
+</ul>
+<img alt="_images/structure_sections_ini_voo4.png" src="_images/structure_sections_ini_voo4.png" />
+<p>Fichier .ini représentant ce schéma :</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="c1">; Production et enfants</span>
+<span class="k">[production]</span>
+
+<span class="k">[prod_php53a : production]</span>
+
+<span class="k">[prod_php53b : production]</span>
+
+<span class="c1">; Staging et enfants</span>
+<span class="k">[staging : production]</span>
+
+<span class="k">[stag_preprod3 : staging]</span>
+
+<span class="c1">; Testing et enfants</span>
+<span class="k">[testing : production]</span>
+
+<span class="k">[test_recette17 : testing]</span>
+
+<span class="c1">; Development et enfants</span>
+<span class="k">[development : production]</span>
+
+<span class="k">[dev_gsa : development]</span>
+
+<span class="k">[dev_sbl : development]</span>
+
+<span class="k">[dev_jds : development]</span>
+
+<span class="k">[dev_cgd : development]</span>
+</pre></div>
+</div>
+<p>L&#8217;identification de la section à charger se fait via une constante <code class="docutils literal"><span class="pre">APPLICATION_ENV</span></code> initialisée :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Au niveau du fichier <code class="docutils literal"><span class="pre">public/index.php</span></code> (<strong>peu recommandé car versionné</strong>)</dt>
+<dd><div class="first last highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">//Cette notation permet d&#39;éviter des erreurs du type &quot;Constant already defined in...&quot; si elle est déjà connue</span>
+<span class="nb">defined</span><span class="p">(</span><span class="s1">&#39;APPLICATION_ENV&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nb">define</span><span class="p">(</span><span class="s1">&#39;APPLICATION_ENV&#39;</span><span class="p">,</span> <span class="s1">&#39;production&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Au niveau du fichier <code class="docutils literal"><span class="pre">public/.htaccess</span></code> (<strong>peu recommandé car versionné</strong>)</dt>
+<dd><div class="first last highlight-apacheconf"><div class="highlight"><pre><span class="nb">SetEnv</span> APPLICATION_ENV production
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Au niveau du Vhost d&#8217;Apache (<strong>recommandé</strong>)</dt>
+<dd><div class="first last highlight-apacheconf"><div class="highlight"><pre><span class="nt">&lt;VirtualHost</span> <span class="s">*:8080</span><span class="nt">&gt;</span>
+        <span class="nb">ServerName</span> neodemat.voozanoo.net
+        <span class="nb">ServerAlias</span> neodemat
+        <span class="nb">ServerAdmin</span> webmaster@localhost
+        <span class="c"># ....</span>
+        <span class="nt">&lt;Directory</span> <span class="s">/var/www/neodemat</span><span class="nt">&gt;</span>
+                <span class="nb">SetEnv</span> APPLICATION_ENV production
+
+                <span class="nb">RewriteEngine</span> <span class="k">On</span>
+                <span class="nb">RewriteCond</span> %{REQUEST_FILENAME} -s [OR]
+                <span class="nb">RewriteCond</span> %{REQUEST_FILENAME} -l [OR]
+                <span class="nb">RewriteCond</span> %{REQUEST_FILENAME} -d [OR]
+                <span class="nb">RewriteCond</span> %{REQUEST_URI} =/favicon.ico [OR]
+                <span class="nb">RewriteCond</span> %{REQUEST_URI} =/server-info [OR]
+                <span class="nb">RewriteCond</span> %{REQUEST_URI} =/server-status
+                <span class="nb">RewriteRule</span> ^.*$ - [NC,L]
+                <span class="nb">RewriteRule</span> ^.*$ index.php [NC,L]
+        <span class="nt">&lt;/Directory&gt;</span>
+        <span class="c"># ....</span>
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Deux fichiers sont chargés:</p>
+<ul class="simple">
+<li>voozanoo.ini, situé à la racine du core Voozanoo utilisé</li>
+<li>&lt;application&gt;.ini, chargé actuellement à partir du chemin PATH_CONF du prepend.inc.php</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Si l&#8217;application contient un .htaccess dans le répertoire public les variables d&#8217;environnement / les règles de rewriting surchargeront votre configuration Apache.</p>
+<p>Pour éviter cela ajoutez cette directive (en ciblant le répertoire <code class="docutils literal"><span class="pre">/public/</span></code> de l&#8217;appli) :</p>
+<div class="last highlight-apache"><div class="highlight"><pre><span class="nb">AllowOverride</span> <span class="k">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="configuration-de-voozanoo4">
+<h2>Configuration de Voozanoo4<a class="headerlink" href="#configuration-de-voozanoo4" title="Permalink to this headline">¶</a></h2>
+<p>On y défini d&#8217;une part</p>
+<ul>
+<li><dl class="first docutils">
+<dt>les configurations propre à un noyau</dt>
+<dd><ul class="first last simple">
+<li>version du ZendFramework à utiliser</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>les configurations génériques nécessaires au bon fonctionnement de l&#8217;application</dt>
+<dd><ul class="first last simple">
+<li>affichage des erreurs</li>
+<li>émission d&#8217;exceptions par le front controller</li>
+<li>tous les chemins d&#8217;inclusions (défini ici à l&#8217;aide des constantes du prepend.inc.php standard)</li>
+<li>quelques réglages génériques sur la base de données</li>
+<li>la configuration en développement</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Noter que</p>
+<ul class="simple">
+<li>VOOZANOO_PATH et APPLICATION_PATH sont deux constantes définies au démarrage de l&#8217;application, avant que les fichiers ini ne soient chargés, nécessaires pour que la configuration puisse être définie relativement aux chemins du core voozanoo choisi et de l&#8217;application.</li>
+<li>VOOZANOO_PATH est le chemin vers le core voozanoo, elle contient donc la version à utiliser (dans le cas d&#8217;une installation de plusieurs coeurs)</li>
+</ul>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[production]</span>
+
+<span class="c1">; -- Environnement PHP --</span>
+        <span class="c1">; @see http://php.net/manual/fr/errorfunc.configuration.php#ini.display-startup-errors</span>
+<span class="na">phpSettings.display_startup_errors</span> <span class="o">=</span> <span class="s">0</span>
+<span class="s">        ; @see http://www.php.net/manual/fr/errorfunc.configuration.php#ini.display-errors</span>
+<span class="na">phpSettings.display_errors</span> <span class="o">=</span> <span class="s">1</span>
+<span class="s">        ; Indique la timezone à utiliser</span>
+<span class="na">phpSettings.date.timezone</span> <span class="o">=</span> <span class="s">&quot;Europe/Paris&quot;</span>
+
+<span class="c1">; -- Include Path automatiquement ajoutés --</span>
+<span class="na">includePaths.library</span> <span class="o">=</span> <span class="s">CHEMIN_EXTLIB</span>
+<span class="na">includePaths.pear</span> <span class="o">=</span> <span class="s">CHEMIN_EXTLIB &quot;PEAR&quot;</span>
+
+<span class="c1">; -- Amorçage de l&#39;application --</span>
+<span class="na">bootstrap.path</span> <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/Bootstrap.php&quot;</span>
+<span class="na">bootstrap.class</span> <span class="o">=</span> <span class="s">&quot;Bootstrap&quot;</span>
+
+<span class="c1">; -- Librairie Voozanoo --</span>
+         <span class="c1">; Active l&#39;utilisation de packages (rollup) statiques de Voozanoo4 et Yui pour optimiser les performances</span>
+<span class="na">lib.voozanoo.javascript.static</span> <span class="o">=</span> <span class="s">TRUE</span>
+<span class="s">        ; Active ou non le mode Debug (console YUI2 + fichier non minifiés)</span>
+<span class="na">lib.yui.debug</span> <span class="o">=</span> <span class="s">FALSE</span>
+<span class="s">        ; Fichier xml référencant les modules Yui3 de Voo4</span>
+<span class="na">lib.voozanoo.javascript.yui_conf</span> <span class="o">=</span> <span class="s">&quot;yui_conf_modules.xml&quot;</span>
+<span class="s">         ; Chemin pointant la librairie javascript de Voozanoo</span>
+<span class="na">lib.voozanoo.javascript.path</span> <span class="o">=</span> <span class="s">CHEMIN_EXTLIB &quot;/VooLibJs&quot;</span>
+<span class="s">        ; Url pointant la librairie JS Voo4 (utilisé dans des balises &lt;script&gt;)</span>
+<span class="na">lib.voozanoo.javascript.url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080/VOOZANOO4/libs/VooLibJs&quot;</span>
+<span class="s">        ; Url pointant le répertoire des assets</span>
+<span class="na">lib.voozanoo.assets.url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080/VOOZANOO4/libs/VooLibAssets&quot;</span>
+<span class="s">        ; Url pointant la librairie YUI 3</span>
+<span class="na">lib.yui.url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080/VOOZANOO4/libs/yui&quot;</span>
+<span class="s">        ; Path pointant la librairie YUI 3</span>
+<span class="na">lib.yui.path</span> <span class="o">=</span> <span class="s">CHEMIN_EXTLIB &quot;/yui&quot;</span>
+<span class="s">        ; Url pointant la librairie YUI 2</span>
+<span class="na">lib.yui2.url</span> <span class="o">=</span> <span class="s">&quot;http://localhost:8080/VOOZANOO4/libs/yui2&quot;</span>
+
+
+
+<span class="c1">; -- Ressources ZendFramework (@see http://framework.zend.com/manual/1.12/en/zend.application.available-resources.html) --</span>
+        <span class="c1">; Active la possibiliter de placer un fichier Bootstrap.php dans chaque répertoire de module pour amorcer spécifiquement chaque Module</span>
+        <span class="c1">; @see http://framework.zend.com/manual/1.12/en/zend.application.available-resources.html#zend.application.available-resources.modules</span>
+<span class="na">resources.modules[]</span> <span class="o">=</span>
+
+<span class="c1">; frontController</span>
+        <span class="c1">; Indique à Zend de ne pas Throws les exception rencontrées mais de les router vers l&#39;Handler d&#39;exception</span>
+<span class="na">resources.frontController.throwExceptions</span> <span class="o">=</span> <span class="s">FALSE</span>
+<span class="s">        ; Pour ne pas afficher de détails relatifs aux exceptions à l&#39;utilisateur (dangereux en production)</span>
+<span class="na">resources.frontController.params.displayExceptions</span> <span class="o">=</span> <span class="s">FALSE</span>
+<span class="s">        ; Répertoire contenant les controllers du module &quot;default&quot;</span>
+<span class="c1">; resources.frontController.controllerDirectory = APPLICATION_PATH &quot;/controllers&quot;</span>
+        <span class="c1">; Modules reconnus (Coté Core et Coté Application)</span>
+<span class="na">resources.frontController.moduleDirectory[]</span> <span class="o">=</span> <span class="s">CHEMIN_CORE &quot;/modules&quot;</span>
+<span class="na">resources.frontController.moduleDirectory[]</span> <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/modules&quot;</span>
+<span class="s">        ; Indique au frontController de considérer le module &#39;home&#39; comme étant celui à utiliser par défaut (ie : sans indication dans l&#39;URL)</span>
+<span class="na">resources.frontController.defaultModule</span> <span class="o">=</span> <span class="s">&#39;home&#39;</span>
+<span class="s">        ; Indique a ZF de préfixer le module par défaut par son libellé (en l&#39;occurence &#39;Home_&#39;)</span>
+<span class="na">resources.frontController.params.prefixDefaultModule</span> <span class="o">=</span> <span class="s">1</span>
+
+<span class="c1">; Aides d&#39;action noyau</span>
+<span class="na">resources.frontController.actionHelperPaths.Core_Library_Action_Helpers</span> <span class="o">=</span> <span class="s">CHEMIN_CORE &quot;/library/Action/Helpers&quot;</span>
+
+<span class="c1">; Aides de vues noyau</span>
+<span class="na">resources.view.helperPath.CoreLibrary_View_Helpers</span> <span class="o">=</span> <span class="s">CHEMIN_CORE &quot;/library/View/Helpers&quot;</span>
+
+<span class="c1">;Resource : mail</span>
+<span class="na">resources.mail.transport.type</span> <span class="o">=</span> <span class="s">smtp</span>
+<span class="na">resources.mail.transport.host</span> <span class="o">=</span> <span class="s">SMTP_HOST</span>
+
+<span class="c1">;Configuration propre à Voozanoo</span>
+        <span class="c1">; Chemin vers les ressources (Xml, Sql etc) de l&#39;application</span>
+<span class="na">voozanoo.resources.path</span> <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/resources&quot;</span>
+
+<span class="c1">; -- Directives facultatives --</span>
+
+<span class="c1">; (Défaut = Calculé en fct du memory_limit) Nombre de tuples considérés comment pouvant être mis en mémoire lors du query vers la DB</span>
+        <span class="c1">; A titre d&#39;information 64Mo de RAM correspond à environ 7.000 records (bien sur tout dépend du nb de colonnes par record)</span>
+        <span class="c1">; @see Core_Library_Resource_XML_DataSet_RowData_Adapter_ZendDBSelect::_calculateLimitCount()</span>
+<span class="na">lib.voozanoo.adapter.zendDbSelect.packetSize</span> <span class="o">=</span> <span class="s">20000</span>
+
+<span class="c1">; (Défaut = 10) Délai (en secondes) utilisé pour le monitoring (péremption ?)</span>
+<span class="c1">; @see Core_Library_Monitoring::Load()</span>
+<span class="na">form.monitor.ttl</span> <span class="o">=</span> <span class="s">10</span>
+
+<span class="c1">; (Défaut = 24) Délai (en heures) avant qu&#39;un fichier uploadé dont la fiche n&#39;a pas été enregistrée soit purgé</span>
+<span class="c1">; @see Core_Library_Controller_Upload_Upload::$_iTimer</span>
+<span class="na">upload.delete_timer</span> <span class="o">=</span> <span class="s">24</span>
+
+<span class="c1">; (Défaut = 0) Numéro de version à fournir aux demandes de fichiers Javascript pour bypass le cache navigateur</span>
+<span class="c1">; @see Core_Library_Options::getResourceVersion()</span>
+<span class="na">voozanoo.core.js_version</span> <span class="o">=</span> <span class="s">0.2.12</span>
+
+<span class="c1">; (Défaut = 0) Numéro de version à fournir aux demandes de fichiers Css pour bypass le cache navigateur</span>
+<span class="c1">; @see Core_Library_Options::getResourceVersion()</span>
+<span class="na">voozanoo.core.css_version</span> <span class="o">=</span> <span class="s">0.2.12</span>
+
+<span class="k">[development : production]</span>
+<span class="na">phpSettings.display_startup_errors</span> <span class="o">=</span> <span class="s">1</span>
+<span class="na">phpSettings.display_errors</span> <span class="o">=</span> <span class="s">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration-d-une-application">
+<h2>Configuration d&#8217;une application<a class="headerlink" href="#configuration-d-une-application" title="Permalink to this headline">¶</a></h2>
+<p>Le principe est de n&#8217;avoir que les éléments réellement spécifiques à l&#8217;application. Notez qu&#8217;il est <em>possible</em> de surcharger dans ce fichier une valeur définie dans le voozanoo.ini.</p>
+<p>Il faut donc être prudent et connaitre les directives de configuration étant présente dans le <code class="docutils literal"><span class="pre">voozanoo.ini</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Le fichier d&#8217;initialisation d&#8217;une application peut désormais se placer dans l&#8217;arborescence de l&#8217;application, afin de garder un <em>modèle</em> de la configuration d&#8217;une appli et également de l&#8217;utiliser tel quel.</p>
+<p>Il faut savoir que le système tentera d&#8217;abord de charger le fichier de configuration depuis le <code class="docutils literal"><span class="pre">PATH_FARM</span></code> puis si, et seulement si, il est introuvable à cet endroit il tentera de le chercher du coté
+de l&#8217;application (<code class="docutils literal"><span class="pre">APPLICATION_PATH/configs/application.ini</span></code>).</p>
+<p class="last">L&#8217;héritage des sections expliqué ci-dessous est toujours valide dans ce fichier.</p>
+</div>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[production]</span>
+
+<span class="c1">; Ressource : Base de données</span>
+        <span class="c1">; PDO est obligatoire</span>
+<span class="na">resources.db.adapter</span> <span class="o">=</span> <span class="s">&quot;PDO_MYSQL&quot;</span>
+<span class="na">resources.db.params.date_format</span> <span class="o">=</span> <span class="s">&quot;YYYY-MM-ddTHH:mm:ss&quot;</span>
+<span class="na">resources.db.isDefaultTableAdapter</span> <span class="o">=</span> <span class="s">true</span>
+<span class="na">resources.db.params.host</span> <span class="o">=</span> <span class="s">&quot;localhost&quot;</span>
+<span class="na">resources.db.params.username</span> <span class="o">=</span> <span class="s">&quot;root&quot;</span>
+<span class="na">resources.db.params.password</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="na">resources.db.params.dbname</span> <span class="o">=</span> <span class="s">&quot;voozanoo4&quot;</span>
+
+<span class="c1">; configuration de l&#39;application</span>
+<span class="na">voozanoo.baseurl</span> <span class="o">=</span> <span class="s">&quot;/applis/VOO4_PROJECTX/public/&quot;</span>
+
+<span class="c1">; Répertoire temporaire où stocker des fichiers générés par l&#39;application (Ex: Export)</span>
+<span class="c1">; @see Core_Library_Export_Builder::_getTempPath()</span>
+<span class="na">dir.temp</span> <span class="o">=</span> <span class="s">PATH_TEMP &quot;PROJECTX/temp/&quot;</span>
+
+<span class="c1">; Répertoire temporaire de stockage des chunks lors de l&#39;upload de fichiers via le composant Y.LargeFileUploader, lié à l&#39;application</span>
+<span class="c1">; @see Core_Library_Controller_Upload_Upload::uploadchunkAction()</span>
+<span class="na">voozanoo.upload.chunk.directory</span> <span class="o">=</span> <span class="s">&quot;/space/storage/chunks/projectx&quot;</span>
+
+<span class="c1">; Répertoire de stockage final d&#39;un fichier uploadé (assimilé à un Storage), lié à l&#39;application</span>
+<span class="c1">; @see Core_Library_File_Manager::GetDefaultStorage()</span>
+<span class="na">voozanoo.upload.directory</span> <span class="o">=</span> <span class="s">&quot;/space/storage/projectx&quot;</span>
+
+<span class="c1">; -- Directives facultatives --</span>
+
+<span class="c1">; (Défaut = valeur de $_SERVER[ &#39;HTTP_HOST&#39; ]) Host à utiliser pour reconstruire l&#39;url du projet</span>
+<span class="c1">; @see Core_Library_Account::GetURL()</span>
+<span class="na">voozanoo.host</span> <span class="o">=</span> <span class="s">&#39;projectx.voozanoo.net&#39;</span>
+
+<span class="c1">; (Défaut = Déduit de $_SERVER[ &#39;SERVER_PORT&#39; ]) Protocole à utiliser pour reconstruire l&#39;url du projet</span>
+<span class="c1">; @see Core_Library_Account::GetURL()</span>
+<span class="na">voozanoo.host</span> <span class="o">=</span> <span class="s">&#39;https&#39;</span>
+
+<span class="c1">; Si l&#39;APPLICATION possède des Widgets JS spécifiques (seront chargés pour tous les projets)</span>
+<span class="na">lib.voozanoo.javascript.extended_yui_conf.default.version</span> <span class="o">=</span> <span class="s">&quot;1.0.0&quot;</span>
+<span class="na">lib.voozanoo.javascript.extended_yui_conf.default.jsuri</span> <span class="o">=</span> <span class="s">&quot;javascript/&quot;</span>
+<span class="na">lib.voozanoo.javascript.extended_yui_conf.default.resource</span> <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/ressources/xml/default_yui_conf_modules.xml&quot;</span>
+
+<span class="c1">; Si le PROJET possède des Widgets JS spécifiques</span>
+<span class="c1">; (En considérant que le projectName est &#39;vaccilab&#39;)</span>
+<span class="na">lib.voozanoo.javascript.extended_yui_conf.vaccilab.version</span> <span class="o">=</span> <span class="s">&quot;1.4.2&quot;</span>
+<span class="na">lib.voozanoo.javascript.extended_yui_conf.vaccilab.jsuri</span> <span class="o">=</span> <span class="s">&quot;javascript/&quot;</span>
+<span class="na">lib.voozanoo.javascript.extended_yui_conf.vaccilab.resource</span> <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/ressources/xml/vaccilab_yui_conf_modules.xml&quot;</span>
+
+<span class="k">[development : production]</span>
+<span class="na">lib.voozanoo.javascript.static</span> <span class="o">=</span> <span class="s">TRUE</span>
+<span class="na">lib.yui.debug</span> <span class="o">=</span> <span class="s">FALSE</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="activation-de-l-auto-loading-de-classes-metier">
+<h2>Activation de l&#8217;auto-loading de classes métier<a class="headerlink" href="#activation-de-l-auto-loading-de-classes-metier" title="Permalink to this headline">¶</a></h2>
+<p>Une application avec des besoins spécifiques peut nécessiter des classes relatives au coté &#8220;métier&#8221; de l&#8217;application.</p>
+<p>Anciennement l&#8217;autoLoading de ces classes était effectué via un ajout dans le classe <code class="docutils literal"><span class="pre">Bootstrap</span></code> présente coté application. Cette façon de faire,
+bien que fonctionnelle, comportait quelques inconvénients :</p>
+<ul>
+<li><p class="first">Le &#8220;namespace&#8221; des classes ainsi auto chargées se retrouvait rallongé (Ex: Neodemat_Library, Epifiles_Lib, Saga_Lib) inutilement</p>
+</li>
+<li><p class="first">Il était impossible de faire cohabiter proprement plusieurs librairies (Ex: 1 librairie par projet pour une application multi-projet)</p>
+</li>
+<li><p class="first">Il était necessaire de modifier un fichier PHP (<code class="docutils literal"><span class="pre">Bootstrap.php</span></code>) pour modifier l&#8217;autoloading</p>
+</li>
+<li><dl class="first docutils">
+<dt>La syntaxe de déclaration de l&#8217;auto-loading était assez complexe :</dt>
+<dd><div class="first last highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">//!! Ceci est un exemple de ce qu&#39;il ne faut plus faire : ne pas le copier-coller !!</span>
+<span class="nv">$oAutoLoader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Zend_Loader_Autoloader_Resource</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;namespace&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Neodemat&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;basePath&#39;</span> <span class="o">=&gt;</span> <span class="nb">dirname</span><span class="p">(</span><span class="k">__FILE__</span><span class="p">),</span>
+        <span class="s1">&#39;resourceTypes&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s1">&#39;library&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;namespace&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Library&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;library&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+<span class="p">));</span>
+<span class="c1">//!! Ceci était un exemple de ce qu&#39;il ne faut plus faire : ne pas le copier-coller !!</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Désormais pour activer l&#8217;auto-loading d&#8217;une librairie propre à un projet (ou à l&#8217;application) la façon de procéder est :</p>
+<ol class="arabic">
+<li><p class="first">Si ce n&#8217;est pas déjà fait créer un répertoire <code class="docutils literal"><span class="pre">library/</span></code> à la raçine de l&#8217;application (là ou les répertoires <code class="docutils literal"><span class="pre">modules</span></code> et <code class="docutils literal"><span class="pre">public</span></code> se trouvent)</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>Modifier le fichier .ini de l&#8217;application pour ajouter le chemin vers ce répertoire <code class="docutils literal"><span class="pre">library/</span></code> dans l&#8217;include_path de php :</dt>
+<dd><div class="first last highlight-ini"><div class="highlight"><pre><span class="c1">; équivalent à un set_include_path( APPLICATION_PATH &quot;/library&quot; . PATH_SEPARATOR . get_include_path() );</span>
+<span class="na">includePaths.library</span> <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/library&quot;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Modifier le fichier .ini de l&#8217;application pour déclarer notre namespace comme &#8220;auto-loadable&#8221; :</dt>
+<dd><div class="first last highlight-ini"><div class="highlight"><pre><span class="c1">; Notez bien l&#39;underscore final &quot;_&quot;, il est ABSOLUMENT necessaire</span>
+<span class="na">autoloadernamespaces[]</span> <span class="o">=</span> <span class="s">&quot;MonProjet_&quot;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Voilà : ZendFramework considérera qu&#8217;une classe nommée &#8220;MonProjet_Foo_Bar&#8221; peut être chargée depuis <code class="docutils literal"><span class="pre">APPLICATION_PATH/library/MonProjet/Foo/Bar.php</span></code>.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p>Dans le cas où votre application comportement plusieurs projets vous pourrez avoir un espace dédié au classes metier de chaque projet :</p>
+<div class="highlight-python"><div class="highlight"><pre>/library/
+   Epidemic/
+      Disease.php
+      Entity.php
+   Stats/
+      Data/
+         Collector.php
+      Ui/
+         Graph.php
+</pre></div>
+</div>
+<p>Il suffira de déclarer chaque namespace dans le fichier <code class="docutils literal"><span class="pre">.ini</span></code> de l&#8217;application :</p>
+<div class="last highlight-ini"><div class="highlight"><pre><span class="na">autoloadernamespaces[]</span> <span class="o">=</span> <span class="s">&quot;Epidemic_&quot;</span>
+<span class="na">autoloadernamespaces[]</span> <span class="o">=</span> <span class="s">&quot;Stats_&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>Plus d&#8217;informations concernant l&#8217;auto-loading dans ZendFramwork : <a class="reference external" href="http://framework.zend.com/manual/1.12/fr/zend.loader.autoloader.html">L&#8217;autoloader</a></p>
+<p>TODO : les chemins de travail devraient être structurés selon les critères suivants</p>
+<ul class="simple">
+<li>les chemins de travail ne doivent pas être dans la même partie de l&#8217;arborescence que le code (questions de droits apache, pour la sécurité)</li>
+<li>si on installe deux fois la même application elles doivent utiliser des dossiers distincts</li>
+<li>l&#8217;idéal serait d&#8217;avoir en réalité le chemin racine de travail, dans lequel on mettra des dossiers &#8220;temp&#8221;, &#8220;templates_c&#8221;, et autres</li>
+</ul>
+</div>
+<div class="section" id="les-directives-devenues-obsoletes">
+<h2>Les directives devenues obsolètes<a class="headerlink" href="#les-directives-devenues-obsoletes" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">zendframework.version</span></code> <span class="classifier-delimiter">:</span> <span class="classifier">Indiquait le numéro de version du ZendFramework utilisée</span></dt>
+<dd><div class="first last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Peut être connu depuis le code PHP en utilisant Zend_Version::VERSION</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">zendframework.path</span></code> : Indiquait le chemin complet d&#8217;accès à la librairie ZendFramework utilisée</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">voozanoo.directory</span></code> : Indiquait le répertoire vers la lib Voozanoo ? (Aucune utilisation connue)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">voozanoo.path_base</span></code> : ???? (Aucune utilisation connue)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">smarty.compile_dir</span></code> : Indiquait le chemin vers le répertoire des templates Smarty compilés</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">smarty.plugins_dir</span></code> : Indiquait le chemin vers le répertoire des plugins Smarty</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">includePaths.smarty</span></code> : Indiquait le chemin vers la librairie Smarty3 pour l&#8217;ajouter dans l&#8217;include_path</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">resources.frontController.controllerDirectory</span></code> : Indiquait le répertoire des controllers à utiliser &#8220;en dehors de la notion de module&#8221;, devenu obsolète suite à l&#8217;implémentation de la Homepage version XML</p>
+</li>
+</ul>
+</div>
+<div class="section" id="re-activation-des-controlleurs-sans-module">
+<h2>Ré-activation des controlleurs sans module<a class="headerlink" href="#re-activation-des-controlleurs-sans-module" title="Permalink to this headline">¶</a></h2>
+<p>L&#8217;implémentation de la page d&#8217;accueil (appelée également Homepage) au format &#8220;Ressource XML&#8221; a introduit des directives empêchant désormais l&#8217;utilisation des controlleurs anciennement présents dans le répertoire
+<code class="docutils literal"><span class="pre">/controllers/</span></code> de l&#8217;application. ( Pour rappel : <code class="docutils literal"><span class="pre">resources.frontController.defaultModule</span></code> et <code class="docutils literal"><span class="pre">resources.frontController.params.prefixDefaultModule</span></code> )</p>
+<p>Avant cette évolution la page d&#8217;accueil était commune aux N projets présents dans l&#8217;application (ce qui pouvait poser de gros problèmes).</p>
+<p>Il est <strong>fortement</strong> déconseillé de ré-activer ces controlleurs. Si vous avez besoin de réaliser une page d&#8217;accueil complexe, mélangeant portions de code PHP, ViewHelpers, etc pour un projet spécifique
+je vous conseille vivement d&#8217;utiliser le mécanisme de surcharge au sein de votre Application :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">//Contenu du fichier présent dans APPLICATION_PATH/modules/home/controllers/IndexController.php</span>
+<span class="k">class</span> <span class="nc">Home_IndexController</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_Home_Index</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span>
+   <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="s1">&#39;vaccilab&#39;</span> <span class="o">===</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetCurrentProjectName</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+
+         <span class="c1">// ... Ici du code spécifique à la homepage de Vaccilab ...</span>
+
+         <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">render</span><span class="p">(</span><span class="s1">&#39;vaccilab&#39;</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span>
+      <span class="p">{</span>
+         <span class="c1">//utilisation du mécanisme de Homepage au format XML</span>
+         <span class="k">parent</span><span class="o">::</span><span class="na">indexAction</span><span class="p">();</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Un fichier <code class="docutils literal"><span class="pre">APPLICATION_PATH/modules/home/views/scripts/index/vaccilab.phtml</span></code> devra être présent pour effectué le rendu.</p>
+<p>En cas de nécessité absolue, voici les directives à placer dans le fichier ini de l&#8217;Application pour réactiver les controlleurs sans module :</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="na">resources.frontController.controllerDirectory.default</span>   <span class="o">=</span> <span class="s">APPLICATION_PATH &quot;/controllers&quot;</span>
+<span class="na">resources.frontController.defaultModule</span> <span class="o">=</span> <span class="s">&#39;default&#39;</span>
+<span class="na">resources.frontController.params.prefixDefaultModule</span> <span class="o">=</span> <span class="s">0</span>
+</pre></div>
+</div>
+<p>Ces directives désactiveront le rendu de la Homepage version &#8220;Ressource XML&#8221; et le controller <code class="docutils literal"><span class="pre">IndexController</span></code> présent dans <code class="docutils literal"><span class="pre">APPLICATION_PATH/controllers</span></code> sera celui ciblé par défaut.</p>
+<p>Si vous désirez combiner ces controlleurs avec le rendu de la Homepage version &#8220;Ressource XML&#8221; mettez cette ligne de redirection dans l&#8217;action <code class="docutils literal"><span class="pre">indexAction</span></code> du controlleur <code class="docutils literal"><span class="pre">IndexController</span></code> :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">IndexController</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_Action</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span>
+   <span class="p">{</span>
+      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_forward</span><span class="p">(</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;home&#39;</span> <span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="le-fichier-prepend-inc-php">
+<h2>Le fichier prepend.inc.php<a class="headerlink" href="#le-fichier-prepend-inc-php" title="Permalink to this headline">¶</a></h2>
+<p>TODO: le fichier prepend est optionnel. Expliquer où doivent être mises les constantes en l&#8217;absence du prepend.</p>
+<p>Ce fichier</p>
+<ul class="simple">
+<li>défini des constantes utilisées uniquement dans les fichiers ini de voozanoo et des applications</li>
+<li>facilite l&#8217;installation des applications sans avoir à redéfinir les chemins complets</li>
+</ul>
+<p>Constantes</p>
+<ul class="simple">
+<li>APPLICATION_ENV : mode de fonctionnement, par défaut &#8216;development&#8217;</li>
+<li>PATH_BASE : chemin racine à partir duquel tous les autres éléments sont configuré</li>
+<li>DIR_VOO4 : chemin relatif à PATH BASE contenant les différentes version du core Voozanoo4</li>
+<li>PATH_VOO4 : chemin de base des différentes version du core Voozanoo4</li>
+<li>PATH_EXTLIB : chemin des librairies externes utilisées par Voozanoo4</li>
+<li>PATH_ZF : chemin contenant les différentes installations du ZendFramework</li>
+<li>PATH_CONF : chemin de base pour la configuration</li>
+<li>PATH_WORK : chemin de base pour les dossiers de travail</li>
+<li>PATH_TEMP : chemin de base pour les fichiers temporaires</li>
+<li>URL_WWWEC : URL correspondant généralement au PATH_BASE</li>
+<li>PATH_UTILITY : chemin des utilitaires nécessaires pour les tests unitaires</li>
+<li>PATH_MYSQL : chemin des exécutables Mysql (nécessaire pour la classe CManipDB / HackDB)</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Paramétrage</a><ul>
+<li><a class="reference internal" href="#principe-de-fonctionnement">Principe de fonctionnement</a></li>
+<li><a class="reference internal" href="#configuration-de-voozanoo4">Configuration de Voozanoo4</a></li>
+<li><a class="reference internal" href="#configuration-d-une-application">Configuration d&#8217;une application</a></li>
+<li><a class="reference internal" href="#activation-de-l-auto-loading-de-classes-metier">Activation de l&#8217;auto-loading de classes métier</a></li>
+<li><a class="reference internal" href="#les-directives-devenues-obsoletes">Les directives devenues obsolètes</a></li>
+<li><a class="reference internal" href="#re-activation-des-controlleurs-sans-module">Ré-activation des controlleurs sans module</a></li>
+<li><a class="reference internal" href="#le-fichier-prepend-inc-php">Le fichier prepend.inc.php</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="amorcage.html"
+                        title="next chapter">Amorçage d&#8217;une application Voozanoo4</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/parametrage.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="amorcage.html" title="Amorçage d’une application Voozanoo4"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

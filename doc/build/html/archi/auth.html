@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Authentification &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Architecture" href="../architecture.html" />
+    <link rel="next" title="Droits" href="droits.html" />
+    <link rel="prev" title="Accès concurentiels" href="acces_concurentiels.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="droits.html" title="Droits"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="acces_concurentiels.html" title="Accès concurentiels"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" accesskey="U">Architecture</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="authentification">
+<h1>Authentification<a class="headerlink" href="#authentification" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="topographie">
+<h2>Topographie<a class="headerlink" href="#topographie" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Classes<ul>
+<li>classe centrale sur l&#8217;authentification : Core_Library_Auth<ul>
+<li>constantes sur les modes de connexion</li>
+</ul>
+</li>
+<li>classe de connexion : Core_Library_Auth_CPS<ul>
+<li>gestion des variables passées par Apache</li>
+<li>moteur masquant l&#8217;implémentation spécifique à la CPS</li>
+</ul>
+</li>
+<li>classe d&#8217;authentification Core_Library_Auth_Adapter_Cps<ul>
+<li>dérive de Zend_Auth_Adapter_Interface</li>
+<li>gestion effective de la connexion en fonction de la présence d&#8217;une CPS, et de sa liaison avec un compte de l&#8217;application</li>
+</ul>
+</li>
+<li>modification de Core_Library_Controller_Auth_Index pour intégrer les différents modes CPS<ul>
+<li>booléen $_bCPSAutoconnect : auto-connexion activée</li>
+<li>méthode _computeAuthMode() : initialisation des éléments de la vue, calcul des affichages en fonction du mode de connexion choisi</li>
+<li>méthode d&#8217;action cpsAction() : redirection vers l&#8217;index du contrôleur Auth, avec le paramètre forçant la CPS à TRUE</li>
+<li>méthode _HandleAuthCPS() : gestion de la connexion en fonction de la présence d&#8217;une CPS, et de sa liaison avec un compte de l&#8217;application (via Core_Library_Auth_Adapter_Cps)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Base de données<ul>
+<li>ajout du champ cps_id dans la table _pj_group, stockant l&#8217;identifiant du propriétaire de la CPS</li>
+<li>ajout d&#8217;un champ dans la table projects, donnant le mode de connexion utilisé</li>
+</ul>
+</li>
+<li>Configuration<ul>
+<li>saisie dans sys_project.auth_mode du mode de connexion : &#8216;PASSWORD&#8217;,&#8217;CPS_MIXTE&#8217;,&#8217;CPS_STRICT&#8217;,&#8217;CPS_MIXTE_CHOIX&#8217;</li>
+<li>saisie dans _pj_group.cps_id des identifiants CPS</li>
+</ul>
+</li>
+<li>Session<ul>
+<li>la variable sCpsId contient l&#8217;identifiant de la CPS insérée lors de la connexion (permet de détecter le changement de carte)</li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Il est désormais possible de s&#8217;authentifier à Voozanoo4 grâce à un Token de Connexion (<code class="docutils literal"><span class="pre">Core_Library_Token_Conn</span></code>). Un utilisateur temporaire est ainsi artificiellement créé (Via le User_Manager) et les
+droits (accès Acl + droits sur varsets) sont récupérés depuis le Token.</p>
+<p class="last">Plus d&#8217;informations dans la partie relative aux <a class="reference internal" href="../lib_php.html#lib-php-tokens"><em>Tokens</em></a>.</p>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>le champ sys_project.auth_mode est une énumération :<ul>
+<li>&#8216;PASSWORD&#8217; : mode classique par login et mot de passe (mode par défaut)</li>
+<li>&#8216;CPS_MIXTE&#8217; : accès par CPS si présente (mode autoconnexion), login et mot de passe sinon</li>
+<li>&#8216;CPS_STRICT&#8217; : accès uniquement par CPS</li>
+<li>&#8216;CPS_MIXTE_CHOIX&#8217; : accès au choix de l&#8217;utilisateur par CPS ou login/mdp</li>
+</ul>
+</li>
+<li>les quatre valeurs sont reprises dans les constantes de Core_Library_Auth</li>
+</ul>
+</div>
+<div class="section" id="specificite-de-la-cps">
+<h2>Spécificité de la CPS<a class="headerlink" href="#specificite-de-la-cps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="details-techniques">
+<h3>Détails techniques<a class="headerlink" href="#details-techniques" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>du fait de l&#8217;utilisation de mod_rewrite, les noms des variables dans $_SERVER utilisées pour accéder aux informations de la CPS transmises à Apache sont préfixées d&#8217;un REDIRECT_REDIRECT. Il ne faut alors pas prendre en compte celles dans ce double REDIRECT, elles peuvent être vides alors que les vraies sont bien remplies. Le code gère cela. Cf <a class="reference external" href="http://stackoverflow.com/questions/9154695/accessing-environment-variables-set-using-mod-rewrite-in-php">http://stackoverflow.com/questions/9154695/accessing-environment-variables-set-using-mod-rewrite-in-php</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="oauth-sso">
+<h2>OAuth / SSO<a class="headerlink" href="#oauth-sso" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="flux">
+<h3>Flux<a class="headerlink" href="#flux" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/oauth_flux.png" src="../_images/oauth_flux.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Authentification</a><ul>
+<li><a class="reference internal" href="#topographie">Topographie</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#specificite-de-la-cps">Spécificité de la CPS</a><ul>
+<li><a class="reference internal" href="#details-techniques">Détails techniques</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#oauth-sso">OAuth / SSO</a><ul>
+<li><a class="reference internal" href="#flux">Flux</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="acces_concurentiels.html"
+                        title="previous chapter">Accès concurentiels</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="droits.html"
+                        title="next chapter">Droits</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/archi/auth.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="droits.html" title="Droits"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="acces_concurentiels.html" title="Accès concurentiels"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

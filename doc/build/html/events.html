@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Events &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Internationalisation (I18N)" href="i18n.html" />
+    <link rel="prev" title="Autocomplétion multiple" href="widgets/autocompletion_multiple.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="Internationalisation (I18N)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="widgets/autocompletion_multiple.html" title="Autocomplétion multiple"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="events">
+<span id="id1"></span><h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principe-de-fonctionnement">
+<h2>Principe de fonctionnement<a class="headerlink" href="#principe-de-fonctionnement" title="Permalink to this headline">¶</a></h2>
+<p>L&#8217;objet Event (Core_Library_Event) permet de déclarer des événements en y associant
+des callbacks (code à exécuter lorsque l&#8217;évenement survient), et de déclencher des
+événements.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">L&#8217;objet Event est un singleton.</p>
+</div>
+</div>
+<div class="section" id="utilisation">
+<h2>Utilisation<a class="headerlink" href="#utilisation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="declarer-un-evenement">
+<h3>Déclarer un événement<a class="headerlink" href="#declarer-un-evenement" title="Permalink to this headline">¶</a></h3>
+<p>Utiliser la méthode <code class="docutils literal"><span class="pre">Attach</span></code> de l&#8217;objet <code class="docutils literal"><span class="pre">Event</span></code>.</p>
+<p>Paramètres:</p>
+<ul class="simple">
+<li>Type de l&#8217;évenement sous forme de chaine de caractère. C&#8217;est ce nom qui sera utilisé pour déclencher l&#8217;événement.</li>
+<li>Le code à exécuter lorsque l&#8217;événement survient. Le paramètre est directement passé à la fonction <code class="docutils literal"><span class="pre">call_user_func</span></code>, le format du paramètres est donc le même que pour cette fonction, voir: <a class="reference external" href="http://php.net/manual/en/function.call-user-func.php">http://php.net/manual/en/function.call-user-func.php</a></li>
+</ul>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">Core_Library_Event::GetInstance()-&gt;Attach( &#39;EVENT::HELLO&#39;, array( $foo, &#39;bar&#39; ) );</span>
+</pre></div>
+</div>
+<p>Quelques exemples de formats pour la callback:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">// Sous forme de fonction</span>
+<span class="x">function Hello() {</span>
+<span class="x">        echo &quot;Hello world&quot;;</span>
+<span class="x">}</span>
+<span class="x">Core_Library_Event::GetInstance()-&gt;Attach( &#39;EVENT::HELLO&#39;, Hello );</span>
+
+<span class="x">// Sous forme de méthode statique</span>
+<span class="x">class Foo {</span>
+<span class="x">        static public function Bar() {</span>
+<span class="x">                echo &quot;Hello  world&quot;;</span>
+<span class="x">        }</span>
+<span class="x">}</span>
+<span class="x">Core_Library_Event::GetInstance()-&gt;Attach( &#39;EVENT::HELLO&#39;, array( &#39;Foo&#39;, &#39;Bar&#39; ) );</span>
+
+<span class="x">// Sous forme d&#39;objet</span>
+<span class="x">class Foo {</span>
+<span class="x">        public function Bar() {</span>
+<span class="x">                echo &quot;Hello  world&quot;;</span>
+<span class="x">        }</span>
+<span class="x">}</span>
+<span class="x">$foo = new Foo();</span>
+
+<span class="x">Core_Library_Event::GetInstance()-&gt;Attach( &#39;EVENT::HELLO&#39;, array( $foo, &#39;Bar&#39; ) );</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Plusieurs événements peuvent être associés à un même type, il suffit d&#8217;appeler autant de fois <code class="docutils literal"><span class="pre">Attach</span></code>.
+L&#8217;ordre d&#8217;exécution sera celui de l&#8217;ordre d&#8217;appel à <code class="docutils literal"><span class="pre">Attach</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">La méthode Attach retourne un identifiant unique attribué à l&#8217;événement, il est utile lors de l&#8217;appel à la méthode Detach.</p>
+</div>
+</div>
+<div class="section" id="declencher-un-evenement">
+<h3>Déclencher un événement<a class="headerlink" href="#declencher-un-evenement" title="Permalink to this headline">¶</a></h3>
+<p>Utiliser la méthode <code class="docutils literal"><span class="pre">Fire</span></code></p>
+<p>Paramètres:</p>
+<ul class="simple">
+<li>Type de l&#8217;événement</li>
+<li>Paramètre à transmettre aux callbacks (optionnel).</li>
+</ul>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">Core_Library_Event::GetInstance()-&gt;Fire( &#39;EVENT::HELLO&#39;, &#39;I am a parameter&#39; );</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Les paramètres sont directement passés à la callback.
+Exemple:</p>
+<div class="last highlight-php"><div class="highlight"><pre><span class="x">class Foo</span>
+<span class="x">{</span>
+<span class="x">        public function Bar( $parameter ) {</span>
+<span class="x">                echo &quot;Parameter value: $parameter&quot;;</span>
+<span class="x">        }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="supprimer-un-evenement">
+<h3>Supprimer un événement<a class="headerlink" href="#supprimer-un-evenement" title="Permalink to this headline">¶</a></h3>
+<p>Utiliser la méthode <code class="docutils literal"><span class="pre">Detach</span></code></p>
+<p>Paramètres:</p>
+<ul class="simple">
+<li>Type de l&#8217;événement</li>
+<li>Identifiant de l&#8217;événement renvoyé par Attach</li>
+</ul>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">Core_Library_Event::GetInstance()-&gt;Detach( &#39;EVENT::HELLO&#39;, $sEventId );</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Events</a><ul>
+<li><a class="reference internal" href="#principe-de-fonctionnement">Principe de fonctionnement</a></li>
+<li><a class="reference internal" href="#utilisation">Utilisation</a><ul>
+<li><a class="reference internal" href="#declarer-un-evenement">Déclarer un événement</a></li>
+<li><a class="reference internal" href="#declencher-un-evenement">Déclencher un événement</a></li>
+<li><a class="reference internal" href="#supprimer-un-evenement">Supprimer un événement</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="widgets/autocompletion_multiple.html"
+                        title="previous chapter">Autocomplétion multiple</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="next chapter">Internationalisation (I18N)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/events.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="Internationalisation (I18N)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="widgets/autocompletion_multiple.html" title="Autocomplétion multiple"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

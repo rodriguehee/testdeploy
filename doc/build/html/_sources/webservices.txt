@@ -1,0 +1,457 @@
+.. _webservices:
+
+Webservices
+===========
+
+Technologie utilisée
+--------------------
+
+Les Webservices au sein de Voozanoo4 se basent majoritairement sur l'architecture REST (Voir :ref:`ws-liens-utiles`).
+
+Voozanoo4 utilise le Routing Zend Framework : ``Zend_Rest_Route`` (Voir :ref:`ws-liens-utiles`)
+
+L'idéal étant d'utiliser le composant ``Zend_Rest_Client`` pour envoyer les requêtes à un projet Voozanoo4.
+
+
+Implémentation dans Voozanoo4 (Partie "Serveur")
+------------------------------------------------
+
+Le Routing
+~~~~~~~~~~
+
+Le routing d'une requête HTTP entrante est effectuée grâce aux routes déclarées dans le Bootstrap de Voozanoo4 (``Core_Library_Account_Bootstrap``) :
+
+- La route ``default`` est déclarée en premier, en charge de reconnaitre le projet ciblé et de router une requête entrante vers un Module / un Controller / une Action.
+	- La reconnaissance du projet ciblé impose la surcharge de ``Zend_Controller_Router_Route_Module`` (par ``Core_Library_Routes_ProjectName``) pour extraire le nom du projet depuis l'URI de la requête.
+- La route ``rest`` est déclarée en second, en charge de reconnaitre le projet ciblé et de router une requête ciblant le module ``ws`` (Webservice) en tant que requête Rest
+	- La reconnaissance du projet ciblé impose la surcharge de ``Zend_Controller_Router_Route_Module`` (par ``Core_Library_Routes_Rest_ProjectName``) pour extraire le nom du projet depuis l'URI de la requête.
+	- Le controller ciblé est gardé tel quel, l'action est déduite de la méthode HTTP utilisée : GET, POST, PUT, DELETE et d'un éventuel paramètre numérique (identifiant).
+
+.. note::
+	Les routes sont déclarées dans cette ordre car Zend Framework dépile les routes en commençant par la dernière, considérant que la première route déclarée est celle la plus "générique" et par conséquent à utiliser en dernier recours::
+
+		Note: Reverse Matching
+		Routes are matched in reverse order so make sure your most generic routes are defined first. 
+	
+	Source : `<http://framework.zend.com/manual/1.12/en/zend.controller.router.html>`_
+
+L'authentification
+~~~~~~~~~~~~~~~~~~
+
+L'authentification est assurée par :
+- Le plugin ``Core_Plugin_Rest_Auth`` qui vérifie l'identité de l'utilisateur lorsque le Module ``ws`` est ciblé (et qu'il s'agit, par conséquent, d'une requête REST).
+- La classe abstraite ``Core_Library_Controller_RestAction`` en charge d'envoyer les en-tête HTTP afin d'activer l'authentification HTTP (WWW-Authenticate: Basic realm="<projectName>")
+
+Actuellement n'importe quel accès à un Webservice mis en place sur Voozanoo4 impose une authentification, celle-ci se fait via l'URL d'accès au Webservice comme lors d'un accès
+à un site réclamant une Authentification Http::
+
+	http://username:password@mywebsite.com
+
+Le plugin exploite les variables ``$_SERVER['PHP_AUTH_USER']`` et ``$_SERVER['PHP_AUTH_PW']`` pour vérifier l'identité de l'utilisateur dans la base de données.
+
+.. hint::
+	Lors de la transmission du nom d'utilisateur et du mot de passe dans l'Url certains caractères peuvent poser problème, c'est le cas de ``@``, ``:``, ``?`` et tout autre caractère ayant une signification
+	particulière dans le contexte d'une Url.
+	
+	Il faut alors encoder ces caractères selon la norme `RFC3986 <http://www.faqs.org/rfcs/rfc3986.html>`_. Vous devrez utiliser la méthode ``rawurlencode()`` pour effecter cet encodage (Cf `documentation officielle <http://fr2.php.net/manual/fr/function.rawurlencode.php>`_).
+
+.. note::
+	Lorsque qu'Apache est utilisé (installé ?) en FastCGI (fréquent sur Windows) la récupération de ces variables d'environnement est impossible (elle ne sont pas définies).
+
+	La solution est d'utiliser une RewriteRule au sein du RewriteEngine pour remplir la variable d'environnement avec l'entête HTTP Authorization (contenant les informations requises) :
+
+	.. code-block:: apache
+	
+		RewriteEngine On
+		# Rule necessaire dans le cas d'utilisation d'Apache en Fast CGI pour l'authent HTTP visible depuis PHP
+		RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+		RewriteCond %{REQUEST_FILENAME} -s [OR]
+		RewriteCond %{REQUEST_FILENAME} -l [OR]
+		RewriteCond %{REQUEST_FILENAME} -d
+		RewriteRule ^.*$ - [NC,L]
+		RewriteRule ^.*$ index.php [NC,L]
+
+	Il est important de mettre cette RewriteRule avant toute autre Rule/Cond
+
+Traitement d'une requête
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+La requête est distribuée au Controller ciblé, l'action appelée est automatiquement déterminée par le composant ``Zend_Rest_Route`` :
+
+======== ===================================== ==========================================
+ Method              URI                        Module_Controller::action
+======== ===================================== ==========================================
+ GET      /product/ratings/                     Product_RatingsController::indexAction()
+ GET      /product/ratings/:id                  Product_RatingsController::getAction()
+ POST     /product/ratings                      Product_RatingsController::postAction()
+ PUT      /product/ratings/:id                  Product_RatingsController::putAction()
+ DELETE   /product/ratings/:id                  Product_RatingsController::deleteAction()
+ POST     /product/ratings/:id?_method=PUT      Product_RatingsController::putAction()
+ POST     /product/ratings/:id?_method=DELETE   Product_RatingsController::deleteAction()
+======== ===================================== ==========================================
+
+Source : `Documentation ZendFramework <http://framework.zend.com/manual/1.12/en/zend.controller.router.html#zend.controller.router.routes.rest>`_
+
+L'id fourni dans la requête et les éventuels paramètres envoyés par le client peuvent être récupérés dans l'action :
+
+.. code-block:: php
+
+	<?php
+	public function indexAction() {
+	   //Récupération du paramètre 'id'
+	   $iId = $this->getRequest()->getParam( 'id' );
+
+	   //Récupération du paramètre 'foo'
+	   $sFoo = $this->getRequest()->getParam( 'foo' );
+	}
+
+
+Communication de la réponse
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Voozanoo4 intègre un système de rendu de réponse par défaut : un script de vue générant du XML.
+
+La mise en place d'un Webservice necessitant l'héritage de la classe abstraite ``Core_Library_Controller_RestAction`` (Voir plus bas) ce Controller abstrait choisi le même Script de Vue quelque soit l'action : result.phtml (Présent dans ``voozanoo4/src/modules/ws/views/script/result.phtml``) en charge de générer la réponse au format XML.
+
+Voici les différents types de XML générés lors de la génération d'une réponse :
+
+- Réponse simple en cas de succès de l'opération, par exemple un DELETE ou un PUT (~ update)
+	.. code-block:: xml
+
+		<root>
+		   <status>success</status>
+		   <reponse>Opération effectuée</response>
+		<root>
+
+- Réponse complexe en cas de succès de l'opération, par exemple GET d'une ressource précise
+	.. code-block:: xml
+
+		<root>
+		   <status>success</status>
+		   <reponse>
+		      <patient>
+		         <id_data>42</id_data>
+		         <code>B19F85</code>
+		         <nom_patient>Cooper</nom_patient>
+		         <ddn>1981-05-14</ddn>
+		      </patient>
+		   </response>
+		<root>
+
+- Réponse en cas d'erreur (controlée, ou involontaire par exemple lors d'Exceptions)
+	.. code-block:: xml
+
+		<root>
+		   <status>failed</status>
+		   <message>Le nom du patient doit être fourni en paramètre : nom_patient</message>
+		<root>
+
+	.. code-block:: xml
+
+		<root>
+		   <status>failed</status>
+		   <message>
+		      An internal Error occured
+		      Message : Unable to find patient code=A1337D
+		      File : C:\Program Files (x86)\Zend\Apache2\htdocs\foo\modules\ws\controllers\PatientController.php (Line 267)
+		      Trace :
+		      #0 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Controller\Action.php(516): Ws_ManifestFileController->getAction()
+		      #1 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('getAction')
+		      #2 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+		      #3 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+		      #4 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+		      #5 C:\Program Files (x86)\Zend\Apache2\htdocs\epifiles\public\index.php(19): Zend_Application->run()
+		      #6 {main}
+		   </message>
+		<root>
+
+Pour "piloter" la génération du XML il faut utiliser ces deux variables de vue :
+
+- success ( ``true`` ou ``false`` ) : Conditionne le contenu de l'élement "<status>" pour indiquer le succès ou l'échec du traitement de la requête
+	- Si cette variable n'est pas définie elle sera considérée comme étant à ``true``.
+- response ( ``String`` ou ``Array`` ) : Réponse à communiquer
+	- Si ``success`` vaut false, ``response`` doit normalement être une ``String`` fournissant la cause de l'échec
+	- Si c'est un ``Array`` : Il est converti sous la forme d'un arbre XML en utilisant les clés associatives comme nom d'élément HTML
+	- Si c'est une ``String`` : Elle est placée tel quel dans l'élément <reponse>
+
+Conversion d'une réponse "Array" en arbre XML
+"""""""""""""""""""""""""""""""""""""""""""""
+
+Opération réalisée grâce à l'aide de vue ``Core_Library_View_Helpers_RestResponseToXml``
+
+- Conversion simple d'un array associatif en XML
+	.. code-block:: php
+
+		<?php
+		$this->view->response = array(
+			'id' => 42,
+			'lastname' => 'Cooper',
+			'firsname' => 'Sheldon',
+			'age' => 34
+		);
+
+	.. code-block:: xml
+
+		<root>
+		    <id>42</id>
+		    <lastname>Cooper</lastname>
+		    <firsname>Sheldon</firsname>
+		    <age>34</age>
+		<root>
+
+- Conversion d'un array associatif imbriqué en XML
+	.. code-block:: php
+
+		<?php
+		$this->view->response = array(
+			'id' => 114,
+			'pays' => 'France',
+			'population' => '65 800 000',
+			'region' => array(
+				array( 'id' => '1084', 'libelle' => 'Ile de France' ),
+				array( 'id' => '1085', 'libelle' => 'Bourgogne' ),
+				array( 'id' => '1086', 'libelle' => 'Champagne-Ardenne' )
+			)
+		);
+
+	.. code-block:: xml
+
+		<root>
+		    <id>114</id>
+		    <pays>France</pays>
+		    <population>65 800 000</population>
+		    <region>
+		       <id>1084</id>
+		       <libelle></libelle>
+		    </region>
+		    <region>
+		       <id>1085</id>
+		       <libelle>Bourgogne</libelle>
+		    </region>
+		    <region>
+		       <id>1086</id>
+		       <libelle>Champagne-Ardenne</libelle>
+		    </region>
+		<root>
+
+
+
+En cas d'Exception
+~~~~~~~~~~~~~~~~~~
+
+Lors de l'exécution du plugin d'authentification REST ``Core_Plugin_Rest_Auth`` si le module ciblé est celui des Webservices un "jeton" (paramètre) est ajouté dans la Requête : 
+
+.. code-block:: php
+	
+	<?php
+	$oRequest->setParam( Core_Library_Controller_RestAction::REST_REQUEST, true );
+
+C'est ce qui nous permet, lorsqu'une exception est levée par le noyau Voo4 ou un projet spécifique, de modifier le comportement d'affichage de l'erreur pour effectuer un forward vers le controller "Error" du module "Ws" pour transmettre correctement l'erreur.
+
+Ce forward est effectué dans le Controller standard de gestion d'erreurs Voozanoo4 : ``Core_Library_Controller_Error_Index::exceptionAction()``
+
+Mettre en place un Webservice
+-----------------------------
+
+.. note::
+	Les explications concernent la mise en place d'un Webservice pour un projet Voozanoo4 (et non pour le noyau Voonzaoo4, même si cela reste en théorie possible).
+
+Considérons la mise en place d'un Webservice à l'application "ProjectX" et au projet "Vaccilab" permettant d'interagir avec la ressource "Patient". L'url d'accès au projet étant http://projectx.voozanoo.net/vaccilab
+
+En résumé il nous faut pouvoir :
+
+- Lister les patients ( Avec possibilité de filtrage )
+- Récupérer les informations d'un patient en particulier
+- Créer un patient
+- Mettre à jour un patient
+- Supprimer un patient
+	
+Coté Server
+~~~~~~~~~~~
+
+Il nous faire créer un Controller dédié au traitement de la ressource "Patient" dans le module "ws" :
+
+.. code-block:: php
+	
+	<?php
+	class Ws_PatientController extends Core_Library_Controller_RestAction {
+
+	}
+
+La classe ``Core_Library_Controller_RestAction`` définit 4 méthodes abstraites qu'il nous faut implémenter dans notre Controller :
+
+- indexAction : En charge de retourner la liste des patients (filtrés si critères présents)
+- getAction : En charge de retourne un patient demandé
+- postAction : En charge de créer un patient
+- putAction : En charge de mettre à jour un patient
+- deleteAction : En charge de supprimer un patient
+
+.. code-block:: php
+	
+	<?php
+	public function indexAction() {
+	   //Récupération des critères de filtrages possible
+	   $sCodePatient = $this->getRequest()->getParam( 'code_patient' );
+	   $sDdn = $this->getRequest()->getParam( 'ddn' );
+
+	   //... Requête sur la DB pour récupérer les patients qui "match" et les placer dans le tableau $aResults ...
+
+	   $aResponse = array( 'patient' => array() ); //Initialisation de la réponse pour production du XML de résultats
+	   foreach( $aResults as $aRow ) {
+	      $aResponse['patient'][] = $aRow;
+	   }
+
+	   /*
+	    * $aResponse sera de la forme  :
+	    * array(
+	    *    'patient' => array(
+	    *        array( 'id' => 1, 'code_patient' => 'AX145', ... ),
+	    *        array( 'id' => 2, 'code_patient' => 'BP963', ... ),
+	    *        array( 'id' => 3, 'code_patient' => 'CV442', ... ),
+	    *     )
+	    * )
+	    */
+
+	   $this->view->success = true; //Facultatif car en l'absence de cette variable elle est considérée comme == true
+	   $this->view->response = $aResponse;
+	}
+
+	public function getAction() {
+	   //L'identifiant fourni sera tjr contenu dans le paramètre 'id'
+	   $iId = $this->getRequest()->getParam( 'id' );
+
+	   //... Query à la DB et affectation à la variable de vue : response ...
+	}
+
+	public function postAction() {
+	   //Récupération des paramètre
+	   $sCodePatient = $this->getRequest()->getParam( 'code_patient' );
+
+	   //Vérification du paramètre : Obligatoire
+	   if ( is_null( $sCodePatient ) || ! strlen( $sCodePatient ) ) {
+	      $this->view->success = false;
+	      $this->view->response = 'La code patient doit être fourni';
+	      return; //Pour stopper l'exécution de cette Action et laisser ZF rendre la vue result
+	   }
+
+	   //... Suite du traitement des varialbe & insertion ...
+
+	   //La réponse pourrait très bien contenir l'identifiant auto-généré du record patient (clé primaire)
+	}
+
+	public function putAction() {
+	   //Récupération de l'identifiant du patient à mettre à jour
+
+	   //Mise à jour du record patient
+	}
+
+	public function deleteAction() {
+	   //Récupération de l'identifiant du patient à supprimer
+
+	   //Suppression du record patient
+	}
+
+
+.. note::
+	Si pour un Webservice précis seule la récupération d'infos est autorisée (indexAction & getAction) il est tout à fait possible de mettre dans les autres méthodes (postAction, putAction & deleteAction) une réponse "basique" du type :
+
+	.. code-block:: php
+
+		<?php
+		$this->view->success = false;
+		$this->view->response = 'Méthode non disponible dans le cadre du Webservice lié au Patient';
+
+	Il est important de retenir que les 5 méthodes doivents être définies, même si elle ne sont pas "ouvertes" au publique.
+
+Coté Client
+~~~~~~~~~~~
+
+Dans cette exemple nous utiliseront le composant ``Zend_Rest_Client`` pour requêter notre tout nouveau Webservice. Cette class intègre la logique d'appel REST et embarque un parsing de réponse XML.
+
+.. note::
+	Après appel à une méthode REST, par exemple ``get()``, ``post()`` etc... le client retourne un objet ``Zend_Rest_Client_Result`` permettant de parcourir facilement le jeu de résultats :
+
+	- ``$oResult->isSuccess()`` : permet de savoir si la requête est un succès ou si elle a échouée
+	- ``$oResult->message`` : Accesseur rapide à l'élément ``<message>`` du résultat
+	- ``$oResult->response`` : Accesseur rapide à l'élément ``<response>`` du résultat
+
+	Les accesseurs rapides retournent un objet de type SimpleXMLElement.
+
+Nous supposerons que la librarie Zend Framework est dans l'include_path de PHP, et que l'autoLoading est enregistré pour charger les classes ZF.
+
+Le modèle d'url d'accès aux Webservices sera donc ::
+	http://username:password@projectx.voozanoo.net/vaccilab/moduleName/controllerName/[:id]
+
+
+Exemple de script permettant de récupérer la liste des Patients dont le nom contient "MARTIN" nés en 1975 :
+
+.. code-block:: php
+	
+	<?php
+	//Création du client Rest
+	$oClient = new Zend_Rest_Client('http://l.hofstadter:123456@projectx.voozanoo.net/vaccilab/ws/patient');
+
+	//Affectation des paramètres
+	$oClient->nom( 'MARTIN' );
+	$oClient->ddn_annee( 1975 );
+
+	$oResult = $oClient->get();
+
+	if ( $oResult->isSuccess() )
+	{
+	   foreach( $oResult->response->patient as $oPatient ) {
+	      //$oPatient est un objet SimpleXMLElement contenant les infos relative au patient
+	      echo $oPatient->code_patient . ' - ' . $oPatient->nom . '(' . $oPatient->ddn . ')';
+	   }
+	   /*
+	    * L'affichage généré pourrait être :
+	    * A4123 - MARTIN - 1975-01-14
+	    * K8874 - MARTINEZ - 1975-12-02
+	    * B4326 - MARTINO - 1975-10-23
+	    */
+	}
+	else
+	{
+		echo "Une erreur est survenur : " . $oClient->message;
+	}
+
+
+Exemple de script permettant de créer une nouveau patient :
+
+.. code-block:: php
+	
+	<?php
+	//Création du client Rest
+	//Note : c'est la même URL que lors de la récupération des patient, seule la méthode d'appel HTTP sera différente
+	$oClient = new Zend_Rest_Client('http://l.hofstadter:123456@projectx.voozanoo.net/vaccilab/ws/patient');
+
+	//Affectation des paramètres pour la création
+	$oClient->nom( 'COOPER' );
+	$oClient->prenom( 'Shelly' );
+	$oClient->ddn( 1981-05-14 );
+	$oClient->sexe( 1 );
+
+	$oResult = $oClient->post();
+
+	if ( $oResult->isSuccess() )
+	{
+	   echo "Création réussi : " . $oClient->response->id; //Si le serveur renvoi l'id auto-incrémenté lors de l'insert
+	}
+	else
+	{
+	   echo "Une erreur est survenur : " . $oClient->message;
+	}
+
+
+.. _ws-liens-utiles:
+
+Liens utiles
+------------
+
+- Zend Framework :
+	- `Zend_Rest_Client <http://framework.zend.com/manual/1.12/en/zend.rest.client.html>`_
+	- `Zend_Rest_Route / Zend_Rest_Controller <http://framework.zend.com/manual/1.12/en/zend.controller.router.html#zend.controller.router.routes.rest>`_
+
+- `SimpleXMLElement <http://www.php.net/manual/en/class.simplexmlelement.php>`_
+
+- `REST <https://fr.wikipedia.org/wiki/Representational_State_Transfer>`_

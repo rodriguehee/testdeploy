@@ -1,0 +1,402 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dataset &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Ressources" href="../ressources.html" />
+    <link rel="next" title="Invokable Dataset" href="invokable_dataset.html" />
+    <link rel="prev" title="Layout" href="layout.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="invokable_dataset.html" title="Invokable Dataset"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="layout.html" title="Layout"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" accesskey="U">Ressources</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dataset">
+<span id="id1"></span><h1>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Un XML dataset est découpé en deux parties :</p>
+<ul class="simple">
+<li>la description de la structure (<code class="docutils literal"><span class="pre">&lt;metadata&gt;</span></code>)</li>
+<li>les données (<code class="docutils literal"><span class="pre">&lt;rowdata&gt;</span></code>).</li>
+</ul>
+<p>La partie <code class="docutils literal"><span class="pre">&lt;metadata&gt;</span></code> est elle même découpée en deux :</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;fields&gt;</span></code> décrivant les champs renvoyés contenus dans ce dataset (Type, Obligatoire, Libellé)</li>
+<li><code class="docutils literal"><span class="pre">&lt;variables&gt;</span></code> décrivant les données provenant de l&#8217;extérieur (utilisées par le dataquery pour les conditions par exemple)</li>
+</ul>
+<p>Les attributes autorisés pour un Dataset sont :</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">id</span></code> : Obligatoire, c&#8217;est l&#8217;identifiant du Dataset, il doit être unique dans le formulaire</li>
+<li><code class="docutils literal"><span class="pre">cacheable</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">true</span></code>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
+<li><code class="docutils literal"><span class="pre">standby</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">true</span></code>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
+<li><code class="docutils literal"><span class="pre">auto_add_record</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">false</span></code>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
+<li><code class="docutils literal"><span class="pre">type</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">standard</span></code>). S&#8217;il vaut <code class="docutils literal"><span class="pre">filter</span></code> les valeurs saisient dans le filtre deviendront persistantes en session.</li>
+<li><code class="docutils literal"><span class="pre">mute_refresh_event</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">false</span></code>), S&#8217;il vaut <code class="docutils literal"><span class="pre">true</span></code> un modification d&#8217;un field lié à ce DataSet n&#8217;induira pas de
+RefreshDataset sur des DataSet référençant ce DataSet (Via des <code class="docutils literal"><span class="pre">&lt;condition&gt;</span></code> par exemple)</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;[ID DATASET]&quot;</span> <span class="na">cacheable=</span><span class="s">&quot;true&quot;</span> <span class="na">standby=</span><span class="s">&quot;true&quot;</span> <span class="na">auto_add_record=</span><span class="s">&quot;false&quot;</span> <span class="na">mute_refresh_event=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;metadata&gt;</span>
+                <span class="nt">&lt;fields/&gt;</span>
+                <span class="nt">&lt;variables/&gt;</span>
+        <span class="nt">&lt;/metadata&gt;</span>
+        <span class="nt">&lt;rowdata/&gt;</span>
+<span class="nt">&lt;/dataset&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>L&#8217;attribut  <code class="docutils literal"><span class="pre">mute_refresh_event</span></code> peut être très utile lorsqu&#8217;il est utilisé sur un DataSet de filtrage. Il permet d&#8217;éviter les requêtes XHR de recherche de données à chaque champ modifié. En revanche
+il est à la charge du développeur de mettre un bouton dans le layout permettant, par conséquent, de lancer manuellement la recherche (vu qu&#8217;elle ne se fait plus automatiquement).</p>
+<p class="last">Le <a class="reference internal" href="../widgets/button.html#widgetbutton"><em>WidgetButton</em></a> à placer devra avoir l&#8217;action <code class="docutils literal"><span class="pre">refresh_dataset</span></code> et indiquer le DataSet à rafraîchir (à savoir celui des données, lié à un DataQuery référençant le DataSet de filtrage dans ses conditions).</p>
+</div>
+<p>Exemple de dataset créé manuellement pour être mis dans le XML de formulaire (source: form.provider_user_list.xml) :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Provider user list --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;user_list&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;metadata&gt;</span>
+                <span class="nt">&lt;fields&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;oauth_provider_id_user&quot;</span> <span class="na">type=</span><span class="s">&quot;primary_key&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Groupe&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Groupe&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;import&quot;</span> <span class="na">type=</span><span class="s">&quot;boolean&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Import&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Import&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;localy_found&quot;</span> <span class="na">type=</span><span class="s">&quot;boolean&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Localy found&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Localy found&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;status&quot;</span> <span class="na">type=</span><span class="s">&quot;fkey_sysdico&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Statut&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Statut&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;fkey_sysdico</span> <span class="na">dico_name=</span><span class="s">&quot;user_status&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;/field&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;username&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Username&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Username&quot;</span><span class="nt">&gt;</span>
+                                <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;50&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;/field&gt;</span>
+                <span class="nt">&lt;/fields&gt;</span>
+        <span class="nt">&lt;/metadata&gt;</span>
+        <span class="nt">&lt;rowdata/&gt;</span>
+<span class="nt">&lt;/dataset&gt;</span>
+
+<span class="c">&lt;!-- Selected role and group --&gt;</span>
+<span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;rights&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;metadata&gt;</span>
+                <span class="nt">&lt;fields&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;id_role&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">default_label=</span><span class="s">&quot;ID rôle&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;ID rôle&quot;</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;id_group&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">default_label=</span><span class="s">&quot;ID groupe&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;ID groupe&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/fields&gt;</span>
+        <span class="nt">&lt;/metadata&gt;</span>
+        <span class="nt">&lt;rowdata/&gt;</span>
+<span class="nt">&lt;/dataset&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="field">
+<h3>Field<a class="headerlink" href="#field" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;cp&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span><span class="nt">&gt;</span>
+  [...]
+<span class="nt">&lt;/field&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>id: identifiant du champ, correspond à l&#8217;alias de la colonne dans le dataquery</li>
+<li>type: correspond aux types du varset. Le type induit la présence d&#8217;une sous balise qui apporte des informations supplémentaires sur le type, comme la longueur (length) pour le type string.</li>
+<li>source: provenance de la variable, est utilisé pour la sauvegarde de la valeur. valeurs possibles: varset et table (induit la présence d&#8217;une balise varset ou table).</li>
+</ul>
+<p>Le <code class="docutils literal"><span class="pre">type</span></code> spécifié pour le field induit la présence d&#8217;un noeud enfant au <code class="docutils literal"><span class="pre">&lt;field&gt;</span></code> ayant le même nom que la valeur de l&#8217;attribut <code class="docutils literal"><span class="pre">type</span></code> :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;cp&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;10&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/field&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ce noeud enfant peut avoir les attributes <code class="docutils literal"><span class="pre">validator</span></code> et <code class="docutils literal"><span class="pre">regexp</span></code>. Pour plus d&#8217;information consultez la partie sur les <a class="reference internal" href="../lib_js.html#lib-js-validateurs"><em>Validateurs</em></a>.</p>
+</div>
+</div>
+<div class="section" id="varset">
+<h3>Varset<a class="headerlink" href="#varset" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;denq&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>name: nom du varset</li>
+<li>field: nom du champ dans le varset</li>
+</ul>
+</div>
+<div class="section" id="table">
+<h3>Table<a class="headerlink" href="#table" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;table</span> <span class="na">name=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">field=</span><span class="s">&quot;denq&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>name: nom de la table</li>
+<li>field: nom du champ dans la table.</li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;variable</span> <span class="na">value=</span><span class="s">&quot;12&quot;</span><span class="nt">&gt;</span>
+  [...]
+<span class="nt">&lt;/variable&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>value: valeur de la variable lors de la génération du dataset</li>
+</ul>
+</div>
+<div class="section" id="entry">
+<h3>Entry<a class="headerlink" href="#entry" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;dataset_field&quot;</span><span class="nt">&gt;</span>
+  [...]
+<span class="nt">&lt;/entry&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>type: param ou dataset_field</li>
+</ul>
+</div>
+<div class="section" id="param">
+<h3>Param<a class="headerlink" href="#param" title="Permalink to this headline">¶</a></h3>
+<p>Données provenant d&#8217;une variable passée dans la requête.
+.. code-block:: xml</p>
+<blockquote>
+<div>&lt;param name=&#8221;id_patient&#8221; /&gt;</div></blockquote>
+<ul class="simple">
+<li>name: nom de la variable dans la requête</li>
+</ul>
+</div>
+<div class="section" id="datasetfield">
+<h3>DatasetField<a class="headerlink" href="#datasetfield" title="Permalink to this headline">¶</a></h3>
+<p>Les données proviennet d&#8217;un dataset</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataset_field</span> <span class="na">name=</span><span class="s">&quot;patient&quot;</span> <span class="na">field=</span><span class="s">&quot;id_data&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>name: nom du dataset</li>
+<li>field: nom du champ dans le dataset</li>
+</ul>
+</div>
+</div>
+<div class="section" id="rowdata">
+<h2>Rowdata<a class="headerlink" href="#rowdata" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="variables-a-reponse-simple">
+<h3>Variables à réponse simple<a class="headerlink" href="#variables-a-reponse-simple" title="Permalink to this headline">¶</a></h3>
+<p>Les variables à réponse simple sont stockées dans la balise row.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;row</span> <span class="na">id_data=</span><span class="s">&quot;24&quot;</span> <span class="na">denq=</span><span class="s">&quot;2010-03-21&quot;</span> <span class="na">ville=</span><span class="s">&quot;paris&quot;</span> <span class="na">cp=</span><span class="s">&quot;75011&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="variables-a-reponse-multiple">
+<h3>Variables à réponse multiple<a class="headerlink" href="#variables-a-reponse-multiple" title="Permalink to this headline">¶</a></h3>
+<p>Les variables à réponse multiple sont stockées comme sous-noeud de la balise row.</p>
+<div class="highlight-xml"><div class="highlight"><pre>&lt;row ...&gt;
+  &lt;mutiple name=&quot;ttt&quot;&gt;
+    &lt;value&gt;1&lt;/value&gt;
+    &lt;value&gt;2&lt;/value&gt;
+    &lt;value&gt;3&lt;/value&gt;
+  &lt;/multiple&gt;
+&lt;/row&gt;
+</pre></div>
+</div>
+<div class="section" id="format-json">
+<h4>Format JSON<a class="headerlink" href="#format-json" title="Permalink to this headline">¶</a></h4>
+<p>Le dataset est envoyé au client au format JSON. Dans ce cas les variables à réponse multiple sont directement stockées dans la partie row:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">rowdata</span><span class="o">:</span> <span class="p">[</span>
+<span class="p">{</span>
+  <span class="nx">id_data</span><span class="o">:</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+  <span class="nx">age</span><span class="o">:</span> <span class="s2">&quot;-7623&quot;</span><span class="p">,</span>
+  <span class="nx">ddn</span><span class="o">:</span> <span class="s2">&quot;1989-04-17&quot;</span><span class="p">,</span>
+  <span class="nx">nom</span><span class="o">:</span> <span class="s2">&quot;Seldon&quot;</span><span class="p">,</span>
+  <span class="nx">prenom</span><span class="o">:</span> <span class="s2">&quot;Harry&quot;</span><span class="p">,</span>
+  <span class="nx">sexe</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="nx">dcontact</span><span class="o">:</span> <span class="s2">&quot;2010-03-01&quot;</span><span class="p">,</span>
+  <span class="nx">relation</span><span class="o">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+  <span class="nx">ttt</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="exemple-complet">
+<h2>Exemple complet<a class="headerlink" href="#exemple-complet" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;enquete&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;metadata&gt;</span>
+    <span class="nt">&lt;fields&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;id_data&quot;</span> <span class="na">type=</span><span class="s">&quot;primary_key&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;true&quot;</span> <span class="na">default_label=</span><span class="s">&quot;ID&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;ID&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;id_data&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;denq&quot;</span> <span class="na">type=</span><span class="s">&quot;date&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;true&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Nom du patient&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Nom&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;denq&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;date</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;ville&quot;</span> <span class="na">type=</span><span class="s">&quot;fkey_dico&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;false&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Ville&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Ville&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;ville&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;fkey_dico</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;cp&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;false&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Code postal&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;CP&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;cp&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;5&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;ttt&quot;</span> <span class="na">type=</span><span class="s">&quot;fkey_dico_ext&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;false&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Traitement&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;TTT&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;ttt&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;fkey_dico_ext</span> <span class="na">varset_relation_name=</span><span class="s">&quot;enq_ttt&quot;</span> <span class="na">dico_name=</span><span class="s">&quot;traitement&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;email&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;false&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Adresse email&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;Email&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;enquete&quot;</span> <span class="na">field=</span><span class="s">&quot;email&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;150&quot;</span> <span class="na">validator=</span><span class="s">&quot;email&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;/fields&gt;</span>
+    <span class="nt">&lt;variables&gt;</span>
+      <span class="nt">&lt;variable</span> <span class="na">value=</span><span class="s">&quot;2009&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;annee&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/entry&gt;</span>
+      <span class="nt">&lt;/variable&gt;</span>
+      <span class="nt">&lt;variable</span> <span class="na">value=</span><span class="s">&quot;12&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">&quot;id_patient&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/entry&gt;</span>
+        <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;dataset_field&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;dataset_field</span> <span class="na">name=</span><span class="s">&quot;patient&quot;</span> <span class="na">field=</span><span class="s">&quot;id_data&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/entry&gt;</span>
+      <span class="nt">&lt;/variable&gt;</span>
+    <span class="nt">&lt;/variables&gt;</span>
+  <span class="nt">&lt;/metadata&gt;</span>
+  <span class="nt">&lt;rowdata&gt;</span>
+    <span class="nt">&lt;row</span> <span class="na">id_data=</span><span class="s">&quot;24&quot;</span> <span class="na">denq=</span><span class="s">&quot;2010-03-21&quot;</span> <span class="na">ville=</span><span class="s">&quot;paris&quot;</span> <span class="na">cp=</span><span class="s">&quot;75011&quot;</span> <span class="nt">&gt;</span>
+      <span class="nt">&lt;mutiple</span> <span class="na">name=</span><span class="s">&quot;ttt&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;value&gt;</span>2<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;value&gt;</span>3<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/multiple&gt;</span>
+    <span class="nt">&lt;/row&gt;</span>
+    <span class="nt">&lt;row</span> <span class="na">id_data=</span><span class="s">&quot;25&quot;</span> <span class="na">denq=</span><span class="s">&quot;2010-05-04&quot;</span> <span class="na">ville=</span><span class="s">&quot;paris&quot;</span> <span class="na">cp=</span><span class="s">&quot;75004&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/rowdata&gt;</span>
+<span class="nt">&lt;/dataset&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dataset</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#metadata">Metadata</a><ul>
+<li><a class="reference internal" href="#field">Field</a></li>
+<li><a class="reference internal" href="#varset">Varset</a></li>
+<li><a class="reference internal" href="#table">Table</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+<li><a class="reference internal" href="#entry">Entry</a></li>
+<li><a class="reference internal" href="#param">Param</a></li>
+<li><a class="reference internal" href="#datasetfield">DatasetField</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rowdata">Rowdata</a><ul>
+<li><a class="reference internal" href="#variables-a-reponse-simple">Variables à réponse simple</a></li>
+<li><a class="reference internal" href="#variables-a-reponse-multiple">Variables à réponse multiple</a><ul>
+<li><a class="reference internal" href="#format-json">Format JSON</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exemple-complet">Exemple complet</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="layout.html"
+                        title="previous chapter">Layout</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="invokable_dataset.html"
+                        title="next chapter">Invokable Dataset</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/res/dataset.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="invokable_dataset.html" title="Invokable Dataset"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="layout.html" title="Layout"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" >Ressources</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+﻿.. _widgetexport:
+
+WidgetExport
+============
+
+Fonction
+--------
+Hérite de :ref:`widgetbutton`
+
+Ce composé est utilisé pour représenter un bouton permettant l'export d'un DataQuery (ie : DataSet après execution via la ModelManager).
+
+Il est instancié lorsque le XML contient la balise :
+
+.. code-block:: xml
+
+	<button action="export" label="Exporter les données">
+	</button>
+
+Le template de rendu est le même que le :ref:`widgetbutton`
+
+
+Attributs
+---------
+Aucun attribut autres que ceux de :ref:`widgetbutton`
+    
+Options
+-------
+
+dataquery_id (Obligatoire / Dépendant)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Integer
+
+Valeur : Id ressource représentant le dataquery à exécuter depuis xxx_pj_ressource pour exporter les données
+
+Valeur par défaut : Aucune
+
+Dépendance : N'est pas obligatoire si un path (moule/controller/action) est renseigné
+
+Exemple :
+
+.. code-block:: xml
+	
+	<button action="export" label="Exporter les données">
+		<option output="html" option_name="dataquery_id" value="42" />
+	</button>
+
+module (Obligatoire / Dépendant)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Type : String
+
+Valeur : Nom du module (ZendFramework) à utiliser pour les requêtes XHR liées à l'export
+
+Valeur par défaut : export
+
+Dépendance : Est obligatoire si l'option ``controller`` ou ``action`` est détectée, sinon ``dataquery_id`` est testé
+
+controller (Obligatoire / Dépendant)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Type : String
+
+Valeur : Nom du controller (ZendFramework) à utiliser pour les requêtes XHR liées à l'export
+
+Valeur par défaut : index
+
+Dépendance : Est obligatoire si l'option ``module`` ou ``action`` est détectée, sinon ``dataquery_id`` est testé
+
+
+action (Obligatoire / Dépendant)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Type : String
+
+Valeur : Nom de l'action (ZendFramework) à utiliser lors de la requête XHR liée à la *génération* du fichier à exporter
+
+Valeur par défaut : csv
+
+Dépendance : Est obligatoire si l'option ``controller`` ou ``action`` est détectée, sinon ``dataquery_id`` est testé
+
+Exemple :
+
+.. code-block:: xml
+	
+	<button action="export" label="Exporter les utilisateurs">
+		<option output="html" option_name="module" value="project" />
+		<option output="html" option_name="controller" value="export" />
+		<option output="html" option_name="action" value="users" />
+	</button>
+	
+dataset_filter (Optionnel)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : string
+
+Valeur : Identifiant (alphabétique) du dataset présent dans le formulaire contenant le bouton d'export à utiliser pour filtrer les données
+
+Valeur par défaut : Aucune
+
+Exemple :
+
+.. code-block:: xml
+	
+	<button action="export" label="Exporter les données">
+		<option output="html" option_name="dataquery_id" value="42" />
+		<option output="html" option_name="dataset_filter" value="filter_export" />
+	</button>
+	
+.. note::
+	Le dataquery (présent dans la base) utilisé pour exporter les données peut donc inclure des conditions en référencant le dataset de filtrage
+	
+	.. code-block:: xml
+		
+		<!-- En considérant que le bouton d'export fournisse l'option dataset_filter == "filter_export" -->
+		<condition sql="{ddn} &gt; {crit_ddn_min}" optional="true">
+			<field field_name="ddn" table_name="p" alias="ddn" />
+			<variable alias="crit_ddn_min" default="NULL">
+				<entry type="dataset" name="filter_export" field="ddn_min" row="current" />
+			</variable>
+		</condition>
+		<condition sql="{ddn} &lt; {crit_ddn_max}" optional="true">
+			<variable alias="crit_ddn_max" default="NULL">
+				<entry type="dataset" name="filter_export" field="ddn_max" row="current" />
+			</variable>
+		</condition>
+	
+
+
+
+Contenu
+-------
+Aucun contenu

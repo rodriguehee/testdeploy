@@ -1,0 +1,265 @@
+﻿.. _dataset:
+
+Dataset
+=======
+
+Description
+-----------
+Un XML dataset est découpé en deux parties :
+
+- la description de la structure (``<metadata>``)
+- les données (``<rowdata>``). 
+
+La partie ``<metadata>`` est elle même découpée en deux :
+
+- ``<fields>`` décrivant les champs renvoyés contenus dans ce dataset (Type, Obligatoire, Libellé) 
+- ``<variables>`` décrivant les données provenant de l'extérieur (utilisées par le dataquery pour les conditions par exemple)
+
+
+Les attributes autorisés pour un Dataset sont :
+
+- ``id`` : Obligatoire, c'est l'identifiant du Dataset, il doit être unique dans le formulaire
+- ``cacheable`` : Facultatif (défaut : ``true``), il est identique à l'attribut présent dans un :ref:`Dataquery <dataquery>`.
+- ``standby`` : Facultatif (défaut : ``true``), il est identique à l'attribut présent dans un :ref:`Dataquery <dataquery>`.
+- ``auto_add_record`` : Facultatif (défaut : ``false``), il est identique à l'attribut présent dans un :ref:`Dataquery <dataquery>`.
+- ``type`` : Facultatif (défaut : ``standard``). S'il vaut ``filter`` les valeurs saisient dans le filtre deviendront persistantes en session.
+- ``mute_refresh_event`` : Facultatif (défaut : ``false``), S'il vaut ``true`` un modification d'un field lié à ce DataSet n'induira pas de 
+  RefreshDataset sur des DataSet référençant ce DataSet (Via des ``<condition>`` par exemple)
+
+.. code-block:: xml
+
+	<dataset id="[ID DATASET]" cacheable="true" standby="true" auto_add_record="false" mute_refresh_event="false">
+		<metadata>
+			<fields/>
+			<variables/>
+		</metadata>
+		<rowdata/>
+	</dataset>
+	
+.. note::
+	L'attribut  ``mute_refresh_event`` peut être très utile lorsqu'il est utilisé sur un DataSet de filtrage. Il permet d'éviter les requêtes XHR de recherche de données à chaque champ modifié. En revanche
+	il est à la charge du développeur de mettre un bouton dans le layout permettant, par conséquent, de lancer manuellement la recherche (vu qu'elle ne se fait plus automatiquement).
+	
+	Le :ref:`widgetbutton` à placer devra avoir l'action ``refresh_dataset`` et indiquer le DataSet à rafraîchir (à savoir celui des données, lié à un DataQuery référençant le DataSet de filtrage dans ses conditions).
+
+Exemple de dataset créé manuellement pour être mis dans le XML de formulaire (source: form.provider_user_list.xml) :
+
+.. code-block:: xml
+
+	<!-- Provider user list -->
+	<dataset id="user_list">
+		<metadata>
+			<fields>
+				<field id="oauth_provider_id_user" type="primary_key" default_label="Groupe" default_short_label="Groupe"/>
+				<field id="import" type="boolean" default_label="Import" default_short_label="Import"/>
+				<field id="localy_found" type="boolean" default_label="Localy found" default_short_label="Localy found"/>
+				<field id="status" type="fkey_sysdico" default_label="Statut" default_short_label="Statut">
+					<fkey_sysdico dico_name="user_status"/>
+				</field>
+				<field id="username" type="string" default_label="Username" default_short_label="Username">
+					<string length="50"/>
+				</field>
+			</fields>
+		</metadata>
+		<rowdata/>
+	</dataset>
+
+	<!-- Selected role and group -->
+	<dataset id="rights">
+		<metadata>
+			<fields>
+				<field id="id_role" type="integer" default_label="ID rôle" default_short_label="ID rôle"/>
+				<field id="id_group" type="integer" default_label="ID groupe" default_short_label="ID groupe"/>
+			</fields>
+		</metadata>
+		<rowdata/>
+	</dataset>
+
+
+
+Metadata
+--------
+Field
+~~~~~
+.. code-block:: xml
+
+	<field id="cp" type="string" source="varset">
+	  [...]
+	</field>
+
+* id: identifiant du champ, correspond à l'alias de la colonne dans le dataquery
+* type: correspond aux types du varset. Le type induit la présence d'une sous balise qui apporte des informations supplémentaires sur le type, comme la longueur (length) pour le type string.
+* source: provenance de la variable, est utilisé pour la sauvegarde de la valeur. valeurs possibles: varset et table (induit la présence d'une balise varset ou table).
+
+Le ``type`` spécifié pour le field induit la présence d'un noeud enfant au ``<field>`` ayant le même nom que la valeur de l'attribut ``type`` :
+
+.. code-block:: xml
+
+	<field id="cp" type="string" source="varset">
+	   <string length="10" />
+	</field>
+
+.. note::
+	Ce noeud enfant peut avoir les attributes ``validator`` et ``regexp``. Pour plus d'information consultez la partie sur les :ref:`Validateurs <lib_js-validateurs>`.
+
+Varset
+~~~~~~
+.. code-block:: xml
+
+	<varset name="enquete" field="denq" />
+
+* name: nom du varset
+* field: nom du champ dans le varset
+
+Table
+~~~~~
+.. code-block:: xml
+
+	<table name="e5y7_01_data" field="denq" />
+
+* name: nom de la table
+* field: nom du champ dans la table.
+
+Variables
+~~~~~~~~~
+.. code-block:: xml
+
+	<variable value="12">
+	  [...]
+	</variable>
+
+* value: valeur de la variable lors de la génération du dataset
+
+Entry
+~~~~~
+.. code-block:: xml
+
+	<entry type="dataset_field">
+	  [...]
+	</entry>
+
+* type: param ou dataset_field
+
+Param
+~~~~~
+Données provenant d'une variable passée dans la requête.
+.. code-block:: xml
+
+	<param name="id_patient" />
+
+* name: nom de la variable dans la requête
+
+DatasetField
+~~~~~~~~~~~~
+Les données proviennet d'un dataset
+
+.. code-block:: xml
+
+	<dataset_field name="patient" field="id_data" />
+
+* name: nom du dataset
+* field: nom du champ dans le dataset
+
+Rowdata
+--------
+Variables à réponse simple
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Les variables à réponse simple sont stockées dans la balise row.
+
+.. code-block:: xml
+
+	<row id_data="24" denq="2010-03-21" ville="paris" cp="75011" />
+
+Variables à réponse multiple
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les variables à réponse multiple sont stockées comme sous-noeud de la balise row.
+
+.. code-block:: xml
+
+	<row ...>
+	  <mutiple name="ttt">
+	    <value>1</value>
+	    <value>2</value>
+	    <value>3</value>
+	  </multiple>
+	</row>
+
+Format JSON
+"""""""""""
+Le dataset est envoyé au client au format JSON. Dans ce cas les variables à réponse multiple sont directement stockées dans la partie row:
+
+.. code-block:: js
+
+	rowdata: [
+	{
+	  id_data: "6",
+	  age: "-7623",
+	  ddn: "1989-04-17",
+	  nom: "Seldon",
+	  prenom: "Harry",
+	  sexe: "1",
+	  dcontact: "2010-03-01",
+	  relation: "3",
+	  ttt: [1, 3, 4]
+	}]
+
+Exemple complet
+---------------
+
+.. code-block:: xml
+
+	<dataset id="enquete">
+	  <metadata>
+	    <fields>
+	      <field id="id_data" type="primary_key" source="varset" mandatory="true" default_label="ID" default_short_label="ID">
+	        <varset name="enquete" field="id_data" />
+	      </field>
+	      <field id="denq" type="date" source="varset" mandatory="true" default_label="Nom du patient" default_short_label="Nom">
+	        <varset name="enquete" field="denq" />
+	        <date />
+	      </field>
+	      <field id="ville" type="fkey_dico" source="varset" mandatory="false" default_label="Ville" default_short_label="Ville">
+	        <varset name="enquete" field="ville" />
+	        <fkey_dico />
+	      </field>
+	      <field id="cp" type="string" source="varset" mandatory="false" default_label="Code postal" default_short_label="CP">
+	        <varset name="enquete" field="cp" />
+	        <string length="5" />
+	      </field>
+	      <field id="ttt" type="fkey_dico_ext" source="varset" mandatory="false" default_label="Traitement" default_short_label="TTT">
+	        <varset name="enquete" field="ttt" />
+	        <fkey_dico_ext varset_relation_name="enq_ttt" dico_name="traitement" />
+	      </field>
+	      <field id="email" type="string" source="varset" mandatory="false" default_label="Adresse email" default_short_label="Email">
+	        <varset name="enquete" field="email" />
+	        <string length="150" validator="email" />
+	      </field>
+	    </fields>
+	    <variables>
+	      <variable value="2009">
+	        <entry type="param">
+	          <param name="annee" />
+	        </entry>
+	      </variable>
+	      <variable value="12">
+	        <entry type="param">
+	          <param name="id_patient" />
+	        </entry>
+	        <entry type="dataset_field">
+	          <dataset_field name="patient" field="id_data" />
+	        </entry>
+	      </variable>
+	    </variables>
+	  </metadata>
+	  <rowdata>
+	    <row id_data="24" denq="2010-03-21" ville="paris" cp="75011" >
+	      <mutiple name="ttt">
+	        <value>1</value>
+	        <value>2</value>
+	        <value>3</value>
+	      </multiple>
+	    </row>
+	    <row id_data="25" denq="2010-05-04" ville="paris" cp="75004" />
+	  </rowdata>
+	</dataset>

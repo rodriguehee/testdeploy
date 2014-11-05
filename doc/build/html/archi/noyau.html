@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Noyau &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Architecture" href="../architecture.html" />
+    <link rel="next" title="Session" href="session.html" />
+    <link rel="prev" title="Model Manager" href="model_manager.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="session.html" title="Session"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model_manager.html" title="Model Manager"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" accesskey="U">Architecture</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="noyau">
+<span id="id1"></span><h1>Noyau<a class="headerlink" href="#noyau" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Les modules standards de Voozanoo sont dans un noyau mutualisé.</p>
+</div>
+<div class="section" id="arborescence-du-noyau">
+<h2>Arborescence du noyau<a class="headerlink" href="#arborescence-du-noyau" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">library: contient l&#8217;API de Voozanoo4.</p>
+</li>
+<li><dl class="first docutils">
+<dt>modules</dt>
+<dd><ul class="first last simple">
+<li>auth: authentificaiton</li>
+<li>error: affichage des erreurs</li>
+<li>form: affichage et gestion des formulaires</li>
+<li>mainframe: module permettant le découpage d&#8217;une page en plusieurs frames</li>
+<li>style: récupération des CSS</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">plugins: contient un plugin (auth) qui test la connexion de l&#8217;utilisateur et les droits d&#8217;accès aux modules</p>
+</li>
+</ul>
+</div>
+<div class="section" id="arborescence-d-une-application">
+<h2>Arborescence d&#8217;une application<a class="headerlink" href="#arborescence-d-une-application" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>controllers: contient le controller index pour la page d&#8217;accueil</li>
+<li>library: librairie dédiée au projet</li>
+<li>modules: modules propres au projet</li>
+<li>public: contient l&#8217;index, et les ressources accessibles directement par le navigateur</li>
+<li>views: vues liées aux controllers qui sont dans le répertoire controllers de la racine</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Noyau</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#arborescence-du-noyau">Arborescence du noyau</a></li>
+<li><a class="reference internal" href="#arborescence-d-une-application">Arborescence d&#8217;une application</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model_manager.html"
+                        title="previous chapter">Model Manager</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="session.html"
+                        title="next chapter">Session</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/archi/noyau.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="session.html" title="Session"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model_manager.html" title="Model Manager"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

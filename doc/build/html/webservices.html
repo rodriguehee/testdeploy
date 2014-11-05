@@ -1,0 +1,634 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Webservices &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Script Player" href="script_player.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="script_player.html" title="Script Player"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="webservices">
+<span id="id1"></span><h1>Webservices<a class="headerlink" href="#webservices" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="technologie-utilisee">
+<h2>Technologie utilisée<a class="headerlink" href="#technologie-utilisee" title="Permalink to this headline">¶</a></h2>
+<p>Les Webservices au sein de Voozanoo4 se basent majoritairement sur l&#8217;architecture REST (Voir <a class="reference internal" href="#ws-liens-utiles"><em>Liens utiles</em></a>).</p>
+<p>Voozanoo4 utilise le Routing Zend Framework : <code class="docutils literal"><span class="pre">Zend_Rest_Route</span></code> (Voir <a class="reference internal" href="#ws-liens-utiles"><em>Liens utiles</em></a>)</p>
+<p>L&#8217;idéal étant d&#8217;utiliser le composant <code class="docutils literal"><span class="pre">Zend_Rest_Client</span></code> pour envoyer les requêtes à un projet Voozanoo4.</p>
+</div>
+<div class="section" id="implementation-dans-voozanoo4-partie-serveur">
+<h2>Implémentation dans Voozanoo4 (Partie &#8220;Serveur&#8221;)<a class="headerlink" href="#implementation-dans-voozanoo4-partie-serveur" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="le-routing">
+<h3>Le Routing<a class="headerlink" href="#le-routing" title="Permalink to this headline">¶</a></h3>
+<p>Le routing d&#8217;une requête HTTP entrante est effectuée grâce aux routes déclarées dans le Bootstrap de Voozanoo4 (<code class="docutils literal"><span class="pre">Core_Library_Account_Bootstrap</span></code>) :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>La route <code class="docutils literal"><span class="pre">default</span></code> est déclarée en premier, en charge de reconnaitre le projet ciblé et de router une requête entrante vers un Module / un Controller / une Action.</dt>
+<dd><ul class="first last simple">
+<li>La reconnaissance du projet ciblé impose la surcharge de <code class="docutils literal"><span class="pre">Zend_Controller_Router_Route_Module</span></code> (par <code class="docutils literal"><span class="pre">Core_Library_Routes_ProjectName</span></code>) pour extraire le nom du projet depuis l&#8217;URI de la requête.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>La route <code class="docutils literal"><span class="pre">rest</span></code> est déclarée en second, en charge de reconnaitre le projet ciblé et de router une requête ciblant le module <code class="docutils literal"><span class="pre">ws</span></code> (Webservice) en tant que requête Rest</dt>
+<dd><ul class="first last simple">
+<li>La reconnaissance du projet ciblé impose la surcharge de <code class="docutils literal"><span class="pre">Zend_Controller_Router_Route_Module</span></code> (par <code class="docutils literal"><span class="pre">Core_Library_Routes_Rest_ProjectName</span></code>) pour extraire le nom du projet depuis l&#8217;URI de la requête.</li>
+<li>Le controller ciblé est gardé tel quel, l&#8217;action est déduite de la méthode HTTP utilisée : GET, POST, PUT, DELETE et d&#8217;un éventuel paramètre numérique (identifiant).</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Les routes sont déclarées dans cette ordre car Zend Framework dépile les routes en commençant par la dernière, considérant que la première route déclarée est celle la plus &#8220;générique&#8221; et par conséquent à utiliser en dernier recours:</p>
+<div class="highlight-python"><div class="highlight"><pre>Note: Reverse Matching
+Routes are matched in reverse order so make sure your most generic routes are defined first.
+</pre></div>
+</div>
+<p class="last">Source : <a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.controller.router.html">http://framework.zend.com/manual/1.12/en/zend.controller.router.html</a></p>
+</div>
+</div>
+<div class="section" id="l-authentification">
+<h3>L&#8217;authentification<a class="headerlink" href="#l-authentification" title="Permalink to this headline">¶</a></h3>
+<p>L&#8217;authentification est assurée par :
+- Le plugin <code class="docutils literal"><span class="pre">Core_Plugin_Rest_Auth</span></code> qui vérifie l&#8217;identité de l&#8217;utilisateur lorsque le Module <code class="docutils literal"><span class="pre">ws</span></code> est ciblé (et qu&#8217;il s&#8217;agit, par conséquent, d&#8217;une requête REST).
+- La classe abstraite <code class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></code> en charge d&#8217;envoyer les en-tête HTTP afin d&#8217;activer l&#8217;authentification HTTP (WWW-Authenticate: Basic realm=&#8221;&lt;projectName&gt;&#8221;)</p>
+<p>Actuellement n&#8217;importe quel accès à un Webservice mis en place sur Voozanoo4 impose une authentification, celle-ci se fait via l&#8217;URL d&#8217;accès au Webservice comme lors d&#8217;un accès
+à un site réclamant une Authentification Http:</p>
+<div class="highlight-python"><div class="highlight"><pre>http://username:password@mywebsite.com
+</pre></div>
+</div>
+<p>Le plugin exploite les variables <code class="docutils literal"><span class="pre">$_SERVER['PHP_AUTH_USER']</span></code> et <code class="docutils literal"><span class="pre">$_SERVER['PHP_AUTH_PW']</span></code> pour vérifier l&#8217;identité de l&#8217;utilisateur dans la base de données.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p>Lors de la transmission du nom d&#8217;utilisateur et du mot de passe dans l&#8217;Url certains caractères peuvent poser problème, c&#8217;est le cas de <code class="docutils literal"><span class="pre">&#64;</span></code>, <code class="docutils literal"><span class="pre">:</span></code>, <code class="docutils literal"><span class="pre">?</span></code> et tout autre caractère ayant une signification
+particulière dans le contexte d&#8217;une Url.</p>
+<p class="last">Il faut alors encoder ces caractères selon la norme <a class="reference external" href="http://www.faqs.org/rfcs/rfc3986.html">RFC3986</a>. Vous devrez utiliser la méthode <code class="docutils literal"><span class="pre">rawurlencode()</span></code> pour effecter cet encodage (Cf <a class="reference external" href="http://fr2.php.net/manual/fr/function.rawurlencode.php">documentation officielle</a>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Lorsque qu&#8217;Apache est utilisé (installé ?) en FastCGI (fréquent sur Windows) la récupération de ces variables d&#8217;environnement est impossible (elle ne sont pas définies).</p>
+<p>La solution est d&#8217;utiliser une RewriteRule au sein du RewriteEngine pour remplir la variable d&#8217;environnement avec l&#8217;entête HTTP Authorization (contenant les informations requises) :</p>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nb">RewriteEngine</span> <span class="k">On</span>
+<span class="c"># Rule necessaire dans le cas d&#39;utilisation d&#39;Apache en Fast CGI pour l&#39;authent HTTP visible depuis PHP</span>
+<span class="nb">RewriteRule</span> .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+<span class="nb">RewriteCond</span> %{REQUEST_FILENAME} -s [OR]
+<span class="nb">RewriteCond</span> %{REQUEST_FILENAME} -l [OR]
+<span class="nb">RewriteCond</span> %{REQUEST_FILENAME} -d
+<span class="nb">RewriteRule</span> ^.*$ - [NC,L]
+<span class="nb">RewriteRule</span> ^.*$ index.php [NC,L]
+</pre></div>
+</div>
+<p class="last">Il est important de mettre cette RewriteRule avant toute autre Rule/Cond</p>
+</div>
+</div>
+<div class="section" id="traitement-d-une-requete">
+<h3>Traitement d&#8217;une requête<a class="headerlink" href="#traitement-d-une-requete" title="Permalink to this headline">¶</a></h3>
+<p>La requête est distribuée au Controller ciblé, l&#8217;action appelée est automatiquement déterminée par le composant <code class="docutils literal"><span class="pre">Zend_Rest_Route</span></code> :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="43%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">URI</th>
+<th class="head">Module_Controller::action</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>GET</td>
+<td>/product/ratings/</td>
+<td>Product_RatingsController::indexAction()</td>
+</tr>
+<tr class="row-odd"><td>GET</td>
+<td>/product/ratings/:id</td>
+<td>Product_RatingsController::getAction()</td>
+</tr>
+<tr class="row-even"><td>POST</td>
+<td>/product/ratings</td>
+<td>Product_RatingsController::postAction()</td>
+</tr>
+<tr class="row-odd"><td>PUT</td>
+<td>/product/ratings/:id</td>
+<td>Product_RatingsController::putAction()</td>
+</tr>
+<tr class="row-even"><td>DELETE</td>
+<td>/product/ratings/:id</td>
+<td>Product_RatingsController::deleteAction()</td>
+</tr>
+<tr class="row-odd"><td>POST</td>
+<td>/product/ratings/:id?_method=PUT</td>
+<td>Product_RatingsController::putAction()</td>
+</tr>
+<tr class="row-even"><td>POST</td>
+<td>/product/ratings/:id?_method=DELETE</td>
+<td>Product_RatingsController::deleteAction()</td>
+</tr>
+</tbody>
+</table>
+<p>Source : <a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.controller.router.html#zend.controller.router.routes.rest">Documentation ZendFramework</a></p>
+<p>L&#8217;id fourni dans la requête et les éventuels paramètres envoyés par le client peuvent être récupérés dans l&#8217;action :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">//Récupération du paramètre &#39;id&#39;</span>
+   <span class="nv">$iId</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParam</span><span class="p">(</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+
+   <span class="c1">//Récupération du paramètre &#39;foo&#39;</span>
+   <span class="nv">$sFoo</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParam</span><span class="p">(</span> <span class="s1">&#39;foo&#39;</span> <span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="communication-de-la-reponse">
+<h3>Communication de la réponse<a class="headerlink" href="#communication-de-la-reponse" title="Permalink to this headline">¶</a></h3>
+<p>Voozanoo4 intègre un système de rendu de réponse par défaut : un script de vue générant du XML.</p>
+<p>La mise en place d&#8217;un Webservice necessitant l&#8217;héritage de la classe abstraite <code class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></code> (Voir plus bas) ce Controller abstrait choisi le même Script de Vue quelque soit l&#8217;action : result.phtml (Présent dans <code class="docutils literal"><span class="pre">voozanoo4/src/modules/ws/views/script/result.phtml</span></code>) en charge de générer la réponse au format XML.</p>
+<p>Voici les différents types de XML générés lors de la génération d&#8217;une réponse :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Réponse simple en cas de succès de l&#8217;opération, par exemple un DELETE ou un PUT (~ update)</dt>
+<dd><div class="first last highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+   <span class="nt">&lt;status&gt;</span>success<span class="nt">&lt;/status&gt;</span>
+   <span class="nt">&lt;reponse&gt;</span>Opération effectuée<span class="nt">&lt;/response&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Réponse complexe en cas de succès de l&#8217;opération, par exemple GET d&#8217;une ressource précise</dt>
+<dd><div class="first last highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+   <span class="nt">&lt;status&gt;</span>success<span class="nt">&lt;/status&gt;</span>
+   <span class="nt">&lt;reponse&gt;</span>
+      <span class="nt">&lt;patient&gt;</span>
+         <span class="nt">&lt;id_data&gt;</span>42<span class="nt">&lt;/id_data&gt;</span>
+         <span class="nt">&lt;code&gt;</span>B19F85<span class="nt">&lt;/code&gt;</span>
+         <span class="nt">&lt;nom_patient&gt;</span>Cooper<span class="nt">&lt;/nom_patient&gt;</span>
+         <span class="nt">&lt;ddn&gt;</span>1981-05-14<span class="nt">&lt;/ddn&gt;</span>
+      <span class="nt">&lt;/patient&gt;</span>
+   <span class="nt">&lt;/response&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Réponse en cas d&#8217;erreur (controlée, ou involontaire par exemple lors d&#8217;Exceptions)</dt>
+<dd><div class="first highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+   <span class="nt">&lt;status&gt;</span>failed<span class="nt">&lt;/status&gt;</span>
+   <span class="nt">&lt;message&gt;</span>Le nom du patient doit être fourni en paramètre : nom_patient<span class="nt">&lt;/message&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+</pre></div>
+</div>
+<div class="last highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+   <span class="nt">&lt;status&gt;</span>failed<span class="nt">&lt;/status&gt;</span>
+   <span class="nt">&lt;message&gt;</span>
+      An internal Error occured
+      Message : Unable to find patient code=A1337D
+      File : C:\Program Files (x86)\Zend\Apache2\htdocs\foo\modules\ws\controllers\PatientController.php (Line 267)
+      Trace :
+      #0 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Controller\Action.php(516): Ws_ManifestFileController-&gt;getAction()
+      #1 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action-&gt;dispatch(&#39;getAction&#39;)
+      #2 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard-&gt;dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+      #3 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front-&gt;dispatch()
+      #4 C:\Program Files (x86)\Zend\ZendServer\share\ZendFramework\library\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap-&gt;run()
+      #5 C:\Program Files (x86)\Zend\Apache2\htdocs\epifiles\public\index.php(19): Zend_Application-&gt;run()
+      #6 {main}
+   <span class="nt">&lt;/message&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Pour &#8220;piloter&#8221; la génération du XML il faut utiliser ces deux variables de vue :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>success ( <code class="docutils literal"><span class="pre">true</span></code> ou <code class="docutils literal"><span class="pre">false</span></code> ) <span class="classifier-delimiter">:</span> <span class="classifier">Conditionne le contenu de l&#8217;élement &#8220;&lt;status&gt;&#8221; pour indiquer le succès ou l&#8217;échec du traitement de la requête</span></dt>
+<dd><ul class="first last simple">
+<li>Si cette variable n&#8217;est pas définie elle sera considérée comme étant à <code class="docutils literal"><span class="pre">true</span></code>.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>response ( <code class="docutils literal"><span class="pre">String</span></code> ou <code class="docutils literal"><span class="pre">Array</span></code> ) <span class="classifier-delimiter">:</span> <span class="classifier">Réponse à communiquer</span></dt>
+<dd><ul class="first last simple">
+<li>Si <code class="docutils literal"><span class="pre">success</span></code> vaut false, <code class="docutils literal"><span class="pre">response</span></code> doit normalement être une <code class="docutils literal"><span class="pre">String</span></code> fournissant la cause de l&#8217;échec</li>
+<li>Si c&#8217;est un <code class="docutils literal"><span class="pre">Array</span></code> : Il est converti sous la forme d&#8217;un arbre XML en utilisant les clés associatives comme nom d&#8217;élément HTML</li>
+<li>Si c&#8217;est une <code class="docutils literal"><span class="pre">String</span></code> : Elle est placée tel quel dans l&#8217;élément &lt;reponse&gt;</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="section" id="conversion-d-une-reponse-array-en-arbre-xml">
+<h4>Conversion d&#8217;une réponse &#8220;Array&#8221; en arbre XML<a class="headerlink" href="#conversion-d-une-reponse-array-en-arbre-xml" title="Permalink to this headline">¶</a></h4>
+<p>Opération réalisée grâce à l&#8217;aide de vue <code class="docutils literal"><span class="pre">Core_Library_View_Helpers_RestResponseToXml</span></code></p>
+<ul>
+<li><dl class="first docutils">
+<dt>Conversion simple d&#8217;un array associatif en XML</dt>
+<dd><div class="first highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">response</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="mi">42</span><span class="p">,</span>
+        <span class="s1">&#39;lastname&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Cooper&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;firsname&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Sheldon&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;age&#39;</span> <span class="o">=&gt;</span> <span class="mi">34</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="last highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;id&gt;</span>42<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;lastname&gt;</span>Cooper<span class="nt">&lt;/lastname&gt;</span>
+    <span class="nt">&lt;firsname&gt;</span>Sheldon<span class="nt">&lt;/firsname&gt;</span>
+    <span class="nt">&lt;age&gt;</span>34<span class="nt">&lt;/age&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Conversion d&#8217;un array associatif imbriqué en XML</dt>
+<dd><div class="first highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">response</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="mi">114</span><span class="p">,</span>
+        <span class="s1">&#39;pays&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;France&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;population&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;65 800 000&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;region&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+                <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1084&#39;</span><span class="p">,</span> <span class="s1">&#39;libelle&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Ile de France&#39;</span> <span class="p">),</span>
+                <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1085&#39;</span><span class="p">,</span> <span class="s1">&#39;libelle&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Bourgogne&#39;</span> <span class="p">),</span>
+                <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1086&#39;</span><span class="p">,</span> <span class="s1">&#39;libelle&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Champagne-Ardenne&#39;</span> <span class="p">)</span>
+        <span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="last highlight-xml"><div class="highlight"><pre><span class="nt">&lt;root&gt;</span>
+    <span class="nt">&lt;id&gt;</span>114<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;pays&gt;</span>France<span class="nt">&lt;/pays&gt;</span>
+    <span class="nt">&lt;population&gt;</span>65 800 000<span class="nt">&lt;/population&gt;</span>
+    <span class="nt">&lt;region&gt;</span>
+       <span class="nt">&lt;id&gt;</span>1084<span class="nt">&lt;/id&gt;</span>
+       <span class="nt">&lt;libelle&gt;&lt;/libelle&gt;</span>
+    <span class="nt">&lt;/region&gt;</span>
+    <span class="nt">&lt;region&gt;</span>
+       <span class="nt">&lt;id&gt;</span>1085<span class="nt">&lt;/id&gt;</span>
+       <span class="nt">&lt;libelle&gt;</span>Bourgogne<span class="nt">&lt;/libelle&gt;</span>
+    <span class="nt">&lt;/region&gt;</span>
+    <span class="nt">&lt;region&gt;</span>
+       <span class="nt">&lt;id&gt;</span>1086<span class="nt">&lt;/id&gt;</span>
+       <span class="nt">&lt;libelle&gt;</span>Champagne-Ardenne<span class="nt">&lt;/libelle&gt;</span>
+    <span class="nt">&lt;/region&gt;</span>
+<span class="nt">&lt;root&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="en-cas-d-exception">
+<h3>En cas d&#8217;Exception<a class="headerlink" href="#en-cas-d-exception" title="Permalink to this headline">¶</a></h3>
+<p>Lors de l&#8217;exécution du plugin d&#8217;authentification REST <code class="docutils literal"><span class="pre">Core_Plugin_Rest_Auth</span></code> si le module ciblé est celui des Webservices un &#8220;jeton&#8221; (paramètre) est ajouté dans la Requête :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oRequest</span><span class="o">-&gt;</span><span class="na">setParam</span><span class="p">(</span> <span class="nx">Core_Library_Controller_RestAction</span><span class="o">::</span><span class="na">REST_REQUEST</span><span class="p">,</span> <span class="k">true</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>C&#8217;est ce qui nous permet, lorsqu&#8217;une exception est levée par le noyau Voo4 ou un projet spécifique, de modifier le comportement d&#8217;affichage de l&#8217;erreur pour effectuer un forward vers le controller &#8220;Error&#8221; du module &#8220;Ws&#8221; pour transmettre correctement l&#8217;erreur.</p>
+<p>Ce forward est effectué dans le Controller standard de gestion d&#8217;erreurs Voozanoo4 : <code class="docutils literal"><span class="pre">Core_Library_Controller_Error_Index::exceptionAction()</span></code></p>
+</div>
+</div>
+<div class="section" id="mettre-en-place-un-webservice">
+<h2>Mettre en place un Webservice<a class="headerlink" href="#mettre-en-place-un-webservice" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les explications concernent la mise en place d&#8217;un Webservice pour un projet Voozanoo4 (et non pour le noyau Voonzaoo4, même si cela reste en théorie possible).</p>
+</div>
+<p>Considérons la mise en place d&#8217;un Webservice à l&#8217;application &#8220;ProjectX&#8221; et au projet &#8220;Vaccilab&#8221; permettant d&#8217;interagir avec la ressource &#8220;Patient&#8221;. L&#8217;url d&#8217;accès au projet étant <a class="reference external" href="http://projectx.voozanoo.net/vaccilab">http://projectx.voozanoo.net/vaccilab</a></p>
+<p>En résumé il nous faut pouvoir :</p>
+<ul class="simple">
+<li>Lister les patients ( Avec possibilité de filtrage )</li>
+<li>Récupérer les informations d&#8217;un patient en particulier</li>
+<li>Créer un patient</li>
+<li>Mettre à jour un patient</li>
+<li>Supprimer un patient</li>
+</ul>
+<div class="section" id="cote-server">
+<h3>Coté Server<a class="headerlink" href="#cote-server" title="Permalink to this headline">¶</a></h3>
+<p>Il nous faire créer un Controller dédié au traitement de la ressource &#8220;Patient&#8221; dans le module &#8220;ws&#8221; :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">Ws_PatientController</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_RestAction</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>La classe <code class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></code> définit 4 méthodes abstraites qu&#8217;il nous faut implémenter dans notre Controller :</p>
+<ul class="simple">
+<li>indexAction : En charge de retourner la liste des patients (filtrés si critères présents)</li>
+<li>getAction : En charge de retourne un patient demandé</li>
+<li>postAction : En charge de créer un patient</li>
+<li>putAction : En charge de mettre à jour un patient</li>
+<li>deleteAction : En charge de supprimer un patient</li>
+</ul>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">//Récupération des critères de filtrages possible</span>
+   <span class="nv">$sCodePatient</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParam</span><span class="p">(</span> <span class="s1">&#39;code_patient&#39;</span> <span class="p">);</span>
+   <span class="nv">$sDdn</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParam</span><span class="p">(</span> <span class="s1">&#39;ddn&#39;</span> <span class="p">);</span>
+
+   <span class="c1">//... Requête sur la DB pour récupérer les patients qui &quot;match&quot; et les placer dans le tableau $aResults ...</span>
+
+   <span class="nv">$aResponse</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;patient&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">()</span> <span class="p">);</span> <span class="c1">//Initialisation de la réponse pour production du XML de résultats</span>
+   <span class="k">foreach</span><span class="p">(</span> <span class="nv">$aResults</span> <span class="k">as</span> <span class="nv">$aRow</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nv">$aResponse</span><span class="p">[</span><span class="s1">&#39;patient&#39;</span><span class="p">][]</span> <span class="o">=</span> <span class="nv">$aRow</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="cm">/*</span>
+<span class="cm">    * $aResponse sera de la forme  :</span>
+<span class="cm">    * array(</span>
+<span class="cm">    *    &#39;patient&#39; =&gt; array(</span>
+<span class="cm">    *        array( &#39;id&#39; =&gt; 1, &#39;code_patient&#39; =&gt; &#39;AX145&#39;, ... ),</span>
+<span class="cm">    *        array( &#39;id&#39; =&gt; 2, &#39;code_patient&#39; =&gt; &#39;BP963&#39;, ... ),</span>
+<span class="cm">    *        array( &#39;id&#39; =&gt; 3, &#39;code_patient&#39; =&gt; &#39;CV442&#39;, ... ),</span>
+<span class="cm">    *     )</span>
+<span class="cm">    * )</span>
+<span class="cm">    */</span>
+
+   <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">success</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span> <span class="c1">//Facultatif car en l&#39;absence de cette variable elle est considérée comme == true</span>
+   <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">response</span> <span class="o">=</span> <span class="nv">$aResponse</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">getAction</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">//L&#39;identifiant fourni sera tjr contenu dans le paramètre &#39;id&#39;</span>
+   <span class="nv">$iId</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParam</span><span class="p">(</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+
+   <span class="c1">//... Query à la DB et affectation à la variable de vue : response ...</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">postAction</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">//Récupération des paramètre</span>
+   <span class="nv">$sCodePatient</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getParam</span><span class="p">(</span> <span class="s1">&#39;code_patient&#39;</span> <span class="p">);</span>
+
+   <span class="c1">//Vérification du paramètre : Obligatoire</span>
+   <span class="k">if</span> <span class="p">(</span> <span class="nb">is_null</span><span class="p">(</span> <span class="nv">$sCodePatient</span> <span class="p">)</span> <span class="o">||</span> <span class="o">!</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$sCodePatient</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+      <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">response</span> <span class="o">=</span> <span class="s1">&#39;La code patient doit être fourni&#39;</span><span class="p">;</span>
+      <span class="k">return</span><span class="p">;</span> <span class="c1">//Pour stopper l&#39;exécution de cette Action et laisser ZF rendre la vue result</span>
+   <span class="p">}</span>
+
+   <span class="c1">//... Suite du traitement des varialbe &amp; insertion ...</span>
+
+   <span class="c1">//La réponse pourrait très bien contenir l&#39;identifiant auto-généré du record patient (clé primaire)</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">putAction</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">//Récupération de l&#39;identifiant du patient à mettre à jour</span>
+
+   <span class="c1">//Mise à jour du record patient</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">deleteAction</span><span class="p">()</span> <span class="p">{</span>
+   <span class="c1">//Récupération de l&#39;identifiant du patient à supprimer</span>
+
+   <span class="c1">//Suppression du record patient</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Si pour un Webservice précis seule la récupération d&#8217;infos est autorisée (indexAction &amp; getAction) il est tout à fait possible de mettre dans les autres méthodes (postAction, putAction &amp; deleteAction) une réponse &#8220;basique&#8221; du type :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">response</span> <span class="o">=</span> <span class="s1">&#39;Méthode non disponible dans le cadre du Webservice lié au Patient&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="last">Il est important de retenir que les 5 méthodes doivents être définies, même si elle ne sont pas &#8220;ouvertes&#8221; au publique.</p>
+</div>
+</div>
+<div class="section" id="cote-client">
+<h3>Coté Client<a class="headerlink" href="#cote-client" title="Permalink to this headline">¶</a></h3>
+<p>Dans cette exemple nous utiliseront le composant <code class="docutils literal"><span class="pre">Zend_Rest_Client</span></code> pour requêter notre tout nouveau Webservice. Cette class intègre la logique d&#8217;appel REST et embarque un parsing de réponse XML.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Après appel à une méthode REST, par exemple <code class="docutils literal"><span class="pre">get()</span></code>, <code class="docutils literal"><span class="pre">post()</span></code> etc... le client retourne un objet <code class="docutils literal"><span class="pre">Zend_Rest_Client_Result</span></code> permettant de parcourir facilement le jeu de résultats :</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">$oResult-&gt;isSuccess()</span></code> : permet de savoir si la requête est un succès ou si elle a échouée</li>
+<li><code class="docutils literal"><span class="pre">$oResult-&gt;message</span></code> : Accesseur rapide à l&#8217;élément <code class="docutils literal"><span class="pre">&lt;message&gt;</span></code> du résultat</li>
+<li><code class="docutils literal"><span class="pre">$oResult-&gt;response</span></code> : Accesseur rapide à l&#8217;élément <code class="docutils literal"><span class="pre">&lt;response&gt;</span></code> du résultat</li>
+</ul>
+<p class="last">Les accesseurs rapides retournent un objet de type SimpleXMLElement.</p>
+</div>
+<p>Nous supposerons que la librarie Zend Framework est dans l&#8217;include_path de PHP, et que l&#8217;autoLoading est enregistré pour charger les classes ZF.</p>
+<dl class="docutils">
+<dt>Le modèle d&#8217;url d&#8217;accès aux Webservices sera donc ::</dt>
+<dd><a class="reference external" href="http://username:password&#64;projectx.voozanoo.net/vaccilab/moduleName/controllerName/[:id">http://username:password&#64;projectx.voozanoo.net/vaccilab/moduleName/controllerName/[:id</a>]</dd>
+</dl>
+<p>Exemple de script permettant de récupérer la liste des Patients dont le nom contient &#8220;MARTIN&#8221; nés en 1975 :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">//Création du client Rest</span>
+<span class="nv">$oClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Zend_Rest_Client</span><span class="p">(</span><span class="s1">&#39;http://l.hofstadter:123456@projectx.voozanoo.net/vaccilab/ws/patient&#39;</span><span class="p">);</span>
+
+<span class="c1">//Affectation des paramètres</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">nom</span><span class="p">(</span> <span class="s1">&#39;MARTIN&#39;</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">ddn_annee</span><span class="p">(</span> <span class="mi">1975</span> <span class="p">);</span>
+
+<span class="nv">$oResult</span> <span class="o">=</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">isSuccess</span><span class="p">()</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="k">foreach</span><span class="p">(</span> <span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">response</span><span class="o">-&gt;</span><span class="na">patient</span> <span class="k">as</span> <span class="nv">$oPatient</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//$oPatient est un objet SimpleXMLElement contenant les infos relative au patient</span>
+      <span class="k">echo</span> <span class="nv">$oPatient</span><span class="o">-&gt;</span><span class="na">code_patient</span> <span class="o">.</span> <span class="s1">&#39; - &#39;</span> <span class="o">.</span> <span class="nv">$oPatient</span><span class="o">-&gt;</span><span class="na">nom</span> <span class="o">.</span> <span class="s1">&#39;(&#39;</span> <span class="o">.</span> <span class="nv">$oPatient</span><span class="o">-&gt;</span><span class="na">ddn</span> <span class="o">.</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="cm">/*</span>
+<span class="cm">    * L&#39;affichage généré pourrait être :</span>
+<span class="cm">    * A4123 - MARTIN - 1975-01-14</span>
+<span class="cm">    * K8874 - MARTINEZ - 1975-12-02</span>
+<span class="cm">    * B4326 - MARTINO - 1975-10-23</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">&quot;Une erreur est survenur : &quot;</span> <span class="o">.</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">message</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Exemple de script permettant de créer une nouveau patient :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="c1">//Création du client Rest</span>
+<span class="c1">//Note : c&#39;est la même URL que lors de la récupération des patient, seule la méthode d&#39;appel HTTP sera différente</span>
+<span class="nv">$oClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Zend_Rest_Client</span><span class="p">(</span><span class="s1">&#39;http://l.hofstadter:123456@projectx.voozanoo.net/vaccilab/ws/patient&#39;</span><span class="p">);</span>
+
+<span class="c1">//Affectation des paramètres pour la création</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">nom</span><span class="p">(</span> <span class="s1">&#39;COOPER&#39;</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">prenom</span><span class="p">(</span> <span class="s1">&#39;Shelly&#39;</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">ddn</span><span class="p">(</span> <span class="mi">1981</span><span class="o">-</span><span class="mo">05</span><span class="o">-</span><span class="mi">14</span> <span class="p">);</span>
+<span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">sexe</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span>
+
+<span class="nv">$oResult</span> <span class="o">=</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="p">(</span> <span class="nv">$oResult</span><span class="o">-&gt;</span><span class="na">isSuccess</span><span class="p">()</span> <span class="p">)</span>
+<span class="p">{</span>
+   <span class="k">echo</span> <span class="s2">&quot;Création réussi : &quot;</span> <span class="o">.</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">response</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">;</span> <span class="c1">//Si le serveur renvoi l&#39;id auto-incrémenté lors de l&#39;insert</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+   <span class="k">echo</span> <span class="s2">&quot;Une erreur est survenur : &quot;</span> <span class="o">.</span> <span class="nv">$oClient</span><span class="o">-&gt;</span><span class="na">message</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="liens-utiles">
+<span id="ws-liens-utiles"></span><h2>Liens utiles<a class="headerlink" href="#liens-utiles" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Zend Framework :</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.rest.client.html">Zend_Rest_Client</a></li>
+<li><a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.controller.router.html#zend.controller.router.routes.rest">Zend_Rest_Route / Zend_Rest_Controller</a></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.php.net/manual/en/class.simplexmlelement.php">SimpleXMLElement</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://fr.wikipedia.org/wiki/Representational_State_Transfer">REST</a></p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Webservices</a><ul>
+<li><a class="reference internal" href="#technologie-utilisee">Technologie utilisée</a></li>
+<li><a class="reference internal" href="#implementation-dans-voozanoo4-partie-serveur">Implémentation dans Voozanoo4 (Partie &#8220;Serveur&#8221;)</a><ul>
+<li><a class="reference internal" href="#le-routing">Le Routing</a></li>
+<li><a class="reference internal" href="#l-authentification">L&#8217;authentification</a></li>
+<li><a class="reference internal" href="#traitement-d-une-requete">Traitement d&#8217;une requête</a></li>
+<li><a class="reference internal" href="#communication-de-la-reponse">Communication de la réponse</a><ul>
+<li><a class="reference internal" href="#conversion-d-une-reponse-array-en-arbre-xml">Conversion d&#8217;une réponse &#8220;Array&#8221; en arbre XML</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#en-cas-d-exception">En cas d&#8217;Exception</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mettre-en-place-un-webservice">Mettre en place un Webservice</a><ul>
+<li><a class="reference internal" href="#cote-server">Coté Server</a></li>
+<li><a class="reference internal" href="#cote-client">Coté Client</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#liens-utiles">Liens utiles</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="script_player.html"
+                        title="previous chapter">Script Player</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/webservices.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="script_player.html" title="Script Player"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

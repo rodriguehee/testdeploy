@@ -1,0 +1,16 @@
+﻿.. _autocompletion:
+
+Autocomplétion
+==============
+Introduction
+------------
+Le composant sert à aller chercher dans la base de données un dataset via un champ autcompletion.
+
+.. image:: ../images/autocompletion1.png
+
+Flux
+----
+
+.. image:: ../images/autocompletion_flux1.png
+
+.. image:: ../images/autocompletion_flux2.png

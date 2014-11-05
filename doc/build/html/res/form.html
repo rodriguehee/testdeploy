@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Form &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Ressources" href="../ressources.html" />
+    <link rel="next" title="Dataquery" href="dataquery.html" />
+    <link rel="prev" title="Varset" href="varset.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dataquery.html" title="Dataquery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="varset.html" title="Varset"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" accesskey="U">Ressources</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="form">
+<span id="id1"></span><h1>Form<a class="headerlink" href="#form" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Le XML de questionnaire sert à décrire la mise en page d&#8217;un questionnaire. Cela correspond à la notion de page dans Voozanoo3, à l&#8217;exception que dans Voozanoo4 il est possible d&#8217;afficher des variables qui proviennent de plusieurs tables.</p>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;form&gt;</span>
+  <span class="nt">&lt;config&gt;</span>
+    <span class="c">&lt;!-- Configuration spécifique pour le formulaire --&gt;</span>
+    <span class="nt">&lt;display_path&gt;</span>module/controller/action<span class="nt">&lt;/display_path&gt;</span>
+    <span class="nt">&lt;save_path&gt;</span>module/controller/action<span class="nt">&lt;/save_path&gt;</span>
+    <span class="nt">&lt;delete_path&gt;</span>module/controller/action<span class="nt">&lt;/delete_path&gt;</span>
+    <span class="nt">&lt;getdataset_path&gt;</span>module/controller/action<span class="nt">&lt;/getdataset_path&gt;</span>
+    <span class="nt">&lt;frame_js_class_name&gt;</span>FrameClassName<span class="nt">&lt;/frame_js_class_name&gt;</span>
+  <span class="nt">&lt;/config&gt;</span>
+
+  <span class="nt">&lt;data_structure&gt;</span>
+    <span class="c">&lt;!-- Contient la définition de tous les dataset sous la forme de dataquery --&gt;</span>
+        <span class="nt">&lt;dataquery/&gt;</span>
+        <span class="nt">&lt;dataquery/&gt;</span>
+  <span class="nt">&lt;/data_structure&gt;</span>
+
+  <span class="nt">&lt;layout&gt;</span>
+    <span class="c">&lt;!-- Contient la mise en page du questionnaire. Les dataset sont utilisés dans le layout --&gt;</span>
+  <span class="nt">&lt;/layout&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
+</div>
+<p>La partie données (data_structure) est séparée de la partie mise en page (layout).</p>
+</div>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>Ce noeud permet de configurer le formulaire de manière spécifique. Il n&#8217;est pas obligatoire d&#8217;avoir ne noeud dans le Xml de formulaire, des valeurs par défaut sont définies.</p>
+<div class="section" id="display-path">
+<h3>Display Path<a class="headerlink" href="#display-path" title="Permalink to this headline">¶</a></h3>
+<p>Permet d&#8217;indiquer quel Uri (Module/Controller/Action) sera utilisée pour récupérer la configuration servant à afficher le formulaire.</p>
+<p>Par défaut : <code class="docutils literal"><span class="pre">form/frame/get</span></code></p>
+</div>
+<div class="section" id="save-path">
+<h3>Save Path<a class="headerlink" href="#save-path" title="Permalink to this headline">¶</a></h3>
+<p>Permet d&#8217;indiquer quel Uri (Module/Controller/Action) sera utilisée pour sauvegarder les données formulaire.</p>
+<p>Par défaut : <code class="docutils literal"><span class="pre">form/frame/save</span></code></p>
+</div>
+<div class="section" id="delete-path">
+<h3>Delete Path<a class="headerlink" href="#delete-path" title="Permalink to this headline">¶</a></h3>
+<p>Permet d&#8217;indiquer quel Uri (Module/Controller/Action) sera utilisée pour supprimer des rows d&#8217;un dataset</p>
+<p>Par défaut : <code class="docutils literal"><span class="pre">form/frame/delete</span></code></p>
+</div>
+<div class="section" id="getdataset-path">
+<h3>Getdataset Path<a class="headerlink" href="#getdataset-path" title="Permalink to this headline">¶</a></h3>
+<p>Permet d&#8217;indiquer quel Uri (Module/Controller/Action) sera utilisée pour récupérer une nouvelle version d&#8217;un dataset</p>
+<p>Par défaut : <code class="docutils literal"><span class="pre">form/frame/getdataset</span></code></p>
+</div>
+<div class="section" id="frame-js-class-name">
+<h3>Frame JS Class Name<a class="headerlink" href="#frame-js-class-name" title="Permalink to this headline">¶</a></h3>
+<p>Permet d&#8217;indiquer le nom de la classe Javascript à instancier pour représenter la Frame.</p>
+<p>Par défaut : <code class="docutils literal"><span class="pre">FrameForm</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Cette classe doit être définie comme un &#8220;Module YUI3&#8221; sans quoi une erreur JS sera levée car la classe sera introuvable (Cf. YuiConf)</p>
+</div>
+</div>
+</div>
+<div class="section" id="data-structure">
+<h2>Data structure<a class="headerlink" href="#data-structure" title="Permalink to this headline">¶</a></h2>
+<p>Ce noeud contient les models (structure + données).</p>
+<p>Un model peut être défini par:</p>
+<ul class="simple">
+<li><a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a></li>
+<li><a class="reference internal" href="dataset.html#dataset"><em>Dataset</em></a> / <a class="reference internal" href="invokable_dataset.html#invokable-dataset"><em>Invokable Dataset</em></a></li>
+</ul>
+</div>
+<div class="section" id="layout">
+<h2>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<p>Voir la sesion <a class="reference internal" href="layout.html#layout"><em>Layout</em></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Form</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+<li><a class="reference internal" href="#config">Config</a><ul>
+<li><a class="reference internal" href="#display-path">Display Path</a></li>
+<li><a class="reference internal" href="#save-path">Save Path</a></li>
+<li><a class="reference internal" href="#delete-path">Delete Path</a></li>
+<li><a class="reference internal" href="#getdataset-path">Getdataset Path</a></li>
+<li><a class="reference internal" href="#frame-js-class-name">Frame JS Class Name</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-structure">Data structure</a></li>
+<li><a class="reference internal" href="#layout">Layout</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="varset.html"
+                        title="previous chapter">Varset</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dataquery.html"
+                        title="next chapter">Dataquery</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/res/form.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dataquery.html" title="Dataquery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="varset.html" title="Varset"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" >Ressources</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

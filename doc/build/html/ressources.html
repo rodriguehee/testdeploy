@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ressources &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Varset" href="res/varset.html" />
+    <link rel="prev" title="R Statistical Computing" href="r.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="res/varset.html" title="Varset"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="r.html" title="R Statistical Computing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ressources">
+<span id="id1"></span><h1>Ressources<a class="headerlink" href="#ressources" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Les ressources représentent les varsets, les formulaires, ..., et sont au format XML.</p>
+</div>
+<div class="section" id="stockage">
+<h2>Stockage<a class="headerlink" href="#stockage" title="Permalink to this headline">¶</a></h2>
+<p>Les ressources sont référencés dans la table des ressources (xxx_pj_resource) de chage projet.
+Cette table peut contenir la ressource (champ content), ou bien le chemin vers le fichier (champ filename).
+Le chemin est construit à partir de la constante voozanoo.resources.path déclarée dans le fichier ini du projet (ou du noyau).</p>
+<p>Ex:
+voozanoo.resources.path = APPLICATION_PATH &#8220;/ressources&#8221;</p>
+<p>NB: le programme va d&#8217;abord vérfier si filename est renseigné, puis content (une exception est levée si les deux champs sont à NULL).</p>
+</div>
+<div class="section" id="acces-direct">
+<h2>Accès direct<a class="headerlink" href="#acces-direct" title="Permalink to this headline">¶</a></h2>
+<p>Il est possible d&#8217;accéder directement à une ressource sur le disque, sans la stocker dans la table, en passant le paramètre &#8220;file&#8221;.</p>
+<p>Ex:
+<a class="reference external" href="http://localhost/VOO4_PROJECTX/public/vaccilab/mainframe/index/one/file/form.new_user">http://localhost/VOO4_PROJECTX/public/vaccilab/mainframe/index/one/file/form.new_user</a></p>
+<p>Le système va chercher dans le répertoire des ressources (défini dans le fichier ini sous la constante &#8220;voozanoo.resources.path&#8221;)
+le fichier portant le nom form.new_user.xml (l&#8217;extension xml est ajoutéé automatiquement si rien n&#8217;est indiqué).</p>
+<p>On peut aussi saisir un chemin avec le paramètre &#8220;path&#8221; (les répertoires doivent être séparés par des underscore).</p>
+<p>Ex:
+<a class="reference external" href="http://localhost/VOO4_PROJECTX/public/vaccilab/mainframe/index/one/file/form.new_user/path/xml_form">http://localhost/VOO4_PROJECTX/public/vaccilab/mainframe/index/one/file/form.new_user/path/xml_form</a></p>
+<p>Le système va chercher la ressource dans: [voozanoo.resources.path]/xml/form/form.new_user.xml</p>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="varset">
+<h3><a class="reference internal" href="res/varset.html#varset"><em>Varset</em></a><a class="headerlink" href="#varset" title="Permalink to this headline">¶</a></h3>
+<p>Contient la description d&#8217;un ensemble de variables. C&#8217;est ce qui ce rapproche du &#8220;Questionnaire&#8221; en Voozanoo3.</p>
+</div>
+<div class="section" id="form">
+<h3><a class="reference internal" href="res/form.html#form"><em>Form</em></a><a class="headerlink" href="#form" title="Permalink to this headline">¶</a></h3>
+<p>Contient la description d&#8217;un formulaire regroupant :</p>
+<ul class="simple">
+<li>Les données nécessaires au formulaire (<code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code>)</li>
+<li>La présentation du formulaire  (<code class="docutils literal"><span class="pre">&lt;layout&gt;</span></code>)</li>
+</ul>
+</div>
+<div class="section" id="dataquery">
+<h3><a class="reference internal" href="res/dataquery.html#dataquery"><em>Dataquery</em></a><a class="headerlink" href="#dataquery" title="Permalink to this headline">¶</a></h3>
+<p>Représente une requête de récupération de données (l&#8217;équivalent d&#8217;une requête SQL).</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">Cette ressource peut exister en &#8220;standalone&#8221; (pour les exports) mais est très généralement présente dans une ressource de type <code class="docutils literal"><span class="pre">form</span></code> (partie <code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code>)</p>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Après exécution un DataQuery donne un DataSet</p>
+</div>
+</div>
+<div class="section" id="layout">
+<h3><a class="reference internal" href="res/layout.html#layout"><em>Layout</em></a><a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
+<p>Contient la description de la partie présentation d&#8217;un formulaire (Interface graphique)</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">Cette ressource n&#8217;existe <strong>pas</strong> en &#8220;standalone&#8221; elle est systématiquement incluse dans une ressource de type <code class="docutils literal"><span class="pre">form</span></code></p>
+</div>
+</div>
+<div class="section" id="dataset">
+<h3><a class="reference internal" href="res/dataset.html#dataset"><em>Dataset</em></a><a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h3>
+<p>Représent un ensemble de données, résultant principale de l&#8217;exécution d&#8217;un DataQuery. Cependant il est possible, dans une ressource <code class="docutils literal"><span class="pre">form</span></code>, de créer directement un DataSet.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>Lorsqu&#8217;on créer un &#8220;Filtre&#8221; sur un formulaire on utilise systématiquement un DataSet et non un DataQuery, le filtre n&#8217;étant (par nature) pas une récupération de données mais directement un ensemble de données.</p>
+<p class="last">De plus on spécifiera fréquemment l&#8217;attribut <code class="docutils literal"><span class="pre">type=&quot;filter&quot;</span></code> sur le noeud <code class="docutils literal"><span class="pre">&lt;dataset&gt;</span></code> pour activer la persistence des valeurs de filtre saisies.</p>
+</div>
+</div>
+<div class="section" id="invokable-dataset">
+<h3><a class="reference internal" href="res/invokable_dataset.html#invokable-dataset"><em>Invokable Dataset</em></a><a class="headerlink" href="#invokable-dataset" title="Permalink to this headline">¶</a></h3>
+<p>Représente un DataSet &#8220;déjà construit&#8221; et utilisable directement.</p>
+</div>
+</div>
+<div class="section" id="liste">
+<h2>Liste<a class="headerlink" href="#liste" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="res/varset.html">Varset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="res/form.html">Form</a></li>
+<li class="toctree-l1"><a class="reference internal" href="res/dataquery.html">Dataquery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="res/layout.html">Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="res/dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="res/invokable_dataset.html">Invokable Dataset</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Ressources</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#stockage">Stockage</a></li>
+<li><a class="reference internal" href="#acces-direct">Accès direct</a></li>
+<li><a class="reference internal" href="#description">Description</a><ul>
+<li><a class="reference internal" href="#varset"><code class="docutils literal"><span class="pre">varset</span></code></a></li>
+<li><a class="reference internal" href="#form"><code class="docutils literal"><span class="pre">form</span></code></a></li>
+<li><a class="reference internal" href="#dataquery"><code class="docutils literal"><span class="pre">dataquery</span></code></a></li>
+<li><a class="reference internal" href="#layout"><code class="docutils literal"><span class="pre">layout</span></code></a></li>
+<li><a class="reference internal" href="#dataset"><code class="docutils literal"><span class="pre">dataset</span></code></a></li>
+<li><a class="reference internal" href="#invokable-dataset"><code class="docutils literal"><span class="pre">invokable_dataset</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#liste">Liste</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="r.html"
+                        title="previous chapter">R Statistical Computing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="res/varset.html"
+                        title="next chapter">Varset</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ressources.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="res/varset.html" title="Varset"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="r.html" title="R Statistical Computing"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

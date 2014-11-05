@@ -1,0 +1,89 @@
+﻿.. _form:
+
+Form
+====
+
+Description
+-----------
+Le XML de questionnaire sert à décrire la mise en page d'un questionnaire. Cela correspond à la notion de page dans Voozanoo3, à l'exception que dans Voozanoo4 il est possible d'afficher des variables qui proviennent de plusieurs tables.
+
+Structure
+---------
+
+.. code-block:: xml
+
+	<form>
+	  <config>
+	    <!-- Configuration spécifique pour le formulaire -->
+	    <display_path>module/controller/action</display_path>
+	    <save_path>module/controller/action</save_path>
+	    <delete_path>module/controller/action</delete_path>
+	    <getdataset_path>module/controller/action</getdataset_path>
+	    <frame_js_class_name>FrameClassName</frame_js_class_name>
+	  </config>
+
+	  <data_structure>
+	    <!-- Contient la définition de tous les dataset sous la forme de dataquery -->
+		<dataquery/>
+		<dataquery/>
+	  </data_structure>
+
+	  <layout>
+	    <!-- Contient la mise en page du questionnaire. Les dataset sont utilisés dans le layout -->
+	  </layout>
+	</form>
+
+La partie données (data_structure) est séparée de la partie mise en page (layout).
+
+Config
+------
+Ce noeud permet de configurer le formulaire de manière spécifique. Il n'est pas obligatoire d'avoir ne noeud dans le Xml de formulaire, des valeurs par défaut sont définies.
+
+Display Path
+^^^^^^^^^^^^
+Permet d'indiquer quel Uri (Module/Controller/Action) sera utilisée pour récupérer la configuration servant à afficher le formulaire.
+
+Par défaut : ``form/frame/get``
+
+Save Path
+^^^^^^^^^
+Permet d'indiquer quel Uri (Module/Controller/Action) sera utilisée pour sauvegarder les données formulaire.
+
+Par défaut : ``form/frame/save``
+
+Delete Path
+^^^^^^^^^^^
+Permet d'indiquer quel Uri (Module/Controller/Action) sera utilisée pour supprimer des rows d'un dataset
+
+Par défaut : ``form/frame/delete``
+
+Getdataset Path
+^^^^^^^^^^^^^^^
+Permet d'indiquer quel Uri (Module/Controller/Action) sera utilisée pour récupérer une nouvelle version d'un dataset
+
+Par défaut : ``form/frame/getdataset``
+
+Frame JS Class Name
+^^^^^^^^^^^^^^^^^^^
+Permet d'indiquer le nom de la classe Javascript à instancier pour représenter la Frame.
+
+Par défaut : ``FrameForm``
+
+.. note::
+	Cette classe doit être définie comme un "Module YUI3" sans quoi une erreur JS sera levée car la classe sera introuvable (Cf. YuiConf)
+
+
+Data structure
+--------------
+
+Ce noeud contient les models (structure + données).
+
+Un model peut être défini par:
+
+* :ref:`dataquery`
+* :ref:`dataset` / :ref:`invokable_dataset`
+
+Layout
+------
+
+Voir la sesion :ref:`layout`

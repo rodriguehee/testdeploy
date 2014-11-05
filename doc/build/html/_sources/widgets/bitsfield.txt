@@ -1,0 +1,58 @@
+﻿.. _widgetbitsfield:
+
+WidgetBitsField
+===============
+
+Fonction
+--------
+Hérite de :ref:`widgetfield`
+
+Ce composé est utilisé pour représenter un champ de bits par des cases à cocher. La case à cocher la plus à gauche représentant le bit 0 et la plus à droite au maximum le bit 7.
+En retour, il renvoie un entier représentant la valeur binaire sélectionnée.
+
+Le template de rendu est :
+
+.. code-block:: html
+    
+    <input type="checkbox" id="{idUnique} value="2^i" />
+    <label>{sLabel}</label>
+
+Attributs
+---------
+
+Les attributs sont les mêmes que pour :ref:`widgetfield`
+
+    
+Options
+-------
+
+widget
+^^^^^^
+
+Value : WidgetBitsField
+
+.. code-block:: xml
+
+	<option output="html" option_name="widget" value="WidgetBitsField" />
+
+labels
+^^^^^^
+
+Type: string
+
+Fonction: Détermine les labels de chaque case à cocher, et donc le nombre de case à cocher
+
+.. code-block:: xml
+
+        <option output="html" option_name="labels" value="liste,de,labels" />
+
+
+Exemple complet :
+
+.. code-block:: xml
+
+    <value dataset="project" field="project_auth" mode="rw" >
+        <option output="html" option_name="widget" value="WidgetBitsField" />
+        <option output="html" option_name="labels" value="Password,CPS strict,CPS choice,SSO" />
+    </value>
+

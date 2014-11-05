@@ -1,0 +1,51 @@
+﻿.. _lib:
+
+Librairie
+=========
+Introduction
+------------
+La lib Voozanoo est en ensemble d'objets PHP qui vont permettre de manipuler les entitées telles que les projets, questionnaires, question, ...
+
+Règles de programmation
+-----------------------
+Syntaxe
+~~~~~~~
+Exemple d'un code Voozanoo4:
+
+.. code-block:: php
+
+	$Account->ProjectCount();
+	$Account->Project['vaccilab']->Table['patient']->Select();
+	$Account->Project['vaccilab']->Table['patient']->RealName();
+	$Account->Project['vaccilab']->Table['patient']->Fields['nom']->type;
+
+	$Account->Project['vaccilab']->Table['patient']->Where('nom=Seb')->Table['bilan']->where('date=2010-02-24');
+	
+.. code-block:: php
+
+	$sProjectName = « vaccilab »;
+	$sTableName = « patient »;
+
+	$Account->Project[$sProjectName]->Table[$sTableName]->Select();
+
+	//Récupération du dernier bilan d'un patient
+	$object = $Account->Project[$sProjectName]->Table[$sTableName]->Where($iRecordId);
+	$object->ShowOnForm();
+
+	$object2 = $Table['bilan']->last();
+	$object2->ShowOnForm();
+	
+Stockage des objets
+~~~~~~~~~~~~~~~~~~~
+Tous les objets seront définis par XML stockés en DB. Les ressources statiques (XSD, XSLT, TPL, SQL, ...) partagées par tous les comptes et tous les projets seront elles stockées sur le disque.
+
+Cohérence des objets
+~~~~~~~~~~~~~~~~~~~~
+Description du cas: plusieurs objets décrits sous forme de XML, utilisent une variable X, cette variable X est supprimée par l'utilisateur. Comment trouver ces objets rapidement?
+Test de la cohérence des données en utilisant les XSD. Les XML (quelque soit leur structure) seront transformés (xslt) en XML de même structure pour pouvoir les valider avec le même XSD.
+
+Diagramme de class
+------------------
+
+.. image:: ../images/voo4_class_v4.png
+

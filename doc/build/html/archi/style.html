@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Style &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Architecture" href="../architecture.html" />
+    <link rel="next" title="Template INED" href="template_ined.html" />
+    <link rel="prev" title="Session" href="session.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="template_ined.html" title="Template INED"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="session.html" title="Session"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" accesskey="U">Architecture</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="style">
+<span id="id1"></span><h1>Style<a class="headerlink" href="#style" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="principe">
+<h2>Principe<a class="headerlink" href="#principe" title="Permalink to this headline">¶</a></h2>
+<p>Les styles (CSS) d&#8217;un projet Voozanoo4 ne sont pas gérés via une feuille de styles classique (*.css). Vu que la couleur dominante d&#8217;un
+projet est paramétrable, c&#8217;est un algorithme Php qui prend en charge les nuances de couleurs (<code class="docutils literal"><span class="pre">Core_Library_Resource_XML_Style</span></code>).</p>
+<p>C&#8217;est le controller <code class="docutils literal"><span class="pre">Index</span></code> du module <code class="docutils literal"><span class="pre">Style</span></code> qui prend en charge la demande de feuille de style et qui manipule <code class="docutils literal"><span class="pre">Core_Library_Resource_XML_Style</span></code>.
+C&#8217;est donc une Vue (*.phtml) qui est rendue (celle-ci contient donc des règles CSS et du PHP).</p>
+</div>
+<div class="section" id="fonctionnement">
+<h2>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h2>
+<p>Ce controller accepte le paramètre <code class="docutils literal"><span class="pre">name</span></code> (via l&#8217;url), il utilise ce paramètre pour rendre la vue demandée, <code class="docutils literal"><span class="pre">style/index/index/name/foo</span></code> induira le rendue de la vue <code class="docutils literal"><span class="pre">foo.phtml</span></code>.</p>
+<p>Par défaut le paramètre <code class="docutils literal"><span class="pre">name</span></code> vaut &#8220;default&#8221;, ce qui correspond à la feuille de style du noyau.</p>
+<p>Extrait de la vue <code class="docutils literal"><span class="pre">default.phtml</span></code></p>
+<div class="highlight-css+php"><div class="highlight"><pre><span class="nt">clear</span> <span class="p">{</span> <span class="k">clear</span><span class="o">:</span><span class="k">both</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.error</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">ErrorColor</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">ErrorColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">ErrorColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">font</span><span class="o">:</span><span class="k">bold</span> <span class="m">100%</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">FontFamily</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.warning</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">WarningColor</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">WarningColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">WarningColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">font</span><span class="o">:</span><span class="k">bold</span> <span class="m">100%</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">FontFamily</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.notice</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">NoticeColor</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">NoticeColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">NoticeColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">font</span><span class="o">:</span><span class="k">bold</span> <span class="m">100%</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">FontFamily</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.info</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">InfoColor</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">InfoColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">color</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">InfoColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="k">font</span><span class="o">:</span><span class="k">bold</span> <span class="m">100%</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">FontFamily</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.hidden</span> <span class="p">{</span> <span class="k">visibility</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span> <span class="p">}</span>
+<span class="nc">.waiting-message</span> <span class="p">{</span> <span class="k">background</span><span class="o">:</span><span class="k">transparent</span> <span class="sx">url(&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">ImagesURL</span><span class="p">()</span> <span class="cp">?&gt;</span><span class="sx">/busy.gif&quot;)</span> <span class="k">no-repeat</span> <span class="k">top</span> <span class="k">center</span><span class="p">;</span> <span class="k">padding</span><span class="o">:</span><span class="m">20px</span><span class="p">;</span> <span class="k">text-align</span><span class="o">:</span><span class="k">center</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="nt">body</span>
+<span class="p">{</span>
+        <span class="k">font</span><span class="o">:</span><span class="k">normal</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">FontSize</span><span class="p">()</span><span class="cp">?&gt;</span> <span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">FontFamily</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span>
+        <span class="k">color</span><span class="o">:</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">BlackColor</span><span class="p">()</span><span class="cp">?&gt;</span><span class="p">;</span>
+        <span class="k">background</span><span class="o">:</span> <span class="sx">url(&quot;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">oStyle</span><span class="o">-&gt;</span><span class="na">ImagesURL</span><span class="p">()</span><span class="cp">?&gt;</span><span class="sx">/background.png&quot;)</span> <span class="k">repeat-x</span> <span class="k">scroll</span> <span class="m">0</span> <span class="m">0</span> <span class="m">#c8e0e9</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="injection-des-feuilles-de-style">
+<h3>Injection des feuilles de style<a class="headerlink" href="#injection-des-feuilles-de-style" title="Permalink to this headline">¶</a></h3>
+<p>L&#8217;injection des feuilles de style s&#8217;effectue dans la classe Core_Library_Controller_Action, normalement parente de tout controller Voozanoo4.</p>
+<p>La méthode <code class="docutils literal"><span class="pre">init()</span></code> de cette classe appelle <code class="docutils literal"><span class="pre">_addCoreViewScriptPath()</span></code> en charge de fournir des fallback de vue en cas d&#8217;absence coté projet. C&#8217;est également à cet endroit que la feuille de style du noyau &amp; du projet est ajoutée.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>La totalité des vues du noyau utilisent l&#8217;aide de vue <a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.view.helpers.html#zend.view.helpers.initial.headlink">headLink</a> qui permet de manipuler
+les feuilles de style coté Controller ou coté Vue.</p>
+<p class="last">Par conséquent il est recommandé d&#8217;utiliser cette aide de vue en cas de surcharge d&#8217;une vue Noyau dans un projet (Exemple : <code class="docutils literal"><span class="pre">mainframe.phtml</span></code>).</p>
+</div>
+</div>
+</div>
+<div class="section" id="utilisation">
+<h2>Utilisation<a class="headerlink" href="#utilisation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="personnalisation-de-tout-un-projet">
+<h3>Personnalisation de tout un projet<a class="headerlink" href="#personnalisation-de-tout-un-projet" title="Permalink to this headline">¶</a></h3>
+<p>Même si la vue <code class="docutils literal"><span class="pre">default.phtml</span></code> inclut plusieurs règles CSS communes et utiles à tout projet Voozanoo 4 il est possible de personnaliser tout un projet pour y inclure une charte graphique propre.</p>
+<p>Pour ce faire il suffit de placer la vue <code class="docutils literal"><span class="pre">&lt;nomDuProjet&gt;.phtml</span></code> dans <code class="docutils literal"><span class="pre">modules/style/views/scripts/index/</span></code> coté projet.</p>
+<p>Cette vue sera automatiquement utilisée comme feuille de style et incluse après l&#8217;inclusion de la feuille de style par défaut, permettant de surcharger / ajouter n&#8217;importe quelle règle CSS.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Cette feuille de style sera incluse dans chaque page nativement présente dans Voozanoo4</p>
+</div>
+</div>
+<div class="section" id="personnalisation-specifique">
+<h3>Personnalisation spécifique<a class="headerlink" href="#personnalisation-specifique" title="Permalink to this headline">¶</a></h3>
+<p>Il est possible d&#8217;ajouter une feuille de style précise pour une action spécifique, il suffit d&#8217;utiliser l&#8217;aide de vue headLink en ajoutant la feuille de style désiré (Css pur ou en pasant par le système de partiel)</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">Foo_IndexController</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_Action</span>
+<span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">init</span><span class="p">()</span>
+        <span class="p">{</span>
+                <span class="k">parent</span><span class="o">::</span><span class="na">init</span><span class="p">();</span>
+
+                <span class="c1">//Ajoutera cette CSS pour toutes les actions de ce controller</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">headLink</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">appendStylesheet</span><span class="p">(</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">baseUrl</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/resources/css/foo.css&#39;</span> <span class="p">);</span> <span class="c1">//Version CSS pure</span>
+
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">headLink</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">appendStylesheet</span><span class="p">(</span> <span class="nv">$oProject</span><span class="o">-&gt;</span><span class="na">GetURL</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/style/index/index/name/foo&#39;</span> <span class="p">);</span> <span class="c1">//Version &quot;parsée&quot; par le moteur de style</span>
+
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">barAction</span><span class="p">()</span>
+        <span class="p">{</span>
+                <span class="c1">//Ajoute cette feuille de style uniquement pour l&#39;action &quot;bar&quot;</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">view</span><span class="o">-&gt;</span><span class="na">headLink</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">appendStylesheet</span><span class="p">(</span> <span class="nv">$oProject</span><span class="o">-&gt;</span><span class="na">GetURL</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/style/index/index/name/bar&#39;</span> <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//A noter : Les vues doivent effectuer un &quot;echo $this-&gt;headLink();&quot; au bon endroit</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Style</a><ul>
+<li><a class="reference internal" href="#principe">Principe</a></li>
+<li><a class="reference internal" href="#fonctionnement">Fonctionnement</a><ul>
+<li><a class="reference internal" href="#injection-des-feuilles-de-style">Injection des feuilles de style</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">Utilisation</a><ul>
+<li><a class="reference internal" href="#personnalisation-de-tout-un-projet">Personnalisation de tout un projet</a></li>
+<li><a class="reference internal" href="#personnalisation-specifique">Personnalisation spécifique</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="session.html"
+                        title="previous chapter">Session</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="template_ined.html"
+                        title="next chapter">Template INED</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/archi/style.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="template_ined.html" title="Template INED"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="session.html" title="Session"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

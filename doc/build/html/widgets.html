@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Composants graphiques &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="WidgetActionList" href="widgets/actionlist.html" />
+    <link rel="prev" title="Base de données" href="bdd.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="widgets/actionlist.html" title="WidgetActionList"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bdd.html" title="Base de données"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="composants-graphiques">
+<span id="widgets"></span><h1>Composants graphiques<a class="headerlink" href="#composants-graphiques" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Le terme &#8220;composants graphiques&#8221; (appelés également &#8220;Widgets&#8221;) regroupe les composants utilisés pour représenter un champ ou tout élément graphique à l&#8217;écran.</p>
+<p>Ils sont regroupés dans &#8220;Voozanoo4/libs/VooLibJs/frame/layout/widget&#8221;</p>
+<p>Tous les composants dérivent : <a class="reference internal" href="widgets/base.html#widgetbase"><em>WidgetBase</em></a>.</p>
+<p>Les Widgets Voozanoo4 (et en règle général toutes les classes de Voo4) sont déclarés comme des <a class="reference external" href="http://yuilibrary.com/yui/docs/yui/create.html">modules Yui3</a>. Afin de bénéficier de l&#8217;autoLoading des classes (et ne pas ajouter X balise &lt;script src=&#8221;&#8220;&gt;&lt;/script&gt; dans chaque page) il est necessaire de spécifier à Yui quels modules sont disponibles et où se trouvent les sources (.js).</p>
+<p>La création de la configuration Yui nécessaire au bon fonctionnement de l&#8217;application est réalisée par la classe PHP <a class="reference internal" href="yuiconf.html#yuiconf"><em>Core_Library_YuiConf</em></a></p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Un important refactoring début 2013 a modifié la structure du JSON fourni pour la confirmation de la Frame, les widgets n&#8217;exploitent plus les Attributs et les Options comme avant. Dorénavant la
+configuration/définition du Widget est contenue dans oWidgetDef (Attribut de <a class="reference internal" href="widgets/base.html#widgetbase"><em>WidgetBase</em></a>)</p>
+</div>
+</div>
+<div class="section" id="attributs-et-options">
+<h2>Attributs et Options<a class="headerlink" href="#attributs-et-options" title="Permalink to this headline">¶</a></h2>
+<p>Il est possible de passer des Attributs et des Options aux Widgets (via le XML).</p>
+<div class="section" id="acces-communs-aux-attributs-et-aux-options">
+<h3>Accès communs aux Attributs et aux Options<a class="headerlink" href="#acces-communs-aux-attributs-et-aux-options" title="Permalink to this headline">¶</a></h3>
+<p>La composant Y.WidgetBase, parent de tous les Widgets embarque la méthode <code class="docutils literal"><span class="pre">GetWidgetDefValue(</span> <span class="pre">sPath,</span> <span class="pre">mDefault</span> <span class="pre">)</span></code> permettant de récupérer un attribut précis ou une option précise en fournissant son &#8220;chemin&#8221; (<code class="docutils literal"><span class="pre">path</span></code>).</p>
+<p>Le chemin permet d&#8217;identifier la variable que l&#8217;ont souhaite atteindre, pour les attributs le chemin sera court : <code class="docutils literal"><span class="pre">attr1</span></code> ou <code class="docutils literal"><span class="pre">attr2</span></code>.</p>
+<p>Pour les options ce chemin sera plus long, chaque niveau étant représenté par un point (.) : <code class="docutils literal"><span class="pre">options.foo</span></code>, <code class="docutils literal"><span class="pre">options.bar</span></code>.</p>
+<p>Le second paramètre <code class="docutils literal"><span class="pre">mDefault</span></code> permet d&#8217;indiquer une valeur par défaut à retourner si la valeur est absente du WidgetDef.</p>
+</div>
+<div class="section" id="attributs">
+<h3>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h3>
+<p>Les attributs sont présents sur la balise du Widget en tant qu&#8217;attribut XML :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;widgetsample</span> <span class="na">attr1=</span><span class="s">&quot;val1&quot;</span> <span class="na">attr2=</span><span class="s">&quot;var2&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/widgetsample&gt;</span>
+</pre></div>
+</div>
+<p>Les attributs placés dans le XML peuvent se récupérer depuis <code class="docutils literal"><span class="pre">oWidgetDef</span></code> et ce à n&#8217;importe quel moment :</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="c1">//Par exemple au Render du widget :</span>
+<span class="nx">Render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;oWidgetDef&#39;</span><span class="p">).</span><span class="nx">attr1</span> <span class="p">);</span> <span class="c1">//affichera &quot;val1&quot;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;oWidgetDef&#39;</span><span class="p">).</span><span class="nx">attr2</span> <span class="p">);</span> <span class="c1">//affichera &quot;val2&quot;</span>
+
+        <span class="c1">//Les notations équivalentes en utlisant GetWidgetDefValue sont :</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">GetWidgetDefValue</span><span class="p">(</span><span class="s1">&#39;attr1&#39;</span><span class="p">)</span> <span class="p">);</span> <span class="c1">//affichera &quot;val1&quot;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">GetWidgetDefValue</span><span class="p">(</span><span class="s1">&#39;attr2&#39;</span><span class="p">)</span> <span class="p">);</span> <span class="c1">//affichera &quot;val2&quot;</span>
+
+        <span class="c1">//En cherchant l&#39;attribut attr3 inexistant on peut utiliser :</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">GetWidgetDefValue</span><span class="p">(</span> <span class="s1">&#39;attr3&#39;</span><span class="p">,</span> <span class="mi">42</span> <span class="p">)</span> <span class="p">);</span> <span class="c1">//La valeur 42 sera retournée, car l&#39;attribut attr3 est inconnu</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>L&#8217;utilisation des attributs via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser <code class="docutils literal"><span class="pre">oWidgetDef</span></code></p>
+<p>Coté Javascript ils sont contenus dans le 3e paramètre du constructeur (Hash de clé/valeur avec clé = nom de l&#8217;attribut et valeur = valeur de l&#8217;attribut)  :</p>
+<div class="last highlight-javascript"><div class="highlight"><pre><span class="c1">//Ancien mode</span>
+<span class="c1">//function WidgetSample(oCfg, oLayout, aMetaData)</span>
+<span class="c1">//{</span>
+   <span class="c1">//aMetaData[&#39;attr1&#39;] est égal à val1</span>
+   <span class="c1">//aMetaData[&#39;attr2&#39;] est égal à val2</span>
+<span class="c1">//}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="options">
+<h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<p>Excepté cas spécifiques (<a class="reference internal" href="widgets/listing.html#widgetlisting"><em>WidgetListing</em></a>) les options sont fournies en tant que X noeuds enfants du noeud widget :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;widgetsample</span> <span class="na">attr1=</span><span class="s">&quot;val1&quot;</span> <span class="na">attr2=</span><span class="s">&quot;var2&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;optionA&quot;</span> <span class="na">value=</span><span class="s">&quot;valueA&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;optionB&quot;</span> <span class="na">value=</span><span class="s">&quot;valueB&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/widgetsample&gt;</span>
+</pre></div>
+</div>
+<p>L&#8217;exploitation des options se fait via l&#8217;attribut <code class="docutils literal"><span class="pre">oWidgetDef</span></code> et ce à n&#8217;importe quel moment :</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="c1">//Par exemple au PostRender du widget :</span>
+<span class="nx">PostRender</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">oWidgetDef</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;oWidgetDef&#39;</span><span class="p">);</span>
+
+        <span class="c1">//Si options diponibles</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">Y</span><span class="p">.</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="nx">oWidgetDef</span><span class="p">.</span><span class="nx">options</span><span class="p">)</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">oWidgetDef</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">optionA</span> <span class="p">);</span> <span class="c1">//Affichera &quot;valueA&quot;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">oWidgetDef</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">optionB</span> <span class="p">);</span> <span class="c1">//Affichera &quot;valueB&quot;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Les notations équivalentes en utlisant GetWidgetDefValue sont :</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">GetWidgetDefValue</span><span class="p">(</span><span class="s1">&#39;options.optionA&#39;</span><span class="p">)</span> <span class="p">);</span> <span class="c1">//affichera &quot;valueA&quot;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">GetWidgetDefValue</span><span class="p">(</span><span class="s1">&#39;options.optionB&#39;</span><span class="p">)</span> <span class="p">);</span> <span class="c1">//affichera &quot;valueB&quot;</span>
+
+        <span class="c1">//En cherchant l&#39;option optionC inexistante on peut utiliser :</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">GetWidgetDefValue</span><span class="p">(</span> <span class="s1">&#39;options.optionC&#39;</span><span class="p">,</span> <span class="s1">&#39;#00ff00&#39;</span> <span class="p">)</span> <span class="p">);</span> <span class="c1">//La valeur &#39;#00ff00&#39; sera retournée, car l&#39;option optionC est inconnue</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>L&#8217;exploitation des options via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser <code class="docutils literal"><span class="pre">oWidgetDef</span></code></p>
+<p>L&#8217;exploitation des options se fait en utilisant le WidgetOptionsManager dans le constructeur du Widget :</p>
+<div class="last highlight-javascript"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">WidgetSample</span><span class="p">(</span><span class="nx">oCfg</span><span class="p">,</span> <span class="nx">oLayout</span><span class="p">,</span> <span class="nx">aMetaData</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">oOptMgr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">WidgetOptionManager</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">aMetaData</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="nx">oOptMgr</span><span class="p">.</span><span class="nx">Exists</span><span class="p">(</span><span class="s1">&#39;optionA&#39;</span><span class="p">))</span>
+   <span class="p">{</span>
+          <span class="c1">//oOptMgr.Get(&#39;optionA&#39;) est égal à &#39;valueA&#39;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="utilisation-des-composants-natifs">
+<h2>Utilisation des composants natifs<a class="headerlink" href="#utilisation-des-composants-natifs" title="Permalink to this headline">¶</a></h2>
+<p>Pour utiliser un widget il suffit de placer son noeud XML dans le fichier ressource (Cf. <a class="reference internal" href="res/layout.html"><em>Layout</em></a>).
+Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du widget est connue.</p>
+<p>Correspondances reconnues :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Noeud XML</th>
+<th class="head">Widget (classe JS)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>value</td>
+<td><ul class="first last simple">
+<li>Lecture seule ? (mode=ro) : WidgetReadOnly</li>
+<li>FieldType=Boolean        : WidgetToggle</li>
+<li>FieldType=Date           : WidgetDate</li>
+<li>FieldType=Time           : WidgetTime</li>
+<li>FieldType=DicoExt        : WidgetCheckboxGroup</li>
+<li>FieldType=Dico           : WidgetRadioGroup</li>
+<li>FieldType=Text           : WidgetText</li>
+<li>FieldType=String         : WidgetField</li>
+<li>FieldType=Integer        : WidgetField</li>
+<li>FieldType=FkeyVarset     : WidgetSelect</li>
+<li>Par Défaut               : WidgetField</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>label</td>
+<td>WidgetLabel</td>
+</tr>
+<tr class="row-even"><td>clear</td>
+<td>WidgetClear</td>
+</tr>
+<tr class="row-odd"><td>group</td>
+<td>WidgetGroup</td>
+</tr>
+<tr class="row-even"><td>canvas</td>
+<td>WidgetCanvas</td>
+</tr>
+<tr class="row-odd"><td>row</td>
+<td>WidgetRow</td>
+</tr>
+<tr class="row-even"><td>cell</td>
+<td>WidgetCell</td>
+</tr>
+<tr class="row-odd"><td>listing</td>
+<td>WidgetListing</td>
+</tr>
+<tr class="row-even"><td>grid</td>
+<td>WidgetGrid</td>
+</tr>
+<tr class="row-odd"><td>tabs</td>
+<td>WidgetTabs</td>
+</tr>
+<tr class="row-even"><td>statictext</td>
+<td>WidgetStaticText</td>
+</tr>
+<tr class="row-odd"><td>button</td>
+<td>WidgetButton (ou WidgetExport si action=export)</td>
+</tr>
+<tr class="row-even"><td>user_group</td>
+<td>WidgetUserGroup</td>
+</tr>
+<tr class="row-odd"><td>search</td>
+<td>WidgetSearch</td>
+</tr>
+<tr class="row-even"><td>pages</td>
+<td>WidgetPages</td>
+</tr>
+<tr class="row-odd"><td>page</td>
+<td>WidgetPage</td>
+</tr>
+<tr class="row-even"><td>upload</td>
+<td>WidgetUpload</td>
+</tr>
+<tr class="row-odd"><td>actionexport</td>
+<td>WidgetActionExport</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utilisation-de-composants-personnalises">
+<h2>Utilisation de composants personnalisés<a class="headerlink" href="#utilisation-de-composants-personnalises" title="Permalink to this headline">¶</a></h2>
+<p>Pour utiliser un composant personnalisé il faut :</p>
+<ul class="simple">
+<li>Le déclarer dans la conf YUI (TODO : Lien vers la doc de configuration YUI)</li>
+<li>Placer un noeud XML nommé <code class="docutils literal"><span class="pre">custom</span></code> là où doit s&#8217;afficher le widget (auparavant le nom du noeud n&#8217;importait pas, mais pour passer la validation par xsd dans le gestionnaire de ressource, il a fallu choisir un nom dédié à cet usage)</li>
+<li>Ajouter un noeud enfant qui précise le widget à utiliser</li>
+</ul>
+<p>Exemples :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;custom&gt;</span>
+   <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;widget&quot;</span> <span class="na">value=</span><span class="s">&quot;WidgetFoo&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/custom&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;value&gt;</span>
+   <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;widget&quot;</span> <span class="na">value=</span><span class="s">&quot;WidgetSpecialInteger&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/value&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="liste-des-widgets">
+<span id="widgetsliste"></span><h2>Liste des widgets<a class="headerlink" href="#liste-des-widgets" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="widgets/actionlist.html">WidgetActionList</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/actionexport.html">WidgetActionExport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/base.html">WidgetBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/bitsfield.html">WidgetBitsField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/button.html">WidgetButton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/field.html">WidgetField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/listing.html">WidgetListing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/grid.html">WidgetGrid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/readonly.html">WidgetReadOnly</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/search.html">WidgetSearch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/select.html">WidgetSelect</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/table.html">WidgetTable</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/text.html">WidgetText</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/time.html">WidgetTime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/toggle.html">WidgetToggle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/tooltip.html">WidgetTooltip</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/upload.html">WidgetUpload</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/pages.html">WidgetPages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/page.html">WidgetPage</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="sous-composants">
+<h2>Sous-Composants<a class="headerlink" href="#sous-composants" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="widgets/optionspanel.panel.html">OptionsPanel.panel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="widgets/optionspanel.panel.html#fonction">Fonction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/optionspanel.panel.html#utilisation-exemple">Utilisation (Exemple)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/optionspanel.panel.html#parametrage-json">Paramétrage JSON</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/optionspanel.option.html">OptionsPanel.option</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="specifications">
+<h2>Spécifications<a class="headerlink" href="#specifications" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="widgets/autocompletion.html">Autocomplétion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/autocompletion_multiple.html">Autocomplétion multiple</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Composants graphiques</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#attributs-et-options">Attributs et Options</a><ul>
+<li><a class="reference internal" href="#acces-communs-aux-attributs-et-aux-options">Accès communs aux Attributs et aux Options</a></li>
+<li><a class="reference internal" href="#attributs">Attributs</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation-des-composants-natifs">Utilisation des composants natifs</a></li>
+<li><a class="reference internal" href="#utilisation-de-composants-personnalises">Utilisation de composants personnalisés</a></li>
+<li><a class="reference internal" href="#liste-des-widgets">Liste des widgets</a></li>
+<li><a class="reference internal" href="#sous-composants">Sous-Composants</a></li>
+<li><a class="reference internal" href="#specifications">Spécifications</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bdd.html"
+                        title="previous chapter">Base de données</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="widgets/actionlist.html"
+                        title="next chapter">WidgetActionList</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/widgets.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="widgets/actionlist.html" title="WidgetActionList"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bdd.html" title="Base de données"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

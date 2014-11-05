@@ -1,0 +1,578 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dataquery &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Ressources" href="../ressources.html" />
+    <link rel="next" title="Layout" href="layout.html" />
+    <link rel="prev" title="Form" href="form.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="layout.html" title="Layout"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="form.html" title="Form"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" accesskey="U">Ressources</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dataquery">
+<span id="id1"></span><h1>Dataquery<a class="headerlink" href="#dataquery" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Le dataquery définit le contenu d&#8217;un dataset.</p>
+</div>
+<div class="section" id="balise-root">
+<h2>Balise root<a class="headerlink" href="#balise-root" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span>
+  <span class="na">id=</span><span class="s">&quot;dataquery_contact&quot;</span>
+  <span class="na">table_name=</span><span class="s">&quot;e5y7_02_data&quot;</span>
+  <span class="na">table_alias=</span><span class="s">&quot;c&quot;</span>
+  <span class="na">begin=</span><span class="s">&quot;0&quot;</span>
+  <span class="na">range=</span><span class="s">&quot;20&quot;</span>
+  <span class="na">dataset_dependency=</span><span class="s">&quot;dataset_enquete&quot;</span>
+  <span class="na">varset_name=</span><span class="s">&quot;pat&quot;</span>
+  <span class="na">mode=</span><span class="s">&quot;rw&quot;</span>
+  <span class="na">cacheable=</span><span class="s">&quot;true&quot;</span>
+  <span class="na">standby=</span><span class="s">&quot;true&quot;</span>
+  <span class="na">auto_add_record=</span><span class="s">&quot;false&quot;</span>
+<span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">id</span></code> : Identifiant du Dataquery (et à terme du dataset généré), il est utiliser pour référencer le Dataquery.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">table_name</span></code> : Nom de la table principale du Dataquery.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Dans le cas où le dataquery doit être utilisé sur plusieurs projets, il est possible d&#8217;indiquer un nom de table générique sous la forme: {pj}_nom_table,
+où {pj} est remplacé par le préfix du projet. Exemple: {pj}_pj_group.</p>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">table_alias</span></code>: Alias sur le nom de la table (optionnel)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">begin</span></code>: Numéro de ligne à partir de laquelle se fait la requête (optionnel)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">range</span></code>: Nombre de lignes renvoyées (optionnel)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">dataset_dependency</span></code> <strong>&#64;deprecated</strong> : nom d&#8217;un dataset dont est dépendant le dataset en cours de définition. Cette dépendance intervient lors de la mise à
+jour des dataset. Dans cet exemple, si le dataset nommé dataset_enquete change, alors le système devra aller chercher tous les dataset qui en sont dépendants.
+Il faudra donc mettre à jour dataquery_contact.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">varset_name</span></code>: nom du varset auquel est lié le dataquery. Correspond à la colonne name dans la table des varset (optionnel).</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">mode</span></code>: indique si le dataquery est en lecture/écriture, ou en lecture seule. Cet attribut est optionnel, s&#8217;il n&#8217;est pas mis, alors le dataquery est en
+lecture/écriture. Les valeurs possibles: rw (lecture/écriture) ou r (lecture).</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">cacheable</span></code>: (Défaut : <code class="docutils literal"><span class="pre">true</span></code>) Indique si le Dataset (généré depuis le Dataquery) doit être mis en cache coté client.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">standby</span></code>: (Défaut : <code class="docutils literal"><span class="pre">true</span></code>)  Indique au processus de suspension de saisie si le Dataset (généré depuis le Dataquery) peut être gelé et conservé en l&#8217;état (= <code class="docutils literal"><span class="pre">true</span></code>) ou s&#8217;il doit
+être regénéré (= <code class="docutils literal"><span class="pre">false</span></code>). Plus d&#8217;infos : <a class="reference internal" href="../archi/frame.html#frame-standby"><em>Suspendre la saisie (Stand by)</em></a>.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">auto_add_record</span></code>: (Défaut : <code class="docutils literal"><span class="pre">false</span></code>) Permet l&#8217;ajout automatique d&#8217;un record vierge si le Dataset généré depuis ce Dataquery est vide. L&#8217;ajout se fait coté JS (et non coté Serveur). Très
+utile dans le cas d&#8217;un Dataquery utilisé pour créer une fiche.</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal"><span class="pre">begin</span></code> et <code class="docutils literal"><span class="pre">range</span></code> correspondent aux valeurs utilisées par le mot clé MySQL <code class="docutils literal"><span class="pre">LIMIT</span></code> :</p>
+<div class="last highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">LIMIT</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>L&#8217;attribut <code class="docutils literal"><span class="pre">varset_name</span></code> du noeud <code class="docutils literal"><span class="pre">&lt;dataquery&gt;</span></code> indique à Voozanoo4 que la table concernée (<code class="docutils literal"><span class="pre">table_name</span></code>) est un Varset. Les droits des utilisateurs doivent donc s&#8217;appliquer.</p>
+<p class="last">Si cet attribut est omis alors qu&#8217;on requête effectivement un Varset <strong>aucun droit</strong> ne sera contrôlé.</p>
+</div>
+</div>
+<div class="section" id="les-colonnes">
+<h2>Les colonnes<a class="headerlink" href="#les-colonnes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="syntaxe">
+<h3>Syntaxe<a class="headerlink" href="#syntaxe" title="Permalink to this headline">¶</a></h3>
+<p>Les colonnes permettent de sélectionner les variables à récupérer dans la partie &#8220;select&#8221; de la requête.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;p&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{nom_attr_sql}&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom_sql&quot;</span> <span class="na">validator=</span><span class="s">&quot;alpha&quot;</span> <span class="na">regexp=</span><span class="s">&quot;[a-z]{3,}&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">field_name=</span><span class="s">&quot;nom&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom_attr_sql&quot;</span>  <span class="na">mode=</span><span class="s">&quot;rw&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Balise <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> :</dt>
+<dd><ul class="first last">
+<li><p class="first"><code class="docutils literal"><span class="pre">sql</span></code> : il s&#8217;agit du sql qui sera utilisé pour récupérer la valeur. On ne met pas directement les champs de la table, mais des alias vers les balises fields qui seont définies ensuite. Ce paramètre est optionnel.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">alias</span></code> : nom de la colonne, correspond à l&#8217;alias SQL: select YEAR(ddn) as annee_naissance. Ce paramètre est optionnel.</p>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">validator</span></code> <span class="classifier-delimiter">:</span> <span class="classifier">(Optionnel) validateur à utiliser pour valider le contenu de la colonne, surcharge le validateur éventuellement définit au niveau du varset</span></dt>
+<dd><div class="first last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pour plus d&#8217;informations consultez la partie sur les <a class="reference internal" href="../lib_js.html#lib-js-validateurs"><em>Validateurs</em></a>.</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">regexp</span></code> : (Optionnel) expression régulière à exécuter pour valider le contenu de la colonne, surcharge une éventuelle regexp définie au niveau du varset</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">mandatory</span></code> : (Optionnel) Permet d&#8217;indiquer si la colonne est considérée comme obligatoire ou non (peut être placé sur un champ calculé). Prend le pas sur le Varset (surcharge)</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Balise <code class="docutils literal"><span class="pre">&lt;field&gt;</span></code> :</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">table_name</span></code> : table où se trouve le champ. Pour récupérer le nom, on utilise l&#8217;alias défini dans la balise dataquery (dans cet exemple &#8220;p&#8221;). Si l&#8217;alias est absent de la balise DataQuery, alors on utilise le contenu de l&#8217;attribut table_name.</li>
+<li><code class="docutils literal"><span class="pre">field_name</span></code> : nom du champ dans la table.</li>
+<li><code class="docutils literal"><span class="pre">alias</span></code> : nom du champ dans l&#8217;attribut sql de la balise column (voir sous-chapitre suivant).</li>
+<li><code class="docutils literal"><span class="pre">mode</span></code> : indique si la colonne est en lecture/écriture, ou en lecture seule. Cet attribut est optionnel, s&#8217;il n&#8217;est pas mis, alors la colonne est en lecture/écriture. Les valeurs possibles: rw (lecture/écriture) ou r (lecture). Cette valeur prend le pas sur le mode indiqué au niveau de la balise dataquery ou join.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="l-attribut-alias-pour-la-balise-field">
+<h3>L&#8217;attribut alias pour la balise field<a class="headerlink" href="#l-attribut-alias-pour-la-balise-field" title="Permalink to this headline">¶</a></h3>
+<p>L&#8217;alias pour une balise field permet de supporter le cas de deux champs qui ont le même nom dans deux tables différentes.
+Exemple:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;dataquery_contact&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5y7_03_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;c&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;concat(&#39;Le patient habitant &#39;, {ville_patient}, &#39; a été en contact avec le cas index à &#39;, {ville_contact})&quot;</span> <span class="na">alias=</span><span class="s">&quot;situation&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">field_name=</span><span class="s">&quot;ville&quot;</span> <span class="na">alias=</span><span class="s">&quot;ville_patient&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;c&quot;</span> <span class="na">field_name=</span><span class="s">&quot;ville&quot;</span> <span class="na">alias=</span><span class="s">&quot;ville_contact&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+
+  <span class="nt">&lt;join</span> <span class="na">detail_table=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">detail_alias=</span><span class="s">&quot;p&quot;</span> <span class="na">sql=</span><span class="s">&quot;{id_patient}={id_data}&quot;</span> <span class="na">detail_varset_name=</span><span class="s">&quot;patient&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;c&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_patient&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_patient&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_data&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_data&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/join&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="typage-d-une-colonne">
+<h3>Typage d&#8217;une colonne<a class="headerlink" href="#typage-d-une-colonne" title="Permalink to this headline">¶</a></h3>
+<p>Lorsqu&#8217;une colonne est le résultat d&#8217;un calcul ou bien n&#8217;est pas issue d&#8217;un varset, il est possible d&#8217;imposer un type.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{id_sys_project}&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_sys_project&quot;</span> <span class="na">type=</span><span class="s">&quot;integer&quot;</span> <span class="na">length=</span><span class="s">&quot;10&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;id_sys_project&quot;</span> <span class="na">table_name=</span><span class="s">&quot;proj&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_sys_project&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{label}&quot;</span> <span class="na">alias=</span><span class="s">&quot;label&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">length=</span><span class="s">&quot;50&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;label&quot;</span> <span class="na">table_name=</span><span class="s">&quot;proj&quot;</span> <span class="na">alias=</span><span class="s">&quot;label&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{date_creation}&quot;</span> <span class="na">alias=</span><span class="s">&quot;date_creation&quot;</span> <span class="na">type=</span><span class="s">&quot;date&quot;</span> <span class="na">condtion=</span><span class="s">&quot;{date_creation}&lt;curdate()&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;date_creation&quot;</span> <span class="na">table_name=</span><span class="s">&quot;proj&quot;</span> <span class="na">alias=</span><span class="s">&quot;date_creation&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot; ~np~{lang}~/np~ &quot;</span> <span class="na">alias=</span><span class="s">&quot;lang&quot;</span> <span class="na">type=</span><span class="s">&quot;dico&quot;</span> <span class="na">dico_name=</span><span class="s">&quot;lang&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;lang&quot;</span> <span class="na">table_name=</span><span class="s">&quot;proj&quot;</span> <span class="na">alias=</span><span class="s">&quot;lang&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/column&gt;</span>
+</pre></div>
+</div>
+<p>La définition du type est prioritaire par rapport à la définition par défaut (cas où la variable est déjà définie dans le varset).</p>
+</div>
+<div class="section" id="transformation-et-utilisation-de-plusieurs-champs-pour-une-colonne">
+<h3>Transformation et utilisation de plusieurs champs pour une colonne<a class="headerlink" href="#transformation-et-utilisation-de-plusieurs-champs-pour-une-colonne" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;datatable_patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;p&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;datediff({date_symptomes}, {ddn})&quot;</span> <span class="na">alias=</span><span class="s">&quot;age&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;ddn&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">alias=</span><span class="s">&quot;ddn&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;date_symptomes&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">alias=</span><span class="s">&quot;date_symptomes&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="column-simple">
+<h3>column_simple<a class="headerlink" href="#column-simple" title="Permalink to this headline">¶</a></h3>
+<p>La balise &#8220;column_simple&#8221; permet de déclarer une colonne rapidement en indiquant uniquement le nom du champ, et la table source.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;column_simple</span> <span class="na">field_name=</span><span class="s">&quot;nom&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>field_name nom du champ</li>
+<li>table_name alias de la table dans la base de données</li>
+</ul>
+</div>
+</div>
+<div class="section" id="conditions">
+<h2>Conditions<a class="headerlink" href="#conditions" title="Permalink to this headline">¶</a></h2>
+<p>Les conditions s&#8217;utilisent de la même manière que les colonnes:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;dataquery_patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;p&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{id_patient}=14&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;id_patient&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/condition&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{nom}&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;nom&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;/datatable&gt;</span>
+</pre></div>
+</div>
+<p>Anciennement il ne pouvait y avoir qu&#8217;une seule balise condition, il est désormais possible d&#8217;en avoir plusieurs. Cela fait suite à l&#8217;implémentation d&#8217;un nouvel attribut <code class="docutils literal"><span class="pre">optional=&quot;true|false&quot;</span></code>.</p>
+<p>Les multiples balises <code class="docutils literal"><span class="pre">&lt;condition&gt;</span></code> sont liées par un <code class="docutils literal"><span class="pre">AND</span></code> entre elles. Lorsque l&#8217;attribut <code class="docutils literal"><span class="pre">optional</span></code> vaut <code class="docutils literal"><span class="pre">true</span></code> la condition concernée est omise si tous les paramètres liés valent &#8220;null&#8221;. Voir <a class="reference internal" href="#utilisation-attribut-optional"><em>Utilisation de l&#8217;attribut optional</em></a></p>
+<div class="section" id="passage-de-parametres">
+<h3>Passage de paramètres<a class="headerlink" href="#passage-de-parametres" title="Permalink to this headline">¶</a></h3>
+<p>Il est possible de passer des paramètres aux conditions en provenance:</p>
+<ul class="simple">
+<li>Des datasets</li>
+<li>Du tableau param du model manager (contient les paramètres de la requête)</li>
+<li>De l&#8217;objet user pour en particulier récupérer l&#8217;identifiant de l&#8217;utilisateur courant pour le comparer la variable id_owner d&#8217;un varset.</li>
+</ul>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{id_data}={id_patient}&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;id_data&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_data&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;id_patient&quot;</span> <span class="na">default=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span> <span class="na">name=</span><span class="s">&quot;id_patient&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;dataset&quot;</span> <span class="na">name=</span><span class="s">&quot;dataquery_patient&quot;</span> <span class="na">row=</span><span class="s">&quot;current&quot;</span> <span class="na">field=</span><span class="s">&quot;id_data&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/variable&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{id_owner}={user_id}&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;id_owner&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_owner&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;user_id&quot;</span> <span class="na">default=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;user&quot;</span> <span class="na">name=</span><span class="s">&quot;user_id&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/variable&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<ul>
+<li><dl class="first docutils">
+<dt>Type <code class="docutils literal"><span class="pre">param</span></code></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> : nom du paramètre dans la requête.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Type <code class="docutils literal"><span class="pre">dataset</span></code></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> : Identifiant du DataSet (indiqué dans l&#8217;attribut <code class="docutils literal"><span class="pre">id</span></code>)</li>
+<li><code class="docutils literal"><span class="pre">row</span></code> : position dans le rowdata, valeurs possibles: current, next, prev, last, first.</li>
+<li><code class="docutils literal"><span class="pre">field</span></code> : nom du champ à récupérer dans le rowdata</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Type <code class="docutils literal"><span class="pre">user</span></code></dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> : correspond au nom d&#8217;un getter de l&#8217;objet User. Le nom est transformé pour correspondre à la syntaxe des méthodes Voozanoo, par exemple user_id devient GetUserId.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>NB: la balise variable sera utilisable dans toutes les autres balises (column, group_by, ...).</p>
+</div>
+<div class="section" id="utilisation-de-l-attribut-optional">
+<span id="utilisation-attribut-optional"></span><h3>Utilisation de l&#8217;attribut optional<a class="headerlink" href="#utilisation-de-l-attribut-optional" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;dataquery_patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;p&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{lastname} = {param_lastname}&quot;</span> <span class="na">optional=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;lastname&quot;</span> <span class="na">alias=</span><span class="s">&quot;lastname&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;param_lastname&quot;</span> <span class="na">default=</span><span class="s">&quot;null&quot;</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span> <span class="na">name=</span><span class="s">&quot;lastname&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/variable&gt;</span>
+   <span class="nt">&lt;/condition&gt;</span>
+   <span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{num_ss} = {param_num_ss}&quot;</span> <span class="na">optional=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;num_ss&quot;</span> <span class="na">alias=</span><span class="s">&quot;num_ss&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+         <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;param_num_ss&quot;</span> <span class="na">default=</span><span class="s">&quot;null&quot;</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span> <span class="na">name=</span><span class="s">&quot;num_ss&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/variable&gt;</span>
+   <span class="nt">&lt;/condition&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Les conditions seront placées dans la requête SQL uniquement si les paramètres <code class="docutils literal"><span class="pre">param_lastname</span></code> et <code class="docutils literal"><span class="pre">param_num_ss</span></code> sont renseignés.</p>
+</div>
+</div>
+<div class="section" id="utilisation-des-parametres-alteres">
+<h3>Utilisation des &#8220;paramètres altérés&#8221;<a class="headerlink" href="#utilisation-des-parametres-alteres" title="Permalink to this headline">¶</a></h3>
+<p>Certains paramètres peuvent être altérés par le noyau Voozanoo4 avant d&#8217;être restitués au ModelManager lors du parsing du DataQuery (plus d&#8217;information dans la partie <a class="reference internal" href="../archi/model_manager.html#model-manager-alteredparameters"><em>Les &#8220;Paramètres altérés&#8221;</em></a>).</p>
+<p>En prenant en exemple le paramètre &#8220;group_tree&#8221;, reconnu nativement comme paramètre altéré, il suffit de le référencer avec ce nom dans une condition du Dataquery lors des spécifications des &#8220;entry&#8221; :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{gl.id_group_parent} IN ({param_id_group})&quot;</span> <span class="na">optional=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;id_group_parent&quot;</span> <span class="na">alias=</span><span class="s">&quot;gl.id_group_parent&quot;</span> <span class="na">table_name=</span><span class="s">&quot;gl&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;param_id_group&quot;</span> <span class="na">default=</span><span class="s">&quot;null&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span> <span class="na">name=</span><span class="s">&quot;group_tree&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;dataset&quot;</span> <span class="na">name=</span><span class="s">&quot;filter&quot;</span> <span class="na">row=</span><span class="s">&quot;current&quot;</span> <span class="na">field=</span><span class="s">&quot;group_tree&quot;</span> <span class="nt">/&gt;</span>
+   <span class="nt">&lt;/variable&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="la-sous-balise-match">
+<h2>La sous balise MATCH<a class="headerlink" href="#la-sous-balise-match" title="Permalink to this headline">¶</a></h2>
+<p>La balise MATCH est un dérivé de la balise condition, elle permet de faire une recherche sur des champs. La syntaxe est quasiment la même que pour la balise condition, la différence est qu&#8217;il doit obligatoirement y avoir une balise VARIABLE.</p>
+<p>La plupart du temps elle sera utilisée avec le composant autocomplete.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;match</span> <span class="na">sql=</span><span class="s">&quot;{nom} like {search_string} or {prenom} like {search_string}&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;nom&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;prenom&quot;</span> <span class="na">alias=</span><span class="s">&quot;prenom&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;search_string&quot;</span> <span class="na">default=</span><span class="s">&quot;NULL&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;param&quot;</span> <span class="na">name=</span><span class="s">&quot;search_string&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/variable&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<p>La partie SQL est répétée pour chaque mot contenu dans la variable.</p>
+<p>Par exemple, si on passe la chaine de caractère &#8220;Harry Seldon&#8221; dans la variable search string, le résultat sera le suivant:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="p">...</span> <span class="k">WHERE</span> <span class="p">((</span><span class="n">nom</span> <span class="k">like</span> <span class="s1">&#39;%Harry%&#39;</span> <span class="k">or</span> <span class="n">prenom</span> <span class="k">like</span> <span class="s1">&#39;%HARRY%&#39;</span><span class="p">)</span> <span class="k">and</span> <span class="p">(</span><span class="n">nom</span> <span class="k">like</span> <span class="s1">&#39;%Seldon%&#39;</span> <span class="k">or</span> <span class="n">prenom</span> <span class="k">like</span> <span class="s1">&#39;%Seldon%&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Un dataquery peut avoir une balise condition et une balise match.</p>
+</div>
+<div class="section" id="les-jointures">
+<h2>Les jointures<a class="headerlink" href="#les-jointures" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;dataquery_contact&quot;</span> <span class="na">table_name=</span><span class="s">&quot;contact&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;join</span> <span class="na">detail_table=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">detail_alias=</span><span class="s">&quot;ct_patient&quot;</span> <span class="na">sql=</span><span class="s">&quot;{id_patient}={id_data}&quot;</span> <span class="na">type=</span><span class="s">&quot;inner&quot;</span> <span class="na">detail_varset_name=</span><span class="s">&quot;pat&quot;</span> <span class="na">mode=</span><span class="s">&quot;rw&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;contact&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_patient&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;ct_patient&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_data&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/join&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>detail_table: nom de la table, comme pour l&#8217;attribut table_name du dataquery, il est possible de mettre un nom générique (de la forme {pj}_table_name)</li>
+<li>detail_alias: alias de la table utilisé pour y faire référence dans les colonnes (équivaut à l&#8217;attribut table_alias du dataquery).</li>
+<li>detail_varset_name: nom du varset auquel est lié la table. Correspond au champ name de la table des varset (optionnel).</li>
+<li>mode: indique si les colonnes liées à la table jointe sont en lecture/écriture, ou en lecture seule. Cet attribut est optionnel, s&#8217;il n&#8217;est pas mis, alors les colonnes de la jointure sont en lecture/écriture. Les valeurs possibles: rw (lecture/écriture) ou r (lecture).</li>
+</ul>
+<p>Types de jointure possible:</p>
+<ul class="simple">
+<li>inner</li>
+<li>left</li>
+<li>right</li>
+</ul>
+<p>Si le type n&#8217;est pas indiqué, alors le système met &#8220;left&#8221; par défaut.
+L&#8217;attribut detail_alias indique le nom de la table une fois que la jointure est faite, c&#8217;est donc ce nom qu&#8217;il faudra utiliser dans le reste du XML pour faire référence à la table.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;dataquery_contact&quot;</span> <span class="na">table_name=</span><span class="s">&quot;contact&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;join</span> <span class="na">detail_table=</span><span class="s">&quot;patient&quot;</span> <span class="na">detail_alias=</span><span class="s">&quot;ct_patient&quot;</span> <span class="na">sql=</span><span class="s">&quot;{id_patient}={id_data}&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;contact&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_patient&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_patient&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;ct_patient&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_data&quot;</span> <span class="na">alias=</span><span class="s">&quot;id_data&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/join&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;{nom}&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;ct_patient&quot;</span> <span class="na">field_name=</span><span class="s">&quot;nom&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+<p>Exemple d&#8217;utilisation de champs qui viennent de tables différentes pour définir une colonnes:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;dataquery_contact&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5y7_03_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;c&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;join</span> <span class="na">detail_table=</span><span class="s">&quot;e5y7_01_data&quot;</span> <span class="na">detail_alias=</span><span class="s">&quot;cp&quot;</span> <span class="na">sql=</span><span class="s">&quot;{id_patient}={id_data}&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;c&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_patient&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;cp&quot;</span> <span class="na">field_name=</span><span class="s">&quot;id_data&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/join&gt;</span>
+  <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;datediff({dcontact}, {ddn})&quot;</span> <span class="na">alias=</span><span class="s">&quot;age&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;ct_patient&quot;</span> <span class="na">field_name=</span><span class="s">&quot;ddn&quot;</span> <span class="na">alias=</span><span class="s">&quot;ddn&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;contact&quot;</span> <span class="na">field_name=</span><span class="s">&quot;dcontact&quot;</span> <span class="na">alias=</span><span class="s">&quot;dcontact&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/column&gt;</span>
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="regroupement">
+<h2>Regroupement<a class="headerlink" href="#regroupement" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;group_by</span> <span class="na">sql=</span><span class="s">&quot;{sexe}&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;sexe&quot;</span> <span class="na">alias=</span><span class="s">&quot;sexe&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/group_by&gt;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Depuis la version 2.14 il est possible de spécifier plusieurs noeuds <code class="docutils literal"><span class="pre">&lt;group_by&gt;</span></code>. Avant seul un noeud de ce type était autorisé par Dataquery.</p>
+</div>
+</div>
+<div class="section" id="tri">
+<h2>Tri<a class="headerlink" href="#tri" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;order_by</span> <span class="na">sql=</span><span class="s">&quot;{nom}&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;nom&quot;</span> <span class="na">alias=</span><span class="s">&quot;nom&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/order_by&gt;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Depuis la version 2.4 il est possible de spécifier plusieurs noeuds <code class="docutils literal"><span class="pre">&lt;order_by&gt;</span></code>. Avant seul un noeud de ce type était autorisé par Dataquery.</p>
+</div>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<p>Pour mettre une valeur dans un dataset provenant d&#8217;une autre source (dataset, param, ...), il est possible de déclarer des variables directement sous le noeud dataquery:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;column_simple</span> <span class="na">field_name=</span><span class="s">&quot;id_patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;variables&gt;</span>
+  <span class="nt">&lt;variable</span> <span class="na">alias=</span><span class="s">&quot;extern_id_patient&quot;</span> <span class="na">default=</span><span class="s">&quot;0&quot;</span> <span class="na">target_column=</span><span class="s">&quot;id_patient&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;entry</span> <span class="na">type=</span><span class="s">&quot;dataset&quot;</span> <span class="na">name=</span><span class="s">&quot;patient&quot;</span> <span class="na">field=</span><span class="s">&quot;id_data&quot;</span> <span class="na">row=</span><span class="s">&quot;current&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/variable&gt;</span>
+<span class="nt">&lt;/variables&gt;</span>
+</pre></div>
+</div>
+<p>Attributs:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">alias</span></code>: nom de la variable</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">GSA : Vérifier l&#8217;utilité de l&#8217;alias, je ne pense pas qu&#8217;il soit réellement utilisé</p>
+</div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">default</span></code>: valeur par défaut</li>
+<li><code class="docutils literal"><span class="pre">target_column</span></code>: référence de la colonne qui sera remplie</li>
+</ul>
+<p>La syntaxe des entrées est la même que pour les conditions.</p>
+</div>
+<div class="section" id="la-clause-having">
+<h2>La clause Having<a class="headerlink" href="#la-clause-having" title="Permalink to this headline">¶</a></h2>
+<p>Il est possible de déclarer un noeud <code class="docutils literal"><span class="pre">&lt;having&gt;</span></code> permettant de spécifier des critères de filtre sur des colonnes contenant une expression Sql (Voir la <a class="reference external" href="http://dev.mysql.com/doc/refman/5.0/fr/select.html">documentation</a>).</p>
+<p>Exemple :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;stats_patient&quot;</span> <span class="na">table_name=</span><span class="s">&quot;e5ib_01_data&quot;</span> <span class="na">table_alias=</span><span class="s">&quot;p&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;column</span> <span class="na">sql=</span><span class="s">&quot;COUNT({p.sexe})&quot;</span> <span class="na">alias=</span><span class="s">&quot;count_sexe&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span> <span class="na">field_name=</span><span class="s">&quot;sexe&quot;</span> <span class="na">alias=</span><span class="s">&quot;p.sexe&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/column&gt;</span>
+   <span class="nt">&lt;column_simple</span> <span class="na">field_name=</span><span class="s">&quot;sexe&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+
+   <span class="nt">&lt;group_by</span> <span class="na">sql=</span><span class="s">&quot;{p.sexe}&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;sexe&quot;</span> <span class="na">alias=</span><span class="s">&quot;p.sexe&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/group_by&gt;</span>
+
+   <span class="nt">&lt;having</span> <span class="na">sql=</span><span class="s">&quot;COUNT({p.sexe}) &amp;gt;= 5&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;sexe&quot;</span> <span class="na">alias=</span><span class="s">&quot;p.sexe&quot;</span> <span class="na">table_name=</span><span class="s">&quot;p&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/having&gt;</span>
+
+<span class="nt">&lt;/dataquery&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Même si MySQL autorise l&#8217;utilisation des alias spécifiés dans la partie <code class="docutils literal"><span class="pre">SELECT</span></code> le noeud <code class="docutils literal"><span class="pre">&lt;having&gt;</span></code> lui requiert la re-déclaration de la formule utilisée, il n&#8217;est <strong>pas</strong> possible d&#8217;utiliser l&#8217;alias spécifié.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dataquery</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#balise-root">Balise root</a></li>
+<li><a class="reference internal" href="#les-colonnes">Les colonnes</a><ul>
+<li><a class="reference internal" href="#syntaxe">Syntaxe</a></li>
+<li><a class="reference internal" href="#l-attribut-alias-pour-la-balise-field">L&#8217;attribut alias pour la balise field</a></li>
+<li><a class="reference internal" href="#typage-d-une-colonne">Typage d&#8217;une colonne</a></li>
+<li><a class="reference internal" href="#transformation-et-utilisation-de-plusieurs-champs-pour-une-colonne">Transformation et utilisation de plusieurs champs pour une colonne</a></li>
+<li><a class="reference internal" href="#column-simple">column_simple</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conditions">Conditions</a><ul>
+<li><a class="reference internal" href="#passage-de-parametres">Passage de paramètres</a></li>
+<li><a class="reference internal" href="#utilisation-de-l-attribut-optional">Utilisation de l&#8217;attribut optional</a></li>
+<li><a class="reference internal" href="#utilisation-des-parametres-alteres">Utilisation des &#8220;paramètres altérés&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#la-sous-balise-match">La sous balise MATCH</a></li>
+<li><a class="reference internal" href="#les-jointures">Les jointures</a></li>
+<li><a class="reference internal" href="#regroupement">Regroupement</a></li>
+<li><a class="reference internal" href="#tri">Tri</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+<li><a class="reference internal" href="#la-clause-having">La clause Having</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="form.html"
+                        title="previous chapter">Form</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="layout.html"
+                        title="next chapter">Layout</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/res/dataquery.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="layout.html" title="Layout"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="form.html" title="Form"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../ressources.html" >Ressources</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

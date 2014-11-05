@@ -1,0 +1,109 @@
+.. _events:
+
+Events
+======
+
+Principe de fonctionnement
+--------------------------
+
+L'objet Event (Core_Library_Event) permet de déclarer des événements en y associant
+des callbacks (code à exécuter lorsque l'évenement survient), et de déclencher des
+événements.
+
+.. note::
+	L'objet Event est un singleton.
+
+
+Utilisation
+-----------
+
+Déclarer un événement
+~~~~~~~~~~~~~~~~~~~~~
+
+Utiliser la méthode ``Attach`` de l'objet ``Event``.
+
+Paramètres:
+
+* Type de l'évenement sous forme de chaine de caractère. C'est ce nom qui sera utilisé pour déclencher l'événement. 
+* Le code à exécuter lorsque l'événement survient. Le paramètre est directement passé à la fonction ``call_user_func``, le format du paramètres est donc le même que pour cette fonction, voir: http://php.net/manual/en/function.call-user-func.php
+
+.. code-block:: php
+
+	Core_Library_Event::GetInstance()->Attach( 'EVENT::HELLO', array( $foo, 'bar' ) );
+
+Quelques exemples de formats pour la callback:
+
+.. code-block:: php
+
+	// Sous forme de fonction
+	function Hello() {
+		echo "Hello world";
+	}
+	Core_Library_Event::GetInstance()->Attach( 'EVENT::HELLO', Hello );
+	
+	// Sous forme de méthode statique
+	class Foo {
+		static public function Bar() {
+			echo "Hello  world";
+		}
+	}
+	Core_Library_Event::GetInstance()->Attach( 'EVENT::HELLO', array( 'Foo', 'Bar' ) );
+
+	// Sous forme d'objet
+	class Foo {
+		public function Bar() {
+			echo "Hello  world";
+		}
+	}
+	$foo = new Foo();
+
+	Core_Library_Event::GetInstance()->Attach( 'EVENT::HELLO', array( $foo, 'Bar' ) );
+
+.. note::
+	Plusieurs événements peuvent être associés à un même type, il suffit d'appeler autant de fois ``Attach``.
+	L'ordre d'exécution sera celui de l'ordre d'appel à ``Attach``.
+
+.. note::
+	La méthode Attach retourne un identifiant unique attribué à l'événement, il est utile lors de l'appel à la méthode Detach.
+
+
+Déclencher un événement
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Utiliser la méthode ``Fire``
+
+Paramètres:
+
+* Type de l'événement
+* Paramètre à transmettre aux callbacks (optionnel).
+
+.. code-block:: php
+
+	Core_Library_Event::GetInstance()->Fire( 'EVENT::HELLO', 'I am a parameter' );
+
+.. note::
+	Les paramètres sont directement passés à la callback.
+	Exemple:
+
+	.. code-block:: php
+
+		class Foo
+		{
+			public function Bar( $parameter ) {
+				echo "Parameter value: $parameter";
+			}
+		}
+
+Supprimer un événement
+~~~~~~~~~~~~~~~~~~~~~~
+
+Utiliser la méthode ``Detach``
+
+Paramètres:
+
+* Type de l'événement
+* Identifiant de l'événement renvoyé par Attach
+
+.. code-block:: php
+
+	Core_Library_Event::GetInstance()->Detach( 'EVENT::HELLO', $sEventId );

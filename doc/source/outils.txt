@@ -1,0 +1,8 @@
+.. _outils:
+
+Outils
+======
+
+.. toctree::
+
+	dev/doc_js

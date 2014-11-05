@@ -1,0 +1,252 @@
+.. _widgets:
+
+Composants graphiques
+=====================
+
+Introduction
+------------
+Le terme "composants graphiques" (appelés également "Widgets") regroupe les composants utilisés pour représenter un champ ou tout élément graphique à l'écran.
+
+Ils sont regroupés dans "Voozanoo4/libs/VooLibJs/frame/layout/widget"
+
+Tous les composants dérivent : :ref:`widgetbase`.
+
+Les Widgets Voozanoo4 (et en règle général toutes les classes de Voo4) sont déclarés comme des `modules Yui3 <http://yuilibrary.com/yui/docs/yui/create.html>`_. Afin de bénéficier de l'autoLoading des classes (et ne pas ajouter X balise <script src=""></script> dans chaque page) il est necessaire de spécifier à Yui quels modules sont disponibles et où se trouvent les sources (.js).
+
+La création de la configuration Yui nécessaire au bon fonctionnement de l'application est réalisée par la classe PHP :ref:`Core_Library_YuiConf <yuiconf>`
+
+.. important::
+	Un important refactoring début 2013 a modifié la structure du JSON fourni pour la confirmation de la Frame, les widgets n'exploitent plus les Attributs et les Options comme avant. Dorénavant la
+	configuration/définition du Widget est contenue dans oWidgetDef (Attribut de :ref:`WidgetBase <widgetbase>`)
+
+Attributs et Options
+--------------------
+Il est possible de passer des Attributs et des Options aux Widgets (via le XML).
+
+Accès communs aux Attributs et aux Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+La composant Y.WidgetBase, parent de tous les Widgets embarque la méthode ``GetWidgetDefValue( sPath, mDefault )`` permettant de récupérer un attribut précis ou une option précise en fournissant son "chemin" (``path``).
+
+Le chemin permet d'identifier la variable que l'ont souhaite atteindre, pour les attributs le chemin sera court : ``attr1`` ou ``attr2``.
+
+Pour les options ce chemin sera plus long, chaque niveau étant représenté par un point (.) : ``options.foo``, ``options.bar``.
+
+Le second paramètre ``mDefault`` permet d'indiquer une valeur par défaut à retourner si la valeur est absente du WidgetDef.
+
+Attributs
+^^^^^^^^^
+Les attributs sont présents sur la balise du Widget en tant qu'attribut XML :
+
+.. code-block:: xml
+
+	<widgetsample attr1="val1" attr2="var2">
+	</widgetsample>
+
+Les attributs placés dans le XML peuvent se récupérer depuis ``oWidgetDef`` et ce à n'importe quel moment :
+
+.. code-block:: javascript
+
+	//Par exemple au Render du widget :
+	Render: function()
+	{
+		console.log( this.get('oWidgetDef').attr1 ); //affichera "val1"
+		console.log( this.get('oWidgetDef').attr2 ); //affichera "val2"
+		
+		//Les notations équivalentes en utlisant GetWidgetDefValue sont :
+		console.log( this.GetWidgetDefValue('attr1') ); //affichera "val1"
+		console.log( this.GetWidgetDefValue('attr2') ); //affichera "val2"
+		
+		//En cherchant l'attribut attr3 inexistant on peut utiliser :
+		console.log( this.GetWidgetDefValue( 'attr3', 42 ) ); //La valeur 42 sera retournée, car l'attribut attr3 est inconnu
+	}
+
+.. warning::
+	L'utilisation des attributs via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser ``oWidgetDef``
+
+	Coté Javascript ils sont contenus dans le 3e paramètre du constructeur (Hash de clé/valeur avec clé = nom de l'attribut et valeur = valeur de l'attribut)  :
+
+	.. code-block:: javascript
+
+
+		//Ancien mode
+		//function WidgetSample(oCfg, oLayout, aMetaData)
+		//{
+		   //aMetaData['attr1'] est égal à val1
+		   //aMetaData['attr2'] est égal à val2
+		//}
+
+Options
+^^^^^^^
+Excepté cas spécifiques (:ref:`widgetlisting`) les options sont fournies en tant que X noeuds enfants du noeud widget :
+
+.. code-block:: xml
+
+	<widgetsample attr1="val1" attr2="var2">
+	   <option output="html" option_name="optionA" value="valueA" />
+	   <option output="html" option_name="optionB" value="valueB" />
+	</widgetsample>
+
+L'exploitation des options se fait via l'attribut ``oWidgetDef`` et ce à n'importe quel moment :
+
+.. code-block:: javascript
+
+	//Par exemple au PostRender du widget :
+	PostRender : function()
+	{
+		var oWidgetDef = this.get('oWidgetDef');
+
+		//Si options diponibles
+		if (Y.Lang.isUndefined(oWidgetDef.options) == false)
+		{
+			console.log( oWidgetDef.options.optionA ); //Affichera "valueA"
+			console.log( oWidgetDef.options.optionB ); //Affichera "valueB"
+		}
+		
+		//Les notations équivalentes en utlisant GetWidgetDefValue sont :
+		console.log( this.GetWidgetDefValue('options.optionA') ); //affichera "valueA"
+		console.log( this.GetWidgetDefValue('options.optionB') ); //affichera "valueB"
+		
+		//En cherchant l'option optionC inexistante on peut utiliser :
+		console.log( this.GetWidgetDefValue( 'options.optionC', '#00ff00' ) ); //La valeur '#00ff00' sera retournée, car l'option optionC est inconnue
+	}
+
+.. warning::
+	L'exploitation des options via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser ``oWidgetDef``
+
+	L'exploitation des options se fait en utilisant le WidgetOptionsManager dans le constructeur du Widget :
+
+	.. code-block:: javascript
+
+		function WidgetSample(oCfg, oLayout, aMetaData)
+		{
+		   var oOptMgr = new Y.WidgetOptionManager(null, aMetaData);
+		   if (oOptMgr.Exists('optionA'))
+		   {
+			  //oOptMgr.Get('optionA') est égal à 'valueA'
+		   }
+		}
+
+Utilisation des composants natifs
+---------------------------------
+Pour utiliser un widget il suffit de placer son noeud XML dans le fichier ressource (Cf. :doc:`../res/layout`).
+Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du widget est connue.
+
+Correspondances reconnues :
+
++-----------------------------+-----------------------------------------------------+
+|          Noeud XML          |                  Widget (classe JS)                 |
++=============================+=====================================================+
+|value                        |- Lecture seule ? (mode=ro) : WidgetReadOnly         |
+|                             |- FieldType=Boolean        : WidgetToggle            |
+|                             |- FieldType=Date           : WidgetDate              |
+|                             |- FieldType=Time           : WidgetTime              |
+|                             |- FieldType=DicoExt        : WidgetCheckboxGroup     |
+|                             |- FieldType=Dico           : WidgetRadioGroup        |
+|                             |- FieldType=Text           : WidgetText              |
+|                             |- FieldType=String         : WidgetField             |
+|                             |- FieldType=Integer        : WidgetField             |
+|                             |- FieldType=FkeyVarset     : WidgetSelect            |
+|                             |- Par Défaut               : WidgetField             |
++-----------------------------+-----------------------------------------------------+
+|label                        |WidgetLabel                                          |
++-----------------------------+-----------------------------------------------------+
+|clear                        |WidgetClear                                          |
++-----------------------------+-----------------------------------------------------+
+|group                        |WidgetGroup                                          |
++-----------------------------+-----------------------------------------------------+
+|canvas                       |WidgetCanvas                                         |
++-----------------------------+-----------------------------------------------------+
+|row                          |WidgetRow                                            |
++-----------------------------+-----------------------------------------------------+
+|cell                         |WidgetCell                                           |
++-----------------------------+-----------------------------------------------------+
+|listing                      |WidgetListing                                        |
++-----------------------------+-----------------------------------------------------+
+|grid                         |WidgetGrid                                           |
++-----------------------------+-----------------------------------------------------+
+|tabs                         |WidgetTabs                                           |
++-----------------------------+-----------------------------------------------------+
+|statictext                   |WidgetStaticText                                     |
++-----------------------------+-----------------------------------------------------+
+|button                       |WidgetButton (ou WidgetExport si action=export)      |
++-----------------------------+-----------------------------------------------------+
+|user_group                   |WidgetUserGroup                                      |
++-----------------------------+-----------------------------------------------------+
+|search                       |WidgetSearch                                         |
++-----------------------------+-----------------------------------------------------+
+|pages                        |WidgetPages                                          |
++-----------------------------+-----------------------------------------------------+
+|page                         |WidgetPage                                           |
++-----------------------------+-----------------------------------------------------+
+|upload                       |WidgetUpload                                         |
++-----------------------------+-----------------------------------------------------+
+|actionexport                 |WidgetActionExport                                   |
++-----------------------------+-----------------------------------------------------+
+
+Utilisation de composants personnalisés
+---------------------------------------
+
+Pour utiliser un composant personnalisé il faut :
+
+* Le déclarer dans la conf YUI (TODO : Lien vers la doc de configuration YUI)
+* Placer un noeud XML nommé ``custom`` là où doit s'afficher le widget (auparavant le nom du noeud n'importait pas, mais pour passer la validation par xsd dans le gestionnaire de ressource, il a fallu choisir un nom dédié à cet usage)
+* Ajouter un noeud enfant qui précise le widget à utiliser
+
+Exemples :
+
+.. code-block:: xml
+
+	<custom>
+	   <option output="html" option_name="widget" value="WidgetFoo" />
+	</custom>
+
+.. code-block:: xml
+
+	<value>
+	   <option output="html" option_name="widget" value="WidgetSpecialInteger" />
+	</value>
+
+.. _widgetsliste:
+
+Liste des widgets
+-----------------
+.. toctree::
+	:maxdepth: 1
+
+	widgets/actionlist
+	widgets/actionexport
+	widgets/base
+	widgets/bitsfield
+	widgets/button
+	widgets/field
+	widgets/listing
+	widgets/grid
+	widgets/readonly
+	widgets/search
+	widgets/select
+	widgets/table
+	widgets/text
+	widgets/time
+	widgets/toggle
+	widgets/tooltip
+	widgets/upload
+	widgets/pages
+	widgets/page
+
+Sous-Composants
+---------------
+.. toctree::
+	:maxdepth: 2
+
+	widgets/optionspanel.panel
+	widgets/optionspanel.option
+
+Spécifications
+--------------
+.. toctree::
+	:maxdepth: 1
+
+	widgets/autocompletion
+	widgets/autocompletion_multiple
+

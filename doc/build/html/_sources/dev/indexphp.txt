@@ -1,0 +1,49 @@
+.. _indexphp:
+
+Index.php : version générique
+=============================
+
+Principe
+--------
+
+Exemple d'un fichier public/index.php :
+
+.. code-block:: php
+
+	<?php
+	$sVersionVoo4 = file_get_contents(dirname(__FILE__) . '/../ressources/deploy/voozanoo4.txt');
+	require_once sprintf(PATH_VOO4_CORE, $sVersionVoo4) . 'library/PublicHelper.php';
+	$application = PublicHelper(__FILE__, $sVersionVoo4);
+
+Remarques : 
+
+* le fichier /ressources/deploy/voozanoo4.txt doit contenir la version Voo4 sous une forme normalisée
+
+  * trunk : tant qu'on n'a pas livré plus de versions stables
+  * x.y.z : forme classique utilisée pour Voozanoo3 déjà
+
+* le but est de ne plus avoir sur nos postes et serveurs de différence dans les fichiers public/index.php. On limite les différences au <application>.ini, voozanoo.ini et éventuellement à la configuration apache (.htaccess ou fichier dans /etc/apache2/conf.d/)
+* la version était à l'origine dans le index.php, elle en a été sortie 
+
+  * pour alimenter les informations de dépendances du système de déploiement
+  * pour que les tests unitaires de l'application utilisent systèmatiquement le même coeur que l'application (ce qui n'existe pas actuellement sous Voo3)
+
+Configuration nécessaire
+------------------------
+
+* Machine avec juste le trunk:: 
+
+	define('PATH_VOO4_CORE', CHEMIN_WWWEC . 'VOOZANOO4/src/');
+	define('PATH_VOO4_EXTLIB', CHEMIN_WWWEC . 'VOOZANOO4/libs/');
+
+* Machine avec plusieurs coeurs Voo4:: 
+
+	define('PATH_VOO4_CORE', PATH_VOO4 . '/%s/src/');
+	define('PATH_VOO4_EXTLIB', PATH_VOO4 . '/%s/libs/');
+
+  * les dossiers contenu dans PATH_VOO4 devront être de la forme 4.0.0, 4.0.1, 4.1.5 ...
+  * mais tant que le numéro de version apparait sous cette forme, aucun problème. On peut avoir par exemple::
+
+	define('PATH_VOO4_CORE', PATH_VOO4 . '/voozanoo4-%s-stable/src/');
+	define('PATH_VOO4_EXTLIB', PATH_VOO4 . '/voozanoo4-%s-stable/libs/');
+

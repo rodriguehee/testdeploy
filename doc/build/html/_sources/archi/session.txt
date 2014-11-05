@@ -1,0 +1,25 @@
+﻿.. _session:
+
+Session
+=======
+
+.. glossary::
+	:sorted:
+	
+	project_name
+		Nom du projet courant, déclaré dans CoreLibrary_Routes_ProjectName, de type STRING.
+		
+	Account
+		Singleton d'account, déclaré dans CoreLibrary_Account, de type OBJECT.
+		
+	config
+		Objet config tiré du application .ini, déclaré dans InitialiserZF(), de type OBJECT.
+
+Howto
+-----
+
+* une variable en session (nommée "nom" dans nos exemples)
+
+  * stocker : Core_Library_Account::Session()->nom = 'valeur';
+  * vérifier la présence : if(isset(Core_Library_Account::Session()->nom)) ...
+  * lire : Core_Library_Account::Session()->nom

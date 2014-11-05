@@ -1,0 +1,240 @@
+.. _widgetgrid:
+
+WidgetGrid
+=============
+
+Fonction
+--------
+Hérite de :ref:`widgetbase`
+
+Permet d'afficher une grille de saisie à la manière d'Excel liée à un DataSet (résultant d'un DataQuery), se base sur le composant `jqxGrid <http://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/>`_ (Cf. `Api de jqxGrid <http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-api.htm>`_).
+
+Ce composant intègre :
+
+* Le DataSet est chargé en intégralité sur le poste client et jqxGrid gère l'affichage
+* Le tri sur une colonne précise
+* Le filtrage sur une ou plusieurs colonnes
+* La suppression de la ligne sur laquelle se trouve le curseur
+* L'édition "à la volée" de cellules
+* La saisie en mode clavier avec les flèches de direction et la touche Entrée
+* Les données sont sauvegardées à chaque changement de cellule du tableur
+
+.. important::
+	Il est indispensable de définir la balise config de la ressource XML située sous la balise racine ainsi:
+
+.. code-block:: xml
+    
+    <config>
+        <display_path>form/frame/get/</display_path>
+        <save_path>form/frame/save</save_path>
+        <frame_js_class_name>FrameFormNoDialog</frame_js_class_name>
+        <getdataset_path>form/frame/getdataset</getdataset_path>
+    </config>
+    
+Attributs
+---------
+
+dataset (Obligatoire)
+^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Fonction : Indique quel DataSet (résultant d'un DataQuery) est lié au tableur, le DataQuery doit être présent dans la partie <data_structure> sans quoi une erreur se produira. Le matching se fait sur l'id du DataQuery
+
+Options
+-------
+Outre les options héritées de :ref:`widgetbase` le WidgetGrid comprend son propre jeu d'options contenues dans un noeud enfant <options></options>
+
+.. code-block:: xml
+    
+    <grid dataset="foo">
+        <options>
+            <option output="html" option_name="" value=""/>
+        </options>
+        <columns />
+    </grid>
+    
+
+addrow_btn_label (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : Add row
+
+Fonction : La chaîne de caractères lié au bouton d'ajout d'une nouvelle ligne
+
+columnsheight (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Integer
+
+Défaut : 25
+
+Fonction : La hauteur en pixel de la ligne d'entête
+
+columnresize (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Boolean
+
+Défaut : false
+
+Fonction : Permet de redimensionner la largeur des colonnes du tableur avec la souris
+
+deleterow_btn_label (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : Delete row
+
+Fonction : La chaîne de caractères liée au bouton de suppression d'une ligne
+
+deleterow_warning (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : Confirm the deletion ?
+
+Fonction : Le message de confirmation associé à la fonction de suppression d'une ligne
+
+export_btn_label (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : Excel Export
+
+Fonction : La chaîne de caractères liée au bouton d'export au format Excel
+
+height (Facultatif)
+^^^^^^^^^^^^^^^^^^^
+Type : Integer
+
+Défaut : 400
+
+Fonction : La hauteur en pixel de la grille, ce paramètre jouera donc sur le nombre de lignes visibles sans utilisation des barres de défilement.
+
+print_btn_label (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : Print
+
+Fonction: Définit le libellé lié à la fonction d'impression
+
+rowsheight (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^
+Type : Integer
+
+Défaut : 25
+
+Fonction : La hauteur en pixel d'une ligne
+
+.. note::
+    Cela ne définit pas la hauteur de la ligne d'entête
+
+showaggregates (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Boolean
+
+Défaut : false
+
+Fonction : Gère l'affichage de la ligne située sous la grille contenant les résultats des calculs aggrégés
+
+showfilterrow (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : Boolean
+
+Défaut : false
+
+Fonction : Gère l'affichage des filtres situés sous la ligne d'entête
+
+sortable (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^
+Type : Boolean
+
+Défaut : false
+
+Fonction : Permet d'effectuer un tri ascendant ou descendant sur les colonnes
+
+theme (Facultatif)
+^^^^^^^^^^^^^^^^^^
+Type : String 
+
+Défaut : null
+
+Fonction : Définit le thème du widget
+
+Valeurs attendues : android / arctic / black / blackberry / bootstrap / energyblue / fresh / highcontrast / metro / metrodark / mobile / office / orange / shinyblack / summer / web / windowsphone
+
+width (Facultatif)
+^^^^^^^^^^^^^^^^^^
+Type : Integer
+
+Défaut : 600
+
+Fonction : La largeur en pixel de la grille
+
+Contenu
+-------
+Le WidgetGrid contient un noeud enfant ``<columns>``, ce noeud contient N noeud ``<column>`` représentant les colonnes à afficher dans le tableur.
+
+Chaque colonne indiquée doit faire référence à une colonne du :ref:`dataquery` (Partie ``<data_structure>``) du dataset spécifié en attribut du tableur.
+
+.. code-block:: xml
+
+    <grid dataset="mon_dataset">
+        <columns>
+            <column field="foo" title="Foo" />
+            <column field="bar" title="Bar" />
+        </columns>
+    </grid>
+    
+Le type des colonnes est définit dans le dataset associé au tableur. A chaque type sera associé un composant de saisie faisant partie de la librairie jqxWidgets et non les composants de saisie de Voozanoo. C'est pourquoi, en raison de l'absence de composants graphiques, les champs textes multilignes ou heure n'existent pas dans le module.
+
++-------------------------+------------------------------------------------------------------------------+
+| Type du champ           | Composant graphique                                                          |
++=========================+==============================================================================+
+| String                  | TextBox                                                                      |
++-------------------------+------------------------------------------------------------------------------+
+| Numérique               | TextBox avec défilement vertical pour incrémenter ou décrémenter les valeurs | 
++-------------------------+------------------------------------------------------------------------------+
+| Date                    | Calendrier                                                                   |
++-------------------------+------------------------------------------------------------------------------+
+| Dico                    | Combobox                                                                     |
++-------------------------+------------------------------------------------------------------------------+
+| Dico à choix multiple   | Combobox incluant des Checkbox sur les items                                 |
++-------------------------+------------------------------------------------------------------------------+
+
+Les attributs du noeud ``<column>`` sont :
+
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| Nom de l'attribut           | Type attendu                  | Description                                                                               |Obligatoire |Défaut |
++=============================+===============================+===========================================================================================+============+=======+
+| field                       | String                        | Alias de la colonne du dataquery                                                          |Oui         |       |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| title                       | String                        | Titre affiché pour l'entête de colonne                                                    |Oui         |       |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| width                       | Integer                       | Largeur en pixel de la colonne                                                            |Non         |       |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| cellsalign                  | "left" ou "right" ou "center" | Définit l'alignement des valeurs dans les cellules de la colonne                          |Non         |left   |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| cellsformat                 | String                        | Définit le format d'une colonne de type date ou de type numérique                         |Non         |       |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| pinned                      | "true" ou "false"             | Fige une colonne, la position de la colonne n'est pas impactée par la barre de défilement |Non         |false  |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| readonly                    | "true" ou "false"             | Définit une colonne en lecture seule                                                      |Non         |false  |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| aggregate                   | String                        | Définit une fonction d'aggrégation sur une colonne                                        |Non         |       |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+| formula                     | String                        | Définit la fonction de calcul d'une colonne                                               |Non         |       |
++-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
+
+.. note::
+	L'attribut ``field`` est obligatoire même dans le cas d'une formule calculée, car le résultat du calcul est stocké dans la colonne de destination.
+
+Les valeurs possibles de l'attribut ``aggregate`` sont: ``avg``, ``count``, ``min``, ``max``, ``sum``, ``product``, ``stdev``, ``stdevp``, ``varp`` et ``var``. Seule ``count`` peut s'appliquer à des colonnes non numériques. Enfin, on ne peut définir qu'une seule fonction d'aggrégation par colonne.
+	
+Les valeurs possibles de l'attribut ``cellsformat`` sont documentées dans l'`API <http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-api.htm>`_ (cf ``Behavior`` > ``columns`` > ``cellsformat``). 
+
+L'attribut ``formula`` est un calcul défini par une fonction Javascript. Il est donc important que la syntaxe soit valide, sinon le module ne fonctionnera pas correctement. Par exemple, pour un total résultant de la multiplication de la quantité d'articles (``quantite``) par le prix unitaire d'un article (``montant``), on pourra utiliser la syntaxe suivante: 
+
+.. code-block:: javascript
+
+    parseFloat(rowdata.montant) * parseFloat(rowdata.quantite)

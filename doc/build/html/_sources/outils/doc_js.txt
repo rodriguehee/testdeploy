@@ -1,0 +1,33 @@
+﻿.. _doc_js:
+
+Documentation javascript
+========================
+Introduction
+------------
+La documentation javascript est générée en utilisant le générateur de documentation de la librairie YUI.
+
+Installation
+------------
+Installation de Python et des packages nécessaires
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pour pouvoir générer la documentation du code source javascript, il est nécessaire d'installer python sur la VM.
+
+Télécharger python http://www.python.org/getit/ (external link)
+Télécharger setupTools: http://pypi.python.org/pypi/setuptools (external link)
+Permet d'installer des packages utilent au générateur de doc. 
+
+Packages à installer:
+
+* C:\Python27\Scripts>easy_install.exe simplejson
+* C:\Python27\Scripts>easy_install.exe pygments
+* C:\Python27\Scripts>easy_install.exe Cheetah
+
+Forum expliquant comment installer le package simplejson avec easy_install: http://forum.xbmc.org/showthread.php?t=90315&page=4 (external link)
+
+Génération de la doc
+~~~~~~~~~~~~~~~~~~~~
+Lancer le .bat voozanoo.bat qui se trouve dans le répertoire: C:\Zend\librairies_externes\VooLibJs_DocGen
+La documentation générée se trouve ensuite dans le répertoire C:\Zend\librairies_externes\VooLibJs_DocGen\generator.
+Il faut supprimer les .svn de ce répertoire (provient du template de doc qui est versionné), puis copier tout le contenu dans le répertoire C:\Zend\librairies_externes\VooLibJs_Doc.
+
+Attention, il ne faut aucun accent dans le code javascript, sinon la génération plante.

@@ -1,0 +1,409 @@
+﻿.. _dataquery:
+
+Dataquery
+=========
+Description
+-----------
+Le dataquery définit le contenu d'un dataset.
+
+Balise root
+-----------
+
+.. code-block:: xml
+    
+	<dataquery
+	  id="dataquery_contact"
+	  table_name="e5y7_02_data"
+	  table_alias="c"
+	  begin="0"
+	  range="20"
+	  dataset_dependency="dataset_enquete"
+	  varset_name="pat"
+	  mode="rw"
+	  cacheable="true" 
+	  standby="true" 
+	  auto_add_record="false"
+	/>
+
+* ``id`` : Identifiant du Dataquery (et à terme du dataset généré), il est utiliser pour référencer le Dataquery.
+* ``table_name`` : Nom de la table principale du Dataquery.
+
+	.. note::
+		Dans le cas où le dataquery doit être utilisé sur plusieurs projets, il est possible d'indiquer un nom de table générique sous la forme: {pj}_nom_table, 
+		où {pj} est remplacé par le préfix du projet. Exemple: {pj}_pj_group.
+		
+* ``table_alias``: Alias sur le nom de la table (optionnel)
+* ``begin``: Numéro de ligne à partir de laquelle se fait la requête (optionnel)
+* ``range``: Nombre de lignes renvoyées (optionnel)
+* ``dataset_dependency`` **@deprecated** : nom d'un dataset dont est dépendant le dataset en cours de définition. Cette dépendance intervient lors de la mise à 
+  jour des dataset. Dans cet exemple, si le dataset nommé dataset_enquete change, alors le système devra aller chercher tous les dataset qui en sont dépendants. 
+  Il faudra donc mettre à jour dataquery_contact.
+* ``varset_name``: nom du varset auquel est lié le dataquery. Correspond à la colonne name dans la table des varset (optionnel).
+* ``mode``: indique si le dataquery est en lecture/écriture, ou en lecture seule. Cet attribut est optionnel, s'il n'est pas mis, alors le dataquery est en 
+  lecture/écriture. Les valeurs possibles: rw (lecture/écriture) ou r (lecture).
+* ``cacheable``: (Défaut : ``true``) Indique si le Dataset (généré depuis le Dataquery) doit être mis en cache coté client.
+* ``standby``: (Défaut : ``true``)  Indique au processus de suspension de saisie si le Dataset (généré depuis le Dataquery) peut être gelé et conservé en l'état (= ``true``) ou s'il doit
+  être regénéré (= ``false``). Plus d'infos : :ref:`frame-standby`.
+* ``auto_add_record``: (Défaut : ``false``) Permet l'ajout automatique d'un record vierge si le Dataset généré depuis ce Dataquery est vide. L'ajout se fait coté JS (et non coté Serveur). Très
+  utile dans le cas d'un Dataquery utilisé pour créer une fiche.
+
+.. note::
+	``begin`` et ``range`` correspondent aux valeurs utilisées par le mot clé MySQL ``LIMIT`` : 
+	
+	.. code-block:: sql
+		
+		SELECT * FROM table LIMIT 0, 20
+
+.. caution::
+	L'attribut ``varset_name`` du noeud ``<dataquery>`` indique à Voozanoo4 que la table concernée (``table_name``) est un Varset. Les droits des utilisateurs doivent donc s'appliquer. 
+	
+	Si cet attribut est omis alors qu'on requête effectivement un Varset **aucun droit** ne sera contrôlé.
+
+Les colonnes
+------------
+Syntaxe
+~~~~~~~
+Les colonnes permettent de sélectionner les variables à récupérer dans la partie "select" de la requête.
+
+.. code-block:: xml
+
+	<dataquery id="patient" table_name="e5y7_01_data" table_alias="p">
+	  <column sql="{nom_attr_sql}" alias="nom_sql" validator="alpha" regexp="[a-z]{3,}">
+	    <field table_name="p" field_name="nom" alias="nom_attr_sql"  mode="rw"/>
+	  </column>
+	</dataquery>
+
+#. Balise ``<column>`` :
+	* ``sql`` : il s'agit du sql qui sera utilisé pour récupérer la valeur. On ne met pas directement les champs de la table, mais des alias vers les balises fields qui seont définies ensuite. Ce paramètre est optionnel.
+	* ``alias`` : nom de la colonne, correspond à l'alias SQL: select YEAR(ddn) as annee_naissance. Ce paramètre est optionnel.
+	* ``validator`` : (Optionnel) validateur à utiliser pour valider le contenu de la colonne, surcharge le validateur éventuellement définit au niveau du varset
+		.. note::
+			Pour plus d'informations consultez la partie sur les :ref:`Validateurs <lib_js-validateurs>`.
+	* ``regexp`` : (Optionnel) expression régulière à exécuter pour valider le contenu de la colonne, surcharge une éventuelle regexp définie au niveau du varset
+	* ``mandatory`` : (Optionnel) Permet d'indiquer si la colonne est considérée comme obligatoire ou non (peut être placé sur un champ calculé). Prend le pas sur le Varset (surcharge)
+#. Balise ``<field>`` :
+	* ``table_name`` : table où se trouve le champ. Pour récupérer le nom, on utilise l'alias défini dans la balise dataquery (dans cet exemple "p"). Si l'alias est absent de la balise DataQuery, alors on utilise le contenu de l'attribut table_name.
+	* ``field_name`` : nom du champ dans la table.
+	* ``alias`` : nom du champ dans l'attribut sql de la balise column (voir sous-chapitre suivant).
+	* ``mode`` : indique si la colonne est en lecture/écriture, ou en lecture seule. Cet attribut est optionnel, s'il n'est pas mis, alors la colonne est en lecture/écriture. Les valeurs possibles: rw (lecture/écriture) ou r (lecture). Cette valeur prend le pas sur le mode indiqué au niveau de la balise dataquery ou join.
+
+L'attribut alias pour la balise field
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+L'alias pour une balise field permet de supporter le cas de deux champs qui ont le même nom dans deux tables différentes.
+Exemple:
+
+.. code-block:: xml
+
+	<dataquery id="dataquery_contact" table_name="e5y7_03_data" table_alias="c">
+	  <column sql="concat('Le patient habitant ', {ville_patient}, ' a été en contact avec le cas index à ', {ville_contact})" alias="situation">
+	    <field table_name="p" field_name="ville" alias="ville_patient"/>
+	    <field table_name="c" field_name="ville" alias="ville_contact"/>
+	  </column>
+
+	  <join detail_table="e5y7_01_data" detail_alias="p" sql="{id_patient}={id_data}" detail_varset_name="patient">
+	    <field table_name="c" field_name="id_patient" alias="id_patient"/>
+	    <field table_name="p" field_name="id_data" alias="id_data"/>
+	  </join>
+	</dataquery>
+
+Typage d'une colonne
+~~~~~~~~~~~~~~~~~~~~
+Lorsqu'une colonne est le résultat d'un calcul ou bien n'est pas issue d'un varset, il est possible d'imposer un type.
+
+.. code-block:: xml
+
+	<column sql="{id_sys_project}" alias="id_sys_project" type="integer" length="10">
+	  <field field_name="id_sys_project" table_name="proj" alias="id_sys_project"/>
+	</column>
+	<column sql="{label}" alias="label" type="string" length="50">
+	  <field field_name="label" table_name="proj" alias="label"/>
+	</column>
+	<column sql="{date_creation}" alias="date_creation" type="date" condtion="{date_creation}<curdate()">
+	  <field field_name="date_creation" table_name="proj" alias="date_creation"/>
+	</column>
+	<column sql=" ~np~{lang}~/np~ " alias="lang" type="dico" dico_name="lang">
+	  <field field_name="lang" table_name="proj" alias="lang"/>
+	</column>
+
+La définition du type est prioritaire par rapport à la définition par défaut (cas où la variable est déjà définie dans le varset).
+
+Transformation et utilisation de plusieurs champs pour une colonne
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: xml
+
+	<dataquery id="datatable_patient" table_name="e5y7_01_data" table_alias="p">
+	  <column sql="datediff({date_symptomes}, {ddn})" alias="age">
+	    <field field_name="ddn" table_name="p" alias="ddn"/>
+	    <field field_name="date_symptomes" table_name="p" alias="date_symptomes"/>
+	  </column>
+	</dataquery>
+
+column_simple
+~~~~~~~~~~~~~
+La balise "column_simple" permet de déclarer une colonne rapidement en indiquant uniquement le nom du champ, et la table source.
+
+.. code-block:: xml
+
+	<column_simple field_name="nom" table_name="p" />
+
+* field_name nom du champ
+* table_name alias de la table dans la base de données
+
+Conditions
+----------
+Les conditions s'utilisent de la même manière que les colonnes:
+
+.. code-block:: xml
+
+	<dataquery id="dataquery_patient" table_name="e5y7_01_data" table_alias="p">
+	  <condition sql="{id_patient}=14">
+	    <field field_name="id_patient" alias="id_patient" table_name="p"/>
+	  </condition>
+	  <column sql="{nom}" alias="nom">
+	    <field field_name="nom" table_name="p" alias="nom"/>
+	  </column>
+	</datatable>
+
+Anciennement il ne pouvait y avoir qu'une seule balise condition, il est désormais possible d'en avoir plusieurs. Cela fait suite à l'implémentation d'un nouvel attribut ``optional="true|false"``.
+
+Les multiples balises ``<condition>`` sont liées par un ``AND`` entre elles. Lorsque l'attribut ``optional`` vaut ``true`` la condition concernée est omise si tous les paramètres liés valent "null". Voir :ref:`utilisation-attribut-optional`
+
+Passage de paramètres
+~~~~~~~~~~~~~~~~~~~~~
+Il est possible de passer des paramètres aux conditions en provenance: 
+
+- Des datasets
+- Du tableau param du model manager (contient les paramètres de la requête)
+- De l'objet user pour en particulier récupérer l'identifiant de l'utilisateur courant pour le comparer la variable id_owner d'un varset.
+
+.. code-block:: xml
+
+	<condition sql="{id_data}={id_patient}">
+	  <field field_name="id_data" alias="id_data" table_name="p"/>
+	  <variable alias="id_patient" default="0">
+	    <entry type="param" name="id_patient" />
+	    <entry type="dataset" name="dataquery_patient" row="current" field="id_data" />
+	  </variable>
+	</condition>
+
+.. code-block:: xml
+
+	<condition sql="{id_owner}={user_id}">
+	  <field field_name="id_owner" alias="id_owner" table_name="p"/>
+	  <variable alias="user_id" default="0">
+		<entry type="user" name="user_id" />
+	  </variable>
+	</condition>
+
+
+* Type ``param``
+	* ``name`` : nom du paramètre dans la requête.
+* Type ``dataset``
+	* ``name`` : Identifiant du DataSet (indiqué dans l'attribut ``id``)
+	* ``row`` : position dans le rowdata, valeurs possibles: current, next, prev, last, first.
+	* ``field`` : nom du champ à récupérer dans le rowdata
+* Type ``user``
+	* ``name`` : correspond au nom d'un getter de l'objet User. Le nom est transformé pour correspondre à la syntaxe des méthodes Voozanoo, par exemple user_id devient GetUserId.
+
+NB: la balise variable sera utilisable dans toutes les autres balises (column, group_by, ...).
+
+.. _utilisation-attribut-optional:
+
+Utilisation de l'attribut optional
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: xml
+
+	<dataquery id="dataquery_patient" table_name="e5y7_01_data" table_alias="p">
+	   <condition sql="{lastname} = {param_lastname}" optional="true">
+	      <field field_name="lastname" alias="lastname" table_name="p"/>
+	      <variable alias="param_lastname" default="null">
+	         <entry type="param" name="lastname" />
+	      </variable>
+	   </condition>
+	   <condition sql="{num_ss} = {param_num_ss}" optional="true">
+	      <field field_name="num_ss" alias="num_ss" table_name="p"/>
+	         <variable alias="param_num_ss" default="null">
+	         <entry type="param" name="num_ss" />
+	      </variable>
+	   </condition>
+	</dataquery>
+
+.. note::
+	Les conditions seront placées dans la requête SQL uniquement si les paramètres ``param_lastname`` et ``param_num_ss`` sont renseignés.
+
+Utilisation des "paramètres altérés"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Certains paramètres peuvent être altérés par le noyau Voozanoo4 avant d'être restitués au ModelManager lors du parsing du DataQuery (plus d'information dans la partie :ref:`model_manager-alteredParameters`).
+
+En prenant en exemple le paramètre "group_tree", reconnu nativement comme paramètre altéré, il suffit de le référencer avec ce nom dans une condition du Dataquery lors des spécifications des "entry" :
+
+.. code-block:: xml
+
+	<condition sql="{gl.id_group_parent} IN ({param_id_group})" optional="true">
+	   <field field_name="id_group_parent" alias="gl.id_group_parent" table_name="gl"/>
+	   <variable alias="param_id_group" default="null">
+	      <entry type="param" name="group_tree" />
+	      <entry type="dataset" name="filter" row="current" field="group_tree" />
+	   </variable>
+	</condition>
+	
+
+La sous balise MATCH
+--------------------
+La balise MATCH est un dérivé de la balise condition, elle permet de faire une recherche sur des champs. La syntaxe est quasiment la même que pour la balise condition, la différence est qu'il doit obligatoirement y avoir une balise VARIABLE.
+
+La plupart du temps elle sera utilisée avec le composant autocomplete.
+
+.. code-block:: xml
+
+	<match sql="{nom} like {search_string} or {prenom} like {search_string}">
+	  <field field_name="nom" alias="nom" table_name="p"/>
+	  <field field_name="prenom" alias="prenom" table_name="p"/>
+	  <variable alias="search_string" default="NULL">
+	    <entry type="param" name="search_string" />
+	  </variable>
+	</condition>
+
+La partie SQL est répétée pour chaque mot contenu dans la variable.
+
+Par exemple, si on passe la chaine de caractère "Harry Seldon" dans la variable search string, le résultat sera le suivant:
+
+.. code-block:: sql
+
+	SELECT ... WHERE ((nom like '%Harry%' or prenom like '%HARRY%') and (nom like '%Seldon%' or prenom like '%Seldon%'))
+
+
+Un dataquery peut avoir une balise condition et une balise match.
+
+Les jointures
+-------------
+
+.. code-block:: xml
+
+	<dataquery id="dataquery_contact" table_name="contact">
+	  <join detail_table="e5y7_01_data" detail_alias="ct_patient" sql="{id_patient}={id_data}" type="inner" detail_varset_name="pat" mode="rw">
+	    <field table_name="contact" field_name="id_patient"/>
+	    <field table_name="ct_patient" field_name="id_data"/>
+	  </join>
+	</dataquery>
+
+* detail_table: nom de la table, comme pour l'attribut table_name du dataquery, il est possible de mettre un nom générique (de la forme {pj}_table_name)
+* detail_alias: alias de la table utilisé pour y faire référence dans les colonnes (équivaut à l'attribut table_alias du dataquery).
+* detail_varset_name: nom du varset auquel est lié la table. Correspond au champ name de la table des varset (optionnel).
+* mode: indique si les colonnes liées à la table jointe sont en lecture/écriture, ou en lecture seule. Cet attribut est optionnel, s'il n'est pas mis, alors les colonnes de la jointure sont en lecture/écriture. Les valeurs possibles: rw (lecture/écriture) ou r (lecture).
+
+Types de jointure possible:
+
+* inner
+* left
+* right
+
+Si le type n'est pas indiqué, alors le système met "left" par défaut.
+L'attribut detail_alias indique le nom de la table une fois que la jointure est faite, c'est donc ce nom qu'il faudra utiliser dans le reste du XML pour faire référence à la table.
+
+.. code-block:: xml
+
+	<dataquery id="dataquery_contact" table_name="contact">
+	  <join detail_table="patient" detail_alias="ct_patient" sql="{id_patient}={id_data}">
+	    <field table_name="contact" field_name="id_patient" alias="id_patient"/>
+	    <field table_name="ct_patient" field_name="id_data" alias="id_data"/>
+	  </join>
+	  <column sql="{nom}" alias="nom">
+	    <field table_name="ct_patient" field_name="nom" alias="nom"/>
+	  </column>
+	</dataquery>
+
+Exemple d'utilisation de champs qui viennent de tables différentes pour définir une colonnes:
+
+.. code-block:: xml
+
+	<dataquery id="dataquery_contact" table_name="e5y7_03_data" table_alias="c">
+	  <join detail_table="e5y7_01_data" detail_alias="cp" sql="{id_patient}={id_data}">
+	    <field table_name="c" field_name="id_patient"/>
+	    <field table_name="cp" field_name="id_data"/>
+	  </join>
+	  <column sql="datediff({dcontact}, {ddn})" alias="age">
+	    <field table_name="ct_patient" field_name="ddn" alias="ddn"/>
+	    <field table_name="contact" field_name="dcontact" alias="dcontact"/>
+	  </column>
+	</dataquery>
+
+Regroupement
+------------
+
+.. code-block:: xml
+
+	<group_by sql="{sexe}">
+	  <field field_name="sexe" alias="sexe" table_name="p"/>
+	</group_by>
+
+.. important::
+	Depuis la version 2.14 il est possible de spécifier plusieurs noeuds ``<group_by>``. Avant seul un noeud de ce type était autorisé par Dataquery.
+
+Tri
+---
+
+.. code-block:: xml
+
+	<order_by sql="{nom}">
+	  <field field_name="nom" alias="nom" table_name="p"/>
+	</order_by>
+
+.. important::
+	Depuis la version 2.4 il est possible de spécifier plusieurs noeuds ``<order_by>``. Avant seul un noeud de ce type était autorisé par Dataquery.
+	
+
+Variables
+---------
+Pour mettre une valeur dans un dataset provenant d'une autre source (dataset, param, ...), il est possible de déclarer des variables directement sous le noeud dataquery:
+
+.. code-block:: xml
+
+	<column_simple field_name="id_patient" table_name="e"/>
+	<variables>
+	  <variable alias="extern_id_patient" default="0" target_column="id_patient">
+	    <entry type="dataset" name="patient" field="id_data" row="current"/>
+	  </variable>
+	</variables>
+
+Attributs:
+
+* ``alias``: nom de la variable
+
+.. note::
+	GSA : Vérifier l'utilité de l'alias, je ne pense pas qu'il soit réellement utilisé
+	
+* ``default``: valeur par défaut
+* ``target_column``: référence de la colonne qui sera remplie
+
+La syntaxe des entrées est la même que pour les conditions.
+
+La clause Having
+----------------
+
+Il est possible de déclarer un noeud ``<having>`` permettant de spécifier des critères de filtre sur des colonnes contenant une expression Sql (Voir la `documentation <http://dev.mysql.com/doc/refman/5.0/fr/select.html>`_).
+
+Exemple :
+
+.. code-block:: xml
+	
+	<dataquery id="stats_patient" table_name="e5ib_01_data" table_alias="p">
+	   <column sql="COUNT({p.sexe})" alias="count_sexe">
+	      <field table_name="p" field_name="sexe" alias="p.sexe"/>
+	   </column>
+	   <column_simple field_name="sexe" table_name="p"/>
+	   
+	   <group_by sql="{p.sexe}">
+	      <field field_name="sexe" alias="p.sexe" table_name="p"/>
+	   </group_by>
+	   
+	   <having sql="COUNT({p.sexe}) &gt;= 5">
+	      <field field_name="sexe" alias="p.sexe" table_name="p"/>
+	   </having>
+	   
+	</dataquery>
+
+.. note::
+	Même si MySQL autorise l'utilisation des alias spécifiés dans la partie ``SELECT`` le noeud ``<having>`` lui requiert la re-déclaration de la formule utilisée, il n'est **pas** possible d'utiliser l'alias spécifié.
+	

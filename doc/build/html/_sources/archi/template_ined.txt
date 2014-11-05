@@ -1,0 +1,48 @@
+.. _template_ined:
+
+Template INED
+=============
+
+Feuille de style
+-------------------
+Voozanoo4 inclut déjà une feuille de style par défaut (``default.phtml``).
+
+Pour surcharger cette feuille de style il suffit de télécharger et de placer la vue :download:`<nomDuProjet>.phtml <../../../template/modules/style/views/scripts/index/tableur.phtml>` dans ``modules/style/views/scripts/index`` côté projet.
+
+Le ``<nomDuProjet>`` est à remplacer par le nom récupéré en exécutant la requête : 
+
+.. code-block:: sql
+
+   SELECT name FROM sys_project;
+   
+Fonts
+^^^^^
+La feuille de style du template INED utilise la font Open Sans. Vous trouverez dans le fichier compresser :download:`fonts.zip <../../../template/public/fonts/fonts.zip>` toutes les fonts pour les différents navigateurs.
+
+Ces fichiers (décompressés) seront à placer dans ``public/fonts`` côté projet.
+
+
+   
+Mainframe
+---------
+Le plus simple pour surcharger La page MainFrame de l’application est de télécharger le fichier :download:`mainframe.phtml <../../../template/modules/mainframe/views/scripts/index/mainframe.phtml>` et de le placer dans ``modules/mainframe/views/scripts/index`` côté projet.
+
+Vues pour La page MainFrame
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+La page MainFrame du template INED utilise, elle-même, trois autres vues à placer dans ``modules/mainframe/views/scripts`` : 
+	* :download:`header.phtml <../../../template/modules/mainframe/views/scripts/header.phtml>`
+	* :download:`menu.phtml <../../../template/modules/mainframe/views/scripts/menu.phtml>`
+	* :download:`footer.phtml <../../../template/modules/mainframe/views/scripts/footer.phtml>`
+	
+Images
+^^^^^^
+La vue header.phtml intégre l'image du :download:`logo de l'INED <../../../template/public/images/logo.svg>`. 
+Cette image est à placer dans ``public/images``.
+
+Logos partenaires (Optionnel)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Il est possible d'ajouter jusqu'à 2 logos pour les partenaires de l'INED.
+
+Ces logos seront à placer dans ``public/images`` et devront avoir comme nom ``logo_partn1.png`` et ``logo_partn2.png``.

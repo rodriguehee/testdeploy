@@ -1,0 +1,48 @@
+.. _widgetpages:
+
+WidgetPages
+===========
+
+Fonction
+--------
+Hérite de :ref:`widgetbase`
+
+Ce composant est utilisé pour afficher des onglets. Il doit être utilisé conjointement avec le composant ``Y.WidgetPage`` (noeud ``<page>``).
+
+Attributs
+---------
+
+keep_selection
+^^^^^^^^^^^^^^
+
+Type: boolean
+
+Fonction : Permet d'activer la conservation de l'onglet sélectionné afin d'auto-sélectionner l'onglet lorsqu'on "revient" sur l'interface
+
+.. important::
+    La conservation de la sélection fonctionne uniquement lorsqu'un identifiant (``id``) est fourni. Sans cela il sera re-généré à chaque affichage et
+    le système sera dans l'incapacité de re-sélectionner l'onglet qui était actif.
+    
+.. note::
+    Ce mécanisme utilise l'utilitaire ``Y.Voozanoo.Util.Storage`` permettant l'utilisation `du localStorage et du sessionStorage  <http://www.alsacreations.com/article/lire/1402-web-storage-localstorage-sessionstorage.html>`_.
+    
+    Cet utilitaire fourni un paliatif pour les anciens navigateurs ne supportant pas le Storage HTML5, il stock les éléments en mémoire. Cela est rendu possible par la conception de Voozanoo4 qui rafraichit le contenu
+    d'une page sans recharger toute la page, uniquement avec des requêtes XHR.
+
+.. code-block:: xml
+    
+    <pages id="pages-dossier-patient" keep_selection="true">
+        <page></page>
+    </pages>
+
+Options
+-------
+
+Aucune option disponible pour ce widget
+
+Contenu
+-------
+
+Ce widget n'accepte qu'un type de balise en tant qu'enfant : ``<page>``.
+
+Voir : :ref:`widgetpage`

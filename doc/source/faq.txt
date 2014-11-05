@@ -1,0 +1,75 @@
+.. _faq:
+
+Voozanoo FAQ
+============
+
+This is a list of Frequently Asked Questions about Voozanoo.  Feel free to
+suggest new entries!
+
+How do I...
+-----------
+
+... Où se trouve l'éditeur de Voozanoo?
+   Il n'est pas encore développé, la structure des questionnaires doit être faite à la main.
+
+... Comment obtenir le libellé de la valeur dans mon champ pour un champ sur dictionnaire?
+   La classe Dicomanager récupére un dictionnaire avec la méthode GetDico et le nom du dico.
+	La méthode GetItems retourne toutes les valeurs du dictionnaire.
+		On recherche via le code pour obtenir le libellé
+
+.. code-block:: php
+
+	protected function getDicoFromLabel( $sDicoName, $sDicoEntryId )
+	{
+		$aDb = Core_Library_Account::GetInstance()->GetCurrentProject()->DicoManager()->GetDico('myDictionnary')->GetItems();
+		foreach ($aDb as $id=>$record ) {
+			if ( $sDicoEntryId == $id ) {
+				return $record['label'];
+			}
+	}
+
+... Comment charger un formulaire avec des valeurs par défaut dans mes champs ?
+   Le jeu de données peut être intercepté avant le chargement du formulaire.
+	On réaffecte les valeurs par défaut en agissant sur le metadata
+
+.. code-block:: php
+
+	protected function _overrideFieldDefaultValue( Core_Library_Resource_XML_DataSet $oDataset )	{
+		$aAuthorizedFields = array ('myParamName' => 'myFieldName');
+		$aParams = $this->getRequest()->getParams();
+		foreach( $aParams as $sKey=>$sValue) {
+			if( array_key_exists($sKey, $aAuthorizedFields) ) {
+				$oDataset->GetMetaData()->OverrideFieldDefaultValue($aAuthorizedFields[$sKey], $sValue);
+			}
+		}
+
+	}
+
+... Comment intercepter le jeu de données avant le chargement du formulaire ?
+   La méthode _get_afterExecute dans le FrameController est déroulée après rapatriement des données et avant génération du formulaire.
+	On la dérive pour y jouer les actions souhaitées.
+
+.. code-block:: php
+
+	protected function _get_afterExecute( Core_Library_Event_Context $oContext )
+	{
+		parent::_get_afterExecute($oContext);
+		$aDatasets = $oContext->get('aDatasets');
+		$sDataSetId = 'myDataSet';
+		foreach ($aDatasets as $oDataset) {
+			if ( $oDataset->Id() == $sDataSetId ) {
+				$this->_overrideFieldDefaultValue($oDataset);
+			}
+		}
+		$oContext->set('aDatasets',$aDatasets);
+	}
+
+... Comment récupérer plusieurs clés primaires dans mon dataquery ?
+   Actuellement, Voozanoo 4 ne permet pas de récupérer plus d'une clé primaire par Dataquery.
+   En revanche, il est possible de récupérer d'autres id_data en utilisant la balise "column". De cette manière, si il sera possible de l'exploiter "manuellement" dans un widget personnalisé ou autre, vous ne pourrez pas utiliser ces valeurs comme des clés primaires dans les fonctionnalités système
+
+.. code-block:: xml
+
+	<column sql="{id_data}" alias="id_data_lecture1" type="integer">
+		<field table_name="l1" field_name="id_data" alias="id_data"  mode="r"/>
+	</column>

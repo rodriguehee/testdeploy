@@ -1,0 +1,469 @@
+﻿.. _parametrage:
+
+Paramétrage
+===========
+
+Principe de fonctionnement
+--------------------------
+
+La configuration d'une application Voozanooo4 se fait via deux fichiers ``.ini`` (Noyau et Application) lus et parsés par 
+`Zend_Config_Ini <http://framework.zend.com/manual/1.12/en/zend.config.adapters.ini.html>`_.
+
+Ce système permet l'utilisation de l'héritage de configuration entre sections. 
+
+Pour éviter tout conflit (Svn/Local/Serveur) dans les fichiers d'initialisation (Core Voozanoo & Application) une section se rattache :
+
+- A un contexte d'éxécution (Ex : Production, Staging - preprod, Testing - Recette, Development)
+- A un de nos serveur en particulier (Ex : php53a, php53b, preprod3, recette17)
+- A un poste de développement précis (Ex : GSA, JDS, SBL, CGD)
+
+.. image:: images/structure_sections_ini_voo4.png
+
+Fichier .ini représentant ce schéma :
+
+.. code-block:: ini
+	
+	; Production et enfants
+	[production]
+	
+	[prod_php53a : production]
+	
+	[prod_php53b : production]
+	
+	; Staging et enfants
+	[staging : production]
+	
+	[stag_preprod3 : staging]
+	
+	; Testing et enfants
+	[testing : production]
+	
+	[test_recette17 : testing]
+	
+	; Development et enfants
+	[development : production]
+	
+	[dev_gsa : development]
+	
+	[dev_sbl : development]
+	
+	[dev_jds : development]
+	
+	[dev_cgd : development]
+	
+
+L'identification de la section à charger se fait via une constante ``APPLICATION_ENV`` initialisée :
+
+- Au niveau du fichier ``public/index.php`` (**peu recommandé car versionné**)
+	.. code-block:: php
+		
+		<?php
+		//Cette notation permet d'éviter des erreurs du type "Constant already defined in..." si elle est déjà connue
+		defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'production');
+		
+- Au niveau du fichier ``public/.htaccess`` (**peu recommandé car versionné**)
+	.. code-block:: apacheconf
+		
+		SetEnv APPLICATION_ENV production
+
+- Au niveau du Vhost d'Apache (**recommandé**)
+	.. code-block:: apacheconf
+		
+		<VirtualHost *:8080>
+			ServerName neodemat.voozanoo.net
+			ServerAlias neodemat
+			ServerAdmin webmaster@localhost
+			# .... 
+			<Directory /var/www/neodemat>
+				SetEnv APPLICATION_ENV production
+
+				RewriteEngine On
+				RewriteCond %{REQUEST_FILENAME} -s [OR]
+				RewriteCond %{REQUEST_FILENAME} -l [OR]
+				RewriteCond %{REQUEST_FILENAME} -d [OR]
+				RewriteCond %{REQUEST_URI} =/favicon.ico [OR]
+				RewriteCond %{REQUEST_URI} =/server-info [OR]
+				RewriteCond %{REQUEST_URI} =/server-status
+				RewriteRule ^.*$ - [NC,L]
+				RewriteRule ^.*$ index.php [NC,L]
+			</Directory>
+			# .... 
+		</VirtualHost>
+	
+
+Deux fichiers sont chargés:
+
+* voozanoo.ini, situé à la racine du core Voozanoo utilisé
+* <application>.ini, chargé actuellement à partir du chemin PATH_CONF du prepend.inc.php 
+
+.. note::
+	Si l'application contient un .htaccess dans le répertoire public les variables d'environnement / les règles de rewriting surchargeront votre configuration Apache.
+	
+	Pour éviter cela ajoutez cette directive (en ciblant le répertoire ``/public/`` de l'appli) :
+	
+	.. code-block:: apache
+		
+		AllowOverride None
+
+Configuration de Voozanoo4
+--------------------------
+
+On y défini d'une part
+
+* les configurations propre à un noyau
+	* version du ZendFramework à utiliser 
+* les configurations génériques nécessaires au bon fonctionnement de l'application
+	* affichage des erreurs
+	* émission d'exceptions par le front controller
+	* tous les chemins d'inclusions (défini ici à l'aide des constantes du prepend.inc.php standard)
+	* quelques réglages génériques sur la base de données
+	* la configuration en développement 
+
+Noter que
+
+* VOOZANOO_PATH et APPLICATION_PATH sont deux constantes définies au démarrage de l'application, avant que les fichiers ini ne soient chargés, nécessaires pour que la configuration puisse être définie relativement aux chemins du core voozanoo choisi et de l'application.
+* VOOZANOO_PATH est le chemin vers le core voozanoo, elle contient donc la version à utiliser (dans le cas d'une installation de plusieurs coeurs) 
+
+.. code-block:: ini
+
+	[production]
+
+	; -- Environnement PHP --
+		; @see http://php.net/manual/fr/errorfunc.configuration.php#ini.display-startup-errors
+	phpSettings.display_startup_errors = 0
+		; @see http://www.php.net/manual/fr/errorfunc.configuration.php#ini.display-errors
+	phpSettings.display_errors = 1
+		; Indique la timezone à utiliser
+	phpSettings.date.timezone = "Europe/Paris"
+	
+	; -- Include Path automatiquement ajoutés --
+	includePaths.library = CHEMIN_EXTLIB
+	includePaths.pear = CHEMIN_EXTLIB "PEAR"
+	
+	; -- Amorçage de l'application --
+	bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+	bootstrap.class = "Bootstrap"
+	
+	; -- Librairie Voozanoo --
+		 ; Active l'utilisation de packages (rollup) statiques de Voozanoo4 et Yui pour optimiser les performances
+	lib.voozanoo.javascript.static = TRUE
+		; Active ou non le mode Debug (console YUI2 + fichier non minifiés)
+	lib.yui.debug = FALSE
+		; Fichier xml référencant les modules Yui3 de Voo4
+	lib.voozanoo.javascript.yui_conf = "yui_conf_modules.xml"
+		 ; Chemin pointant la librairie javascript de Voozanoo
+	lib.voozanoo.javascript.path = CHEMIN_EXTLIB "/VooLibJs"
+		; Url pointant la librairie JS Voo4 (utilisé dans des balises <script>)
+	lib.voozanoo.javascript.url = "http://localhost:8080/VOOZANOO4/libs/VooLibJs"
+		; Url pointant le répertoire des assets
+	lib.voozanoo.assets.url = "http://localhost:8080/VOOZANOO4/libs/VooLibAssets"
+		; Url pointant la librairie YUI 3
+	lib.yui.url = "http://localhost:8080/VOOZANOO4/libs/yui"
+		; Path pointant la librairie YUI 3
+	lib.yui.path = CHEMIN_EXTLIB "/yui"
+		; Url pointant la librairie YUI 2
+	lib.yui2.url = "http://localhost:8080/VOOZANOO4/libs/yui2" 
+		
+		
+	
+	; -- Ressources ZendFramework (@see http://framework.zend.com/manual/1.12/en/zend.application.available-resources.html) --
+		; Active la possibiliter de placer un fichier Bootstrap.php dans chaque répertoire de module pour amorcer spécifiquement chaque Module
+		; @see http://framework.zend.com/manual/1.12/en/zend.application.available-resources.html#zend.application.available-resources.modules
+	resources.modules[] =
+	
+	; frontController
+		; Indique à Zend de ne pas Throws les exception rencontrées mais de les router vers l'Handler d'exception
+	resources.frontController.throwExceptions = FALSE
+		; Pour ne pas afficher de détails relatifs aux exceptions à l'utilisateur (dangereux en production)
+	resources.frontController.params.displayExceptions = FALSE
+		; Répertoire contenant les controllers du module "default"
+	; resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+		; Modules reconnus (Coté Core et Coté Application)
+	resources.frontController.moduleDirectory[] = CHEMIN_CORE "/modules"
+	resources.frontController.moduleDirectory[] = APPLICATION_PATH "/modules"
+		; Indique au frontController de considérer le module 'home' comme étant celui à utiliser par défaut (ie : sans indication dans l'URL)
+	resources.frontController.defaultModule = 'home'
+		; Indique a ZF de préfixer le module par défaut par son libellé (en l'occurence 'Home_')
+	resources.frontController.params.prefixDefaultModule = 1
+
+	; Aides d'action noyau
+	resources.frontController.actionHelperPaths.Core_Library_Action_Helpers = CHEMIN_CORE "/library/Action/Helpers"
+	
+	; Aides de vues noyau
+	resources.view.helperPath.CoreLibrary_View_Helpers = CHEMIN_CORE "/library/View/Helpers"
+	
+	;Resource : mail
+	resources.mail.transport.type = smtp
+	resources.mail.transport.host = SMTP_HOST
+
+	;Configuration propre à Voozanoo
+		; Chemin vers les ressources (Xml, Sql etc) de l'application
+	voozanoo.resources.path = APPLICATION_PATH "/resources"
+	
+	; -- Directives facultatives --
+	
+	; (Défaut = Calculé en fct du memory_limit) Nombre de tuples considérés comment pouvant être mis en mémoire lors du query vers la DB
+		; A titre d'information 64Mo de RAM correspond à environ 7.000 records (bien sur tout dépend du nb de colonnes par record)
+		; @see Core_Library_Resource_XML_DataSet_RowData_Adapter_ZendDBSelect::_calculateLimitCount()
+	lib.voozanoo.adapter.zendDbSelect.packetSize = 20000
+	
+	; (Défaut = 10) Délai (en secondes) utilisé pour le monitoring (péremption ?)
+	; @see Core_Library_Monitoring::Load()
+	form.monitor.ttl = 10
+	
+	; (Défaut = 24) Délai (en heures) avant qu'un fichier uploadé dont la fiche n'a pas été enregistrée soit purgé
+	; @see Core_Library_Controller_Upload_Upload::$_iTimer
+	upload.delete_timer = 24
+	
+	; (Défaut = 0) Numéro de version à fournir aux demandes de fichiers Javascript pour bypass le cache navigateur
+	; @see Core_Library_Options::getResourceVersion()
+	voozanoo.core.js_version = 0.2.12
+	
+	; (Défaut = 0) Numéro de version à fournir aux demandes de fichiers Css pour bypass le cache navigateur
+	; @see Core_Library_Options::getResourceVersion()
+	voozanoo.core.css_version = 0.2.12
+
+	[development : production]
+	phpSettings.display_startup_errors = 1
+	phpSettings.display_errors = 1
+
+Configuration d'une application
+-------------------------------
+
+Le principe est de n'avoir que les éléments réellement spécifiques à l'application. Notez qu'il est *possible* de surcharger dans ce fichier une valeur définie dans le voozanoo.ini.
+
+Il faut donc être prudent et connaitre les directives de configuration étant présente dans le ``voozanoo.ini``
+
+.. note::
+	Le fichier d'initialisation d'une application peut désormais se placer dans l'arborescence de l'application, afin de garder un *modèle* de la configuration d'une appli et également de l'utiliser tel quel.
+	
+	Il faut savoir que le système tentera d'abord de charger le fichier de configuration depuis le ``PATH_FARM`` puis si, et seulement si, il est introuvable à cet endroit il tentera de le chercher du coté
+	de l'application (``APPLICATION_PATH/configs/application.ini``).
+	
+	L'héritage des sections expliqué ci-dessous est toujours valide dans ce fichier.
+
+.. code-block:: ini
+
+	[production]
+	
+	; Ressource : Base de données
+		; PDO est obligatoire 
+	resources.db.adapter = "PDO_MYSQL"
+	resources.db.params.date_format = "YYYY-MM-ddTHH:mm:ss"
+	resources.db.isDefaultTableAdapter = true
+	resources.db.params.host = "localhost"
+	resources.db.params.username = "root"
+	resources.db.params.password = ""
+	resources.db.params.dbname = "voozanoo4"
+
+	; configuration de l'application
+	voozanoo.baseurl = "/applis/VOO4_PROJECTX/public/"
+
+	; Répertoire temporaire où stocker des fichiers générés par l'application (Ex: Export)
+	; @see Core_Library_Export_Builder::_getTempPath()
+	dir.temp = PATH_TEMP "PROJECTX/temp/"
+	
+	; Répertoire temporaire de stockage des chunks lors de l'upload de fichiers via le composant Y.LargeFileUploader, lié à l'application
+	; @see Core_Library_Controller_Upload_Upload::uploadchunkAction()
+	voozanoo.upload.chunk.directory = "/space/storage/chunks/projectx"
+	
+	; Répertoire de stockage final d'un fichier uploadé (assimilé à un Storage), lié à l'application
+	; @see Core_Library_File_Manager::GetDefaultStorage()
+	voozanoo.upload.directory = "/space/storage/projectx"
+	
+	; -- Directives facultatives --
+	
+	; (Défaut = valeur de $_SERVER[ 'HTTP_HOST' ]) Host à utiliser pour reconstruire l'url du projet
+	; @see Core_Library_Account::GetURL()
+	voozanoo.host = 'projectx.voozanoo.net'
+	
+	; (Défaut = Déduit de $_SERVER[ 'SERVER_PORT' ]) Protocole à utiliser pour reconstruire l'url du projet
+	; @see Core_Library_Account::GetURL()
+	voozanoo.host = 'https'
+	
+	; Si l'APPLICATION possède des Widgets JS spécifiques (seront chargés pour tous les projets)
+	lib.voozanoo.javascript.extended_yui_conf.default.version = "1.0.0"
+	lib.voozanoo.javascript.extended_yui_conf.default.jsuri = "javascript/"
+	lib.voozanoo.javascript.extended_yui_conf.default.resource = APPLICATION_PATH "/ressources/xml/default_yui_conf_modules.xml"
+	
+	; Si le PROJET possède des Widgets JS spécifiques
+	; (En considérant que le projectName est 'vaccilab')
+	lib.voozanoo.javascript.extended_yui_conf.vaccilab.version = "1.4.2"
+	lib.voozanoo.javascript.extended_yui_conf.vaccilab.jsuri = "javascript/"
+	lib.voozanoo.javascript.extended_yui_conf.vaccilab.resource = APPLICATION_PATH "/ressources/xml/vaccilab_yui_conf_modules.xml"
+	
+	[development : production]
+	lib.voozanoo.javascript.static = TRUE
+	lib.yui.debug = FALSE
+
+Activation de l'auto-loading de classes métier
+----------------------------------------------
+
+Une application avec des besoins spécifiques peut nécessiter des classes relatives au coté "métier" de l'application.
+
+Anciennement l'autoLoading de ces classes était effectué via un ajout dans le classe ``Bootstrap`` présente coté application. Cette façon de faire, 
+bien que fonctionnelle, comportait quelques inconvénients :
+
+- Le "namespace" des classes ainsi auto chargées se retrouvait rallongé (Ex: Neodemat_Library, Epifiles_Lib, Saga_Lib) inutilement
+- Il était impossible de faire cohabiter proprement plusieurs librairies (Ex: 1 librairie par projet pour une application multi-projet)
+- Il était necessaire de modifier un fichier PHP (``Bootstrap.php``) pour modifier l'autoloading
+- La syntaxe de déclaration de l'auto-loading était assez complexe :
+	.. code-block:: php
+		
+		<?php
+		//!! Ceci est un exemple de ce qu'il ne faut plus faire : ne pas le copier-coller !!
+		$oAutoLoader = new Zend_Loader_Autoloader_Resource(array(
+			'namespace' => 'Neodemat',
+			'basePath' => dirname(__FILE__),
+			'resourceTypes' => array(
+				'library' => array('namespace' => 'Library', 'path' => 'library')
+			)
+		));
+		//!! Ceci était un exemple de ce qu'il ne faut plus faire : ne pas le copier-coller !!
+
+Désormais pour activer l'auto-loading d'une librairie propre à un projet (ou à l'application) la façon de procéder est :
+
+#. Si ce n'est pas déjà fait créer un répertoire ``library/`` à la raçine de l'application (là ou les répertoires ``modules`` et ``public`` se trouvent)
+
+	- Modifier le fichier .ini de l'application pour ajouter le chemin vers ce répertoire ``library/`` dans l'include_path de php :
+		.. code-block:: ini
+			
+			; équivalent à un set_include_path( APPLICATION_PATH "/library" . PATH_SEPARATOR . get_include_path() );
+			includePaths.library = APPLICATION_PATH "/library"
+		
+#. Modifier le fichier .ini de l'application pour déclarer notre namespace comme "auto-loadable" :
+	.. code-block:: ini
+		
+		; Notez bien l'underscore final "_", il est ABSOLUMENT necessaire
+		autoloadernamespaces[] = "MonProjet_"
+
+Voilà : ZendFramework considérera qu'une classe nommée "MonProjet_Foo_Bar" peut être chargée depuis ``APPLICATION_PATH/library/MonProjet/Foo/Bar.php``.
+
+.. hint::
+	
+	Dans le cas où votre application comportement plusieurs projets vous pourrez avoir un espace dédié au classes metier de chaque projet :
+	
+	::
+		
+		/library/
+		   Epidemic/
+		      Disease.php
+		      Entity.php
+		   Stats/
+		      Data/
+		         Collector.php
+		      Ui/
+		         Graph.php
+	
+	Il suffira de déclarer chaque namespace dans le fichier ``.ini`` de l'application :
+	
+	.. code-block:: ini
+		
+		autoloadernamespaces[] = "Epidemic_"
+		autoloadernamespaces[] = "Stats_"
+
+Plus d'informations concernant l'auto-loading dans ZendFramwork : `L'autoloader <http://framework.zend.com/manual/1.12/fr/zend.loader.autoloader.html>`_
+
+TODO : les chemins de travail devraient être structurés selon les critères suivants
+
+* les chemins de travail ne doivent pas être dans la même partie de l'arborescence que le code (questions de droits apache, pour la sécurité)
+* si on installe deux fois la même application elles doivent utiliser des dossiers distincts
+* l'idéal serait d'avoir en réalité le chemin racine de travail, dans lequel on mettra des dossiers "temp", "templates_c", et autres 
+
+Les directives devenues obsolètes
+---------------------------------
+
+- ``zendframework.version`` : Indiquait le numéro de version du ZendFramework utilisée
+	.. note::
+		Peut être connu depuis le code PHP en utilisant Zend_Version::VERSION
+- ``zendframework.path`` : Indiquait le chemin complet d'accès à la librairie ZendFramework utilisée
+- ``voozanoo.directory`` : Indiquait le répertoire vers la lib Voozanoo ? (Aucune utilisation connue)
+- ``voozanoo.path_base`` : ???? (Aucune utilisation connue)
+- ``smarty.compile_dir`` : Indiquait le chemin vers le répertoire des templates Smarty compilés
+- ``smarty.plugins_dir`` : Indiquait le chemin vers le répertoire des plugins Smarty
+- ``includePaths.smarty`` : Indiquait le chemin vers la librairie Smarty3 pour l'ajouter dans l'include_path
+- ``resources.frontController.controllerDirectory`` : Indiquait le répertoire des controllers à utiliser "en dehors de la notion de module", devenu obsolète suite à l'implémentation de la Homepage version XML
+
+Ré-activation des controlleurs sans module
+------------------------------------------
+
+L'implémentation de la page d'accueil (appelée également Homepage) au format "Ressource XML" a introduit des directives empêchant désormais l'utilisation des controlleurs anciennement présents dans le répertoire
+``/controllers/`` de l'application. ( Pour rappel : ``resources.frontController.defaultModule`` et ``resources.frontController.params.prefixDefaultModule`` )
+
+Avant cette évolution la page d'accueil était commune aux N projets présents dans l'application (ce qui pouvait poser de gros problèmes).
+
+Il est **fortement** déconseillé de ré-activer ces controlleurs. Si vous avez besoin de réaliser une page d'accueil complexe, mélangeant portions de code PHP, ViewHelpers, etc pour un projet spécifique 
+je vous conseille vivement d'utiliser le mécanisme de surcharge au sein de votre Application :
+
+.. code-block:: php
+	
+	<?php
+	//Contenu du fichier présent dans APPLICATION_PATH/modules/home/controllers/IndexController.php
+	class Home_IndexController extends Core_Library_Controller_Home_Index
+	{
+	   public function indexAction()
+	   {
+	      if ( 'vaccilab' === Core_Library_Account::GetInstance()->GetCurrentProjectName() ) {
+	         
+	         // ... Ici du code spécifique à la homepage de Vaccilab ...
+	         
+	         $this->render('vaccilab');
+	      }
+	      else
+	      {
+	         //utilisation du mécanisme de Homepage au format XML
+	         parent::indexAction();
+	      }
+	   }
+	}
+	
+Un fichier ``APPLICATION_PATH/modules/home/views/scripts/index/vaccilab.phtml`` devra être présent pour effectué le rendu.
+
+En cas de nécessité absolue, voici les directives à placer dans le fichier ini de l'Application pour réactiver les controlleurs sans module :
+
+.. code-block:: ini
+	
+	resources.frontController.controllerDirectory.default	= APPLICATION_PATH "/controllers"
+	resources.frontController.defaultModule = 'default'
+	resources.frontController.params.prefixDefaultModule = 0
+
+Ces directives désactiveront le rendu de la Homepage version "Ressource XML" et le controller ``IndexController`` présent dans ``APPLICATION_PATH/controllers`` sera celui ciblé par défaut.
+
+Si vous désirez combiner ces controlleurs avec le rendu de la Homepage version "Ressource XML" mettez cette ligne de redirection dans l'action ``indexAction`` du controlleur ``IndexController`` :
+
+.. code-block:: php
+	
+	<?php
+	class IndexController extends Core_Library_Controller_Action
+	{
+	   public function indexAction()
+	   {
+	      $this->_forward( 'index', 'index', 'home' );
+	   }
+	}
+
+Le fichier prepend.inc.php
+--------------------------
+
+TODO: le fichier prepend est optionnel. Expliquer où doivent être mises les constantes en l'absence du prepend.
+
+Ce fichier
+
+* défini des constantes utilisées uniquement dans les fichiers ini de voozanoo et des applications
+* facilite l'installation des applications sans avoir à redéfinir les chemins complets 
+
+Constantes
+
+* APPLICATION_ENV : mode de fonctionnement, par défaut 'development'
+* PATH_BASE : chemin racine à partir duquel tous les autres éléments sont configuré
+* DIR_VOO4 : chemin relatif à PATH BASE contenant les différentes version du core Voozanoo4
+* PATH_VOO4 : chemin de base des différentes version du core Voozanoo4
+* PATH_EXTLIB : chemin des librairies externes utilisées par Voozanoo4
+* PATH_ZF : chemin contenant les différentes installations du ZendFramework
+* PATH_CONF : chemin de base pour la configuration
+* PATH_WORK : chemin de base pour les dossiers de travail
+* PATH_TEMP : chemin de base pour les fichiers temporaires
+* URL_WWWEC : URL correspondant généralement au PATH_BASE
+* PATH_UTILITY : chemin des utilitaires nécessaires pour les tests unitaires
+* PATH_MYSQL : chemin des exécutables Mysql (nécessaire pour la classe CManipDB / HackDB) 
+

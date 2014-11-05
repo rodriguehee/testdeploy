@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Internationalisation (I18N) &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Librairie Javascript" href="lib_js.html" />
+    <link rel="prev" title="Events" href="events.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="lib_js.html" title="Librairie Javascript"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="Events"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="internationalisation-i18n">
+<span id="i18n"></span><h1>Internationalisation (I18N)<a class="headerlink" href="#internationalisation-i18n" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mecanisme-en-place">
+<h2>Mécanisme en place<a class="headerlink" href="#mecanisme-en-place" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="description-des-fichiers-po-mo">
+<h3>Description des fichiers PO/MO<a class="headerlink" href="#description-des-fichiers-po-mo" title="Permalink to this headline">¶</a></h3>
+<p><strong>PO/MO projet</strong></p>
+<p>Chaque projet a son propre fichier PO/MO.</p>
+<p>Il contient les chaînes de caractères suivantes:</p>
+<ul class="simple">
+<li>Les libellés et libellés courts des variables (uniquement des varsets standards). Le contenu de certaines variables sont aussi pris en compte (ajouter l&#8217;attribut <strong>translate=true</strong> dans la balise var). C&#8217;est utile pour traduire les varsets qui servent de dictionnaire (exemple: CIM10).</li>
+<li>Les dictionnaires (libellé et code)</li>
+<li>Les ressources de type formulaire de la table pj_resource (voozanoo extrait les chaines présentes dans le layout et la partie data structure)</li>
+</ul>
+<p>Extraction fichier PO / Insertion fichier MO</p>
+<ul class="simple">
+<li>Le fichier PO est fourni par l&#8217;action translate/index/get-prj-po (le fichier est généré à la volée)</li>
+<li>Le fichier MO est référencé dans la table pj_resource du projet, et stocké dans le répertoire <em>[application]/resources/translation/[lang]/[project name].mo</em>. L&#8217;enregistrement du fichier se fait via l&#8217;action translate/index/send-prj-po (attention l&#8217;application doit avoir les droits en écriture sur le répertoire [application]/resources/translation). Dans la table pj_resource, le fichier a pour nom la langue, et pour type <em>mo</em>.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Le module translate contient une page d&#8217;accueil qui liste toutes les actions possibles, dont la récupération du fichier po (action translate/index).</p>
+</div>
+<p><strong>PO/MO noyau</strong></p>
+<p>Trois fichiers PO/MO pour le noyau:</p>
+<ul class="simple">
+<li>core_js : chaines de caractères du code source javascript ( libs/VooLibJs/*.js ). Le fichier est généré par poedit en scannant le source et est stocké dans <em>[core]/src/resources/translation/[lang]/core_js.po</em>.</li>
+<li>core_src: chaines de caractères du code source PHP ( src/*.php ; src/*.phtml ), aussi généré par poedit et stocké dans <em>[core]/src/resources/translation/[lang]/core_src.po</em>.</li>
+<li>core_res: chaines de caractères des ressources XML du noyau, sont pris en compte tous les xml de formulaire trouvés dans les sous-répertoire de src/modules, avec en plus les libellés (et abréviations) des varsets de type système (sys), et les dictionnaires système (sys_dico). Le fichier est généré par l&#8217;action <em>create-core-res-po</em> (module/controleur: <em>translate/index</em>) dans <em>[core]/src/resources/translation/[lang]/core_res.po</em>.</li>
+</ul>
+<p><strong>PO/MO de l&#8217;application</strong></p>
+<p>L&#8217;application peut avoir ses propres fichiers PO/MO, dans le cas où les spécificités ( principalement de nouveaux modules ) contiennent des chaines de caractères à traduire.</p>
+<p>Tous ces fichiers sont donc optionnels:</p>
+<ul class="simple">
+<li>app_js : chaines de caractères du code source javascript, généré par poedit et enregistré dans <em>[application]/resources/translation/[lang]/app_js.po</em></li>
+<li>app_src: chaines de caractères du code source PHP ( [app]/*.php ; [app]/*.phtml ), aussi généré par poedit est enregistré dans <em>[application]/resources/translation/[lang]/app_src.po</em></li>
+<li>app_res: chaines de caractères trouvées dans les ressources XML de l&#8217;application (tous les formulaires situés dans les sous-répertoire de <em>[application]/modules</em>). Ce fichier est créé par l&#8217;action create-app-res-po et enregistré dans <em>[application]/resources/[lang]/app_res.po</em>.</li>
+</ul>
+</div>
+<div class="section" id="generation-des-fichiers-po">
+<h3>Génération des fichiers PO<a class="headerlink" href="#generation-des-fichiers-po" title="Permalink to this headline">¶</a></h3>
+<p>Les fichiers *_js.po et *_src.po sont générés par poedit qui scan le code source pour trouver toutes les chaînes de caractères à traduire ( voir paramétrage poedit ).</p>
+<p>Les fichiers *_res.po sont issus de l&#8217;action translate/index/create-core-res-po pour core_res.po et translate/index/create-app-res-po pour app_res.po.
+Voozanoo scanne lui même le noyau et l&#8217;application pour extraire les chaînes des ressources ( voir Core_Library_Po_Manager ).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">L&#8217;action translate/index/create-app-po génère tous les fichiers po de l&#8217;application (app_js, app_src, app_res).
+Les fichiers app_js et app_src sont créés vides, mais cela permet d&#8217;avoir un fichier de départ pour poedit.
+D&#8217;autre part tous les sous répertoires sont automatiquement créés (le répertoire translation, et les sous-répertoires liés aux langues).</p>
+</div>
+</div>
+<div class="section" id="schema-des-flux">
+<h3>Schéma des flux<a class="headerlink" href="#schema-des-flux" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/flux_i18n.png" src="_images/flux_i18n.png" />
+</div>
+</div>
+<div class="section" id="traduction-dans-le-code">
+<h2>Traduction dans le code<a class="headerlink" href="#traduction-dans-le-code" title="Permalink to this headline">¶</a></h2>
+<p>Pour le PHP</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="nv">$oTranslate</span> <span class="o">=</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">TranslateManager</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetZendTranslate</span><span class="p">();</span>
+<span class="nv">$oTranslate</span><span class="o">-&gt;</span><span class="na">_</span><span class="p">(</span> <span class="s2">&quot;Hello world&quot;</span> <span class="p">);</span>
+
+<span class="c1">// Raccourci</span>
+<span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">_</span><span class="p">(</span> <span class="s2">&quot;Hello world&quot;</span> <span class="p">);</span>
+
+<span class="c1">// Pour les vues ( l&#39;aide de vue prend l&#39;instance de Zend_Translate présente dans la registry )</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">translate</span><span class="p">(</span> <span class="s1">&#39;Hello world&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Pour le javascript</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">Y</span><span class="p">.</span><span class="nx">Translate</span><span class="p">.</span><span class="nx">_</span><span class="p">(</span> <span class="s2">&quot;Hello world&quot;</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>Quand la chaîne de caractère contient des éléments dynamiques, utiliser sprint en PHP et format en javascript (voir les exemples ci-dessous).</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">sprintf( $oTranslate-&gt;_( &quot;Please confirm deletion of group %1$s and its children&quot; ), $name );</span>
+
+<span class="x">sprintf( $oTranslate-&gt;_( &quot;%1$s greater than %2$s&quot; ), $varname, $value );</span>
+</pre></div>
+</div>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">Y</span><span class="p">.</span><span class="nx">Translate</span><span class="p">.</span><span class="nx">_</span><span class="p">(</span> <span class="s2">&quot;Please confirm deletion of group {0} and its children&quot;</span> <span class="p">).</span><span class="nx">format</span><span class="p">(</span> <span class="nx">oEvent</span><span class="p">.</span><span class="nx">oTreeNode</span><span class="p">.</span><span class="nx">label</span> <span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="core-library-locale-manager">
+<h3>Core_Library_Locale_Manager<a class="headerlink" href="#core-library-locale-manager" title="Permalink to this headline">¶</a></h3>
+<p>Sert, entre autre, à récupérer la locale courante. La locale est transformée en langue
+pour récupérer les fichiers mo dans le répertoire translation (ex: [core]/src/resources/translation/fr).</p>
+<p>On récupère d&#8217;abord la locale de l&#8217;utilisateur (champ locale dans le varset user_data), puis celle du navigateur, et
+enfin celle du projet (champ lang de la table sys_project).</p>
+<p>Le champ <em>locale</em> utilise le dictionnaire système <em>locale</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Le champ lang dans la table sys_project devra être renommé en &#8220;locale&#8221;, et devra pointer sur le dictionnaire système &#8220;locale&#8221;.
+Le script de création d&#8217;un projet devra demander à l&#8217;utilisateur quelle langue mettre par défaut pour le projet, ainsi que celle
+de l&#8217;utilisateur par défaut.</p>
+</div>
+</div>
+<div class="section" id="core-library-po-manager">
+<h3>Core_Library_Po_Manager<a class="headerlink" href="#core-library-po-manager" title="Permalink to this headline">¶</a></h3>
+<p>En charge des fichiers po, en particulier génère les po liés aux ressources ( *_res.po )</p>
+</div>
+<div class="section" id="core-library-translate-manager">
+<h3>Core_Library_Translate_Manager<a class="headerlink" href="#core-library-translate-manager" title="Permalink to this headline">¶</a></h3>
+<p>Gère les deux instances de Zend_Translate, celle dédiée aux chaines de caractères contenues dans le
+code javascript ( *_js.mo ), et celle qui contient toutes les autres traductions ( *_res.mo, *_src.mo, prj.mo ) plus la traduction Zend des validateurs.
+Cette class dispose en plus des méthodes <em>SavePrjMo</em> et <em>GetPrjMo</em> pour manipuler les fichiers mo des projets (écriture dans la table pj_resource, et lecture).</p>
+</div>
+<div class="section" id="traduction-des-dictionnaires">
+<h3>Traduction des dictionnaires<a class="headerlink" href="#traduction-des-dictionnaires" title="Permalink to this headline">¶</a></h3>
+<p>La méthode <em>ForceTranslate</em> dans la class Core_Library_Resource_XML_DataSet, a été ajoutée pour traduire les dictionnaires. Elle permet d&#8217;indiquer les variables dont il faut traduire le contenu.</p>
+<p><strong>class Core_Library_Model_Dico</strong> :</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">ToDataSet</span><span class="p">(</span><span class="nv">$bAllowCache</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$bAllowCache</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_oDicoDataSet</span> <span class="nx">instanceof</span> <span class="nx">Core_Library_Resource_XML_DataSet</span><span class="p">))</span>
+        <span class="p">{</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_oDicoDataSet</span><span class="o">-&gt;</span><span class="na">First</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+                <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_oDicoDataSet</span><span class="o">-&gt;</span><span class="na">ForceTranslate</span><span class="p">(</span> <span class="k">array</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="na">DICO_FIELD_LABEL</span><span class="p">,</span> <span class="nx">self</span><span class="o">::</span><span class="na">DICO_FIELD_SHORTLABEL</span> <span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">_oDicoDataSet</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="traduction-des-varsets">
+<h3>Traduction des varsets<a class="headerlink" href="#traduction-des-varsets" title="Permalink to this headline">¶</a></h3>
+<p>Pour traduire le contenu des varsets qui servent de référentiel (exemple: CIM10), il faut indiquer dans le XML du varset quelles sont les variables à traduire. Pour cela, ajouter l&#8217;attribut <em>translate</em>, avec la valeur <em>true</em>.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;varset</span> <span class="na">name=</span><span class="s">&quot;country&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;var</span> <span class="na">uid=</span><span class="s">&quot;1&quot;</span> <span class="na">id=</span><span class="s">&quot;country&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;true&quot;</span> <span class="na">default_label=</span><span class="s">&quot;Country&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;country&quot;</span> <span class="na">translate=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;50&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/var&gt;</span>
+        <span class="nt">&lt;var</span> <span class="na">uid=</span><span class="s">&quot;2&quot;</span> <span class="na">id=</span><span class="s">&quot;code&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">mandatory=</span><span class="s">&quot;true&quot;</span> <span class="na">default_label=</span><span class="s">&quot;code&quot;</span> <span class="na">default_short_label=</span><span class="s">&quot;code&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;50&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/var&gt;</span>
+<span class="nt">&lt;/varset&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="traduction-cote-javascript">
+<h3>Traduction coté javascript<a class="headerlink" href="#traduction-cote-javascript" title="Permalink to this headline">¶</a></h3>
+<p>Les chaînes de caractères traduites sont récupérées par le client en appellant l&#8217;action translate/index/translationsCatalog.
+Elles sont stockées dans la variable globale Y.TranslationsCatalog.</p>
+<p>Exemple de code javascript retourné par l&#8217;action translationsCatalog</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">YUI</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;translations_catalog&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">Y</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Y</span><span class="p">.</span><span class="nx">TranslationsCatalog</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;An error occured:&quot;</span><span class="o">:</span><span class="s2">&quot;Une erreur est survenue:&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Begins with&quot;</span><span class="o">:</span><span class="s2">&quot;Commence par&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Cancel&quot;</span><span class="o">:</span><span class="s2">&quot;Annuler&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Cancel merge&quot;</span><span class="o">:</span><span class="s2">&quot;Annuler la fusion&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Colorize rows&quot;</span><span class="o">:</span><span class="s2">&quot;Colorier les lignes&quot;</span><span class="p">,</span>
+                <span class="p">[...]</span>
+<span class="p">},</span>
+<span class="s1">&#39;0.0.1&#39;</span><span class="p">,</span>
+<span class="p">{</span>
+        <span class="nx">requires</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">le js renvoyé par l&#8217;action translate/index/translations-catalog semble être mis en cache, ce qui pose un problème si on change de langue en cours de route.</p>
+</div>
+</div>
+</div>
+<div class="section" id="parametrage-poedit">
+<h2>Paramétrage poedit<a class="headerlink" href="#parametrage-poedit" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scan-du-code-source-javascript">
+<h3>Scan du code source Javascript<a class="headerlink" href="#scan-du-code-source-javascript" title="Permalink to this headline">¶</a></h3>
+<p>Par défaut poedit ne sait pas scanner du code source javascript, il faut ajouter un nouvel analyseur.</p>
+<ul class="simple">
+<li>Aller dans Fichier/Préférences, onglet Analyseurs</li>
+<li>Créer un analyseur nommé JS, et entrer les valeurs comme sur l&#8217;image ci-dessous</li>
+</ul>
+<img alt="_images/poedit_analyseur_settings.png" src="_images/poedit_analyseur_settings.png" />
+<p>Nb: attention à bien indiquer que le code source est en utf8 lorsque vous lancer le scan.</p>
+<p>Source: <a class="reference external" href="http://stackoverflow.com/questions/16557327/how-to-generate-po-file-from-js-file-using-poedit">http://stackoverflow.com/questions/16557327/how-to-generate-po-file-from-js-file-using-poedit</a></p>
+</div>
+<div class="section" id="scan-du-code-source-php">
+<h3>Scan du code source PHP<a class="headerlink" href="#scan-du-code-source-php" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Il faut ajouter le scan des vues dans l&#8217;analyseur: ajouter *.phtml dans les extensions (au final cela devrait donner: *.php;*.phtml)</li>
+<li>L&#8217;aide de vue &#8220;translate&#8221; est utilisée pour la traduction dans les vues, il s&#8217;agit d&#8217;un mot clé que poedit ne connait. Ajouter &#8220;translate&#8221; dans les mots clés, ainsi que &#8220;_&#8221; pour le code source.</li>
+</ul>
+<img alt="_images/poedit_analyseur_settings2.png" src="_images/poedit_analyseur_settings2.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Internationalisation (I18N)</a><ul>
+<li><a class="reference internal" href="#mecanisme-en-place">Mécanisme en place</a><ul>
+<li><a class="reference internal" href="#description-des-fichiers-po-mo">Description des fichiers PO/MO</a></li>
+<li><a class="reference internal" href="#generation-des-fichiers-po">Génération des fichiers PO</a></li>
+<li><a class="reference internal" href="#schema-des-flux">Schéma des flux</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#traduction-dans-le-code">Traduction dans le code</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li><a class="reference internal" href="#core-library-locale-manager">Core_Library_Locale_Manager</a></li>
+<li><a class="reference internal" href="#core-library-po-manager">Core_Library_Po_Manager</a></li>
+<li><a class="reference internal" href="#core-library-translate-manager">Core_Library_Translate_Manager</a></li>
+<li><a class="reference internal" href="#traduction-des-dictionnaires">Traduction des dictionnaires</a></li>
+<li><a class="reference internal" href="#traduction-des-varsets">Traduction des varsets</a></li>
+<li><a class="reference internal" href="#traduction-cote-javascript">Traduction coté javascript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parametrage-poedit">Paramétrage poedit</a><ul>
+<li><a class="reference internal" href="#scan-du-code-source-javascript">Scan du code source Javascript</a></li>
+<li><a class="reference internal" href="#scan-du-code-source-php">Scan du code source PHP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="events.html"
+                        title="previous chapter">Events</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lib_js.html"
+                        title="next chapter">Librairie Javascript</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/i18n.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="lib_js.html" title="Librairie Javascript"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="events.html" title="Events"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

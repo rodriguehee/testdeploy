@@ -1,0 +1,256 @@
+﻿.. _invokable_dataset:
+
+Invokable Dataset
+=================
+
+Description
+-----------
+Il s'agit d'un système qui permet de transformer un dataset après sa création
+par le model manager.
+
+La transformation peut consister dans l'initialisation de variables, le remplissage
+du dataset, voir sa création complète.
+
+Dans l'exemple ci-dessous, les datasets ne sont pas définis (la partie metadata
+n'est pas décrite), c'est le système "invoke" qui va se charger de décrire la structure
+et remplir les données.
+
+.. code-block:: xml
+
+	<!-- Groups list -->
+	<dataset id="groups" invoke_from="IndentedGroups"/>
+
+	<!-- Roles list -->
+	<dataset id="roles" invoke_from="Roles"/>
+
+
+Templates existants
+-------------------
+
+IndentedGroups
+~~~~~~~~~~~~~~
+
+Récupération de la liste de tous les groupes, avec le niveau de profondeur où se situe chaque groupe.
+
+.. code-block:: xml
+
+	<!-- Roles list -->
+	<dataset id="groups" invoke_from="IndentedGroups"/>
+
+Dataset généré:
+
+.. code-block:: js
+
+	{
+		"id": "groups"
+		"total_rows": 1,
+		"begin": 0,
+		"metadata": {
+			"fields": {
+				"id_group": {
+					"type": "primary_key",
+					"mandatory": "false",
+					"primary_key": []
+				},
+				"name": {
+					"type": "string",
+					"mandatory": "false",
+					"default_label": "Groupe",
+					"string": {
+						"length": 50
+					}
+				},
+				"level": {
+					"type": "integer",
+					"mandatory": "false",
+					"integer": {
+						"max": "999",
+						"min": "0"
+					}
+				},
+				"id_axis": {
+					"type": "integer",
+					"mandatory": "false",
+					"integer": {
+						"max": "999",
+						"min": "0"
+					}
+				},
+				"id_parent": {
+					"type": "integer",
+					"mandatory": "false",
+					"integer": {
+						"max": "9999999999",
+						"min": "0"
+					}
+				}
+			},
+			"variables": []
+		},
+		"rowdata": [
+			{
+				"id_group": 1,
+				"name": "Main",
+				"id_axis": "1",
+				"level": 0,
+				"id_parent": null
+			}
+		]
+	}
+
+Roles
+~~~~~
+
+Récupération de tous les rôles
+
+.. code-block:: xml
+
+	<!-- Roles list -->
+	<dataset id="roles" invoke_from="Roles"/>
+
+Dataset généré:
+
+.. code-block:: js
+
+	{
+		"id": "roles",
+		"total_rows": 1,
+		"begin": 0,
+		"metadata": {
+			"fields": {
+				"id_role": {
+					"type": "primary_key",
+					"mandatory": "false",
+					"primary_key": []
+				},
+				"label": {
+					"type": "string",
+                        "mandatory": "false",
+						"string": {
+							"length": 100
+						}
+					}
+				},
+				"variables": []
+			},
+			"rowdata": [
+			{
+				"id_role": "1",
+				"label": "Administrator"
+			}
+		]
+	}
+
+Users
+~~~~~
+
+Récupération de tous les utilisateurs actifs.
+
+.. code-block:: xml
+
+	<!-- Roles list -->
+	<dataset id="users" invoke_from="Users"/>
+
+Le dataset généré contient deux variables: id_user (clé primaire) et label.
+
+
+Déclaration d'un invokable dataset
+----------------------------------
+
+Créer une class " Core_Library_Model_InvokableDataSet_[Nom] " dans library/Model/InvokableDataSet qui implémente l'interface Core_Library_Model_InvokableDataSet_Interface.
+
+[Nom] correspond au nom de l' "invokable", et doit être en CamelCase.
+
+Liste des méthodes qui doivent être définies dans la class:
+
+* public function checkFormat(Core_Library_Resource_XML_DataSet $oDataSet);
+	* Vérification du format du dataset. Si le format n'est pas celui attendu, il faut générer un exception.
+* public function transform(Core_Library_Resource_XML_DataSet $oDataSet);
+	* Transformation du dataset, elle renvoie le dataset transformé.
+
+
+Dans le cas de "IndentedGroups" et "Roles", la transformation consiste à créer un
+nouveau dataset décrit par un dataquery (ou un dataset) XML se trouvant dans le
+même répertoire que la class.
+
+C'est pourquoi il n'est pas nécessaire de décrire la partie metadata à l'utilisation
+de ces invokables, par ailles la méthode checkFormat est inutile dans ce cas.
+
+
+
+Méthode _executeXMLDataStructure de la class Core_Library_Model_Manager qui traite l'attribut "invokable":
+
+.. code-block:: php
+
+	foreach ($aDataSets as $oDataset)
+	{
+		// Test la présence de l'attribut invoke from dans le dataset. Si présent,
+		// alors il remplir le dataset à partir d'une class présente dans InvokableDataSet.
+		// Une exception est renvoyée sur la class n'existe pas
+		if ( isset( $oDataset->GetXml()->attributes()->invoke_from ) )
+		{
+			// On utilise GetXml au lieu de GetSimpleXml, avec cette dernière l'attribut invoke_from disparait, car l'objet
+			// simplexml est entièrement reconstruit.
+			$sClassName = 'Core_Library_Model_InvokableDataSet_' . ucfirst($oDataset->GetXml()->attributes()->invoke_from);
+
+			// Vérification de l'existence de de la class $sClassName
+			if ( false === Zend_Loader_Autoloader::autoload($sClassName) )
+			{
+				throw new Core_Library_Exception(sprintf('Invokable dataset class %s not found', $sClassName));
+			}
+			$oInvokableDasetSet = new $sClassName();
+
+			//Si le dataset n'a pas le format attendu pour la transformation, check format renvoie une exception
+			$oInvokableDasetSet->checkFormat( $oDataset );
+
+			//Transformation du dataset, en général remplissage des données
+			$oDataset = $oInvokableDasetSet->transform( $oDataset );
+		}
+
+		[...]
+
+	}
+
+Exemple
+-------
+
+
+.. code-block:: xml
+
+	Partie data_structure:
+
+	<!-- Groups list -->
+	<dataset id="groups" invoke_from="IndentedGroups"/>
+
+	<!-- Roles list -->
+	<dataset id="roles" invoke_from="Roles"/>
+
+
+	<!-- Selected role and group -->
+	<dataset id="rights">
+		<metadata>
+			<fields>
+				<field id="id_role" type="integer" default_label="ID role" default_short_label="ID role"/>
+				<field id="id_group" type="integer" default_label="ID group" default_short_label="ID group"/>
+			</fields>
+		</metadata>
+		<rowdata/>
+	</dataset>
+
+	Partie layout: 
+
+	<group>
+		<label dataset="rights" field="id_group" />
+		<value dataset="rights" field="id_group" mode="rw">
+			<option output="html" option_name="widget" value="WidgetProjectGroup" />
+			<option output="html" option_name="dataset" value="groups" />
+		</value>
+		<clear/>
+
+		<label dataset="rights" field="id_role" />
+		<value dataset="rights" field="id_role" mode="rw">
+			<option output="html" option_name="widget" value="WidgetSelect" />
+			<option output="html" option_name="dataset" value="roles" />
+		</value>
+		<clear/>
+	</group>

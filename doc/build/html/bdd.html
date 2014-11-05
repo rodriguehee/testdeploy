@@ -1,0 +1,1206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Base de données &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
+    <link rel="next" title="Composants graphiques" href="widgets.html" />
+    <link rel="prev" title="Template INED" href="archi/template_ined.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="widgets.html" title="Composants graphiques"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="archi/template_ined.html" title="Template INED"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="base-de-donnees">
+<span id="bdd"></span><h1>Base de données<a class="headerlink" href="#base-de-donnees" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="regle-de-nommage-des-tables">
+<h2>Règle de nommage des tables<a class="headerlink" href="#regle-de-nommage-des-tables" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>Chaque questionnaire est représenté par un identifiant. L&#8217;intérêt de cet identifiant est de pouvoir déplacer une enquête dans une autre base qui contient aussi des enquêtes, sans avoir à faire des recodages de nom de table.
+L&#8217;identifiant sera le même pour les tables de l&#8217;enquête et les tables des questionnaires. Pour différencier les questionnaires, on ajoutera un incrément sur deux caractères.
+Pour les tables au niveau projet on mettra le libellé &#8220;pj&#8221;.
+La longeur de l&#8217;identifiant sera de 4 caractères. Pour conserver un nombre de combinaisons important, on utilisera des caractères alpha-numériques.</p>
+</div>
+<div class="section" id="format-de-l-identifiant">
+<h3>Format de l&#8217;identifiant<a class="headerlink" href="#format-de-l-identifiant" title="Permalink to this headline">¶</a></h3>
+<p>Pour éviter de confondre certains caractères, les caractères i, 1, l, 0, o seront exlus de l&#8217;identifiant.
+Tous les caractères seront en minuscules.
+La longueur de l&#8217;identifiant sera de 4 caractères.
+Le premier caractère est compris entre les lettes a-z, avec exclusion des lettres i,l,o
+Les autres sont compris entre a-z et 0-1, avec exclusion des caractères i, 1, l, 0, o
+Si le premier caractère est composé uniquement de lettres, c&#8217;est justement pour éviter que le nom d&#8217;une table commence par un numérique, ce qui pourrait provoquer des erreurs dans certains moteurs de base de données.</p>
+<p>Nombre de combinaisons possibles: 23 x 31 x 31 x 31 = 685 193
+NB: si on ajoute un caractère en plus, on passe à 21 240 983 combinaisons possibles.</p>
+</div>
+<div class="section" id="exemples">
+<h3>Exemples<a class="headerlink" href="#exemples" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>e5y7_pj_globals</li>
+<li>e5y7_pj_users</li>
+<li>e5y7_01_data</li>
+<li>e5y7_02_data</li>
+</ul>
+</div>
+<div class="section" id="table-pour-les-relations-n-n">
+<h3>Table pour les relations N-N<a class="headerlink" href="#table-pour-les-relations-n-n" title="Permalink to this headline">¶</a></h3>
+<p>Pour une relation de type N-N entre deux tables, Voozanoo crée une table spécifique qui contient toutes les relations.
+Structure de la table: id_link, id_upstream, id_downstream
+Nommage de cette table: e6y7_01_02_link (relation N-N entre la table préfixé 01, et la table 02).</p>
+</div>
+</div>
+<div class="section" id="tables-globales">
+<h2>Tables globales<a class="headerlink" href="#tables-globales" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="description">
+<h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
+<p>Comme dans Voozanoo3, certaines tables ne seront liées à aucune enquête.
+Ces tables pourront être utilisées par l&#8217;éditeur, et parfois par certains modules des enquêtes (exemple: la table qui liste toutes les enquêtes d&#8217;une base de données Voozanoo4).</p>
+</div>
+<div class="section" id="format">
+<h3>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
+<p>Toutes les tables commenceront par les caractères &#8220;sys&#8221;.
+Exemple: sys_projects</p>
+</div>
+</div>
+<div class="section" id="jointures">
+<h2>Jointures<a class="headerlink" href="#jointures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="n">
+<h3>1-N<a class="headerlink" href="#n" title="Permalink to this headline">¶</a></h3>
+<p>Ajout d&#8217;une clé étrangère dans la table.
+Par exemple, si nous souhaitons faire une jointure entre la table patient et la table des communes, il faudra ajouter la clé étrangère id_commune dans la table patient.
+Voir le type fkey_varset dans la page varset.</p>
+</div>
+<div class="section" id="n-n">
+<h3>N-N<a class="headerlink" href="#n-n" title="Permalink to this headline">¶</a></h3>
+<p>Création d&#8217;une table de liaison pour chaque relation N-N. La table contient les identifiants des deux tables.
+Voir le type fkey_varset_ext dans la page varset.</p>
+</div>
+<div class="section" id="statut-de-la-jointure">
+<h3>Statut de la jointure<a class="headerlink" href="#statut-de-la-jointure" title="Permalink to this headline">¶</a></h3>
+<p>Dans Voozanoo3 nous avons un problème lié aux fiches archivées:
+Un patient est lié à plusieurs suivis qui ont été supprimés (rec_status = 3), dans ce cas il ne ressort pas dans les exports ou les listings. Cela vient du fait qu&#8217;on indique dans la jointure de ne pas renvoyer les suivis supprimés. Le patient sort uniquement dans le cas où il a au moins un suivi non supprimé.</p>
+<p>Nous avons remarqué que dans Sugar il y avait une table pour les jointures N-N, avec en particulier une variable qui indique si la jointure est toujours valide.
+Nous devons étudier ce système pour voir s&#8217;il faut ajouter dans la table de liaison des variables supplémentaires.</p>
+</div>
+</div>
+<div class="section" id="dictionnaires">
+<h2>Dictionnaires<a class="headerlink" href="#dictionnaires" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="reponse-simple">
+<h3>Réponse simple<a class="headerlink" href="#reponse-simple" title="Permalink to this headline">¶</a></h3>
+<p>On conserve une table qui contient la définition de tous les dictionnaires (code + label). Cette table est un questionnaire. La valeur stockée dans la table des données est l&#8217;id_data.
+Voir le type fkey_dico dans la page varset.</p>
+</div>
+<div class="section" id="reponse-multiple">
+<h3>Réponse multiple<a class="headerlink" href="#reponse-multiple" title="Permalink to this headline">¶</a></h3>
+<p>Les dictionnaires à réponse multiple se basent sur une table de jointure contenant l&#8217;identifiant de l&#8217;enregistrement, et l&#8217;identifiant du dictionnaire.
+Voir le type fkey_dico_ext dans la page varset.</p>
+</div>
+</div>
+<div class="section" id="description-des-tables-voozanoo4">
+<h2>Description des tables Voozanoo4<a class="headerlink" href="#description-des-tables-voozanoo4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sys-project">
+<h3>sys_project<a class="headerlink" href="#sys-project" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>Introduction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>Cette table liste tous les projets qui se trouvent dans la base de données. Elle a le même rôle que la table sb_enquete de voozanoo3 (liste des enquêtes).
+Il s&#8217;agit donc d&#8217;une table qui est globale et qui est toujours présente dans une base de données Voozanoo4.</p>
+</div>
+<div class="section" id="structure">
+<h4>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_sys_project</dt>
+<dd><ul class="first last simple">
+<li>INT INSIGNED NOT NULL</li>
+<li>Auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>label</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR (200)</li>
+<li>Nom du projet (ex. Surveillance de la grippe)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR (20) UNIQUE</li>
+<li>Nom à utiliser en programmation (ex. grippe)</li>
+<li>Regexp : ^[[a-z][[a-z0-1]</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>tables_prefix</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR (4) UNIQUE</li>
+<li>Identifiant des tables du projet (ex. aey4)</li>
+<li>Auto généré par Voozanoo</li>
+<li>Regexp : &#8211; ^[a-km-np-z][a-km-np-z2-9]{3}$</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>lang</dt>
+<dd><ul class="first last simple">
+<li>CHAR (10)</li>
+<li>Code langage par défaut (ex. fr, en_us, ...)</li>
+<li>code fourni par Zend_Locale</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="sys-module">
+<h3>sys_module<a class="headerlink" href="#sys-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h4>Introduction<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>Liste des modules installés dans le système (module noyau + module application)</p>
+</div>
+<div class="section" id="id3">
+<h4>Structure<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_sys_module</dt>
+<dd><ul class="first last simple">
+<li>INTEGER AUTO INCREMENT</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(50) NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>version</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(20)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="sys-module-acl">
+<h3>sys_module_acl<a class="headerlink" href="#sys-module-acl" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h4>Introduction<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>Liste des droits pour chaque module.</p>
+</div>
+<div class="section" id="id5">
+<h4>Structure<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_sys_module_acl</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL AUTO_INCREMENT</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_sys_module</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>code</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(45) NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>label</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(50) NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-module">
+<h3>aey4_pj_module<a class="headerlink" href="#aey4-pj-module" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h4>Introduction<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>Liste des modules activés dans le projet (jointure sur sys_module).</p>
+</div>
+<div class="section" id="id7">
+<h4>Structure<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_module</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL AUTO_INCREMENT</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_sys_module</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-module-acl">
+<h3>aey4_pj_module_acl<a class="headerlink" href="#aey4-pj-module-acl" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>Description<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p>Liste des droits activés dans le projet (jointure sur sys_module_acl).</p>
+</div>
+<div class="section" id="id9">
+<h4>Structure<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_module_acl</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL AUTO_INCREMENT,</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_sys_module_acl</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-role">
+<h3>aey4_pj_role<a class="headerlink" href="#aey4-pj-role" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h4>Description<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p>Liste des rôles.</p>
+</div>
+<div class="section" id="id11">
+<h4>Structure<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_role</dt>
+<dd><ul class="first last simple">
+<li>INTEGER UNSIGNED NOT NULL AUTO_INCREMENT</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(50) NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-role-acl">
+<h3>aey4_pj_role_acl<a class="headerlink" href="#aey4-pj-role-acl" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h4>Description<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<p>Table de jointure entre la table des rôle et la tabel des module_acl. Permet de définir les droits pour chaque rôle.</p>
+</div>
+<div class="section" id="id13">
+<h4>Structure<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_role_acl</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL AUTO_INCREMENT</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_role</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_module_acl</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-group-role">
+<h3>aey4_pj_group_role<a class="headerlink" href="#aey4-pj-group-role" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h4>Description<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<p>Attribution des rôles aux groupes (un utilisateur = un groupe). Un groupe peut avoir plusieurs rôles.</p>
+</div>
+<div class="section" id="id15">
+<h4>Structure<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_group_role</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL AUTO_INCREMENT</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_group</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_role</dt>
+<dd><ul class="first last simple">
+<li>INTEGER NOT NULL</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-resource">
+<h3>aey4_pj_resource<a class="headerlink" href="#aey4-pj-resource" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h4>Description<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
+<p>Contient la définition des objets au format XML.</p>
+</div>
+<div class="section" id="id17">
+<h4>Structure<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_resource</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>CHAR (200)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>type</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>char (20)</dt>
+<dd><ul class="first last simple">
+<li>mainframe</li>
+<li>listing</li>
+<li>etc.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>content</dt>
+<dd><ul class="first last simple">
+<li>BLOB</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-varset">
+<h3>aey4_pj_varset<a class="headerlink" href="#aey4-pj-varset" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h4>Description<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+<p>Contient la liste des varsets (c.f. sb_queges de Voo3).</p>
+</div>
+<div class="section" id="id19">
+<h4>Structure<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_varset</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>label</dt>
+<dd><ul class="first last simple">
+<li>char (200)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>CHAR (20)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>varset_table_prefix</dt>
+<dd><ul class="first last simple">
+<li>CHAR (10) (ex. [01 - 99], user)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_resource</dt>
+<dd><ul class="first last simple">
+<li>Identifiant qui pointe sur la ressource XML qui définit le contenu du varset.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-globals">
+<h3>aey4_pj_globals<a class="headerlink" href="#aey4-pj-globals" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id20">
+<h4>Description<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h4>
+<p>Cette table contient les variables globales du projet. On pourrait faire un parallèle avec les variables MySQL (show variables).
+Exemples de variables globales:</p>
+<ul class="simple">
+<li>Durée du timeout</li>
+<li>Type de connexion</li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h4>Structure<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h4>
+<p>A compléter</p>
+</div>
+</div>
+<div class="section" id="aey4-pj-axis">
+<h3>aey4_pj_axis<a class="headerlink" href="#aey4-pj-axis" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id22">
+<h4>Description<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+<p>Contient la liste de tous les axes. Un axes correspond à un arbre de groupes.</p>
+</div>
+<div class="section" id="id23">
+<h4>Structure<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_axis</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(45)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_group</dt>
+<dd><ul class="first last simple">
+<li>INT</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-group">
+<h3>aey4_pj_group<a class="headerlink" href="#aey4-pj-group" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id24">
+<h4>Description<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h4>
+<p>Contient la liste de tous les groupes, ainsi que les utilisateurs.</p>
+</div>
+<div class="section" id="id25">
+<h4>Structure<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_group</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>name</dt>
+<dd><ul class="first last simple">
+<li>VARCHAR(50)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="o">`</span><span class="mi">0000</span><span class="n">_pj_group</span><span class="o">`</span> <span class="p">(</span>
+  <span class="o">`</span><span class="n">id_group</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">name</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id_group</span><span class="o">`</span><span class="p">),</span>
+  <span class="k">UNIQUE</span> <span class="k">KEY</span> <span class="o">`</span><span class="n">name</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">name</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span> <span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="aey4-pj-group-link">
+<h3>aey4_pj_group_link<a class="headerlink" href="#aey4-pj-group-link" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id26">
+<h4>Description<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h4>
+<p>Cette table décrit les relations entre chaque groupe (y compris les utilisateurs).</p>
+</div>
+<div class="section" id="id27">
+<h4>Structure<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_group_link</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_group</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_group_parent</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="o">`</span><span class="n">aey4_pj_group_link</span><span class="o">`</span> <span class="p">(</span>
+  <span class="o">`</span><span class="n">id_group_link</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">id_group</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">id_group_parent</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id_group_link</span><span class="o">`</span><span class="p">),</span>
+  <span class="k">UNIQUE</span> <span class="k">KEY</span> <span class="o">`</span><span class="n">id_group</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">id_group</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">id_group_parent</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span> <span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="aey4-pj-group-mode">
+<h3>aey4_pj_group_mode<a class="headerlink" href="#aey4-pj-group-mode" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id28">
+<h4>Description<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h4>
+<p>Définition des droits de l&#8217;utilisateur dans chaque groupe auxquels il peut accéder.</p>
+</div>
+<div class="section" id="id29">
+<h4>Structure<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_group_mode</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_group_link</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_varset</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>mode</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="o">`</span><span class="n">aey4_pj_group_mode</span><span class="o">`</span> <span class="p">(</span>
+<span class="o">`</span><span class="n">id_group_mode</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+<span class="o">`</span><span class="n">id_group_link</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="o">`</span><span class="n">id_varset</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="o">`</span><span class="k">mode</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id_group_mode</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span> <span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="aey4-pj-query">
+<h3>aey4_pj_query<a class="headerlink" href="#aey4-pj-query" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id30">
+<h4>Description<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h4>
+<p>Liste des requêtes. Une requête peut être un test de cohérence, une variable calculée, une condition de bloc, ...</p>
+</div>
+<div class="section" id="id31">
+<h4>Structure<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_query</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>type</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>CHAR(20)</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>consistency_test</dt>
+<dd><ul class="first last simple">
+<li>Test de cohérence</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>condition</dt>
+<dd><ul class="first last simple">
+<li>Condition sur les bloc</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>calc</dt>
+<dd><ul class="first last simple">
+<li>Variable calculée</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">trigger</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_resource</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-pj-query-var">
+<h3>aey4_pj_query_var<a class="headerlink" href="#aey4-pj-query-var" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id32">
+<h4>Description<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h4>
+<p>Liste des variables utilisées dans chaque test de cohérence</p>
+</div>
+<div class="section" id="id33">
+<h4>Structure<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_query_var</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_query</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_varset</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_var</dt>
+<dd><ul class="first last simple">
+<li>CHAR(100)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-01-data">
+<h3>aey4_01_data<a class="headerlink" href="#aey4-01-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id34">
+<h4>Description<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h4>
+<p>Table qui va contenir les données d&#8217;un varset.</p>
+</div>
+<div class="section" id="id35">
+<h4>Structure<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_data</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_user</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-01-data-group">
+<h3>aey4_01_data_group<a class="headerlink" href="#aey4-01-data-group" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id36">
+<h4>Description<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h4>
+<p>Liste des groupes où se trouvent chaque enregistrement</p>
+</div>
+<div class="section" id="id37">
+<h4>Structure<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_data_group</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_data</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_group</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-01-data-group-mode">
+<h3>aey4_01_data_group_mode<a class="headerlink" href="#aey4-01-data-group-mode" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id38">
+<h4>Description<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h4>
+<p>Permet de surcharger les droits d&#8217;un enregistrement + groupe (ou utilisateur).</p>
+</div>
+<div class="section" id="id39">
+<h4>Structure<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>id_data_group_mode</dt>
+<dd><ul class="first last simple">
+<li>INT auto_increment PRIMARY</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>id_data_group</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>mode</dt>
+<dd><ul class="first last simple">
+<li>INT(10)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>date_valid</dt>
+<dd><ul class="first last simple">
+<li>DATE</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="aey4-user-data">
+<h3>aey4_user_data<a class="headerlink" href="#aey4-user-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id40">
+<h4>Description<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h4>
+<p>Stockage des utilisateurs</p>
+</div>
+<div class="section" id="id41">
+<h4>Structure<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h4>
+<p>A compléter</p>
+</div>
+</div>
+<div class="section" id="aey4-dico-data">
+<h3>aey4_dico_data<a class="headerlink" href="#aey4-dico-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id42">
+<h4>Description<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h4>
+<p>Stockage des dictionnaires</p>
+</div>
+<div class="section" id="id43">
+<h4>Structure<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h4>
+<p>A compléter</p>
+</div>
+</div>
+<div class="section" id="aey4-01-02-data">
+<h3>aey4_01_02_data<a class="headerlink" href="#aey4-01-02-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id44">
+<h4>Description<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h4>
+<p>Table pour la relation de type N-N entre les varset 01 et 02.</p>
+</div>
+<div class="section" id="id45">
+<h4>Structure<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h4>
+<p>A compléter</p>
+</div>
+</div>
+<div class="section" id="aey4-01-dico-ttt-data">
+<h3>aey4_01_dico_ttt_data<a class="headerlink" href="#aey4-01-dico-ttt-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id46">
+<h4>Description<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h4>
+<p>Table de relation pour les variables à réponse multiple.</p>
+</div>
+<div class="section" id="id47">
+<h4>Structure<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h4>
+<p>A compléter</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Base de données</a><ul>
+<li><a class="reference internal" href="#regle-de-nommage-des-tables">Règle de nommage des tables</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#format-de-l-identifiant">Format de l&#8217;identifiant</a></li>
+<li><a class="reference internal" href="#exemples">Exemples</a></li>
+<li><a class="reference internal" href="#table-pour-les-relations-n-n">Table pour les relations N-N</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tables-globales">Tables globales</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#format">Format</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jointures">Jointures</a><ul>
+<li><a class="reference internal" href="#n">1-N</a></li>
+<li><a class="reference internal" href="#n-n">N-N</a></li>
+<li><a class="reference internal" href="#statut-de-la-jointure">Statut de la jointure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dictionnaires">Dictionnaires</a><ul>
+<li><a class="reference internal" href="#reponse-simple">Réponse simple</a></li>
+<li><a class="reference internal" href="#reponse-multiple">Réponse multiple</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#description-des-tables-voozanoo4">Description des tables Voozanoo4</a><ul>
+<li><a class="reference internal" href="#sys-project">sys_project</a><ul>
+<li><a class="reference internal" href="#id1">Introduction</a></li>
+<li><a class="reference internal" href="#structure">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sys-module">sys_module</a><ul>
+<li><a class="reference internal" href="#id2">Introduction</a></li>
+<li><a class="reference internal" href="#id3">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sys-module-acl">sys_module_acl</a><ul>
+<li><a class="reference internal" href="#id4">Introduction</a></li>
+<li><a class="reference internal" href="#id5">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-module">aey4_pj_module</a><ul>
+<li><a class="reference internal" href="#id6">Introduction</a></li>
+<li><a class="reference internal" href="#id7">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-module-acl">aey4_pj_module_acl</a><ul>
+<li><a class="reference internal" href="#id8">Description</a></li>
+<li><a class="reference internal" href="#id9">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-role">aey4_pj_role</a><ul>
+<li><a class="reference internal" href="#id10">Description</a></li>
+<li><a class="reference internal" href="#id11">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-role-acl">aey4_pj_role_acl</a><ul>
+<li><a class="reference internal" href="#id12">Description</a></li>
+<li><a class="reference internal" href="#id13">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-group-role">aey4_pj_group_role</a><ul>
+<li><a class="reference internal" href="#id14">Description</a></li>
+<li><a class="reference internal" href="#id15">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-resource">aey4_pj_resource</a><ul>
+<li><a class="reference internal" href="#id16">Description</a></li>
+<li><a class="reference internal" href="#id17">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-varset">aey4_pj_varset</a><ul>
+<li><a class="reference internal" href="#id18">Description</a></li>
+<li><a class="reference internal" href="#id19">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-globals">aey4_pj_globals</a><ul>
+<li><a class="reference internal" href="#id20">Description</a></li>
+<li><a class="reference internal" href="#id21">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-axis">aey4_pj_axis</a><ul>
+<li><a class="reference internal" href="#id22">Description</a></li>
+<li><a class="reference internal" href="#id23">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-group">aey4_pj_group</a><ul>
+<li><a class="reference internal" href="#id24">Description</a></li>
+<li><a class="reference internal" href="#id25">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-group-link">aey4_pj_group_link</a><ul>
+<li><a class="reference internal" href="#id26">Description</a></li>
+<li><a class="reference internal" href="#id27">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-group-mode">aey4_pj_group_mode</a><ul>
+<li><a class="reference internal" href="#id28">Description</a></li>
+<li><a class="reference internal" href="#id29">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-query">aey4_pj_query</a><ul>
+<li><a class="reference internal" href="#id30">Description</a></li>
+<li><a class="reference internal" href="#id31">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-pj-query-var">aey4_pj_query_var</a><ul>
+<li><a class="reference internal" href="#id32">Description</a></li>
+<li><a class="reference internal" href="#id33">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-01-data">aey4_01_data</a><ul>
+<li><a class="reference internal" href="#id34">Description</a></li>
+<li><a class="reference internal" href="#id35">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-01-data-group">aey4_01_data_group</a><ul>
+<li><a class="reference internal" href="#id36">Description</a></li>
+<li><a class="reference internal" href="#id37">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-01-data-group-mode">aey4_01_data_group_mode</a><ul>
+<li><a class="reference internal" href="#id38">Description</a></li>
+<li><a class="reference internal" href="#id39">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-user-data">aey4_user_data</a><ul>
+<li><a class="reference internal" href="#id40">Description</a></li>
+<li><a class="reference internal" href="#id41">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-dico-data">aey4_dico_data</a><ul>
+<li><a class="reference internal" href="#id42">Description</a></li>
+<li><a class="reference internal" href="#id43">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-01-02-data">aey4_01_02_data</a><ul>
+<li><a class="reference internal" href="#id44">Description</a></li>
+<li><a class="reference internal" href="#id45">Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#aey4-01-dico-ttt-data">aey4_01_dico_ttt_data</a><ul>
+<li><a class="reference internal" href="#id46">Description</a></li>
+<li><a class="reference internal" href="#id47">Structure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="archi/template_ined.html"
+                        title="previous chapter">Template INED</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="widgets.html"
+                        title="next chapter">Composants graphiques</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/bdd.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="widgets.html" title="Composants graphiques"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="archi/template_ined.html" title="Template INED"
+             >previous</a> |</li>
+        <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>

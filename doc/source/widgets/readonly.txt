@@ -1,0 +1,50 @@
+.. _widgetreadonly:
+
+WidgetReadOnly
+==============
+Fonction
+--------
+Hérite de :ref:`widgetbase`
+Utilisé lorsque qu'un champ du layout est en mode="ro", affiche la valeur du champ sans possibilité de modification (Lecture seule).
+
+Template de rendu :
+
+.. code-block:: html
+    
+    <div class="field readonly-field" id="{idUnique}">{valeurField}</div>
+
+Attributs
+---------
+Les mêmes attributs que :ref:`widgetfield`
+
+.. note::
+    Rappel : Ce widget est instancié si le mode de la <value> à affiche est 'ro', les attributs fournis sont alors les même que ceux de <value>
+
+Options
+-------
+display_null (Facultatif)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Type : String
+
+Défaut : null (Rien n'est affiché si le champ vaut null)
+
+Fonction : Le texte à afficher si le champ vaut null
+
+.. code-block:: xml
+    
+    <value id="nom_epouse_patient" dataset="patient" field="nom_epouse" mode="ro">
+        <option output="html" option_name="display_null" value="---" />
+    </value>
+    
+Produira :
+
+.. code-block:: html
+    
+    <div class="field readonly-field" id="main_nom_epouse_patient">DUPONT</div>
+
+Ou dans le cas d'un nom égal à null :
+
+.. code-block:: html
+    
+    <div class="field readonly-field" id="main_nom_epouse_patient">---</div>
+    

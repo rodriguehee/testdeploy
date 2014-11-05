@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WidgetBase &mdash; Voozanoo4 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/epiconcept.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Composants graphiques" href="../widgets.html" />
+    <link rel="next" title="WidgetBitsField" href="bitsfield.html" />
+    <link rel="prev" title="WidgetActionExport" href="actionexport.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bitsfield.html" title="WidgetBitsField"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="actionexport.html" title="WidgetActionExport"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" accesskey="U">Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="widgetbase">
+<span id="id1"></span><h1>WidgetBase<a class="headerlink" href="#widgetbase" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fonction">
+<h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
+<p>Hérite de <a class="reference external" href="http://yuilibrary.com/yui/docs/api/classes/Base.html">Y.Base</a></p>
+<p>Ce composant WidgetBase n&#8217;est jamais instancié directement, c&#8217;est une classe abstraite dérivée par tous les Widgets Voozanoo4. Il définit
+par conséquent plusieurs méthodes devant être implémentées par les classes filles et certaines communes à tous les Widgets.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Suite à l&#8217;important refactoring effectué concernant la structure du JSON contenant la définition du formulaire l&#8217;initialisation (instanciation ou non)
+et le rendu des Widgets est très différents de précédemment :</p>
+<ul class="last">
+<li><p class="first">La détermination du Widget à utiliser se fait coté serveur.</p>
+</li>
+<li><p class="first">L&#8217;identifiant du Widget, si non spécifié, se fait coté serveur.</p>
+</li>
+<li><p class="first">La structure du Layout n&#8217;est plus encapsulée sur N niveaux mais est applatie (Exception faite du composant WidgetPages).</p>
+</li>
+<li><dl class="first docutils">
+<dt>L&#8217;ensemble des Widgets présents dans le Layout seront stockés dans l&#8217;attribut <code class="docutils literal"><span class="pre">oWidgets</span></code> de Y.Layout.</dt>
+<dd><ul class="first last simple">
+<li>Cette &#8220;collection&#8221; de widget se présentera sous la forme clé = Identifiant du Widget, valeur = Instance du widget (Sauf en cas de Widget statique où la valeur sera l&#8217;identifiant du Widget parent)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<p>L&#8217;initialisation et le rendu des Widgets composants la Frame se fait dans la méthode InitializeWidgets() de la classe Layout :</p>
+<ul>
+<li><p class="first">Affinage du Widget à rendre si le Widget actuellement spécifié est &#8220;WidgetField&#8221; ou &#8220;WidgetButton&#8221; et que l&#8217;action vaut &#8220;export&#8221;</p>
+</li>
+<li><dl class="first docutils">
+<dt>Vérification présence d&#8217;une méthode statique &#8220;Render&#8221; spécifiant que le Widget n&#8217;est pas nécessairement instanciable</dt>
+<dd><ul class="first last">
+<li><p class="first">Si oui : Appel de cete méthode statique &#8220;Render&#8221; puis la méthode statique &#8220;PostRender&#8221; et ajout du widget à la collection <code class="docutils literal"><span class="pre">oWidgets</span></code></p>
+</li>
+<li><dl class="first docutils">
+<dt>Si non :</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Instanciation du Widget</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">oWidget</span> <span class="o">=</span> <span class="nx">oWidgetFactory</span><span class="p">.</span><span class="nx">InstantiateWidgetClass</span><span class="p">(</span><span class="nx">oWidgetDef</span><span class="p">,</span> <span class="nx">oParentWidget</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Enregistrement de l&#8217;instance du widget dans la collection <code class="docutils literal"><span class="pre">oWidgets</span></code></dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidgets</span><span class="p">[</span><span class="nx">oWidgetDef</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">oWidget</span><span class="p">;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>PreRender()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">PreRender</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Render()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">oWidgetDef</span><span class="p">.</span><span class="nx">pid</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>PostRender()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">PostRender</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Update()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">Update</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Dans le cas d&#8217;un WidgetPages / WidgetPage des traitements complémentaires sont appliqués</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>&#64;deprecated</p>
+<p>Le fonctionnement d&#8217;initialisation et de rendu des Widgets est systématiquement le même (Cf. méthode InitializeWidgets() de la classe Layout) :</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Instanciation du widget</dt>
+<dd><div class="first highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">oWidget</span> <span class="o">=</span> <span class="nx">oWidgetFactory</span><span class="p">.</span><span class="nx">GetWidget</span><span class="p">(</span><span class="nx">sWidgetName</span><span class="p">,</span> <span class="nx">aMetaData</span><span class="p">[</span><span class="nx">iIndex</span><span class="p">],</span> <span class="nx">oParentWidget</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul class="last">
+<li><p class="first">La méthode GetWidget instancie le widget en fournissant le Layout (2e param) et les metadata (3e param)</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;oWidget = new Y.&#39;</span> <span class="o">+</span> <span class="nx">sWidgetName</span> <span class="o">+</span> <span class="s1">&#39;(null, this.get(\&#39;oLayout\&#39;), aMetaData);&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>PreRender()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">PreRender</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Render()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">sNodeId</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>PostRender()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">PostRender</span><span class="p">(</span><span class="nx">bDisabled</span><span class="p">,</span> <span class="nx">oOptMgr</span><span class="p">.</span><span class="nx">Exists</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">));</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Update()</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="nx">oWidget</span><span class="p">.</span><span class="nx">Update</span><span class="p">();</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Sauvegarde du Widget en cache</dt>
+<dd><div class="first last highlight-javascript"><div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;oWidgetCache&#39;</span><span class="p">).</span><span class="nx">SaveWidget</span><span class="p">(</span><span class="nx">oWidget</span><span class="p">.</span><span class="nx">Family</span><span class="p">(),</span> <span class="nx">oWidget</span><span class="p">.</span><span class="nx">UniqId</span><span class="p">(),</span> <span class="nx">oWidget</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="attributs">
+<h2>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id-facultatif">
+<h3>id (Facultatif)<a class="headerlink" href="#id-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Par défaut :  Identifiant auto-généré coté serveur sous la forme &#8220;vzn8f35dc...&#8221;</p>
+<p>Fonction : utilisé en tant que id=&#8221;&#8221; sur la balise HTML &#8220;Racine&#8221; du widget.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;group</span> <span class="na">id=</span><span class="s">&quot;foobar&quot;</span><span class="nt">&gt;</span>
+    ...
+<span class="nt">&lt;/group&gt;</span>
+</pre></div>
+</div>
+<p>Produira :</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;foobar&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;span&gt;&lt;/span&gt;</span>
+    ...
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="class-facultatif">
+<h3>class (Facultatif)<a class="headerlink" href="#class-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Par défaut : Attribut class non placé</p>
+<p>Fonction : Utilisé en tant que class=&#8221;&#8221; sur la balise HTML &#8220;Racine&#8221; du widget</p>
+<p>Exemple :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;group</span> <span class="na">class=</span><span class="s">&quot;red&quot;</span><span class="nt">&gt;</span>
+    ...
+<span class="nt">&lt;/group&gt;</span>
+</pre></div>
+</div>
+<p>Produira :</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;red&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;span&gt;&lt;/span&gt;</span>
+    ...
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tooltip-facultatif">
+<h3>tooltip (Facultatif)<a class="headerlink" href="#tooltip-facultatif" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Par défaut : -</p>
+<p>Fonction : Utilisé en tant qu&#8217;attribut du noeud &#8220;Racine&#8221; du Widget (celui ayant l&#8217;uniqId) pour être parsé comme tooltip avec le composant gallery-yui-tooltip</p>
+<p>Exemple :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;value</span> <span class="na">dataset=</span><span class="s">&quot;foo&quot;</span> <span class="na">field=</span><span class="s">&quot;bar&quot;</span> <span class="na">tooltip=</span><span class="s">&quot;Saisir la valeur sans espace et en minuscule&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tooltip-alignment">
+<h3>tooltip_alignment<a class="headerlink" href="#tooltip-alignment" title="Permalink to this headline">¶</a></h3>
+<p>Type : String</p>
+<p>Par défaut : top</p>
+<p>Valeurs possibles : top, right, bottom, left</p>
+<p>Fonction : Précise l&#8217;alignement de la tooltip, au dessus du noeud, à droite, en dessous ou à gauche</p>
+<p>Exemple :</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;value</span> <span class="na">dataset=</span><span class="s">&quot;foo&quot;</span> <span class="na">field=</span><span class="s">&quot;bar&quot;</span> <span class="na">tooltip=</span><span class="s">&quot;Lorem Ipsum&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;tooltip_alignment&quot;</span> <span class="na">value=</span><span class="s">&quot;right&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/value&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WidgetBase</a><ul>
+<li><a class="reference internal" href="#fonction">Fonction</a></li>
+<li><a class="reference internal" href="#attributs">Attributs</a><ul>
+<li><a class="reference internal" href="#id-facultatif">id (Facultatif)</a></li>
+<li><a class="reference internal" href="#class-facultatif">class (Facultatif)</a></li>
+<li><a class="reference internal" href="#tooltip-facultatif">tooltip (Facultatif)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#options">Options</a><ul>
+<li><a class="reference internal" href="#tooltip-alignment">tooltip_alignment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="actionexport.html"
+                        title="previous chapter">WidgetActionExport</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bitsfield.html"
+                        title="next chapter">WidgetBitsField</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/base.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bitsfield.html" title="WidgetBitsField"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="actionexport.html" title="WidgetActionExport"
+             >previous</a> |</li>
+        <li><a href="../index.html">Voozanoo4 1.0 documentation</a> &raquo;</li>
+          <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012, Epiconcept.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+    </div>
+  </body>
+</html>
