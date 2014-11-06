@@ -73,7 +73,7 @@
 <h2>Mainframe<a class="headerlink" href="#mainframe" title="Permalink to this headline">¶</a></h2>
 <p>Le plus simple pour surcharger La page MainFrame de l’application est de télécharger le fichier <a class="reference download internal" href="../_downloads/mainframe.phtml"><code class="xref download docutils literal"><span class="pre">mainframe.phtml</span></code></a> et de le placer dans <code class="docutils literal"><span class="pre">modules/mainframe/views/scripts/index</span></code> côté projet.</p>
 <div class="section" id="vues-pour-la-page-mainframe">
-<h3>Vues pour La page MainFrame<a class="headerlink" href="#vues-pour-la-page-mainframe" title="Permalink to this headline">¶</a></h3>
+<h3>Vues pour la page MainFrame<a class="headerlink" href="#vues-pour-la-page-mainframe" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt>La page MainFrame du template INED utilise, elle-même, trois autres vues à placer dans <code class="docutils literal"><span class="pre">modules/mainframe/views/scripts</span></code> :</dt>
 <dd><ul class="first last simple">
@@ -94,6 +94,70 @@ Cette image est à placer dans <code class="docutils literal"><span class="pre">
 <p>Ces logos seront à placer dans <code class="docutils literal"><span class="pre">public/images</span></code> et devront avoir comme nom <code class="docutils literal"><span class="pre">logo_partn1.png</span></code> et <code class="docutils literal"><span class="pre">logo_partn2.png</span></code>.</p>
 </div>
 </div>
+<div class="section" id="arborescence-des-fichiers">
+<h3>Arborescence des fichiers<a class="headerlink" href="#arborescence-des-fichiers" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/arbo.png" src="../_images/arbo.png" />
+</div>
+</div>
+<div class="section" id="personalisation-du-menu">
+<h2>Personalisation du menu<a class="headerlink" href="#personalisation-du-menu" title="Permalink to this headline">¶</a></h2>
+<p>Le code suivant permet de stocker dans une variable si l’utilisateur connecté possède le rôle défini dans HasRole().
+Ici, si l’utilisateur connecté possède le rôle « admin » la variable $bIsAdmin sera égale à true, sinon à false.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span> <span class="nv">$bIsAdmin</span> <span class="o">=</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetCurrentUser</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">HasRole</span><span class="p">(</span> <span class="s1">&#39;admin&#39;</span> <span class="p">)</span> <span class="o">?</span> <span class="k">true</span> <span class="o">:</span> <span class="k">false</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Cela permet de faire un affichage conditionnel. Ici, si l’utilisateur a le rôle « admin », il pourra voir un lien dirigeant vers la gestion des utilisateurs.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span> <span class="k">if</span> <span class="p">(</span> <span class="nv">$bIsAdmin</span> <span class="p">)</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="x"></span>
+
+<span class="x">             //HTML à afficher</span>
+
+<span class="cp">&lt;?php</span> <span class="k">endif</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<p>Il est aussi possible de vérifier le login de l’utilisateur connecté.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span> <span class="nv">$bIsKGrab</span> <span class="o">=</span> <span class="nx">Core_Library_Account</span><span class="o">::</span><span class="na">GetInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">GetCurrentUserName</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;k.grabiner&#39;</span> <span class="o">?</span> <span class="k">true</span> <span class="o">:</span> <span class="k">false</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+</div>
+<div class="section" id="liens">
+<h3>Liens<a class="headerlink" href="#liens" title="Permalink to this headline">¶</a></h3>
+<p>Pour ajouter un lien au menu, il faudra ajouter un nouvel élement à la liste <code class="docutils literal"><span class="pre">&lt;ul</span> <span class="pre">class=&quot;nav</span> <span class="pre">navbar-nav&quot;&gt;</span></code></p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;li&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">onclick=</span><span class="s">&quot;Y.Voozanoo.oMainFrame.goToFrame( &#39;form/frame/get/id/47&#39; )&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-book&quot;</span><span class="nt">&gt;&lt;/span&gt;</span> Lien 2
+        <span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/li&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">onclick=&quot;Y.Voozanoo.oMainFrame.goToFrame(</span> <span class="pre">'form/frame/get/id/47'</span> <span class="pre">)&quot;</span></code> permet d&#8217;indiquer vers quelle ressource ponte le lien. Ici le lien pointe vers la ressource <code class="docutils literal"><span class="pre">47</span></code></p>
+<p>Il est possible de personnaliser l&#8217;icône de lien. Voozanoo4 met à disposition 2 bibliothèques d&#8217;icônes, <a class="reference external" href="http://glyphicons.com/">Glyphicones</a> et <a class="reference external" href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a></p>
+</div>
+<div class="section" id="dropdown">
+<h3>Dropdown<a class="headerlink" href="#dropdown" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;dropdown&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- Lien du menu --&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">class=</span><span class="s">&quot;dropdown-toggle&quot;</span> <span class="na">data-toggle=</span><span class="s">&quot;dropdown&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;glyphicon glyphicon-wrench&quot;</span><span class="nt">&gt;&lt;/span&gt;</span> Admin.
+                <span class="nt">&lt;b</span> <span class="na">class=</span><span class="s">&quot;caret&quot;</span><span class="nt">&gt;&lt;/b&gt;</span>
+        <span class="nt">&lt;/a&gt;</span>
+
+        <span class="c">&lt;!-- Liens du dropdown --&gt;</span>
+        <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;dropdown-menu&quot;</span><span class="nt">&gt;</span>
+
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">onclick=</span><span class="s">&quot;Y.Voozanoo.oMainFrame.goToFrame( &#39;resource/list/index&#39; )&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Ressources<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">onclick=</span><span class="s">&quot;Y.Voozanoo.oMainFrame.goToFrame( &#39;dico/list/index&#39; )&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Dictionnaires<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+
+                <span class="c">&lt;!-- Séparateur --&gt;</span>
+                <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;divider&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">onclick=</span><span class="s">&quot;Y.Voozanoo.oMainFrame.goToFrame( &#39;project/group/getgroups&#39; )&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Groupes<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">onclick=</span><span class="s">&quot;Y.Voozanoo.oMainFrame.goToFrame( &#39;project/role/getroles&#39; )&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Rôles<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">onclick=</span><span class="s">&quot;Y.Voozanoo.oMainFrame.goToFrame( &#39;project/user/getusers&#39; )&quot;</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;</span>Utilisateurs<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+
+        <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/li&gt;</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -111,11 +175,17 @@ Cette image est à placer dans <code class="docutils literal"><span class="pre">
 </ul>
 </li>
 <li><a class="reference internal" href="#mainframe">Mainframe</a><ul>
-<li><a class="reference internal" href="#vues-pour-la-page-mainframe">Vues pour La page MainFrame</a></li>
+<li><a class="reference internal" href="#vues-pour-la-page-mainframe">Vues pour la page MainFrame</a></li>
 <li><a class="reference internal" href="#images">Images</a><ul>
 <li><a class="reference internal" href="#logos-partenaires-optionnel">Logos partenaires (Optionnel)</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#arborescence-des-fichiers">Arborescence des fichiers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#personalisation-du-menu">Personalisation du menu</a><ul>
+<li><a class="reference internal" href="#liens">Liens</a></li>
+<li><a class="reference internal" href="#dropdown">Dropdown</a></li>
 </ul>
 </li>
 </ul>

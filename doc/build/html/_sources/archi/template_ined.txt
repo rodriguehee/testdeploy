@@ -4,7 +4,7 @@ Template INED
 =============
 
 Feuille de style
--------------------
+----------------
 Voozanoo4 inclut déjà une feuille de style par défaut (``default.phtml``).
 
 Pour surcharger cette feuille de style il suffit de télécharger et de placer la vue :download:`<nomDuProjet>.phtml <../../../template/modules/style/views/scripts/index/tableur.phtml>` dans ``modules/style/views/scripts/index`` côté projet.
@@ -27,7 +27,7 @@ Mainframe
 ---------
 Le plus simple pour surcharger La page MainFrame de l’application est de télécharger le fichier :download:`mainframe.phtml <../../../template/modules/mainframe/views/scripts/index/mainframe.phtml>` et de le placer dans ``modules/mainframe/views/scripts/index`` côté projet.
 
-Vues pour La page MainFrame
+Vues pour la page MainFrame
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 La page MainFrame du template INED utilise, elle-même, trois autres vues à placer dans ``modules/mainframe/views/scripts`` : 
@@ -46,3 +46,83 @@ Logos partenaires (Optionnel)
 Il est possible d'ajouter jusqu'à 2 logos pour les partenaires de l'INED.
 
 Ces logos seront à placer dans ``public/images`` et devront avoir comme nom ``logo_partn1.png`` et ``logo_partn2.png``.
+
+Arborescence des fichiers
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ../../../images/arbo.png
+
+Personalisation du menu
+-----------------------
+
+Le code suivant permet de stocker dans une variable si l’utilisateur connecté possède le rôle défini dans HasRole(). 
+Ici, si l’utilisateur connecté possède le rôle « admin » la variable $bIsAdmin sera égale à true, sinon à false.
+
+.. code-block:: php
+
+   <?php $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 'admin' ) ? true : false; ?>
+
+Cela permet de faire un affichage conditionnel. Ici, si l’utilisateur a le rôle « admin », il pourra voir un lien dirigeant vers la gestion des utilisateurs.
+
+.. code-block:: php
+
+   <?php if ( $bIsAdmin ): ?>
+   
+		//HTML à afficher
+		
+   <?php endif; ?>
+
+Il est aussi possible de vérifier le login de l’utilisateur connecté.
+
+.. code-block:: php
+
+   <?php $bIsKGrab = Core_Library_Account::GetInstance()->GetCurrentUserName() === 'k.grabiner' ? true : false; ?>
+
+
+Liens
+^^^^^
+
+Pour ajouter un lien au menu, il faudra ajouter un nouvel élement à la liste ``<ul class="nav navbar-nav">``
+
+.. code-block:: html
+	
+	<li>
+		<a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/47' )" href="#">
+			<span class="glyphicon glyphicon-book"></span> Lien 2
+		</a>
+	</li>
+	
+``onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/47' )"`` permet d'indiquer vers quelle ressource ponte le lien. Ici le lien pointe vers la ressource ``47``
+
+Il est possible de personnaliser l'icône de lien. Voozanoo4 met à disposition 2 bibliothèques d'icônes, `Glyphicones <http://glyphicons.com/>`_ et `Font Awesome <http://fortawesome.github.io/Font-Awesome/>`_
+
+Dropdown
+^^^^^^^^
+
+.. code-block:: html
+	
+	<li class="dropdown">
+		<!-- Lien du menu -->
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			<span class="glyphicon glyphicon-wrench"></span> Admin.
+			<b class="caret"></b>
+		</a>
+		
+		<!-- Liens du dropdown -->
+		<ul class="dropdown-menu">
+		
+			<li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'resource/list/index' )" href="#">Ressources</a></li>
+			<li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'dico/list/index' )" href="#">Dictionnaires</a></li>
+			
+			<!-- Séparateur -->
+			<li class="divider"></li>
+			
+			<li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/group/getgroups' )" href="#">Groupes</a></li>
+			<li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/role/getroles' )" href="#">Rôles</a></li>
+			<li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/user/getusers' )" href="#">Utilisateurs</a></li>
+			
+		</ul>
+	</li>
+
+	
+

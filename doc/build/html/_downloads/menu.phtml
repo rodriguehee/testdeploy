@@ -18,19 +18,22 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 1 ) 
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
+
+            <!-- Lien vers l'accueil (Ne pas supprimer) -->
             <li class="">
                 <a class="" href="#" onclick="Y.Voozanoo.backToHome();">
                     <span class="glyphicon glyphicon-home"></span> Accueil
                 </a>
             </li>
 
+            <!-- Lien à personaliser -->
             <li class="">
                 <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/50')" href="#">
                     <span class="fa fa-table"></span> Tableur
                 </a>
             </li>
 
-
+            <!-- Dropdown -->
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-list"></span> Formation
@@ -50,19 +53,26 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 1 ) 
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/47' )" href="#">CSS Arnaud [47]</a></li>
                 </ul>
             </li>
+
+            <!-- Lien à personaliser -->
             <li class="">
                 <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/21' )" href="#">
                     <span class="glyphicon glyphicon-inbox"></span> Lien 1
                 </a>
             </li>
 
+            <!-- Lien à personaliser -->
             <li class="">
                 <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/47' )" href="#">
                     <span class="glyphicon glyphicon-book"></span> Lien 2
                 </a>
             </li>
+
         </ul>
+        <!-- Correction pour la vu mobile -->
         <p style="margin-bottom: -40px"></p>
+
+        <!-- Lien de déconnexion (Ne pas supprimer) -->
         <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
             <li class="">
                 <a class="" href="<?=Core_Library_Account::GetInstance()->GetCurrentProject()->GetURL() ?>auth/index/disconnect">
@@ -70,6 +80,8 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 1 ) 
                 </a>
             </li>
         </ul>
+
+        <!-- Dropdown uniquement visible par le rôle admin (Ne pas supprimer) -->
         <?php if ($bIsAdmin): ?>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -84,10 +96,10 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 1 ) 
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/group/getgroups' )" href="#">Groupes</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/role/getroles' )" href="#">Rôles</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/user/getusers' )" href="#">Utilisateurs</a></li>
-                    <li></li> <!-- évite que le dernier element de la liste soit en float right dans le menu déroulant -->
                 </ul>
             </li>
         </ul>
-        <?php endif ?>
+        <?php endif; ?>
+
     </div>
 </nav>
