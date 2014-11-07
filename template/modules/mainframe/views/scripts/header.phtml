@@ -10,7 +10,7 @@
         <h2 class="hidden-md hidden-lg">Collecte budgetaire</h2>
     </div>
 
-    <div class="col-xs-10 col-sm-4 col-md-3">
+    <div class="col-xs-10 col-sm-4 col-md-3 hidden-xs">
 
         <?php if(file_exists( 'images/logo_partn1.png' ) ): ?>
         <div class="col-xs-4 col-sm-6">
@@ -36,7 +36,7 @@
     </div>
 
 
-    <div class="col-sm-2 col-xs-2 hidden-lg hidden-md">
+    <div class="col-sm-2 col-xs-2 hidden-lg hidden-md col-xs-offset-10">
         <a class="btn btn-sm btn-danger pull-right" href="<?=Core_Library_Account::GetInstance()->GetCurrentProject()->GetURL() ?>auth/index/disconnect">D&eacute;connexion</a>
     </div>
 
