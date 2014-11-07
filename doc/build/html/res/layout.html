@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -24,14 +25,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
     <link rel="up" title="Ressources" href="../ressources.html" />
     <link rel="next" title="Dataset" href="dataset.html" />
     <link rel="prev" title="Dataquery" href="dataquery.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,7 +52,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="layout">
 <span id="id1"></span><h1>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h1>
@@ -73,8 +74,8 @@ concept de <a class="reference external" href="http://getbootstrap.com/css/#grid
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">title</span></code> : titre de la page</li>
-<li><code class="docutils literal"><span class="pre">short_title</span></code> : titre court de la page</li>
+<li><tt class="docutils literal"><span class="pre">title</span></tt> : titre de la page</li>
+<li><tt class="docutils literal"><span class="pre">short_title</span></tt> : titre court de la page</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -103,10 +104,10 @@ le nom du projet.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;label</span> <span class="na">dataset=</span><span class="s">&quot;datatable_patient&quot;</span> <span class="na">field=</span><span class="s">&quot;nom&quot;</span><span class="nt">/&gt;</span>
 </pre></div>
 </div>
-<p>Dans le cadre d&#8217;un rendu HTML : correspond à l&#8217;élément Html <code class="docutils literal"><span class="pre">&lt;label&gt;</span></code>.</p>
+<p>Dans le cadre d&#8217;un rendu HTML : correspond à l&#8217;élément Html <tt class="docutils literal"><span class="pre">&lt;label&gt;</span></tt>.</p>
 <div class="admonition hint">
 <p class="first admonition-title">Hint</p>
-<p class="last">En l&#8217;absence de classes relatives au système de grid de bootstrap les classes appliquées à l&#8217;élément label seront <code class="docutils literal"><span class="pre">col-lg-2</span> <span class="pre">col-md-3</span></code>.</p>
+<p class="last">En l&#8217;absence de classes relatives au système de grid de bootstrap les classes appliquées à l&#8217;élément label seront <tt class="docutils literal"><span class="pre">col-lg-2</span> <span class="pre">col-md-3</span></tt>.</p>
 </div>
 </div>
 <div class="section" id="value">
@@ -117,14 +118,14 @@ le nom du projet.</p>
 </div>
 <p>Dans le cadre d&#8217;un rendu HTML, génère le code Html en fonction de la variable à représenter, exemple :</p>
 <ul class="simple">
-<li>Un <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> dans le cas d&#8217;une variable simple, de type String</li>
-<li>Un <code class="docutils literal"><span class="pre">&lt;textarea&gt;</span></code> dans le cas d&#8217;une variable de type Text</li>
-<li>Plusieurs <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> dans le cas d&#8217;une variable de type Date ou Heure</li>
-<li>Un structure plus complexe avec des <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> dans le cas de variable à réponse multiple (Checkbox) ou liée à un dictionnaire (Radio)</li>
-<li><code class="docutils literal"><span class="pre">dataset</span></code> : Identifiant du dataset</li>
-<li><code class="docutils literal"><span class="pre">field</span></code> : Nom du champ</li>
-<li><code class="docutils literal"><span class="pre">mode</span></code> : r (read) ou rw (read/write)</li>
-<li><code class="docutils literal"><span class="pre">size</span></code> (optionnel) : Dans le cas d&#8217;un rendu <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> sera placé comme attribut &#8220;size&#8221;</li>
+<li>Un <tt class="docutils literal"><span class="pre">&lt;input&gt;</span></tt> dans le cas d&#8217;une variable simple, de type String</li>
+<li>Un <tt class="docutils literal"><span class="pre">&lt;textarea&gt;</span></tt> dans le cas d&#8217;une variable de type Text</li>
+<li>Plusieurs <tt class="docutils literal"><span class="pre">&lt;input&gt;</span></tt> dans le cas d&#8217;une variable de type Date ou Heure</li>
+<li>Un structure plus complexe avec des <tt class="docutils literal"><span class="pre">&lt;input&gt;</span></tt> dans le cas de variable à réponse multiple (Checkbox) ou liée à un dictionnaire (Radio)</li>
+<li><tt class="docutils literal"><span class="pre">dataset</span></tt> : Identifiant du dataset</li>
+<li><tt class="docutils literal"><span class="pre">field</span></tt> : Nom du champ</li>
+<li><tt class="docutils literal"><span class="pre">mode</span></tt> : r (read) ou rw (read/write)</li>
+<li><tt class="docutils literal"><span class="pre">size</span></tt> (optionnel) : Dans le cas d&#8217;un rendu <tt class="docutils literal"><span class="pre">&lt;input&gt;</span></tt> sera placé comme attribut &#8220;size&#8221;</li>
 </ul>
 <div class="section" id="options">
 <h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
@@ -141,7 +142,7 @@ le nom du projet.</p>
 <div class="section" id="form-row">
 <h2>Form Row<a class="headerlink" href="#form-row" title="Permalink to this headline">¶</a></h2>
 <p>Cet élément, directement lié à l&#8217;intégration de Bootstrap CSS, permet de de déclarer une &#8220;ligne&#8221; dans un formulaire. Il permet
-d&#8217;encapsuler N élément enfants (label, value, statictext). Cet élément reflète l&#8217;élément <code class="docutils literal"><span class="pre">&lt;div</span> <span class="pre">class=&quot;form-group&quot;&gt;</span></code> de Bootstrap.</p>
+d&#8217;encapsuler N élément enfants (label, value, statictext). Cet élément reflète l&#8217;élément <tt class="docutils literal"><span class="pre">&lt;div</span> <span class="pre">class=&quot;form-group&quot;&gt;</span></tt> de Bootstrap.</p>
 <p>Exemple d&#8217;utilisation :</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;form_row&gt;</span>
     <span class="nt">&lt;label</span> <span class="na">dataset=</span><span class="s">&quot;foo&quot;</span> <span class="na">field=</span><span class="s">&quot;bar&quot;</span> <span class="nt">/&gt;</span>
@@ -229,9 +230,9 @@ NB: utilisation du terme canvas car le terme table est déjà utilisé.</p>
 <p>Le titre est optionnel.</p>
 <div class="section" id="id2">
 <h3>Options<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Il est possible de spécifier l&#8217;option <code class="docutils literal"><span class="pre">show_on</span></code> ou <code class="docutils literal"><span class="pre">hide_on</span></code> pour conditionner l&#8217;affichage de ce group à l&#8217;aide d&#8217;une condition Javascript. L&#8217;utilisation d&#8217;une telle condition préconisée uniquement dans le cas
+<p>Il est possible de spécifier l&#8217;option <tt class="docutils literal"><span class="pre">show_on</span></tt> ou <tt class="docutils literal"><span class="pre">hide_on</span></tt> pour conditionner l&#8217;affichage de ce group à l&#8217;aide d&#8217;une condition Javascript. L&#8217;utilisation d&#8217;une telle condition préconisée uniquement dans le cas
 du développement de la partie &#8220;éditeur&#8221; de Voozanoo4 ou lors de développement très spécifique à un projet.</p>
-<p>Il est de la responsabilité du développeur de ne pas écrire du code syntaxiquement invalide, cette condition étant directement évaluée (<code class="docutils literal"><span class="pre">eval()</span></code>) coté javascript.</p>
+<p>Il est de la responsabilité du développeur de ne pas écrire du code syntaxiquement invalide, cette condition étant directement évaluée (<tt class="docutils literal"><span class="pre">eval()</span></tt>) coté javascript.</p>
 <p>Plus d&#8217;informations sur la page &#8220;<a class="reference internal" href="../lib_js.html#lib-js-jsquery"><em>Conditions d&#8217;affichage Javascript</em></a>&#8221;.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;group</span> <span class="na">title=</span><span class="s">&quot;Paramètres&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;option</span> <span class="na">output=</span><span class="s">&quot;html&quot;</span> <span class="na">option_name=</span><span class="s">&quot;show_on&quot;</span> <span class="na">value=</span><span class="s">&quot;{foo.bar} == 5&quot;</span><span class="nt">/&gt;</span>
@@ -303,7 +304,7 @@ particulières.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -338,14 +339,12 @@ particulières.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="dataset.html"
                         title="next chapter">Dataset</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/res/layout.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/res/layout.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -362,7 +361,7 @@ particulières.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -378,9 +377,9 @@ particulières.</p>
           <li><a href="../ressources.html" >Ressources</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

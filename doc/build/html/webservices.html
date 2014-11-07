@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -14,7 +15,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -24,13 +25,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
     <link rel="next" title="Installation" href="installation.html" />
     <link rel="prev" title="Script Player" href="script_player.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -49,34 +50,34 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="webservices">
 <span id="id1"></span><h1>Webservices<a class="headerlink" href="#webservices" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="technologie-utilisee">
 <h2>Technologie utilisée<a class="headerlink" href="#technologie-utilisee" title="Permalink to this headline">¶</a></h2>
 <p>Les Webservices au sein de Voozanoo4 se basent majoritairement sur l&#8217;architecture REST (Voir <a class="reference internal" href="#ws-liens-utiles"><em>Liens utiles</em></a>).</p>
-<p>Voozanoo4 utilise le Routing Zend Framework : <code class="docutils literal"><span class="pre">Zend_Rest_Route</span></code> (Voir <a class="reference internal" href="#ws-liens-utiles"><em>Liens utiles</em></a>)</p>
-<p>L&#8217;idéal étant d&#8217;utiliser le composant <code class="docutils literal"><span class="pre">Zend_Rest_Client</span></code> pour envoyer les requêtes à un projet Voozanoo4.</p>
+<p>Voozanoo4 utilise le Routing Zend Framework : <tt class="docutils literal"><span class="pre">Zend_Rest_Route</span></tt> (Voir <a class="reference internal" href="#ws-liens-utiles"><em>Liens utiles</em></a>)</p>
+<p>L&#8217;idéal étant d&#8217;utiliser le composant <tt class="docutils literal"><span class="pre">Zend_Rest_Client</span></tt> pour envoyer les requêtes à un projet Voozanoo4.</p>
 </div>
 <div class="section" id="implementation-dans-voozanoo4-partie-serveur">
 <h2>Implémentation dans Voozanoo4 (Partie &#8220;Serveur&#8221;)<a class="headerlink" href="#implementation-dans-voozanoo4-partie-serveur" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="le-routing">
 <h3>Le Routing<a class="headerlink" href="#le-routing" title="Permalink to this headline">¶</a></h3>
-<p>Le routing d&#8217;une requête HTTP entrante est effectuée grâce aux routes déclarées dans le Bootstrap de Voozanoo4 (<code class="docutils literal"><span class="pre">Core_Library_Account_Bootstrap</span></code>) :</p>
+<p>Le routing d&#8217;une requête HTTP entrante est effectuée grâce aux routes déclarées dans le Bootstrap de Voozanoo4 (<tt class="docutils literal"><span class="pre">Core_Library_Account_Bootstrap</span></tt>) :</p>
 <ul>
 <li><dl class="first docutils">
-<dt>La route <code class="docutils literal"><span class="pre">default</span></code> est déclarée en premier, en charge de reconnaitre le projet ciblé et de router une requête entrante vers un Module / un Controller / une Action.</dt>
+<dt>La route <tt class="docutils literal"><span class="pre">default</span></tt> est déclarée en premier, en charge de reconnaitre le projet ciblé et de router une requête entrante vers un Module / un Controller / une Action.</dt>
 <dd><ul class="first last simple">
-<li>La reconnaissance du projet ciblé impose la surcharge de <code class="docutils literal"><span class="pre">Zend_Controller_Router_Route_Module</span></code> (par <code class="docutils literal"><span class="pre">Core_Library_Routes_ProjectName</span></code>) pour extraire le nom du projet depuis l&#8217;URI de la requête.</li>
+<li>La reconnaissance du projet ciblé impose la surcharge de <tt class="docutils literal"><span class="pre">Zend_Controller_Router_Route_Module</span></tt> (par <tt class="docutils literal"><span class="pre">Core_Library_Routes_ProjectName</span></tt>) pour extraire le nom du projet depuis l&#8217;URI de la requête.</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>La route <code class="docutils literal"><span class="pre">rest</span></code> est déclarée en second, en charge de reconnaitre le projet ciblé et de router une requête ciblant le module <code class="docutils literal"><span class="pre">ws</span></code> (Webservice) en tant que requête Rest</dt>
+<dt>La route <tt class="docutils literal"><span class="pre">rest</span></tt> est déclarée en second, en charge de reconnaitre le projet ciblé et de router une requête ciblant le module <tt class="docutils literal"><span class="pre">ws</span></tt> (Webservice) en tant que requête Rest</dt>
 <dd><ul class="first last simple">
-<li>La reconnaissance du projet ciblé impose la surcharge de <code class="docutils literal"><span class="pre">Zend_Controller_Router_Route_Module</span></code> (par <code class="docutils literal"><span class="pre">Core_Library_Routes_Rest_ProjectName</span></code>) pour extraire le nom du projet depuis l&#8217;URI de la requête.</li>
+<li>La reconnaissance du projet ciblé impose la surcharge de <tt class="docutils literal"><span class="pre">Zend_Controller_Router_Route_Module</span></tt> (par <tt class="docutils literal"><span class="pre">Core_Library_Routes_Rest_ProjectName</span></tt>) pour extraire le nom du projet depuis l&#8217;URI de la requête.</li>
 <li>Le controller ciblé est gardé tel quel, l&#8217;action est déduite de la méthode HTTP utilisée : GET, POST, PUT, DELETE et d&#8217;un éventuel paramètre numérique (identifiant).</li>
 </ul>
 </dd>
@@ -86,9 +87,8 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Les routes sont déclarées dans cette ordre car Zend Framework dépile les routes en commençant par la dernière, considérant que la première route déclarée est celle la plus &#8220;générique&#8221; et par conséquent à utiliser en dernier recours:</p>
-<div class="highlight-python"><div class="highlight"><pre>Note: Reverse Matching
-Routes are matched in reverse order so make sure your most generic routes are defined first.
-</pre></div>
+<div class="highlight-python"><pre>Note: Reverse Matching
+Routes are matched in reverse order so make sure your most generic routes are defined first.</pre>
 </div>
 <p class="last">Source : <a class="reference external" href="http://framework.zend.com/manual/1.12/en/zend.controller.router.html">http://framework.zend.com/manual/1.12/en/zend.controller.router.html</a></p>
 </div>
@@ -96,19 +96,18 @@ Routes are matched in reverse order so make sure your most generic routes are de
 <div class="section" id="l-authentification">
 <h3>L&#8217;authentification<a class="headerlink" href="#l-authentification" title="Permalink to this headline">¶</a></h3>
 <p>L&#8217;authentification est assurée par :
-- Le plugin <code class="docutils literal"><span class="pre">Core_Plugin_Rest_Auth</span></code> qui vérifie l&#8217;identité de l&#8217;utilisateur lorsque le Module <code class="docutils literal"><span class="pre">ws</span></code> est ciblé (et qu&#8217;il s&#8217;agit, par conséquent, d&#8217;une requête REST).
-- La classe abstraite <code class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></code> en charge d&#8217;envoyer les en-tête HTTP afin d&#8217;activer l&#8217;authentification HTTP (WWW-Authenticate: Basic realm=&#8221;&lt;projectName&gt;&#8221;)</p>
+- Le plugin <tt class="docutils literal"><span class="pre">Core_Plugin_Rest_Auth</span></tt> qui vérifie l&#8217;identité de l&#8217;utilisateur lorsque le Module <tt class="docutils literal"><span class="pre">ws</span></tt> est ciblé (et qu&#8217;il s&#8217;agit, par conséquent, d&#8217;une requête REST).
+- La classe abstraite <tt class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></tt> en charge d&#8217;envoyer les en-tête HTTP afin d&#8217;activer l&#8217;authentification HTTP (WWW-Authenticate: Basic realm=&#8221;&lt;projectName&gt;&#8221;)</p>
 <p>Actuellement n&#8217;importe quel accès à un Webservice mis en place sur Voozanoo4 impose une authentification, celle-ci se fait via l&#8217;URL d&#8217;accès au Webservice comme lors d&#8217;un accès
 à un site réclamant une Authentification Http:</p>
-<div class="highlight-python"><div class="highlight"><pre>http://username:password@mywebsite.com
-</pre></div>
+<div class="highlight-python"><pre>http://username:password@mywebsite.com</pre>
 </div>
-<p>Le plugin exploite les variables <code class="docutils literal"><span class="pre">$_SERVER['PHP_AUTH_USER']</span></code> et <code class="docutils literal"><span class="pre">$_SERVER['PHP_AUTH_PW']</span></code> pour vérifier l&#8217;identité de l&#8217;utilisateur dans la base de données.</p>
+<p>Le plugin exploite les variables <tt class="docutils literal"><span class="pre">$_SERVER['PHP_AUTH_USER']</span></tt> et <tt class="docutils literal"><span class="pre">$_SERVER['PHP_AUTH_PW']</span></tt> pour vérifier l&#8217;identité de l&#8217;utilisateur dans la base de données.</p>
 <div class="admonition hint">
 <p class="first admonition-title">Hint</p>
-<p>Lors de la transmission du nom d&#8217;utilisateur et du mot de passe dans l&#8217;Url certains caractères peuvent poser problème, c&#8217;est le cas de <code class="docutils literal"><span class="pre">&#64;</span></code>, <code class="docutils literal"><span class="pre">:</span></code>, <code class="docutils literal"><span class="pre">?</span></code> et tout autre caractère ayant une signification
+<p>Lors de la transmission du nom d&#8217;utilisateur et du mot de passe dans l&#8217;Url certains caractères peuvent poser problème, c&#8217;est le cas de <tt class="docutils literal"><span class="pre">&#64;</span></tt>, <tt class="docutils literal"><span class="pre">:</span></tt>, <tt class="docutils literal"><span class="pre">?</span></tt> et tout autre caractère ayant une signification
 particulière dans le contexte d&#8217;une Url.</p>
-<p class="last">Il faut alors encoder ces caractères selon la norme <a class="reference external" href="http://www.faqs.org/rfcs/rfc3986.html">RFC3986</a>. Vous devrez utiliser la méthode <code class="docutils literal"><span class="pre">rawurlencode()</span></code> pour effecter cet encodage (Cf <a class="reference external" href="http://fr2.php.net/manual/fr/function.rawurlencode.php">documentation officielle</a>).</p>
+<p class="last">Il faut alors encoder ces caractères selon la norme <a class="reference external" href="http://www.faqs.org/rfcs/rfc3986.html">RFC3986</a>. Vous devrez utiliser la méthode <tt class="docutils literal"><span class="pre">rawurlencode()</span></tt> pour effecter cet encodage (Cf <a class="reference external" href="http://fr2.php.net/manual/fr/function.rawurlencode.php">documentation officielle</a>).</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -129,7 +128,7 @@ particulière dans le contexte d&#8217;une Url.</p>
 </div>
 <div class="section" id="traitement-d-une-requete">
 <h3>Traitement d&#8217;une requête<a class="headerlink" href="#traitement-d-une-requete" title="Permalink to this headline">¶</a></h3>
-<p>La requête est distribuée au Controller ciblé, l&#8217;action appelée est automatiquement déterminée par le composant <code class="docutils literal"><span class="pre">Zend_Rest_Route</span></code> :</p>
+<p>La requête est distribuée au Controller ciblé, l&#8217;action appelée est automatiquement déterminée par le composant <tt class="docutils literal"><span class="pre">Zend_Rest_Route</span></tt> :</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="9%" />
@@ -189,7 +188,7 @@ particulière dans le contexte d&#8217;une Url.</p>
 <div class="section" id="communication-de-la-reponse">
 <h3>Communication de la réponse<a class="headerlink" href="#communication-de-la-reponse" title="Permalink to this headline">¶</a></h3>
 <p>Voozanoo4 intègre un système de rendu de réponse par défaut : un script de vue générant du XML.</p>
-<p>La mise en place d&#8217;un Webservice necessitant l&#8217;héritage de la classe abstraite <code class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></code> (Voir plus bas) ce Controller abstrait choisi le même Script de Vue quelque soit l&#8217;action : result.phtml (Présent dans <code class="docutils literal"><span class="pre">voozanoo4/src/modules/ws/views/script/result.phtml</span></code>) en charge de générer la réponse au format XML.</p>
+<p>La mise en place d&#8217;un Webservice necessitant l&#8217;héritage de la classe abstraite <tt class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></tt> (Voir plus bas) ce Controller abstrait choisi le même Script de Vue quelque soit l&#8217;action : result.phtml (Présent dans <tt class="docutils literal"><span class="pre">voozanoo4/src/modules/ws/views/script/result.phtml</span></tt>) en charge de générer la réponse au format XML.</p>
 <p>Voici les différents types de XML générés lors de la génération d&#8217;une réponse :</p>
 <ul>
 <li><dl class="first docutils">
@@ -254,19 +253,19 @@ particulière dans le contexte d&#8217;une Url.</p>
 <p>Pour &#8220;piloter&#8221; la génération du XML il faut utiliser ces deux variables de vue :</p>
 <ul>
 <li><dl class="first docutils">
-<dt>success ( <code class="docutils literal"><span class="pre">true</span></code> ou <code class="docutils literal"><span class="pre">false</span></code> ) <span class="classifier-delimiter">:</span> <span class="classifier">Conditionne le contenu de l&#8217;élement &#8220;&lt;status&gt;&#8221; pour indiquer le succès ou l&#8217;échec du traitement de la requête</span></dt>
+<dt>success ( <tt class="docutils literal"><span class="pre">true</span></tt> ou <tt class="docutils literal"><span class="pre">false</span></tt> ) <span class="classifier-delimiter">:</span> <span class="classifier">Conditionne le contenu de l&#8217;élement &#8220;&lt;status&gt;&#8221; pour indiquer le succès ou l&#8217;échec du traitement de la requête</span></dt>
 <dd><ul class="first last simple">
-<li>Si cette variable n&#8217;est pas définie elle sera considérée comme étant à <code class="docutils literal"><span class="pre">true</span></code>.</li>
+<li>Si cette variable n&#8217;est pas définie elle sera considérée comme étant à <tt class="docutils literal"><span class="pre">true</span></tt>.</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>response ( <code class="docutils literal"><span class="pre">String</span></code> ou <code class="docutils literal"><span class="pre">Array</span></code> ) <span class="classifier-delimiter">:</span> <span class="classifier">Réponse à communiquer</span></dt>
+<dt>response ( <tt class="docutils literal"><span class="pre">String</span></tt> ou <tt class="docutils literal"><span class="pre">Array</span></tt> ) <span class="classifier-delimiter">:</span> <span class="classifier">Réponse à communiquer</span></dt>
 <dd><ul class="first last simple">
-<li>Si <code class="docutils literal"><span class="pre">success</span></code> vaut false, <code class="docutils literal"><span class="pre">response</span></code> doit normalement être une <code class="docutils literal"><span class="pre">String</span></code> fournissant la cause de l&#8217;échec</li>
-<li>Si c&#8217;est un <code class="docutils literal"><span class="pre">Array</span></code> : Il est converti sous la forme d&#8217;un arbre XML en utilisant les clés associatives comme nom d&#8217;élément HTML</li>
-<li>Si c&#8217;est une <code class="docutils literal"><span class="pre">String</span></code> : Elle est placée tel quel dans l&#8217;élément &lt;reponse&gt;</li>
+<li>Si <tt class="docutils literal"><span class="pre">success</span></tt> vaut false, <tt class="docutils literal"><span class="pre">response</span></tt> doit normalement être une <tt class="docutils literal"><span class="pre">String</span></tt> fournissant la cause de l&#8217;échec</li>
+<li>Si c&#8217;est un <tt class="docutils literal"><span class="pre">Array</span></tt> : Il est converti sous la forme d&#8217;un arbre XML en utilisant les clés associatives comme nom d&#8217;élément HTML</li>
+<li>Si c&#8217;est une <tt class="docutils literal"><span class="pre">String</span></tt> : Elle est placée tel quel dans l&#8217;élément &lt;reponse&gt;</li>
 </ul>
 </dd>
 </dl>
@@ -274,7 +273,7 @@ particulière dans le contexte d&#8217;une Url.</p>
 </ul>
 <div class="section" id="conversion-d-une-reponse-array-en-arbre-xml">
 <h4>Conversion d&#8217;une réponse &#8220;Array&#8221; en arbre XML<a class="headerlink" href="#conversion-d-une-reponse-array-en-arbre-xml" title="Permalink to this headline">¶</a></h4>
-<p>Opération réalisée grâce à l&#8217;aide de vue <code class="docutils literal"><span class="pre">Core_Library_View_Helpers_RestResponseToXml</span></code></p>
+<p>Opération réalisée grâce à l&#8217;aide de vue <tt class="docutils literal"><span class="pre">Core_Library_View_Helpers_RestResponseToXml</span></tt></p>
 <ul>
 <li><dl class="first docutils">
 <dt>Conversion simple d&#8217;un array associatif en XML</dt>
@@ -340,13 +339,13 @@ particulière dans le contexte d&#8217;une Url.</p>
 </div>
 <div class="section" id="en-cas-d-exception">
 <h3>En cas d&#8217;Exception<a class="headerlink" href="#en-cas-d-exception" title="Permalink to this headline">¶</a></h3>
-<p>Lors de l&#8217;exécution du plugin d&#8217;authentification REST <code class="docutils literal"><span class="pre">Core_Plugin_Rest_Auth</span></code> si le module ciblé est celui des Webservices un &#8220;jeton&#8221; (paramètre) est ajouté dans la Requête :</p>
+<p>Lors de l&#8217;exécution du plugin d&#8217;authentification REST <tt class="docutils literal"><span class="pre">Core_Plugin_Rest_Auth</span></tt> si le module ciblé est celui des Webservices un &#8220;jeton&#8221; (paramètre) est ajouté dans la Requête :</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="nv">$oRequest</span><span class="o">-&gt;</span><span class="na">setParam</span><span class="p">(</span> <span class="nx">Core_Library_Controller_RestAction</span><span class="o">::</span><span class="na">REST_REQUEST</span><span class="p">,</span> <span class="k">true</span> <span class="p">);</span>
 </pre></div>
 </div>
 <p>C&#8217;est ce qui nous permet, lorsqu&#8217;une exception est levée par le noyau Voo4 ou un projet spécifique, de modifier le comportement d&#8217;affichage de l&#8217;erreur pour effectuer un forward vers le controller &#8220;Error&#8221; du module &#8220;Ws&#8221; pour transmettre correctement l&#8217;erreur.</p>
-<p>Ce forward est effectué dans le Controller standard de gestion d&#8217;erreurs Voozanoo4 : <code class="docutils literal"><span class="pre">Core_Library_Controller_Error_Index::exceptionAction()</span></code></p>
+<p>Ce forward est effectué dans le Controller standard de gestion d&#8217;erreurs Voozanoo4 : <tt class="docutils literal"><span class="pre">Core_Library_Controller_Error_Index::exceptionAction()</span></tt></p>
 </div>
 </div>
 <div class="section" id="mettre-en-place-un-webservice">
@@ -373,7 +372,7 @@ particulière dans le contexte d&#8217;une Url.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>La classe <code class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></code> définit 4 méthodes abstraites qu&#8217;il nous faut implémenter dans notre Controller :</p>
+<p>La classe <tt class="docutils literal"><span class="pre">Core_Library_Controller_RestAction</span></tt> définit 4 méthodes abstraites qu&#8217;il nous faut implémenter dans notre Controller :</p>
 <ul class="simple">
 <li>indexAction : En charge de retourner la liste des patients (filtrés si critères présents)</li>
 <li>getAction : En charge de retourne un patient demandé</li>
@@ -458,14 +457,14 @@ particulière dans le contexte d&#8217;une Url.</p>
 </div>
 <div class="section" id="cote-client">
 <h3>Coté Client<a class="headerlink" href="#cote-client" title="Permalink to this headline">¶</a></h3>
-<p>Dans cette exemple nous utiliseront le composant <code class="docutils literal"><span class="pre">Zend_Rest_Client</span></code> pour requêter notre tout nouveau Webservice. Cette class intègre la logique d&#8217;appel REST et embarque un parsing de réponse XML.</p>
+<p>Dans cette exemple nous utiliseront le composant <tt class="docutils literal"><span class="pre">Zend_Rest_Client</span></tt> pour requêter notre tout nouveau Webservice. Cette class intègre la logique d&#8217;appel REST et embarque un parsing de réponse XML.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Après appel à une méthode REST, par exemple <code class="docutils literal"><span class="pre">get()</span></code>, <code class="docutils literal"><span class="pre">post()</span></code> etc... le client retourne un objet <code class="docutils literal"><span class="pre">Zend_Rest_Client_Result</span></code> permettant de parcourir facilement le jeu de résultats :</p>
+<p>Après appel à une méthode REST, par exemple <tt class="docutils literal"><span class="pre">get()</span></tt>, <tt class="docutils literal"><span class="pre">post()</span></tt> etc... le client retourne un objet <tt class="docutils literal"><span class="pre">Zend_Rest_Client_Result</span></tt> permettant de parcourir facilement le jeu de résultats :</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">$oResult-&gt;isSuccess()</span></code> : permet de savoir si la requête est un succès ou si elle a échouée</li>
-<li><code class="docutils literal"><span class="pre">$oResult-&gt;message</span></code> : Accesseur rapide à l&#8217;élément <code class="docutils literal"><span class="pre">&lt;message&gt;</span></code> du résultat</li>
-<li><code class="docutils literal"><span class="pre">$oResult-&gt;response</span></code> : Accesseur rapide à l&#8217;élément <code class="docutils literal"><span class="pre">&lt;response&gt;</span></code> du résultat</li>
+<li><tt class="docutils literal"><span class="pre">$oResult-&gt;isSuccess()</span></tt> : permet de savoir si la requête est un succès ou si elle a échouée</li>
+<li><tt class="docutils literal"><span class="pre">$oResult-&gt;message</span></tt> : Accesseur rapide à l&#8217;élément <tt class="docutils literal"><span class="pre">&lt;message&gt;</span></tt> du résultat</li>
+<li><tt class="docutils literal"><span class="pre">$oResult-&gt;response</span></tt> : Accesseur rapide à l&#8217;élément <tt class="docutils literal"><span class="pre">&lt;response&gt;</span></tt> du résultat</li>
 </ul>
 <p class="last">Les accesseurs rapides retournent un objet de type SimpleXMLElement.</p>
 </div>
@@ -554,7 +553,7 @@ particulière dans le contexte d&#8217;une Url.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -587,14 +586,12 @@ particulière dans le contexte d&#8217;une Url.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="installation.html"
                         title="next chapter">Installation</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/webservices.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/webservices.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -611,7 +608,7 @@ particulière dans le contexte d&#8217;une Url.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -626,9 +623,9 @@ particulière dans le contexte d&#8217;une Url.</p>
         <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -14,7 +15,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -24,13 +25,13 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="index.html" />
     <link rel="next" title="WidgetActionList" href="widgets/actionlist.html" />
     <link rel="prev" title="Base de données" href="bdd.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -49,7 +50,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="composants-graphiques">
 <span id="widgets"></span><h1>Composants graphiques<a class="headerlink" href="#composants-graphiques" title="Permalink to this headline">¶</a></h1>
@@ -71,10 +72,10 @@ configuration/définition du Widget est contenue dans oWidgetDef (Attribut de <a
 <p>Il est possible de passer des Attributs et des Options aux Widgets (via le XML).</p>
 <div class="section" id="acces-communs-aux-attributs-et-aux-options">
 <h3>Accès communs aux Attributs et aux Options<a class="headerlink" href="#acces-communs-aux-attributs-et-aux-options" title="Permalink to this headline">¶</a></h3>
-<p>La composant Y.WidgetBase, parent de tous les Widgets embarque la méthode <code class="docutils literal"><span class="pre">GetWidgetDefValue(</span> <span class="pre">sPath,</span> <span class="pre">mDefault</span> <span class="pre">)</span></code> permettant de récupérer un attribut précis ou une option précise en fournissant son &#8220;chemin&#8221; (<code class="docutils literal"><span class="pre">path</span></code>).</p>
-<p>Le chemin permet d&#8217;identifier la variable que l&#8217;ont souhaite atteindre, pour les attributs le chemin sera court : <code class="docutils literal"><span class="pre">attr1</span></code> ou <code class="docutils literal"><span class="pre">attr2</span></code>.</p>
-<p>Pour les options ce chemin sera plus long, chaque niveau étant représenté par un point (.) : <code class="docutils literal"><span class="pre">options.foo</span></code>, <code class="docutils literal"><span class="pre">options.bar</span></code>.</p>
-<p>Le second paramètre <code class="docutils literal"><span class="pre">mDefault</span></code> permet d&#8217;indiquer une valeur par défaut à retourner si la valeur est absente du WidgetDef.</p>
+<p>La composant Y.WidgetBase, parent de tous les Widgets embarque la méthode <tt class="docutils literal"><span class="pre">GetWidgetDefValue(</span> <span class="pre">sPath,</span> <span class="pre">mDefault</span> <span class="pre">)</span></tt> permettant de récupérer un attribut précis ou une option précise en fournissant son &#8220;chemin&#8221; (<tt class="docutils literal"><span class="pre">path</span></tt>).</p>
+<p>Le chemin permet d&#8217;identifier la variable que l&#8217;ont souhaite atteindre, pour les attributs le chemin sera court : <tt class="docutils literal"><span class="pre">attr1</span></tt> ou <tt class="docutils literal"><span class="pre">attr2</span></tt>.</p>
+<p>Pour les options ce chemin sera plus long, chaque niveau étant représenté par un point (.) : <tt class="docutils literal"><span class="pre">options.foo</span></tt>, <tt class="docutils literal"><span class="pre">options.bar</span></tt>.</p>
+<p>Le second paramètre <tt class="docutils literal"><span class="pre">mDefault</span></tt> permet d&#8217;indiquer une valeur par défaut à retourner si la valeur est absente du WidgetDef.</p>
 </div>
 <div class="section" id="attributs">
 <h3>Attributs<a class="headerlink" href="#attributs" title="Permalink to this headline">¶</a></h3>
@@ -83,7 +84,7 @@ configuration/définition du Widget est contenue dans oWidgetDef (Attribut de <a
 <span class="nt">&lt;/widgetsample&gt;</span>
 </pre></div>
 </div>
-<p>Les attributs placés dans le XML peuvent se récupérer depuis <code class="docutils literal"><span class="pre">oWidgetDef</span></code> et ce à n&#8217;importe quel moment :</p>
+<p>Les attributs placés dans le XML peuvent se récupérer depuis <tt class="docutils literal"><span class="pre">oWidgetDef</span></tt> et ce à n&#8217;importe quel moment :</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="c1">//Par exemple au Render du widget :</span>
 <span class="nx">Render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
 <span class="p">{</span>
@@ -101,7 +102,7 @@ configuration/définition du Widget est contenue dans oWidgetDef (Attribut de <a
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>L&#8217;utilisation des attributs via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser <code class="docutils literal"><span class="pre">oWidgetDef</span></code></p>
+<p>L&#8217;utilisation des attributs via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser <tt class="docutils literal"><span class="pre">oWidgetDef</span></tt></p>
 <p>Coté Javascript ils sont contenus dans le 3e paramètre du constructeur (Hash de clé/valeur avec clé = nom de l&#8217;attribut et valeur = valeur de l&#8217;attribut)  :</p>
 <div class="last highlight-javascript"><div class="highlight"><pre><span class="c1">//Ancien mode</span>
 <span class="c1">//function WidgetSample(oCfg, oLayout, aMetaData)</span>
@@ -122,7 +123,7 @@ configuration/définition du Widget est contenue dans oWidgetDef (Attribut de <a
 <span class="nt">&lt;/widgetsample&gt;</span>
 </pre></div>
 </div>
-<p>L&#8217;exploitation des options se fait via l&#8217;attribut <code class="docutils literal"><span class="pre">oWidgetDef</span></code> et ce à n&#8217;importe quel moment :</p>
+<p>L&#8217;exploitation des options se fait via l&#8217;attribut <tt class="docutils literal"><span class="pre">oWidgetDef</span></tt> et ce à n&#8217;importe quel moment :</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="c1">//Par exemple au PostRender du widget :</span>
 <span class="nx">PostRender</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
 <span class="p">{</span>
@@ -146,7 +147,7 @@ configuration/définition du Widget est contenue dans oWidgetDef (Attribut de <a
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>L&#8217;exploitation des options via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser <code class="docutils literal"><span class="pre">oWidgetDef</span></code></p>
+<p>L&#8217;exploitation des options via aMetaData est obsolète, avec le refactoring effectuée il faut utiliser <tt class="docutils literal"><span class="pre">oWidgetDef</span></tt></p>
 <p>L&#8217;exploitation des options se fait en utilisant le WidgetOptionsManager dans le constructeur du Widget :</p>
 <div class="last highlight-javascript"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">WidgetSample</span><span class="p">(</span><span class="nx">oCfg</span><span class="p">,</span> <span class="nx">oLayout</span><span class="p">,</span> <span class="nx">aMetaData</span><span class="p">)</span>
 <span class="p">{</span>
@@ -252,7 +253,7 @@ Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du
 <p>Pour utiliser un composant personnalisé il faut :</p>
 <ul class="simple">
 <li>Le déclarer dans la conf YUI (TODO : Lien vers la doc de configuration YUI)</li>
-<li>Placer un noeud XML nommé <code class="docutils literal"><span class="pre">custom</span></code> là où doit s&#8217;afficher le widget (auparavant le nom du noeud n&#8217;importait pas, mais pour passer la validation par xsd dans le gestionnaire de ressource, il a fallu choisir un nom dédié à cet usage)</li>
+<li>Placer un noeud XML nommé <tt class="docutils literal"><span class="pre">custom</span></tt> là où doit s&#8217;afficher le widget (auparavant le nom du noeud n&#8217;importait pas, mais pour passer la validation par xsd dans le gestionnaire de ressource, il a fallu choisir un nom dédié à cet usage)</li>
 <li>Ajouter un noeud enfant qui précise le widget à utiliser</li>
 </ul>
 <p>Exemples :</p>
@@ -322,7 +323,7 @@ Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -336,9 +337,15 @@ Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du
 </li>
 <li><a class="reference internal" href="#utilisation-des-composants-natifs">Utilisation des composants natifs</a></li>
 <li><a class="reference internal" href="#utilisation-de-composants-personnalises">Utilisation de composants personnalisés</a></li>
-<li><a class="reference internal" href="#liste-des-widgets">Liste des widgets</a></li>
-<li><a class="reference internal" href="#sous-composants">Sous-Composants</a></li>
-<li><a class="reference internal" href="#specifications">Spécifications</a></li>
+<li><a class="reference internal" href="#liste-des-widgets">Liste des widgets</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#sous-composants">Sous-Composants</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#specifications">Spécifications</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -349,14 +356,12 @@ Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du
   <h4>Next topic</h4>
   <p class="topless"><a href="widgets/actionlist.html"
                         title="next chapter">WidgetActionList</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/widgets.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/widgets.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -373,7 +378,7 @@ Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -388,9 +393,9 @@ Ceci est valable si la correspondance entre Nom du noeud et classe Javascript du
         <li><a href="index.html">Voozanoo4 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

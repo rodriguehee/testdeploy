@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -24,14 +25,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
     <link rel="up" title="Architecture" href="../architecture.html" />
     <link rel="next" title="Mainframe" href="mainframe.html" />
     <link rel="prev" title="Export" href="export.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,7 +52,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="frame">
 <span id="id1"></span><h1>Frame<a class="headerlink" href="#frame" title="Permalink to this headline">¶</a></h1>
@@ -65,20 +66,20 @@
 <li>L&#8217;execution de tests de cohérences (queries)</li>
 </ul>
 <p>C&#8217;est le composant MainFrame qui &#8220;charge&#8221; les Frames, elle le fait par l&#8217;intermédiaire d&#8217;appel Ajax avec une Uri précise (appelé DisplayPath).</p>
-<p>Anciennement seule l&#8217;Uri <code class="docutils literal"><span class="pre">form/frame/get</span></code> était utilisable comme DisplayPath, l&#8217;action <code class="docutils literal"><span class="pre">get</span></code> était en charge de la réstitution (au format JSON) :</p>
+<p>Anciennement seule l&#8217;Uri <tt class="docutils literal"><span class="pre">form/frame/get</span></tt> était utilisable comme DisplayPath, l&#8217;action <tt class="docutils literal"><span class="pre">get</span></tt> était en charge de la réstitution (au format JSON) :</p>
 <ul class="simple">
 <li>Des données (DataQuery tranformé en DataSet)</li>
 <li>Du Layout (définit via le Xml)</li>
 <li>D&#8217;autre infos diverses (DataSetDico, Axis, etc...)</li>
 </ul>
 <p>Même si la surcharge était possible la modularité était difficilement possible. Voozanoo 4 peut gérer énormément de types formulaire, de la saisie utilisateur à la saisie administrateur pour paramétrer le système lui même.</p>
-<p>L&#8217;attribution des accès aux fonctionnalités était infaisable : soit on autorisait l&#8217;accès au module <code class="docutils literal"><span class="pre">Form</span></code> soit on l&#8217;interdisait, ce qui revenait à &#8220;ouvrir&#8221; ou &#8220;fermer&#8221; l&#8217;application.</p>
+<p>L&#8217;attribution des accès aux fonctionnalités était infaisable : soit on autorisait l&#8217;accès au module <tt class="docutils literal"><span class="pre">Form</span></tt> soit on l&#8217;interdisait, ce qui revenait à &#8220;ouvrir&#8221; ou &#8220;fermer&#8221; l&#8217;application.</p>
 <p>Il à donc été décidé de déplacer la logique liée aux formulaire afin que n&#8217;importe quel Controller puisse y accéder. De cette façon les développeurs
 seraient à même d&#8217;écrire des Module / Controller intégrant la logique de formulaire mais cloisonés.</p>
 </div>
 <div class="section" id="implementation">
 <h2>Implémentation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
-<p>Les anciennes méthodes de restitution, sauvegarde etc... ont été déplacées dans un controller parent : <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code>.
+<p>Les anciennes méthodes de restitution, sauvegarde etc... ont été déplacées dans un controller parent : <tt class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></tt>.
 Tous les controllers de Voozanoo 4 ainsi que les controllers spécifiques aux projets doivent dériver cette classe.</p>
 <p>Les méthodes sont maintenant en &#8220;protected&#8221;, et peuvent être appelée de n&#8217;importe quel sous classe :</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
@@ -111,7 +112,7 @@ Tous les controllers de Voozanoo 4 ainsi que les controllers spécifiques aux pr
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Le refactoring de l&#8217;ancien controller Form (<code class="docutils literal"><span class="pre">Core_Library_Controller_Form_Frame</span></code>) assure la rétro-compatibilité :</p>
+<p>Le refactoring de l&#8217;ancien controller Form (<tt class="docutils literal"><span class="pre">Core_Library_Controller_Form_Frame</span></tt>) assure la rétro-compatibilité :</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="k">class</span> <span class="nc">Core_Library_Controller_Form_Frame</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_Action</span>
 <span class="p">{</span>
@@ -160,7 +161,7 @@ Tous les controllers de Voozanoo 4 ainsi que les controllers spécifiques aux pr
 <span id="hooks"></span><h2>Points d&#8217;accès (Hook / Events)<a class="headerlink" href="#points-d-acces-hook-events" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id2">
 <h3>Introduction<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Lors de développements spécifiques le développeur n&#8217;avait pas d&#8217;autre choix que de surcharger la totalité de la méthode voulue (<code class="docutils literal"><span class="pre">getAction()</span></code>, <code class="docutils literal"><span class="pre">saveAction()</span></code> etc...),
+<p>Lors de développements spécifiques le développeur n&#8217;avait pas d&#8217;autre choix que de surcharger la totalité de la méthode voulue (<tt class="docutils literal"><span class="pre">getAction()</span></tt>, <tt class="docutils literal"><span class="pre">saveAction()</span></tt> etc...),
 le seul choix possible était d&#8217;agir <strong>avant</strong> ou <strong>après</strong> le traitement noyau.</p>
 <p>Il a été convenu de créer des points d&#8217;accès dans l&#8217;algorithme de traitement des données (restitution / sauvegarde etc...). Ces point d&#8217;accès (Hook) sont des brêches placé à des points stratégiques
 offrant la possibilité au développeur de :</p>
@@ -171,7 +172,7 @@ offrant la possibilité au développeur de :</p>
 </div>
 <div class="section" id="fonctionnement">
 <h3>Fonctionnement<a class="headerlink" href="#fonctionnement" title="Permalink to this headline">¶</a></h3>
-<p>Plusieurs méthodes &#8220;vides&#8221; sont créées dans <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code>, elles prennent un paramètre : le Contexte d&#8217;exécution. Ces méthodes sont ensuite appelées à des endroits stratégiques du processus.</p>
+<p>Plusieurs méthodes &#8220;vides&#8221; sont créées dans <tt class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></tt>, elles prennent un paramètre : le Contexte d&#8217;exécution. Ces méthodes sont ensuite appelées à des endroits stratégiques du processus.</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="k">class</span> <span class="nc">Core_Library_Controller_Action</span> <span class="k">extends</span> <span class="nx">Zend_Controller_Action</span>
 <span class="p">{</span>
@@ -199,7 +200,7 @@ se rapprocher de la notion &#8220;d&#8217;évènement&#8221; même s&#8217;il ne
 </div>
 <div class="section" id="le-contexte">
 <h3>Le Contexte<a class="headerlink" href="#le-contexte" title="Permalink to this headline">¶</a></h3>
-<p>Lors d&#8217;appels aux Hooks l&#8217;environnement d&#8217;exécution doit être communiqué au développeur, on parlera alors de &#8220;Contexte&#8221;, ce rôle est rempli par le composant <code class="docutils literal"><span class="pre">Core_Library_Event_Context</span></code>.</p>
+<p>Lors d&#8217;appels aux Hooks l&#8217;environnement d&#8217;exécution doit être communiqué au développeur, on parlera alors de &#8220;Contexte&#8221;, ce rôle est rempli par le composant <tt class="docutils literal"><span class="pre">Core_Library_Event_Context</span></tt>.</p>
 <p>Le noyau se chargera de créer une instance de la classe de Contexte. Il ajoutera N éléments nécessaires au bon déroulement du processus et utilisera <strong>exclusivement</strong> les élements du Contexte pour le traitement. Ce même
 contexte sera systématiquement communiqué lors des appels aux Hooks. Le développeur pourra alors agir dessus (modification) ou l&#8217;utiliser en lecture seule.</p>
 <p>Les méthodes utiles du contexte (pour plus d&#8217;infos consultez la PHPDoc de la classe) :</p>
@@ -218,11 +219,11 @@ contexte sera systématiquement communiqué lors des appels aux Hooks. Le dével
 <p>Les éléments présents sous le nom du Hook sont les paramètres présents dans le Contexte (et accessibles via cette clé).</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p>Le point d&#8217;accès <code class="docutils literal"><span class="pre">_retrieveForm</span></code> est particulier :</p>
+<p>Le point d&#8217;accès <tt class="docutils literal"><span class="pre">_retrieveForm</span></tt> est particulier :</p>
 <blockquote class="last">
 <div><ul class="simple">
-<li>Il est commun au processus <code class="docutils literal"><span class="pre">_getDataset()</span></code> et <code class="docutils literal"><span class="pre">_getFormConfiguration()</span></code>, ces deux processus nécessitant la récupération du formulaire.</li>
-<li>Il embarque déjà une logique au sein de <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code>, la récupération d&#8217;un formulaire depuis son identifiant ou un nom de fichier / un chemin</li>
+<li>Il est commun au processus <tt class="docutils literal"><span class="pre">_getDataset()</span></tt> et <tt class="docutils literal"><span class="pre">_getFormConfiguration()</span></tt>, ces deux processus nécessitant la récupération du formulaire.</li>
+<li>Il embarque déjà une logique au sein de <tt class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></tt>, la récupération d&#8217;un formulaire depuis son identifiant ou un nom de fichier / un chemin</li>
 </ul>
 </div></blockquote>
 </div>
@@ -230,14 +231,14 @@ contexte sera systématiquement communiqué lors des appels aux Hooks. Le dével
 <h4>Relatifs à _getDataset()<a class="headerlink" href="#relatifs-a-getdataset" title="Permalink to this headline">¶</a></h4>
 <ul>
 <li><dl class="first docutils">
-<dt>_retrieveForm() <span class="classifier-delimiter">:</span> <span class="classifier">En charge de récupérer une instance de formulaire (<code class="docutils literal"><span class="pre">Core_Library_Resource_XML_Frame_Form</span></code>) à traiter</span></dt>
+<dt>_retrieveForm() <span class="classifier-delimiter">:</span> <span class="classifier">En charge de récupérer une instance de formulaire (<tt class="docutils literal"><span class="pre">Core_Library_Resource_XML_Frame_Form</span></tt>) à traiter</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">iFormId</span></code> {Integer} Identifiant de la ressource représentant le formulaire à utilier, est égal à 0 si la ressource est chargée depuis le disuqe</li>
-<li><code class="docutils literal"><span class="pre">sFormFileName</span></code> {String} Nom du fichier à charger comme formulaire - Non pertinent si <code class="docutils literal"><span class="pre">iFormId</span></code> est renseigné</li>
-<li><code class="docutils literal"><span class="pre">FormFilePath</span></code> {String} Chemin &#8220;de liaison&#8221; entre la directive <code class="docutils literal"><span class="pre">voozanoo.resources.path</span></code> et le paramètre <code class="docutils literal"><span class="pre">sFormFileName</span></code> fourni - Non pertinent si <code class="docutils literal"><span class="pre">iFormId</span></code> est renseigné et peut également
-être vide même lorsque <code class="docutils literal"><span class="pre">sFormFileName</span></code> est renseigné.</li>
-<li><code class="docutils literal"><span class="pre">oOnStandByFrame</span></code> {Core_Library_Frame_Form_OnStandBy | false } Contient une instance représentant un formulaire préalablement suspendu, il peut être utile d&#8217;avoir cet information pour adapter son code
-en conséquence ou même exploiter cette instance. Dans le cas où aucun formulaire est suspendu la valeur stockée dans le Contexte sera <code class="docutils literal"><span class="pre">false</span></code>.</li>
+<li><tt class="docutils literal"><span class="pre">iFormId</span></tt> {Integer} Identifiant de la ressource représentant le formulaire à utilier, est égal à 0 si la ressource est chargée depuis le disuqe</li>
+<li><tt class="docutils literal"><span class="pre">sFormFileName</span></tt> {String} Nom du fichier à charger comme formulaire - Non pertinent si <tt class="docutils literal"><span class="pre">iFormId</span></tt> est renseigné</li>
+<li><tt class="docutils literal"><span class="pre">FormFilePath</span></tt> {String} Chemin &#8220;de liaison&#8221; entre la directive <tt class="docutils literal"><span class="pre">voozanoo.resources.path</span></tt> et le paramètre <tt class="docutils literal"><span class="pre">sFormFileName</span></tt> fourni - Non pertinent si <tt class="docutils literal"><span class="pre">iFormId</span></tt> est renseigné et peut également
+être vide même lorsque <tt class="docutils literal"><span class="pre">sFormFileName</span></tt> est renseigné.</li>
+<li><tt class="docutils literal"><span class="pre">oOnStandByFrame</span></tt> {Core_Library_Frame_Form_OnStandBy | false } Contient une instance représentant un formulaire préalablement suspendu, il peut être utile d&#8217;avoir cet information pour adapter son code
+en conséquence ou même exploiter cette instance. Dans le cas où aucun formulaire est suspendu la valeur stockée dans le Contexte sera <tt class="docutils literal"><span class="pre">false</span></tt>.</li>
 </ul>
 </dd>
 </dl>
@@ -245,10 +246,10 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_getdataset_beforeExecute() <span class="classifier-delimiter">:</span> <span class="classifier">Avant appel à Core_Library_Model_Manager::Execute()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">sDatasetId</span></code> {String} Identifiant du DataSet demandé</li>
-<li><code class="docutils literal"><span class="pre">oForm</span></code> {Core_Library_Entity_Form} Instance du formulaire (construit à partir de la Ressource Xml) à utiliser pour récupérer le DataSet demandé</li>
-<li><code class="docutils literal"><span class="pre">oDataStructure</span></code> {Core_Library_Resource_XML_DataStructure} Une instance représentant la partie <code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code> du Xml de formulaire</li>
-<li><code class="docutils literal"><span class="pre">aParams</span></code> {Array} Un tableau de paramètres en &#8220;extra&#8221;</li>
+<li><tt class="docutils literal"><span class="pre">sDatasetId</span></tt> {String} Identifiant du DataSet demandé</li>
+<li><tt class="docutils literal"><span class="pre">oForm</span></tt> {Core_Library_Entity_Form} Instance du formulaire (construit à partir de la Ressource Xml) à utiliser pour récupérer le DataSet demandé</li>
+<li><tt class="docutils literal"><span class="pre">oDataStructure</span></tt> {Core_Library_Resource_XML_DataStructure} Une instance représentant la partie <tt class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></tt> du Xml de formulaire</li>
+<li><tt class="docutils literal"><span class="pre">aParams</span></tt> {Array} Un tableau de paramètres en &#8220;extra&#8221;</li>
 </ul>
 </dd>
 </dl>
@@ -256,7 +257,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_getdataset_afterExecute() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Model_Manager::Execute()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oDataSet</span></code> {Core_Library_Resource_XML_DataSet} Le DataSet généré</li>
+<li><tt class="docutils literal"><span class="pre">oDataSet</span></tt> {Core_Library_Resource_XML_DataSet} Le DataSet généré</li>
 </ul>
 </dd>
 </dl>
@@ -271,7 +272,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_save_beforeCommit() <span class="classifier-delimiter">:</span> <span class="classifier">Avant appel à Core_Library_Model_Manager::Commit()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oDataJson</span></code> {Core_Library_Resource_JSON} La représentation Json des données à sauvegarder</li>
+<li><tt class="docutils literal"><span class="pre">oDataJson</span></tt> {Core_Library_Resource_JSON} La représentation Json des données à sauvegarder</li>
 </ul>
 </dd>
 </dl>
@@ -279,7 +280,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_save_afterCommit() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Model_Manager::Commit()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oCommitEnv</span></code> {Core_Library_Resource_XML_DataSet_Commit_Environment} L&#8217;environnement de Commit</li>
+<li><tt class="docutils literal"><span class="pre">oCommitEnv</span></tt> {Core_Library_Resource_XML_DataSet_Commit_Environment} L&#8217;environnement de Commit</li>
 </ul>
 </dd>
 </dl>
@@ -287,7 +288,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_save_render() <span class="classifier-delimiter">:</span> <span class="classifier">Appelée à la fin du processus pour effectuer le rendu</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oOutputJson</span></code> {Core_Library_Resource_JSON} L&#8217;output généré</li>
+<li><tt class="docutils literal"><span class="pre">oOutputJson</span></tt> {Core_Library_Resource_JSON} L&#8217;output généré</li>
 </ul>
 </dd>
 </dl>
@@ -300,8 +301,8 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_query_beforeExecute() <span class="classifier-delimiter">:</span> <span class="classifier">Avant appel à Core_Library_Resource_XML_Query::Execute()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">iQueryId</span></code> {Integer} L&#8217;id du test de cohérence / condition à executé (de la table <code class="docutils literal"><span class="pre">xxxx_query_data</span></code></li>
-<li><code class="docutils literal"><span class="pre">aFlatParams</span></code> {Array} Un tableau &#8220;aplani&#8221; des paramètre nécessaires à l&#8217;exécution de la query</li>
+<li><tt class="docutils literal"><span class="pre">iQueryId</span></tt> {Integer} L&#8217;id du test de cohérence / condition à executé (de la table <tt class="docutils literal"><span class="pre">xxxx_query_data</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">aFlatParams</span></tt> {Array} Un tableau &#8220;aplani&#8221; des paramètre nécessaires à l&#8217;exécution de la query</li>
 </ul>
 </dd>
 </dl>
@@ -309,7 +310,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_query_afterExecute() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Resource_XML_Query::Execute()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">mResult</span></code> {Array} Le résultat généré après execution de la query</li>
+<li><tt class="docutils literal"><span class="pre">mResult</span></tt> {Array} Le résultat généré après execution de la query</li>
 </ul>
 </dd>
 </dl>
@@ -317,7 +318,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_query_render() <span class="classifier-delimiter">:</span> <span class="classifier">Appelée à la fin du processus pour effectuer le rendu</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oOutputJson</span></code> {Core_Library_Resource_JSON} L&#8217;ouput généré (avec le résultat)</li>
+<li><tt class="docutils literal"><span class="pre">oOutputJson</span></tt> {Core_Library_Resource_JSON} L&#8217;ouput généré (avec le résultat)</li>
 </ul>
 </dd>
 </dl>
@@ -330,8 +331,8 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_delete_beforeDelete() <span class="classifier-delimiter">:</span> <span class="classifier">Avant appel à Core_Library_Resource_XML_VarSet::DeleteData()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">aRecordsIds</span></code> {Array} Un tableau de records à supprimer</li>
-<li><code class="docutils literal"><span class="pre">sVarsetId</span></code> {String} L&#8217;identifiant du varset d&#8217;où les enregistrement doivent être supprimé</li>
+<li><tt class="docutils literal"><span class="pre">aRecordsIds</span></tt> {Array} Un tableau de records à supprimer</li>
+<li><tt class="docutils literal"><span class="pre">sVarsetId</span></tt> {String} L&#8217;identifiant du varset d&#8217;où les enregistrement doivent être supprimé</li>
 </ul>
 </dd>
 </dl>
@@ -339,7 +340,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_delete_afterDelete() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Resource_XML_VarSet::DeleteData()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oNotifier</span></code> {Core_Library_Project_Notifier} Le &#8220;Notifier&#8221; rempli par DeleteData()</li>
+<li><tt class="docutils literal"><span class="pre">oNotifier</span></tt> {Core_Library_Project_Notifier} Le &#8220;Notifier&#8221; rempli par DeleteData()</li>
 </ul>
 </dd>
 </dl>
@@ -356,14 +357,14 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <h4>Relatifs à _getFormConfiguration()<a class="headerlink" href="#relatifs-a-getformconfiguration" title="Permalink to this headline">¶</a></h4>
 <ul>
 <li><dl class="first docutils">
-<dt>_retrieveForm() <span class="classifier-delimiter">:</span> <span class="classifier">En charge de récupérer une instance de formulaire (<code class="docutils literal"><span class="pre">Core_Library_Resource_XML_Frame_Form</span></code>) à traiter</span></dt>
+<dt>_retrieveForm() <span class="classifier-delimiter">:</span> <span class="classifier">En charge de récupérer une instance de formulaire (<tt class="docutils literal"><span class="pre">Core_Library_Resource_XML_Frame_Form</span></tt>) à traiter</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">iFormId</span></code> {Integer} Identifiant de la ressource représentant le formulaire à utilier, est égal à 0 si la ressource est chargée depuis le disuqe</li>
-<li><code class="docutils literal"><span class="pre">sFormFileName</span></code> {String} Nom du fichier à charger comme formulaire - Non pertinent si <code class="docutils literal"><span class="pre">iFormId</span></code> est renseigné</li>
-<li><code class="docutils literal"><span class="pre">FormFilePath</span></code> {String} Chemin &#8220;de liaison&#8221; entre la directive <code class="docutils literal"><span class="pre">voozanoo.resources.path</span></code> et le paramètre <code class="docutils literal"><span class="pre">sFormFileName</span></code> fourni - Non pertinent si <code class="docutils literal"><span class="pre">iFormId</span></code> est renseigné et peut également
-être vide même lorsque <code class="docutils literal"><span class="pre">sFormFileName</span></code> est renseigné.</li>
-<li><code class="docutils literal"><span class="pre">oOnStandByFrame</span></code> {Core_Library_Frame_Form_OnStandBy | false } Contient une instance représentant un formulaire préalablement suspendu, il peut être utile d&#8217;avoir cet information pour adapter son code
-en conséquence ou même exploiter cette instance. Dans le cas où aucun formulaire est suspendu la valeur stockée dans le Contexte sera <code class="docutils literal"><span class="pre">false</span></code>.</li>
+<li><tt class="docutils literal"><span class="pre">iFormId</span></tt> {Integer} Identifiant de la ressource représentant le formulaire à utilier, est égal à 0 si la ressource est chargée depuis le disuqe</li>
+<li><tt class="docutils literal"><span class="pre">sFormFileName</span></tt> {String} Nom du fichier à charger comme formulaire - Non pertinent si <tt class="docutils literal"><span class="pre">iFormId</span></tt> est renseigné</li>
+<li><tt class="docutils literal"><span class="pre">FormFilePath</span></tt> {String} Chemin &#8220;de liaison&#8221; entre la directive <tt class="docutils literal"><span class="pre">voozanoo.resources.path</span></tt> et le paramètre <tt class="docutils literal"><span class="pre">sFormFileName</span></tt> fourni - Non pertinent si <tt class="docutils literal"><span class="pre">iFormId</span></tt> est renseigné et peut également
+être vide même lorsque <tt class="docutils literal"><span class="pre">sFormFileName</span></tt> est renseigné.</li>
+<li><tt class="docutils literal"><span class="pre">oOnStandByFrame</span></tt> {Core_Library_Frame_Form_OnStandBy | false } Contient une instance représentant un formulaire préalablement suspendu, il peut être utile d&#8217;avoir cet information pour adapter son code
+en conséquence ou même exploiter cette instance. Dans le cas où aucun formulaire est suspendu la valeur stockée dans le Contexte sera <tt class="docutils literal"><span class="pre">false</span></tt>.</li>
 </ul>
 </dd>
 </dl>
@@ -371,9 +372,9 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_get_beforeExecute() <span class="classifier-delimiter">:</span> <span class="classifier">Avant appel à Core_Library_Model_Manager::Execute()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">iFormId</span></code> {Integer} Id du formulaire à utiliser pour executer les DataQuery (Peut être égal à 0 si le formulaire est chargé depuis le disque)</li>
-<li><code class="docutils literal"><span class="pre">oForm</span></code> {Core_Library_Entity_Form} Instance du formulaire à utiliser</li>
-<li><code class="docutils literal"><span class="pre">aParams</span></code> {Array} Tableau de paramètre &#8220;en extra&#8221; fourni</li>
+<li><tt class="docutils literal"><span class="pre">iFormId</span></tt> {Integer} Id du formulaire à utiliser pour executer les DataQuery (Peut être égal à 0 si le formulaire est chargé depuis le disque)</li>
+<li><tt class="docutils literal"><span class="pre">oForm</span></tt> {Core_Library_Entity_Form} Instance du formulaire à utiliser</li>
+<li><tt class="docutils literal"><span class="pre">aParams</span></tt> {Array} Tableau de paramètre &#8220;en extra&#8221; fourni</li>
 </ul>
 </dd>
 </dl>
@@ -381,7 +382,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_get_afterExecute() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Model_Manager::Execute()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">aDatasets</span></code> {Array} Tableau de DataSet (Core_Library_Resource_XML_DataSet) généré par l&#8217;execution via le ModelManager</li>
+<li><tt class="docutils literal"><span class="pre">aDatasets</span></tt> {Array} Tableau de DataSet (Core_Library_Resource_XML_DataSet) généré par l&#8217;execution via le ModelManager</li>
 </ul>
 </dd>
 </dl>
@@ -391,7 +392,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_get_afterDatasetDico() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Model_Manager::GetDataSetDico()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">aDatasetDico</span></code> {Array} Tableau de DataSet (Core_Library_Resource_XML_DataSet) représentant les dictionnaires utilisés dans les DataSets précédemment générés</li>
+<li><tt class="docutils literal"><span class="pre">aDatasetDico</span></tt> {Array} Tableau de DataSet (Core_Library_Resource_XML_DataSet) représentant les dictionnaires utilisés dans les DataSets précédemment générés</li>
 </ul>
 </dd>
 </dl>
@@ -401,7 +402,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_get_afterQuery() <span class="classifier-delimiter">:</span> <span class="classifier">Après appel à Core_Library_Resource_XML_Query_Manager::GetQueriesRelatedToDatasets()</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">aQueries</span></code> {Array} Tableau des queries &#8220;aplanies&#8221; relatives aux DataSets précédemment générés</li>
+<li><tt class="docutils literal"><span class="pre">aQueries</span></tt> {Array} Tableau des queries &#8220;aplanies&#8221; relatives aux DataSets précédemment générés</li>
 </ul>
 </dd>
 </dl>
@@ -409,7 +410,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <li><dl class="first docutils">
 <dt>_get_render() <span class="classifier-delimiter">:</span> <span class="classifier">Appelée à la fin du processus pour effectuer le rendu</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">oResourceJSON</span></code> {Core_Library_Resource_JSON} Représentation Json de toutes les données à utiliser pour rendre la configuration du Formulaire (+ données)</li>
+<li><tt class="docutils literal"><span class="pre">oResourceJSON</span></tt> {Core_Library_Resource_JSON} Représentation Json de toutes les données à utiliser pour rendre la configuration du Formulaire (+ données)</li>
 </ul>
 </dd>
 </dl>
@@ -419,7 +420,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 </div>
 <div class="section" id="points-d-acces-polymorphes">
 <h3>Points d&#8217;accès &#8220;polymorphes&#8221;<a class="headerlink" href="#points-d-acces-polymorphes" title="Permalink to this headline">¶</a></h3>
-<p>Un problème est apparau sur Neodemat : Un controller spécifique disposait de plusieurs actions reprenant la logique de <code class="docutils literal"><span class="pre">_getFormConfiguration()</span></code>.</p>
+<p>Un problème est apparau sur Neodemat : Un controller spécifique disposait de plusieurs actions reprenant la logique de <tt class="docutils literal"><span class="pre">_getFormConfiguration()</span></tt>.</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="k">class</span> <span class="nc">Form_FrameController</span> <span class="k">extends</span> <span class="nx">Core_Library_Controller_Form_Frame</span>
 <span class="p">{</span>
@@ -435,7 +436,7 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Cette classe offre donc 3 accès à la logique de récupération de formulaire : <code class="docutils literal"><span class="pre">getAction()</span></code> (hérité), <code class="docutils literal"><span class="pre">newAction()</span></code> et <code class="docutils literal"><span class="pre">mobileAction()</span></code>. Des traitements spécifiques devant être réalisés dans chacune des trois actions.</p>
+<p>Cette classe offre donc 3 accès à la logique de récupération de formulaire : <tt class="docutils literal"><span class="pre">getAction()</span></tt> (hérité), <tt class="docutils literal"><span class="pre">newAction()</span></tt> et <tt class="docutils literal"><span class="pre">mobileAction()</span></tt>. Des traitements spécifiques devant être réalisés dans chacune des trois actions.</p>
 <p>La première solution consistait à définir le Hook &#8216;_get_afterExecute()&#8217;, appelé à chacune des 3 action, seulement le code à l&#8217;intérieur de ce Hook était enchevêtré :</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="k">protected</span> <span class="k">function</span> <span class="nf">_get_afterExecute</span><span class="p">(</span> <span class="nx">Core_Library_Event_Context</span> <span class="nv">$oCtx</span> <span class="p">)</span>
@@ -456,10 +457,10 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <p>Pour palier à ce soucis le système de Points d&#8217;Accès gère par des Points d&#8217;Accès polymorphe, lorsque le processus Core décide d&#8217;appeler le Hook _get_afterExecute() le système :</p>
 <ul>
 <li><dl class="first docutils">
-<dt>Vérifie si un Hook nommé <code class="docutils literal"><span class="pre">_[actionName]_get_afterExecute()</span></code> existe</dt>
+<dt>Vérifie si un Hook nommé <tt class="docutils literal"><span class="pre">_[actionName]_get_afterExecute()</span></tt> existe</dt>
 <dd><ul class="first last simple">
 <li>Si ce Hook est trouvé c&#8217;est celui-ci qui est appelé</li>
-<li>Sinon le Hook &#8220;strandard&#8221; est appelé : <code class="docutils literal"><span class="pre">_get_afterExecute()</span></code></li>
+<li>Sinon le Hook &#8220;strandard&#8221; est appelé : <tt class="docutils literal"><span class="pre">_get_afterExecute()</span></tt></li>
 </ul>
 </dd>
 </dl>
@@ -492,9 +493,9 @@ en conséquence ou même exploiter cette instance. Dans le cas où aucun formula
 <h3>Utilisation des points d&#8217;accès<a class="headerlink" href="#utilisation-des-points-d-acces" title="Permalink to this headline">¶</a></h3>
 <p>Il faut garder à l&#8217;esprit que tout passe par le Contexte, aussi dans vos Hook vous devrez toujours :</p>
 <ul class="simple">
-<li>Récupérer l&#8217;élement via le Contexte (méthode <code class="docutils literal"><span class="pre">get()</span></code>)</li>
+<li>Récupérer l&#8217;élement via le Contexte (méthode <tt class="docutils literal"><span class="pre">get()</span></tt>)</li>
 <li>Optionellement le modifier (si besoin)</li>
-<li>Le réaffecter au Contexte (méthode <code class="docutils literal"><span class="pre">set()</span></code>)</li>
+<li>Le réaffecter au Contexte (méthode <tt class="docutils literal"><span class="pre">set()</span></tt>)</li>
 </ul>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="k">protected</span> <span class="k">function</span> <span class="nf">_delete_beforeDelete</span><span class="p">(</span> <span class="nx">Core_Library_Event_Context</span> <span class="nv">$oCtx</span> <span class="p">)</span>
@@ -531,18 +532,18 @@ action &#8220;Enregistrer&#8221; ou &#8220;Retour/Quitter&#8221; permettra de re
 </div>
 <div class="section" id="id3">
 <h3>Fonctionnement<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<p>Ce système se base sur l&#8217;utilisation conjointe des Tokens (<code class="docutils literal"><span class="pre">Core_Library_Token</span></code>) et de la Session utilisateur pour enregistrer l&#8217;état du formulaire Principal lors de sa suspension.</p>
-<p>L&#8217;action <code class="docutils literal"><span class="pre">standByAction()</span></code> du Controller Frame du Module Form est en charge de sauvegarder l&#8217;état de la saisie utilisateur (Token + Session) et de retourner l&#8217;identifiant du Token
+<p>Ce système se base sur l&#8217;utilisation conjointe des Tokens (<tt class="docutils literal"><span class="pre">Core_Library_Token</span></tt>) et de la Session utilisateur pour enregistrer l&#8217;état du formulaire Principal lors de sa suspension.</p>
+<p>L&#8217;action <tt class="docutils literal"><span class="pre">standByAction()</span></tt> du Controller Frame du Module Form est en charge de sauvegarder l&#8217;état de la saisie utilisateur (Token + Session) et de retourner l&#8217;identifiant du Token
 permettant de poursuivre la saisie.</p>
-<p>L&#8217;action <code class="docutils literal"><span class="pre">getAction()</span></code> du Controller Frame du Module Form est en charge de restituer une formulaire préalablement suspendu lorsqu&#8217;elle détecte le paramètre <code class="docutils literal"><span class="pre">restore_on_stand_by_frame</span></code>.</p>
+<p>L&#8217;action <tt class="docutils literal"><span class="pre">getAction()</span></tt> du Controller Frame du Module Form est en charge de restituer une formulaire préalablement suspendu lorsqu&#8217;elle détecte le paramètre <tt class="docutils literal"><span class="pre">restore_on_stand_by_frame</span></tt>.</p>
 <div class="admonition hint">
 <p class="first admonition-title">Hint</p>
-<p>La &#8220;nouvelle&#8221; action <code class="docutils literal"><span class="pre">standByAction()</span></code> est en réalité une façade à la méthode protégée <code class="docutils literal"><span class="pre">_standByFrame()</span></code> de <code class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></code>, n&#8217;importe quel controller (même spécifique)
+<p>La &#8220;nouvelle&#8221; action <tt class="docutils literal"><span class="pre">standByAction()</span></tt> est en réalité une façade à la méthode protégée <tt class="docutils literal"><span class="pre">_standByFrame()</span></tt> de <tt class="docutils literal"><span class="pre">Core_Library_Controller_Action</span></tt>, n&#8217;importe quel controller (même spécifique)
 peut dont bénéficier de cette logique si besoin est.</p>
 <p class="last">Aucun hook n&#8217;est disponible pour le moment (concernant cette méthode).</p>
 </div>
-<p>La classe <code class="docutils literal"><span class="pre">Core_Library_Frame_Form_Manager</span></code> permet de manipuler les formulaires suspendus (représentés par la classe <code class="docutils literal"><span class="pre">Core_Library_Frame_Form_OnStandBy</span></code>).</p>
-<p>L&#8217;ajout d&#8217;un <code class="docutils literal"><span class="pre">&lt;button</span> <span class="pre">action=&quot;stand_by&quot;&gt;</span></code> au <code class="docutils literal"><span class="pre">&lt;layout&gt;</span></code> permet d&#8217;activer l&#8217;ensemble de ce processus.</p>
+<p>La classe <tt class="docutils literal"><span class="pre">Core_Library_Frame_Form_Manager</span></tt> permet de manipuler les formulaires suspendus (représentés par la classe <tt class="docutils literal"><span class="pre">Core_Library_Frame_Form_OnStandBy</span></tt>).</p>
+<p>L&#8217;ajout d&#8217;un <tt class="docutils literal"><span class="pre">&lt;button</span> <span class="pre">action=&quot;stand_by&quot;&gt;</span></tt> au <tt class="docutils literal"><span class="pre">&lt;layout&gt;</span></tt> permet d&#8217;activer l&#8217;ensemble de ce processus.</p>
 </div>
 <div class="section" id="desactiver-le-gele-d-un-dataset">
 <h3>Désactiver le &#8220;gèle&#8221; d&#8217;un DataSet<a class="headerlink" href="#desactiver-le-gele-d-un-dataset" title="Permalink to this headline">¶</a></h3>
@@ -556,7 +557,7 @@ peut dont bénéficier de cette logique si besoin est.</p>
 </ul>
 <p>Si le DataSet des catégorie est restitué tel qu&#8217;il avait été gelé la nouvelle catégorie n&#8217;apparaitra pas. C&#8217;est pourquoi on doit indiquer que ce DataSet ne doit <strong>pas</strong> être gelé par le processus
 de suspension de saisie.</p>
-<p>Pour ce faire il faut utiliser l&#8217;attribut <code class="docutils literal"><span class="pre">standby</span></code> du noeud <code class="docutils literal"><span class="pre">&lt;dataquery&gt;</span></code> en lui indiquant la valeur <code class="docutils literal"><span class="pre">false</span></code>.</p>
+<p>Pour ce faire il faut utiliser l&#8217;attribut <tt class="docutils literal"><span class="pre">standby</span></tt> du noeud <tt class="docutils literal"><span class="pre">&lt;dataquery&gt;</span></tt> en lui indiquant la valeur <tt class="docutils literal"><span class="pre">false</span></tt>.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataquery</span> <span class="na">id=</span><span class="s">&quot;categorie&quot;</span> <span class="na">standby=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
     <span class="c">&lt;!-- ... --&gt;</span>
 <span class="nt">&lt;/dataquery&gt;</span>
@@ -567,7 +568,7 @@ de suspension de saisie.</p>
 <div class="section" id="a-savoir">
 <h3>A savoir<a class="headerlink" href="#a-savoir" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Lors de l&#8217;utilisation d&#8217;un bouton ayant l&#8217;action <code class="docutils literal"><span class="pre">stand_by</span></code> il dotit obligatoirement avoir un noeud <code class="docutils literal"><span class="pre">&lt;redirection&gt;</span></code> enfant de <code class="docutils literal"><span class="pre">&lt;button&gt;</span></code>, suspendre la saisie sans rediriger l&#8217;utilisateur
+<li>Lors de l&#8217;utilisation d&#8217;un bouton ayant l&#8217;action <tt class="docutils literal"><span class="pre">stand_by</span></tt> il dotit obligatoirement avoir un noeud <tt class="docutils literal"><span class="pre">&lt;redirection&gt;</span></tt> enfant de <tt class="docutils literal"><span class="pre">&lt;button&gt;</span></tt>, suspendre la saisie sans rediriger l&#8217;utilisateur
 vers une autre Frame n&#8217;aurait aucun sens.</li>
 <li>Le formulaire Secondaire, ciblé lors de la suspension de la saisie du formulaire principal, n&#8217;a aucun besoin spécifique pour fonctionner avec un formulaire préalablement suspendu. Il peut même
 être utilisé comme formulaire &#8220;classique&#8221; utilisable de façon standard.</li>
@@ -582,7 +583,7 @@ modifier en enregistrement lié au formulaire Principal et affiché dans ce dern
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -622,14 +623,12 @@ modifier en enregistrement lié au formulaire Principal et affiché dans ce dern
   <h4>Next topic</h4>
   <p class="topless"><a href="mainframe.html"
                         title="next chapter">Mainframe</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/archi/frame.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/archi/frame.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -646,7 +645,7 @@ modifier en enregistrement lié au formulaire Principal et affiché dans ce dern
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -662,9 +661,9 @@ modifier en enregistrement lié au formulaire Principal et affiché dans ce dern
           <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

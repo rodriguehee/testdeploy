@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -24,14 +25,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
     <link rel="up" title="Ressources" href="../ressources.html" />
     <link rel="next" title="Invokable Dataset" href="invokable_dataset.html" />
     <link rel="prev" title="Layout" href="layout.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,7 +52,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="dataset">
 <span id="id1"></span><h1>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
@@ -59,23 +60,23 @@
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Un XML dataset est découpé en deux parties :</p>
 <ul class="simple">
-<li>la description de la structure (<code class="docutils literal"><span class="pre">&lt;metadata&gt;</span></code>)</li>
-<li>les données (<code class="docutils literal"><span class="pre">&lt;rowdata&gt;</span></code>).</li>
+<li>la description de la structure (<tt class="docutils literal"><span class="pre">&lt;metadata&gt;</span></tt>)</li>
+<li>les données (<tt class="docutils literal"><span class="pre">&lt;rowdata&gt;</span></tt>).</li>
 </ul>
-<p>La partie <code class="docutils literal"><span class="pre">&lt;metadata&gt;</span></code> est elle même découpée en deux :</p>
+<p>La partie <tt class="docutils literal"><span class="pre">&lt;metadata&gt;</span></tt> est elle même découpée en deux :</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">&lt;fields&gt;</span></code> décrivant les champs renvoyés contenus dans ce dataset (Type, Obligatoire, Libellé)</li>
-<li><code class="docutils literal"><span class="pre">&lt;variables&gt;</span></code> décrivant les données provenant de l&#8217;extérieur (utilisées par le dataquery pour les conditions par exemple)</li>
+<li><tt class="docutils literal"><span class="pre">&lt;fields&gt;</span></tt> décrivant les champs renvoyés contenus dans ce dataset (Type, Obligatoire, Libellé)</li>
+<li><tt class="docutils literal"><span class="pre">&lt;variables&gt;</span></tt> décrivant les données provenant de l&#8217;extérieur (utilisées par le dataquery pour les conditions par exemple)</li>
 </ul>
 <p>Les attributes autorisés pour un Dataset sont :</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">id</span></code> : Obligatoire, c&#8217;est l&#8217;identifiant du Dataset, il doit être unique dans le formulaire</li>
-<li><code class="docutils literal"><span class="pre">cacheable</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">true</span></code>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
-<li><code class="docutils literal"><span class="pre">standby</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">true</span></code>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
-<li><code class="docutils literal"><span class="pre">auto_add_record</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">false</span></code>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
-<li><code class="docutils literal"><span class="pre">type</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">standard</span></code>). S&#8217;il vaut <code class="docutils literal"><span class="pre">filter</span></code> les valeurs saisient dans le filtre deviendront persistantes en session.</li>
-<li><code class="docutils literal"><span class="pre">mute_refresh_event</span></code> : Facultatif (défaut : <code class="docutils literal"><span class="pre">false</span></code>), S&#8217;il vaut <code class="docutils literal"><span class="pre">true</span></code> un modification d&#8217;un field lié à ce DataSet n&#8217;induira pas de
-RefreshDataset sur des DataSet référençant ce DataSet (Via des <code class="docutils literal"><span class="pre">&lt;condition&gt;</span></code> par exemple)</li>
+<li><tt class="docutils literal"><span class="pre">id</span></tt> : Obligatoire, c&#8217;est l&#8217;identifiant du Dataset, il doit être unique dans le formulaire</li>
+<li><tt class="docutils literal"><span class="pre">cacheable</span></tt> : Facultatif (défaut : <tt class="docutils literal"><span class="pre">true</span></tt>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
+<li><tt class="docutils literal"><span class="pre">standby</span></tt> : Facultatif (défaut : <tt class="docutils literal"><span class="pre">true</span></tt>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
+<li><tt class="docutils literal"><span class="pre">auto_add_record</span></tt> : Facultatif (défaut : <tt class="docutils literal"><span class="pre">false</span></tt>), il est identique à l&#8217;attribut présent dans un <a class="reference internal" href="dataquery.html#dataquery"><em>Dataquery</em></a>.</li>
+<li><tt class="docutils literal"><span class="pre">type</span></tt> : Facultatif (défaut : <tt class="docutils literal"><span class="pre">standard</span></tt>). S&#8217;il vaut <tt class="docutils literal"><span class="pre">filter</span></tt> les valeurs saisient dans le filtre deviendront persistantes en session.</li>
+<li><tt class="docutils literal"><span class="pre">mute_refresh_event</span></tt> : Facultatif (défaut : <tt class="docutils literal"><span class="pre">false</span></tt>), S&#8217;il vaut <tt class="docutils literal"><span class="pre">true</span></tt> un modification d&#8217;un field lié à ce DataSet n&#8217;induira pas de
+RefreshDataset sur des DataSet référençant ce DataSet (Via des <tt class="docutils literal"><span class="pre">&lt;condition&gt;</span></tt> par exemple)</li>
 </ul>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;dataset</span> <span class="na">id=</span><span class="s">&quot;[ID DATASET]&quot;</span> <span class="na">cacheable=</span><span class="s">&quot;true&quot;</span> <span class="na">standby=</span><span class="s">&quot;true&quot;</span> <span class="na">auto_add_record=</span><span class="s">&quot;false&quot;</span> <span class="na">mute_refresh_event=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;metadata&gt;</span>
@@ -88,9 +89,9 @@ RefreshDataset sur des DataSet référençant ce DataSet (Via des <code class="d
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>L&#8217;attribut  <code class="docutils literal"><span class="pre">mute_refresh_event</span></code> peut être très utile lorsqu&#8217;il est utilisé sur un DataSet de filtrage. Il permet d&#8217;éviter les requêtes XHR de recherche de données à chaque champ modifié. En revanche
+<p>L&#8217;attribut  <tt class="docutils literal"><span class="pre">mute_refresh_event</span></tt> peut être très utile lorsqu&#8217;il est utilisé sur un DataSet de filtrage. Il permet d&#8217;éviter les requêtes XHR de recherche de données à chaque champ modifié. En revanche
 il est à la charge du développeur de mettre un bouton dans le layout permettant, par conséquent, de lancer manuellement la recherche (vu qu&#8217;elle ne se fait plus automatiquement).</p>
-<p class="last">Le <a class="reference internal" href="../widgets/button.html#widgetbutton"><em>WidgetButton</em></a> à placer devra avoir l&#8217;action <code class="docutils literal"><span class="pre">refresh_dataset</span></code> et indiquer le DataSet à rafraîchir (à savoir celui des données, lié à un DataQuery référençant le DataSet de filtrage dans ses conditions).</p>
+<p class="last">Le <a class="reference internal" href="../widgets/button.html#widgetbutton"><em>WidgetButton</em></a> à placer devra avoir l&#8217;action <tt class="docutils literal"><span class="pre">refresh_dataset</span></tt> et indiquer le DataSet à rafraîchir (à savoir celui des données, lié à un DataQuery référençant le DataSet de filtrage dans ses conditions).</p>
 </div>
 <p>Exemple de dataset créé manuellement pour être mis dans le XML de formulaire (source: form.provider_user_list.xml) :</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="c">&lt;!-- Provider user list --&gt;</span>
@@ -138,7 +139,7 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
 <li>type: correspond aux types du varset. Le type induit la présence d&#8217;une sous balise qui apporte des informations supplémentaires sur le type, comme la longueur (length) pour le type string.</li>
 <li>source: provenance de la variable, est utilisé pour la sauvegarde de la valeur. valeurs possibles: varset et table (induit la présence d&#8217;une balise varset ou table).</li>
 </ul>
-<p>Le <code class="docutils literal"><span class="pre">type</span></code> spécifié pour le field induit la présence d&#8217;un noeud enfant au <code class="docutils literal"><span class="pre">&lt;field&gt;</span></code> ayant le même nom que la valeur de l&#8217;attribut <code class="docutils literal"><span class="pre">type</span></code> :</p>
+<p>Le <tt class="docutils literal"><span class="pre">type</span></tt> spécifié pour le field induit la présence d&#8217;un noeud enfant au <tt class="docutils literal"><span class="pre">&lt;field&gt;</span></tt> ayant le même nom que la valeur de l&#8217;attribut <tt class="docutils literal"><span class="pre">type</span></tt> :</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;field</span> <span class="na">id=</span><span class="s">&quot;cp&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span> <span class="na">source=</span><span class="s">&quot;varset&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;string</span> <span class="na">length=</span><span class="s">&quot;10&quot;</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/field&gt;</span>
@@ -146,7 +147,7 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Ce noeud enfant peut avoir les attributes <code class="docutils literal"><span class="pre">validator</span></code> et <code class="docutils literal"><span class="pre">regexp</span></code>. Pour plus d&#8217;information consultez la partie sur les <a class="reference internal" href="../lib_js.html#lib-js-validateurs"><em>Validateurs</em></a>.</p>
+<p class="last">Ce noeud enfant peut avoir les attributes <tt class="docutils literal"><span class="pre">validator</span></tt> et <tt class="docutils literal"><span class="pre">regexp</span></tt>. Pour plus d&#8217;information consultez la partie sur les <a class="reference internal" href="../lib_js.html#lib-js-validateurs"><em>Validateurs</em></a>.</p>
 </div>
 </div>
 <div class="section" id="varset">
@@ -225,14 +226,13 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
 <div class="section" id="variables-a-reponse-multiple">
 <h3>Variables à réponse multiple<a class="headerlink" href="#variables-a-reponse-multiple" title="Permalink to this headline">¶</a></h3>
 <p>Les variables à réponse multiple sont stockées comme sous-noeud de la balise row.</p>
-<div class="highlight-xml"><div class="highlight"><pre>&lt;row ...&gt;
-  &lt;mutiple name=&quot;ttt&quot;&gt;
+<div class="highlight-xml"><pre>&lt;row ...&gt;
+  &lt;mutiple name="ttt"&gt;
     &lt;value&gt;1&lt;/value&gt;
     &lt;value&gt;2&lt;/value&gt;
     &lt;value&gt;3&lt;/value&gt;
   &lt;/multiple&gt;
-&lt;/row&gt;
-</pre></div>
+&lt;/row&gt;</pre>
 </div>
 <div class="section" id="format-json">
 <h4>Format JSON<a class="headerlink" href="#format-json" title="Permalink to this headline">¶</a></h4>
@@ -319,7 +319,7 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -354,14 +354,12 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
   <h4>Next topic</h4>
   <p class="topless"><a href="invokable_dataset.html"
                         title="next chapter">Invokable Dataset</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/res/dataset.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/res/dataset.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -378,7 +376,7 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -394,9 +392,9 @@ il est à la charge du développeur de mettre un bouton dans le layout permettan
           <li><a href="../ressources.html" >Ressources</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

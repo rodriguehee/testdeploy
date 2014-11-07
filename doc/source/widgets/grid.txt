@@ -14,7 +14,7 @@ Ce composant intègre :
 * Le DataSet est chargé en intégralité sur le poste client et jqxGrid gère l'affichage
 * Le tri sur une colonne précise
 * Le filtrage sur une ou plusieurs colonnes
-* La suppression de la ligne sur laquelle se trouve le curseur
+* La suppression de la ligne sur laquelle se trouve le curseur, après confirmation via une boite de dialogue.
 * L'édition "à la volée" de cellules
 * La saisie en mode clavier avec les flèches de direction et la touche Entrée
 * Les données sont sauvegardées à chaque changement de cellule du tableur
@@ -159,7 +159,7 @@ Type : String
 
 Défaut : null
 
-Fonction : Définit le thème du widget
+Fonction : Définit le thème du widget. Ce thème est aussi utilisé pour le rendu graphique des boutons situé sous le widget.
 
 Valeurs attendues : android / arctic / black / blackberry / bootstrap / energyblue / fresh / highcontrast / metro / metrodark / mobile / office / orange / shinyblack / summer / web / windowsphone
 
@@ -227,11 +227,14 @@ Les attributs du noeud ``<column>`` sont :
 +-----------------------------+-------------------------------+-------------------------------------------------------------------------------------------+------------+-------+
 
 .. note::
+	Les attributs ``min`` et ``max`` du varset dans lequel les colonnes sont définies déclenchent la validation de la saisie par le module. Si la valeur est invalide, il est nécessaire de la rectifier car il s'agit d'un contrôle bloquant.
+
+.. note::
 	L'attribut ``field`` est obligatoire même dans le cas d'une formule calculée, car le résultat du calcul est stocké dans la colonne de destination.
 
-Les valeurs possibles de l'attribut ``aggregate`` sont: ``avg``, ``count``, ``min``, ``max``, ``sum``, ``product``, ``stdev``, ``stdevp``, ``varp`` et ``var``. Seule ``count`` peut s'appliquer à des colonnes non numériques. Enfin, on ne peut définir qu'une seule fonction d'aggrégation par colonne.
+Les valeurs possibles de l'attribut ``aggregate`` sont: ``avg``, ``count``, ``min``, ``max``, ``sum``, ``product``, ``stdev``, ``stdevp``, ``varp`` et ``var``. Seule ``count`` peut s'appliquer à des colonnes non numériques. On ne peut définir qu'une seule fonction d'aggrégation par colonne. Il n'est pas possible de redéfinir le libellé (en anglais) des fonctions d'aggrégation.
 	
-Les valeurs possibles de l'attribut ``cellsformat`` sont documentées dans l'`API <http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-api.htm>`_ (cf ``Behavior`` > ``columns`` > ``cellsformat``). 
+Les valeurs possibles de l'attribut ``cellsformat`` sont documentées dans l'`API <http://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-api.htm>`_ (cf ``Behavior`` > ``columns`` > ``cellsformat``). Il s'agit d'une fonctionnalité de rendu, donc d'un affichage statique. Cette option n'est pas prise en compte par les widgets de saisie.
 
 L'attribut ``formula`` est un calcul défini par une fonction Javascript. Il est donc important que la syntaxe soit valide, sinon le module ne fonctionnera pas correctement. Par exemple, pour un total résultant de la multiplication de la quantité d'articles (``quantite``) par le prix unitaire d'un article (``montant``), on pourra utiliser la syntaxe suivante: 
 

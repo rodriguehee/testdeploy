@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -24,14 +25,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
     <link rel="up" title="Composants graphiques" href="../widgets.html" />
     <link rel="next" title="OptionsPanel.option" href="optionspanel.option.html" />
     <link rel="prev" title="WidgetPage" href="page.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,13 +52,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="optionspanel-panel">
 <span id="id1"></span><h1>OptionsPanel.panel<a class="headerlink" href="#optionspanel-panel" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="fonction">
 <h2>Fonction<a class="headerlink" href="#fonction" title="Permalink to this headline">¶</a></h2>
-<p>Hérite de <code class="docutils literal"><span class="pre">Y.Panel</span></code></p>
+<p>Hérite de <tt class="docutils literal"><span class="pre">Y.Panel</span></tt></p>
 <p>Ce composant permet d&#8217;afficher une boite de dialogue modale contenant un ou plusieurs champs SELECT permettant à l&#8217;utilisateur définir des options.</p>
 </div>
 <div class="section" id="utilisation-exemple">
@@ -123,29 +124,29 @@
 <h2>Paramétrage JSON<a class="headerlink" href="#parametrage-json" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">headerContent</span></code> : Titre de la fenêtre</p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">headerContent</span></tt> : Titre de la fenêtre</p>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">oOnOk</span></code></dt>
+<dt><tt class="docutils literal"><span class="pre">oOnOk</span></tt></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">fn</span></code> : Fonction de rappel quand click sur &#8216;OK&#8217;</li>
-<li><code class="docutils literal"><span class="pre">scope</span></code> : Scope sur la classe appelante</li>
+<li><tt class="docutils literal"><span class="pre">fn</span></tt> : Fonction de rappel quand click sur &#8216;OK&#8217;</li>
+<li><tt class="docutils literal"><span class="pre">scope</span></tt> : Scope sur la classe appelante</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">aOptions</span></code></dt>
+<dt><tt class="docutils literal"><span class="pre">aOptions</span></tt></dt>
 <dd><ul class="first last">
-<li><p class="first"><code class="docutils literal"><span class="pre">label</span></code> : Label associé au champ SELECT</p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">label</span></tt> : Label associé au champ SELECT</p>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">varname</span></code> : Variable associée à l&#8217;option</p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">varname</span></tt> : Variable associée à l&#8217;option</p>
 </li>
 <li><dl class="first docutils">
-<dt><code class="docutils literal"><span class="pre">values</span></code> <span class="classifier-delimiter">:</span> <span class="classifier">Tableau des valeurs des différentes options</span></dt>
+<dt><tt class="docutils literal"><span class="pre">values</span></tt> <span class="classifier-delimiter">:</span> <span class="classifier">Tableau des valeurs des différentes options</span></dt>
 <dd><ul class="first last simple">
-<li><code class="docutils literal"><span class="pre">label</span></code> : Label associé à une option</li>
-<li><code class="docutils literal"><span class="pre">value</span></code> : Valeur associé à une option</li>
+<li><tt class="docutils literal"><span class="pre">label</span></tt> : Label associé à une option</li>
+<li><tt class="docutils literal"><span class="pre">value</span></tt> : Valeur associé à une option</li>
 </ul>
 </dd>
 </dl>
@@ -163,7 +164,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -181,14 +182,12 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="optionspanel.option.html"
                         title="next chapter">OptionsPanel.option</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/widgets/optionspanel.panel.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/widgets/optionspanel.panel.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -205,7 +204,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -221,9 +220,9 @@
           <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

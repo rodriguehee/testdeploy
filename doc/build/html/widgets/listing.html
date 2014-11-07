@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -24,14 +25,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
     <link rel="up" title="Composants graphiques" href="../widgets.html" />
     <link rel="next" title="WidgetGrid" href="grid.html" />
     <link rel="prev" title="WidgetField" href="field.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,7 +52,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="widgetlisting">
 <span id="id1"></span><h1>WidgetListing<a class="headerlink" href="#widgetlisting" title="Permalink to this headline">¶</a></h1>
@@ -250,19 +251,19 @@
 <p>Défaut : true</p>
 <p>Fonction : Indique quel mode d&#8217;ajout utiliser lorsque l&#8217;utilisateur clique sur le bouton &#8220;Ajouter&#8221;</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">true</span></code> : La méthode Javascript Array.push est utilisée, le record est ajouté en fin de tableau</li>
-<li><code class="docutils literal"><span class="pre">false</span></code> : La méthode Javascript Array.unshift est utilisée, le record est ajouté en début de tableau</li>
+<li><tt class="docutils literal"><span class="pre">true</span></tt> : La méthode Javascript Array.push est utilisée, le record est ajouté en fin de tableau</li>
+<li><tt class="docutils literal"><span class="pre">false</span></tt> : La méthode Javascript Array.unshift est utilisée, le record est ajouté en début de tableau</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Cette option est pertinente uniquement lorsque le listing est en mode <code class="docutils literal"><span class="pre">rw</span></code> sinon le bouton &#8220;Ajouter&#8221; n&#8217;est pas présent.</p>
+<p class="last">Cette option est pertinente uniquement lorsque le listing est en mode <tt class="docutils literal"><span class="pre">rw</span></tt> sinon le bouton &#8220;Ajouter&#8221; n&#8217;est pas présent.</p>
 </div>
 </div>
 </div>
 <div class="section" id="contenu">
 <h2>Contenu<a class="headerlink" href="#contenu" title="Permalink to this headline">¶</a></h2>
-<p>Le WidgetListing contient un noeud enfant <code class="docutils literal"><span class="pre">&lt;columns&gt;</span></code>, ce noeud contient N noeud <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> représentant les colonnes à afficher dans le listing.</p>
-<p>Chaque colonne indiquée doit faire référence à une colonne du <a class="reference internal" href="../res/dataquery.html#dataquery"><em>Dataquery</em></a> (Partie <code class="docutils literal"><span class="pre">&lt;data_structre&gt;</span></code>) du dataset spécifié en attribut du listing.</p>
+<p>Le WidgetListing contient un noeud enfant <tt class="docutils literal"><span class="pre">&lt;columns&gt;</span></tt>, ce noeud contient N noeud <tt class="docutils literal"><span class="pre">&lt;column&gt;</span></tt> représentant les colonnes à afficher dans le listing.</p>
+<p>Chaque colonne indiquée doit faire référence à une colonne du <a class="reference internal" href="../res/dataquery.html#dataquery"><em>Dataquery</em></a> (Partie <tt class="docutils literal"><span class="pre">&lt;data_structre&gt;</span></tt>) du dataset spécifié en attribut du listing.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;listing</span> <span class="na">dataset=</span><span class="s">&quot;mon_dataset&quot;</span> <span class="na">mode=</span><span class="s">&quot;ro&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;columns&gt;</span>
         <span class="nt">&lt;column</span> <span class="na">field=</span><span class="s">&quot;foo&quot;</span> <span class="na">mode=</span><span class="s">&quot;ro&quot;</span> <span class="na">title=</span><span class="s">&quot;Foo&quot;</span> <span class="nt">/&gt;</span>
@@ -272,7 +273,7 @@
 <span class="nt">&lt;/listing&gt;</span>
 </pre></div>
 </div>
-<p>Les attributs du noeud <code class="docutils literal"><span class="pre">&lt;column&gt;</span></code> sont :</p>
+<p>Les attributs du noeud <tt class="docutils literal"><span class="pre">&lt;column&gt;</span></tt> sont :</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="19%" />
@@ -300,18 +301,18 @@
 </tr>
 <tr class="row-odd"><td>dataset</td>
 <td>String</td>
-<td>Identifiant du dataset à utiliser pour effectuer le rendu d&#8217;un field de type <code class="docutils literal"><span class="pre">fkey_varset</span></code></td>
+<td>Identifiant du dataset à utiliser pour effectuer le rendu d&#8217;un field de type <tt class="docutils literal"><span class="pre">fkey_varset</span></tt></td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Lors de l&#8217;affichage d&#8217;une colonne liée à un field <code class="docutils literal"><span class="pre">fkey_varset</span></code> l&#8217;attribut <code class="docutils literal"><span class="pre">dataset</span></code> est requis pour effectuer un affichage correct.</p>
+<p>Lors de l&#8217;affichage d&#8217;une colonne liée à un field <tt class="docutils literal"><span class="pre">fkey_varset</span></tt> l&#8217;attribut <tt class="docutils literal"><span class="pre">dataset</span></tt> est requis pour effectuer un affichage correct.</p>
 <p>Le Dataset ciblé doit :</p>
 <ul class="last simple">
-<li>Être présent dans la partie <code class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></code></li>
+<li>Être présent dans la partie <tt class="docutils literal"><span class="pre">&lt;data_structure&gt;</span></tt></li>
 <li>Avoir une clé primaire</li>
-<li>Avoir une colonne ayant comme alias <code class="docutils literal"><span class="pre">label</span></code>. Elle sera utilisée pour l&#8217;affichage et le tri (local)</li>
+<li>Avoir une colonne ayant comme alias <tt class="docutils literal"><span class="pre">label</span></tt>. Elle sera utilisée pour l&#8217;affichage et le tri (local)</li>
 </ul>
 </div>
 </div>
@@ -321,7 +322,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -356,14 +357,12 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="grid.html"
                         title="next chapter">WidgetGrid</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/widgets/listing.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/widgets/listing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -380,7 +379,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -396,9 +395,9 @@
           <li><a href="../widgets.html" >Composants graphiques</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

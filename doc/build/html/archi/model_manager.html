@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -24,14 +25,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Voozanoo4 1.0 documentation" href="../index.html" />
     <link rel="up" title="Architecture" href="../architecture.html" />
     <link rel="next" title="Noyau" href="noyau.html" />
     <link rel="prev" title="Mainframe" href="mainframe.html" /> 
   </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,7 +52,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="model-manager">
 <span id="id1"></span><h1>Model Manager<a class="headerlink" href="#model-manager" title="Permalink to this headline">¶</a></h1>
@@ -245,22 +246,22 @@ Mode seconde requête si l&#8217;attribut SQL est égale au nom de l&#8217;alias
 </div>
 <div class="section" id="principe">
 <h3>Principe<a class="headerlink" href="#principe" title="Permalink to this headline">¶</a></h3>
-<p>Schématiquement lorsque le ModelManager détecte une ou plusieurs balises &#8220;<code class="docutils literal"><span class="pre">&lt;condition&gt;</span></code>&#8221; dans un DataQuery il les évalue en utilisant la classe
-<code class="docutils literal"><span class="pre">Core_Library_Resource_XML_DataQuery_Params</span></code> pour récupérer la valeur réelle du paramètre à utiliser.</p>
+<p>Schématiquement lorsque le ModelManager détecte une ou plusieurs balises &#8220;<tt class="docutils literal"><span class="pre">&lt;condition&gt;</span></tt>&#8221; dans un DataQuery il les évalue en utilisant la classe
+<tt class="docutils literal"><span class="pre">Core_Library_Resource_XML_DataQuery_Params</span></tt> pour récupérer la valeur réelle du paramètre à utiliser.</p>
 <p>Cette classe intégère maintenant la notion de &#8220;Paramètre altéré&#8221; : si le paramètre demandé est détecté comme étant un de ces paramètres le &#8220;getter&#8221;
 approrié sera appelé afin d&#8217;injecter une logique plus complexe qu&#8217;un simple getter.</p>
 </div>
 <div class="section" id="liste-des-parametres-alteres-reconnus">
 <h3>Liste des paramètres altérés reconnus<a class="headerlink" href="#liste-des-parametres-alteres-reconnus" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="group-tree-ce-groupe-et-ses-enfants">
-<h4><code class="docutils literal"><span class="pre">group_tree</span></code> - Ce groupe et ses enfants<a class="headerlink" href="#group-tree-ce-groupe-et-ses-enfants" title="Permalink to this headline">¶</a></h4>
-<p>La détection de se paramètre occasionne l&#8217;appel au getter <code class="docutils literal"><span class="pre">getParamGroupTree</span></code> en charge de retourner un tableau contenant l&#8217;identifiant
+<h4><tt class="docutils literal"><span class="pre">group_tree</span></tt> - Ce groupe et ses enfants<a class="headerlink" href="#group-tree-ce-groupe-et-ses-enfants" title="Permalink to this headline">¶</a></h4>
+<p>La détection de se paramètre occasionne l&#8217;appel au getter <tt class="docutils literal"><span class="pre">getParamGroupTree</span></tt> en charge de retourner un tableau contenant l&#8217;identifiant
 du groupe sélectionné ainsi que les identifiants de tous ses fils.</p>
 <p>Cela permet, dans des interfaces complexes, de proposer à l&#8217;utilisateur la sélection d&#8217;un groupe en tant que critère de filtrage et
 d&#8217;inclure dans les résultats les fiches correspondant à ce groupe et tous ses enfants.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Le développeur doit anticiper ce comportement lors de l&#8217;utilisation du paramètre altéré <code class="docutils literal"><span class="pre">group_tree</span></code> : le retour d&#8217;un tableau d&#8217;identifiants.</p>
+<p>Le développeur doit anticiper ce comportement lors de l&#8217;utilisation du paramètre altéré <tt class="docutils literal"><span class="pre">group_tree</span></tt> : le retour d&#8217;un tableau d&#8217;identifiants.</p>
 <p>Il doit donc écrire son fragment SQL en conséquence, avec un IN :</p>
 <div class="last highlight-xml"><div class="highlight"><pre><span class="nt">&lt;condition</span> <span class="na">sql=</span><span class="s">&quot;{gl.id_group_parent} IN ({param_id_group})&quot;</span> <span class="na">optional=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
    <span class="nt">&lt;field</span> <span class="na">field_name=</span><span class="s">&quot;id_group_parent&quot;</span> <span class="na">alias=</span><span class="s">&quot;gl.id_group_parent&quot;</span> <span class="na">table_name=</span><span class="s">&quot;gl&quot;</span><span class="nt">/&gt;</span>
@@ -279,7 +280,7 @@ d&#8217;inclure dans les résultats les fiches correspondant à ce groupe et tou
 <p>Pour ajouter un paramètre altéré il faut :</p>
 <ul>
 <li><dl class="first docutils">
-<dt>L&#8217;ajouter dans l&#8217;attribut protected <code class="docutils literal"><span class="pre">$_aAlteredParams</span></code>, exemple :</dt>
+<dt>L&#8217;ajouter dans l&#8217;attribut protected <tt class="docutils literal"><span class="pre">$_aAlteredParams</span></tt>, exemple :</dt>
 <dd><div class="first last highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="k">protected</span> <span class="nv">$_aAlteredParams</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;group_tree&#39;</span><span class="p">,</span> <span class="s1">&#39;foo_bar&#39;</span><span class="p">);</span>
 </pre></div>
@@ -302,7 +303,7 @@ d&#8217;inclure dans les résultats les fiches correspondant à ce groupe et tou
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>Le getter reçoit systématiquement un paramètre <code class="docutils literal"><span class="pre">$sOriginalParamName</span></code> qui est une String représent le nom du paramètre d&#8217;origine.</p>
+<p>Le getter reçoit systématiquement un paramètre <tt class="docutils literal"><span class="pre">$sOriginalParamName</span></tt> qui est une String représent le nom du paramètre d&#8217;origine.</p>
 <p>Dans le cas d&#8217;un paramètre altéré natif &#8220;foo_bar&#8221; ou &#8220;group_tree&#8221; ce paramètre vaudra respectivement &#8220;foo_bar&#8221; et &#8220;group_tree&#8221;. Cependant l&#8217;utilisateur peut utilisé un &#8220;Alias de paramètre altéré&#8221;
 pour lié un paramètre &#8220;azerty&#8221; au comportement du paramètre altéré &#8220;groupe_tree&#8221;.</p>
 <p class="last">Ce comportement sera rarement implémenté mais est permis, voir les détails ci-dessous.</p>
@@ -311,9 +312,9 @@ pour lié un paramètre &#8220;azerty&#8221; au comportement du paramètre alté
 <div class="section" id="ajout-d-un-alias-de-parametre-altere">
 <h3>Ajout d&#8217;un Alias de paramètre altéré<a class="headerlink" href="#ajout-d-un-alias-de-parametre-altere" title="Permalink to this headline">¶</a></h3>
 <p>Le développeur peut spécifier un Alias de paramètre altéré pour faire pointer un paramètre qu&#8217;il nomme &#8220;dummy&#8221; vers le comportement spécifique du paramètre &#8220;group_tree&#8221;.</p>
-<p>Pour ce faire il doit exploiter les Points d&#8217;accès (Voir <a class="reference internal" href="frame.html#hooks"><em>Points d&#8217;accès (Hook / Events)</em></a>) et en particulier celui lié au getDataset : <code class="docutils literal"><span class="pre">_getdataset_beforeExecute</span></code>.</p>
-<p>Ce dernier dispose, dans son contexte, de la clé <code class="docutils literal"><span class="pre">'aParams'</span></code> contenant un array de paramètres fournis en HTTP Get. Le développeur peut à loisir
-transformer ce tableau de paramètre en objet <code class="docutils literal"><span class="pre">Core_Library_Resource_XML_DataQuery_Params</span></code> afin d&#8217;indiquer un alias via :</p>
+<p>Pour ce faire il doit exploiter les Points d&#8217;accès (Voir <a class="reference internal" href="frame.html#hooks"><em>Points d&#8217;accès (Hook / Events)</em></a>) et en particulier celui lié au getDataset : <tt class="docutils literal"><span class="pre">_getdataset_beforeExecute</span></tt>.</p>
+<p>Ce dernier dispose, dans son contexte, de la clé <tt class="docutils literal"><span class="pre">'aParams'</span></tt> contenant un array de paramètres fournis en HTTP Get. Le développeur peut à loisir
+transformer ce tableau de paramètre en objet <tt class="docutils literal"><span class="pre">Core_Library_Resource_XML_DataQuery_Params</span></tt> afin d&#8217;indiquer un alias via :</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="nv">$oParams</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Core_Library_Resource_XML_DataQuery_Params</span><span class="p">(</span> <span class="nv">$oDataQuery</span><span class="p">,</span> <span class="nv">$aParams</span> <span class="p">);</span>
 <span class="nv">$oParams</span><span class="o">-&gt;</span><span class="na">AddAliasAlteredParameter</span><span class="p">(</span><span class="s1">&#39;dummy&#39;</span><span class="p">,</span> <span class="s1">&#39;group_tree&#39;</span><span class="p">);</span>
@@ -327,7 +328,7 @@ transformer ce tableau de paramètre en objet <code class="docutils literal"><sp
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -351,7 +352,7 @@ transformer ce tableau de paramètre en objet <code class="docutils literal"><sp
 <li><a class="reference internal" href="#les-parametres-alteres">Les &#8220;Paramètres altérés&#8221;</a><ul>
 <li><a class="reference internal" href="#principe">Principe</a></li>
 <li><a class="reference internal" href="#liste-des-parametres-alteres-reconnus">Liste des paramètres altérés reconnus</a><ul>
-<li><a class="reference internal" href="#group-tree-ce-groupe-et-ses-enfants"><code class="docutils literal"><span class="pre">group_tree</span></code> - Ce groupe et ses enfants</a></li>
+<li><a class="reference internal" href="#group-tree-ce-groupe-et-ses-enfants"><tt class="docutils literal"><span class="pre">group_tree</span></tt> - Ce groupe et ses enfants</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#ajout-de-parametre-altere">Ajout de paramètre altéré</a></li>
@@ -368,14 +369,12 @@ transformer ce tableau de paramètre en objet <code class="docutils literal"><sp
   <h4>Next topic</h4>
   <p class="topless"><a href="noyau.html"
                         title="next chapter">Noyau</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/archi/model_manager.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/archi/model_manager.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -392,7 +391,7 @@ transformer ce tableau de paramètre en objet <code class="docutils literal"><sp
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -408,9 +407,9 @@ transformer ce tableau de paramètre en objet <code class="docutils literal"><sp
           <li><a href="../architecture.html" >Architecture</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
+    <div class="footer">
         &copy; Copyright 2012, Epiconcept.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>
