@@ -19,7 +19,7 @@ RewriteCond %{REQUEST_URI} =/favicon.ico [OR]
 RewriteCond %{REQUEST_URI} =/server-info [OR]
 RewriteCond %{REQUEST_URI} =/server-status
 RewriteRule ^.*$ - [NC,L]
-RewriteRule ^.*$ /e/Deploye/app_dev/demo/public/index.php [NC,L]
+RewriteRule ^.*$ /e/DeployeFinal/app_dev/demo/public/index.php [NC,L]
 
 ExpiresActive On
 ExpiresByType image/* "access plus 1 month"
