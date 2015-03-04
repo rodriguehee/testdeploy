@@ -1,12 +1,28 @@
-# MÍme s'il est possible d'utiliser ce fichier htaccess pour spÈcifier des directives Apache,
-# il est fortement dÈconseillÈ, consultez la documentation.
-# Il est recommandÈ de placer ces directives dans le VHost (Directory par exemple)
+# fichier g√©n√©r√©, il sera √©cras√©, ne pas modifier
 
-SetEnv APPLICATION_ENV production
+SetEnv APPLICATION_ENV development
+SetEnv VOO4_APPBOOTSTRAPPER "/home/cedric/www/e/DeployeFinal/cores//20150216-02.15-86//src/tools/Voo4_AppBootstrapper.php"
+SetEnv PATH_FARM "/home/cedric/www/e/DeployeFinal/confs/dev/"
+SetEnv PATH_VOO4_CORE "/home/cedric/www/e/DeployeFinal/cores//20150216-02.15-86//src/"
+SetEnv PATH_VOO4_EXTLIB  "/home/cedric/www/e/DeployeFinal/cores//20150216-02.15-86//libs/"
+SetEnv PATH_ZF "/home/cedric/www/e/DeployeFinal/ZendFramework/"
+
+#g√©rer les alias en sortant le bouzin du .htaccess ? 
+#Alias /e/Deploye/app_dev/appli_un/public/VooLibJs /home/cedric/www/e/Deploye/cores/20150216-02.15-86/libs/VooLibJs
 
 RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
-RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_URI} =/favicon.ico [OR]
+RewriteCond %{REQUEST_URI} =/server-info [OR]
+RewriteCond %{REQUEST_URI} =/server-status
 RewriteRule ^.*$ - [NC,L]
-RewriteRule ^.*$ index.php [NC,L]
+RewriteRule ^.*$ /e/DeployeFinal/app_dev/demo2/public/index.php [NC,L]
+
+ExpiresActive On
+ExpiresByType image/* "access plus 1 month"
+
+ExpiresActive On
+ExpiresByType text/javascript "access plus 2 week"
