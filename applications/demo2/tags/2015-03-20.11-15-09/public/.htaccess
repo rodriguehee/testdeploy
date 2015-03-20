@@ -1,8 +1,8 @@
 # fichier généré, il sera écrasé, ne pas modifier
 
-SetEnv APPLICATION_ENV development
+SetEnv APPLICATION_ENV production
 SetEnv VOO4_APPBOOTSTRAPPER "/home/web/sites/cores//20150302-02.15-87//src/tools/Voo4_AppBootstrapper.php"
-SetEnv PATH_FARM "/home/web/sites/confs/dev/"
+SetEnv PATH_FARM "/home/web/sites/confs/prod/"
 SetEnv PATH_VOO4_CORE "/home/web/sites/cores//20150302-02.15-87//src/"
 SetEnv PATH_VOO4_EXTLIB  "/home/web/sites/cores//20150302-02.15-87//libs/"
 SetEnv PATH_ZF "/home/web/sites/ZendFramework/"
