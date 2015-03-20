@@ -4,7 +4,7 @@
         <?php if(file_exists( 'images/logo_partn1.png' ) ): ?>
             <div class="col-xs-5">
                 <a class="logo-partn" href="http://ined.fr" target="_blank">
-                    <img src="<?php echo $this->baseUrl(); ?>/images/logo_partn1.png" alt="logo" />
+                    <img src="<?php echo Core_Library_Account::GetInstance()->GetURL(); ?>/images/logo_partn1.png" alt="logo" />
                 </a>
             </div>
         <?php endif ?>
@@ -12,7 +12,7 @@
         <?php if(file_exists( 'images/logo_partn2.png' ) ): ?>
             <div class="col-xs-5 col-xs-offset-2">
                 <a class="logo-partn" href="http://ined.fr" target="_blank">
-                    <img src="<?php echo $this->baseUrl(); ?>/images/logo_partn2.png" alt="logo" />
+                    <img src="<?php echo Core_Library_Account::GetInstance()->GetURL(); ?>/images/logo_partn2.png" alt="logo" />
                 </a>
             </div>
         <?php endif ?>
