@@ -6,4 +6,7 @@
     <module name="frameformnodialog" path="frame/frameformnodialog-min.js">
         <require>frameform</require>
     </module>
+    <module name="widgetselectout" path="frame/layout/widget/widgetselectout-min.js">
+        <require>widgetselect</require>
+    </module>
 </modules>

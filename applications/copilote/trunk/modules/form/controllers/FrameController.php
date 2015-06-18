@@ -57,32 +57,47 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	
 	/**
 	 * @return float
-	 * @param integer $idDemande
+	 * @param integer $idDepense
 	 */
 	public function computeMontantDepense( $idDepense )
 	{
 		$total = 0 ;
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
 		
-		// organisation de colloques
-		$result = $db->fetchOne( '
-			SELECT SUM(voc.cout)
-			FROM cplt_oc_data oc 
-			JOIN cplt_vntl_data voc
-			  ON oc.id_data = voc.id_oc
-			WHERE id_depense = ?
-		',	$idDepense 
+		$ventilations = array(
+			"id_oc" => "oc",
+			"id_pe" => "pe",
+			"id_dmp" => "dmp",
 		) ;
-		$total += (float) $result ;
+		foreach( $ventilations as $foreignKey => $varsetPrefix ) {
+			$query = sprintf( "
+				SELECT SUM(v.cout)
+				FROM cplt_%s_data d
+				JOIN cplt_vntl_data v
+				ON d.id_data = v.%s
+				WHERE d.id_depense = ?
+			", 	$varsetPrefix,
+				$foreignKey
+			) ;
+			$result = $db->fetchOne( $query, $idDepense ) ;
+			$total += (float) $result ;
+		}
 		
-		// deplacements temporaires
-		$result = $db->fetchOne( '
-			SELECT SUM(dt.dt_couttot)
-			FROM cplt_dt_data dt
-			WHERE id_depense = ?
-		',	$idDepense
+		$depenses = array(
+			"dt_couttot" => "dt",
+			"rh_couttot" => "rh",
 		) ;
-		$total += (float) $result ;
+		foreach( $depenses as $fieldName => $varsetPrefix ) {
+			$query = sprintf( '
+				SELECT SUM(%s)
+				FROM cplt_%s_data
+				WHERE id_depense = ?
+			', 	$fieldName,
+				$varsetPrefix
+			) ;
+			$result = $db->fetchOne( $query, $idDepense ) ;
+			$total += (float) $result ;
+		}
 		
 		return $total ;
 	}
