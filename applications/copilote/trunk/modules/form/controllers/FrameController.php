@@ -29,7 +29,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	{
 		$varset = $context->get( 'sVarsetId' ) ;
 		
-		if ( in_array( $varset, array( "oc", "rh", "dt", "pe", "dmp" ) ) ) {
+		if ( in_array( $varset, array( "oc", "rh", "dt", "pe", "dmp", "sta" ) ) ) {
 			$demandes = array() ;
 			foreach( $context->get( 'aRecordsIds' )as $id ) {
 				$idDemande = $this->getIdDemande( $varset, $id ) ;
@@ -114,7 +114,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			"id_oc" => "oc",
 			"id_pe" => "pe",
 			"id_dmp" => "dmp",
-			"id_rh" => "rh",
+			"id_sta" => "sta",
 		) ;
 		foreach( $ventilations as $foreignKey => $varsetPrefix ) {
 			$query = sprintf( "
