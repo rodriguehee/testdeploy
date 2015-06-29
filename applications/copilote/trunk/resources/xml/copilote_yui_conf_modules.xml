@@ -9,4 +9,7 @@
     <module name="widgetselectout" path="frame/layout/widget/widgetselectout-min.js">
         <require>widgetselect</require>
     </module>
+    <module name="widgetnotif" path="frame/layout/widget/widgetnotif-min.js">
+        <require>widgetbase</require>
+    </module>
 </modules>
