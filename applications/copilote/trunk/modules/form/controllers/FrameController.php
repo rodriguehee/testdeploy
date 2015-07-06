@@ -3,28 +3,78 @@
 class Form_FrameController extends Core_Library_Controller_Form_Frame
 {
 	/**
+	 * @see Core_Library_Controller_Form_Frame::_get_get_afterExecute
+	 * @param Core_Library_Event_Context $oContext
+	 */
+	protected function _get_get_afterExecute( Core_Library_Event_Context $oContext )
+	{
+		$aParams = $this->getRequest()->getParams() ;
+		$aDatasets = $oContext->get( 'aDatasets' ) ;
+
+		foreach ( $aDatasets as $oDataset ) {
+			if ( $oDataset->Id() == 'validation' && isset( $aParams['type_validation'] ) ) {
+				$oDataset->GetMetaData()->OverrideFieldDefaultValue( 'type_validation', $aParams['type_validation'] ) ;
+				$oDataset->GetMetaData()->OverrideFieldDefaultValue( 'date_creation', date( 'Y-m-d H:i:s' ) ) ;
+			}
+		}
+
+		$oContext->set( 'aDatasets',$aDatasets ) ;
+		$this->_get_afterExecute( $oContext ) ;
+	}
+
+	/**
+	 * Mise à jour 
+	 * - du statut de la demande avec duplication de la demande si nécessaire
+	 * - des montants de la demande
+	 * 
 	 * @param Core_Library_Event_Context $context
 	 */
 	protected function _save_save_afterCommit( Core_Library_Event_Context $context )
 	{
+		require $this->_getLibPath() . "/Workflow.php" ;
+		require $this->_getLibPath() . "/Demande.php" ;
+		$wf = new Copilote_Library_Workflow() ;
+		
 		$data = $context->get( 'oDataJson' )->GetJSON() ;
 		
 		foreach( $data['data'] as $dataset ) {
+			if( $dataset['id'] == "validation" ) {
+				foreach( $dataset['rowdata'] as $row ) {
+					error_log( print_r( $row, true ) ) ;
+					$wf->setDemande( new Copilote_Library_Demande( $row['id_demande'] ) ) ;
+					$wf->setValidation( $row['type_validation'] ) ;
+				}
+			}
+			/* gestion du calcul des montants 
 			if( $dataset['id'] == "dmnd" ) {
 				foreach( $dataset['rowdata'] as $row ) {
 					$idDemande = $row['id_data'] ;
 					if( is_numeric( $idDemande ) ) {
-						$montant = $this->computeMontantDemande( $idDemande ) ;
-						$this->setMontantDemande( $idDemande, $montant ) ;
+						//require $this->_getLibPath() . "/Demande.php" ;
+						//require $this->_getLibPath() . "/Depense.php" ;
+						//$demande = new Copilote_Library_Demande( $idDemande ) ;
+						//$demande->synchronize() ;
 					}
 				}
-			}
+			} */
 		}
 	}
 	
 	/**
-	 * @param Core_Library_Event_Context $context
+	 * @return string
 	 */
+	protected function _getLibPath()
+	{
+		$libPath = Core_Library_Options::get( 'lib.path' ) ;
+		if ( $libPath  === false ) {
+			throw new Core_Library_Exception( 'Libraries path not found in ini file' );
+		}
+		return $libPath ;
+	}
+	
+	/**
+	 * @param Core_Library_Event_Context $context
+	 *
 	protected function _delete_delete_beforeDelete( Core_Library_Event_Context $context )
 	{
 		$varset = $context->get( 'sVarsetId' ) ;
@@ -49,11 +99,11 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			}
 			$context->add( "demandes", $demandes ) ;
 		}
-	}
+	}*/
 	
 	/**
 	 * @param Core_Library_Event_Context $context
-	 */
+	 *
 	protected function _delete_delete_afterDelete( Core_Library_Event_Context $context )
 	{
 		$varset = $context->get( 'sVarsetId' ) ;
@@ -64,7 +114,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 				$this->setMontantDemande( $idDemande, $montant ) ;
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * @param integer $idDemande
