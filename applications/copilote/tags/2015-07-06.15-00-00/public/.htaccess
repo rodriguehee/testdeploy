@@ -1,0 +1,14 @@
+# fichier généré, il sera écrasé, ne pas modifier
+
+SetEnv APPLICATION_ENV development
+SetEnv VOO4_APPBOOTSTRAPPER "/home/cedric/www/e/DeployeFinal/cores//20150216-02.15-86//src/tools/Voo4_AppBootstrapper.php"
+SetEnv PATH_FARM "/home/cedric/www/e/DeployeFinal/confs/dev/"
+SetEnv PATH_VOO4_CORE "/home/cedric/www/e/DeployeFinal/cores//20150216-02.15-86//src/"
+SetEnv PATH_VOO4_EXTLIB  "/home/cedric/www/e/DeployeFinal/cores//20150216-02.15-86//libs/"
+SetEnv PATH_ZF "/home/cedric/www/e/DeployeFinal/ZendFramework/"
+
+ExpiresActive On
+ExpiresByType image/* "access plus 1 month"
+
+ExpiresActive On
+ExpiresByType text/javascript "access plus 2 week"
