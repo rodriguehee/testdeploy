@@ -18,13 +18,12 @@ class Copilote_Library_Schema
 	public function __construct( $schema )
 	{
 		$this->_schema = (string) $schema ;
-		$this->_setConstraints() ;
 	}
 	
 	/**
 	 * @return Copilote_Library_Schema
 	 */
-	protected function _setConstraints()
+	public function setConstraints()
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
 		
@@ -52,7 +51,7 @@ class Copilote_Library_Schema
 	public function getConstraints( $tableName )
 	{
 		if ( ! array_key_exists( $tableName, $this->_constraints ) ) {
-			throw new LogicException( sprintf( "La table '%s' n'a pas de contraintes référentielle !!!", $tableName ) ) ;
+			return array() ;
 		}
 		return $this->_constraints[$tableName] ;
 	}

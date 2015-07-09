@@ -28,7 +28,7 @@ class Copilote_Library_Demande
 	public function __construct( $id )
 	{
 		$this->_id = (int) $id ;
-		$this->_setAttributes() ;
+		$this->_setAttributes()->_setDepenses() ;
 	}
 	
 	/**
@@ -47,21 +47,27 @@ class Copilote_Library_Demande
 	}
 		
 	/**
-	 * @return integer
+	 * @return Copilote_Library_Depense
+	 * @param string $key
+	 * @param string $value
 	 */
-	public function getStatut()
+	public function setAttribute( $key, $value )
 	{
-		return $this->_attributes['etat'] ;
+		$this->_attributes[$key] = $value ;
+		return $this ;
 	}
 	
 	/**
-	 * @return Copilote_Library_Demande
-	 * @param integer $statut
+	 * @return string
+	 * @param string $key
 	 */
-	public function setStatut( $statut )
+	public function getAttribute( $key )
 	{
-		$this->_attributes['etat'] = $statut ;
-		return $this ;
+		if( array_key_exists( $key, $this->_attributes ) ) {
+			return $this->_attributes[$key] ;
+		}
+		
+		throw new DomainException( sprintf( "Attribut '%s' introuvable", $key ) ) ;
 	}
 	
 	/**
@@ -81,6 +87,7 @@ class Copilote_Library_Demande
 		}
 		$query = sprintf( "UPDATE %s SET %s WHERE id_data = %d", $this->_tableName, implode( ", ", $sets ), $this->_id ) ;
 		$db->query( $query ) ;
+		return $this ;
 	}
 	
 	/**
@@ -98,30 +105,33 @@ class Copilote_Library_Demande
 	}
 	
 	/**
-	 * @return float
+	 * @return Copilote_Library_Demande
+	 * @param string $field
 	 */
-	public function getMontant()
+	protected function _computeMontant( $field )
 	{
-		$total = (float) 0 ;
+		$montant = (float) 0 ;
 		foreach( $this->_depenses as $depense ) {
 			$depense instanceof Copilote_Library_Depense ;
-			$total += (float) $depense->getMontant() ;
+			$montant += (float) $depense->getAttribute( $field ) ;
 		}
-		return $total ;
+		$this->setAttribute( $field, $montant ) ;
+		return $this ;
 	}
 	
 	/**
 	 * @return Copilote_Library_Demande
 	 */
-	public function synchronize()
+	public function computeMontantAE()
 	{
-		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-		$db->update( 
-			$this->_tableName, 
-			array( 
-				"montant" => $this->getMontant() 
-			), 
-			"id_data = " . $this->_id 
-		) ;
+		return $this->_computeMontant( "montant_ae" ) ;
+	}
+	
+	/**
+	 * @return Copilote_Library_Demande
+	 */
+	public function computeMontantCP()
+	{
+		return $this->_computeMontant( "montant_cp" ) ;
 	}
 }

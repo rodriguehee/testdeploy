@@ -18,12 +18,20 @@ class Copilote_Library_Workflow
 	}
 	
 	/**
+	 * @return Copilote_Library_Demande
+	 */
+	public function getDemande()
+	{
+		return $this->_demande ;
+	}
+	
+	/**
 	 * @return Copilote_Library_Workflow
 	 * @param integer $typeValidation
 	 */
 	public function setValidation( $typeValidation )
 	{
-		$statut = $this->_demande->getStatut() ;
+		$statut = $this->_demande->getAttribute( "etat" ) ;
 		
 		if( $typeValidation == 486 && $statut < 478 ) {
 			$statut = 478 ;
@@ -34,10 +42,7 @@ class Copilote_Library_Workflow
 		if( $typeValidation == 488 && $statut == 479 ) {
 			$statut = 480 ;
 		}
-		if( $statut != $this->_demande->getStatut() ) {
-			$this->_demande->setStatut( $statut )->commit() ;
-		}
-		
+		$this->_demande->setAttribute( "etat", $statut ) ;
 		return $this ;
 	}
 }

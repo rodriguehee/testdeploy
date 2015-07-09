@@ -69,6 +69,18 @@ class Copilote_Library_Record
 	}
 	
 	/**
+	 * @param string $key
+	 * @return string
+	 */
+	public function getAttribute( $key )
+	{
+		if( array_key_exists( $key, $this->_attributes ) ) {
+			return $this->_attributes[$key] ;
+		}
+		throw new DomainException( sprintf( "Attribut '%s' introuvable", $key ) ) ;
+	}
+	
+	/**
 	 * @return Copilote_Library_Record
 	 */
 	protected function _setAttributes()
@@ -108,7 +120,6 @@ class Copilote_Library_Record
 	protected function _setChildren()
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-		
 		$constraints = $this->_schema->getConstraints( $this->_tableName ) ;
 		foreach( $constraints as $tableName => $foreignKeyColumn ) {
 			$query = sprintf( "SELECT id_data FROM %s WHERE %s = %d ", $tableName, $foreignKeyColumn, $this->_id ) ;
@@ -119,7 +130,6 @@ class Copilote_Library_Record
 				$this->_children[] = $child ;
 			}
 		}
-		
 		return $this ;
 	}
 	
