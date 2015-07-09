@@ -108,49 +108,52 @@ class Copilote_Library_Depense
 	/**
 	 * @return Copilote_Library_Depense
 	 */
-	public function computeMontantAE()
+	public function computeMontant()
 	{
-		$montant = $this->getMontant( "personnel", "rh", "ae", "scsp" ) + 
-			$this->getMontant( "personnel", "rh", "ae", "convention" ) + 
-			$this->getMontant( "fonctionnement", "dt", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dt", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "sta", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "sta", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "oc", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "oc", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "pe", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "pe", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "dmp", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dmp", "ae", "convention" ) +
-			$this->getMontant( "investissement", "pe", "ae", "scsp" ) +
-			$this->getMontant( "investissement", "pe", "ae", "convention" ) +
-			$this->getMontant( "investissement", "dmp", "ae", "scsp" ) +
-			$this->getMontant( "investissement", "dmp", "ae", "convention" ) ;
-		return $this->setAttribute( "montant_ae", $montant ) ;
+		$montant = (float) $this->getAttribute( "montant_scsp" ) + (float) $this->getAttribute( "montant_convention" ) ;
+		return $this->setAttribute( "montant", $montant ) ;
 	}
 	
 	/**
-	 * @return float
+	 * @see fichier docx de Nadia relatif au découpage des montants
+	 * @return Copilote_Library_Depense
 	 */
-	public function computeMontantCP()
+	public function computeMontantSCSP()
 	{
-		$montant = $this->getMontant( "personnel", "rh", "cp", "scsp" ) +
-			$this->getMontant( "personnel", "rh", "cp", "convention" ) +
-			$this->getMontant( "fonctionnement", "dt", "cp", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dt", "cp", "convention" ) +
-			$this->getMontant( "fonctionnement", "sta", "cp", "scsp" ) +
-			$this->getMontant( "fonctionnement", "sta", "cp", "convention" ) +
-			$this->getMontant( "fonctionnement", "oc", "cp", "scsp" ) +
-			$this->getMontant( "fonctionnement", "oc", "cp", "convention" ) +
+		$montant = $this->getMontant( "personnel", "rh", "ae", "scsp" ) +
+			$this->getMontant( "fonctionnement", "dt", "ae", "scsp" ) +
+			$this->getMontant( "fonctionnement", "sta", "ae", "scsp" ) +
+			$this->getMontant( "fonctionnement", "oc", "ae", "scsp" ) +
+			$this->getMontant( "fonctionnement", "pe", "ae", "scsp" ) +
+			$this->getMontant( "investissement", "pe", "ae", "scsp" ) +
+			$this->getMontant( "fonctionnement", "dmp", "ae", "scsp" ) +
+			$this->getMontant( "investissement", "dmp", "ae", "scsp" ) +
 			$this->getMontant( "fonctionnement", "pe", "cp", "scsp" ) +
-			$this->getMontant( "fonctionnement", "pe", "cp", "convention" ) +
-			$this->getMontant( "fonctionnement", "dmp", "cp", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dmp", "cp", "convention" ) +
 			$this->getMontant( "investissement", "pe", "cp", "scsp" ) +
+			$this->getMontant( "fonctionnement", "dmp", "cp", "scsp" ) +
+			$this->getMontant( "investissement", "dmp", "cp", "scsp" ) ;
+		return $this->setAttribute( "montant_scsp", $montant ) ;
+	}
+	
+	/**
+	 * @see fichier docx de Nadia relatif au découpage des montants
+	 * @return Copilote_Library_Depense
+	 */
+	public function computeMontantConvention()
+	{
+		$montant = $this->getMontant( "personnel", "rh", "ae", "convention" ) +
+			$this->getMontant( "fonctionnement", "dt", "ae", "convention" ) +
+			$this->getMontant( "fonctionnement", "sta", "ae", "convention" ) +
+			$this->getMontant( "fonctionnement", "oc", "ae", "convention" ) +
+			$this->getMontant( "fonctionnement", "pe", "ae", "convention" ) +
+			$this->getMontant( "investissement", "pe", "ae", "convention" ) +
+			$this->getMontant( "fonctionnement", "dmp", "ae", "convention" ) +
+			$this->getMontant( "investissement", "dmp", "ae", "convention" ) +
+			$this->getMontant( "fonctionnement", "pe", "cp", "convention" ) +
 			$this->getMontant( "investissement", "pe", "cp", "convention" ) +
-			$this->getMontant( "investissement", "dmp", "cp", "scsp" ) +
+			$this->getMontant( "fonctionnement", "dmp", "cp", "convention" ) +
 			$this->getMontant( "investissement", "dmp", "cp", "convention" ) ;
-		return $this->setAttribute( "montant_cp", $montant ) ;
+		return $this->setAttribute( "montant_convention", $montant ) ;
 	}
 	
 	/**

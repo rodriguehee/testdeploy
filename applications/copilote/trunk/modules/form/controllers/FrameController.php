@@ -52,8 +52,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 				foreach( $dataset['rowdata'] as $row ) {
 					if( array_key_exists( "id_depense", $row ) ) {
 						$depense = new Copilote_Library_Depense( $row['id_depense'] ) ;
-						$depense->computeMontantAE()->computeMontantCP()->commit() ;
-						$depense->getDemande()->computeMontantAE()->computeMontantCP()->commit() ;
+						$depense->computeMontantConvention()->computeMontantSCSP()->computeMontant()->commit() ;
+						$depense->getDemande()->compute( "montant_scsp" )->compute( "montant_convention" )->compute( "montant" )->commit() ;
 					}
 				}
 			}
@@ -111,8 +111,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		
 		foreach( $context->get( 'depenses' )as $idDepense ) {
  			$depense = new Copilote_Library_Depense( $idDepense ) ;
- 			$depense->computeMontantAE()->computeMontantCP()->commit() ;
- 			$depense->getDemande()->computeMontantAE()->computeMontantCP()->commit() ;
+ 			$depense->computeMontantConvention()->computeMontantSCSP()->computeMontant()->commit() ;
+ 			$depense->getDemande()->compute( "montant_scsp" )->compute( "montant_convention" )->compute( "montant" )->commit() ;
 	 	}
 	}	
 	

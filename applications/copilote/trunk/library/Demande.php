@@ -108,7 +108,7 @@ class Copilote_Library_Demande
 	 * @return Copilote_Library_Demande
 	 * @param string $field
 	 */
-	protected function _computeMontant( $field )
+	public function compute( $field )
 	{
 		$montant = (float) 0 ;
 		foreach( $this->_depenses as $depense ) {
@@ -117,21 +117,5 @@ class Copilote_Library_Demande
 		}
 		$this->setAttribute( $field, $montant ) ;
 		return $this ;
-	}
-	
-	/**
-	 * @return Copilote_Library_Demande
-	 */
-	public function computeMontantAE()
-	{
-		return $this->_computeMontant( "montant_ae" ) ;
-	}
-	
-	/**
-	 * @return Copilote_Library_Demande
-	 */
-	public function computeMontantCP()
-	{
-		return $this->_computeMontant( "montant_cp" ) ;
 	}
 }
