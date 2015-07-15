@@ -37,24 +37,35 @@ YUI.add("frameformcalc", function(Y)
              */
             initializer : function()
             {
+                if( this.DataSetManager().DataSet( 'bdgt' ) ){
+                    oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                    aRecord = oDataSet.RowData().GetRecord();
 
-                this.get( 'oLayout' ).on( 'layout:intialized', function() {
-
-                    if( this.DataSetManager().DataSet( 'bdgt' ) ){
-                        oDataSet = this.DataSetManager().DataSet( 'bdgt');
-                        aRecord = oDataSet.RowData().GetRecord();
+                    this.get( 'oLayout' ).on( 'layout:intialized', function() {
 
                         Y.one('.montant_c6 input').on('valuechange', this.updateCalcMontantC6, this );
                         Y.one('.montant_d6 input').on('valuechange', this.updateCalcMontantD6, this );
                         Y.one('.montant_e6 input').on('valuechange', this.updateCalcMontantE6, this );
                         Y.one('.montant_f6 input').on('valuechange', this.updateCalcMontantF6, this );
                         Y.one('.montant_g6 input').on('valuechange', this.updateCalcMontantG6, this );
-                    }
 
-                }, this);
+
+                    }, this);
+                }
             },
 
+            /*DataSetChangeEvent : function( oDataSet ) {
+
+            },
+
+            ValueChangeEvent : function( oField ) {
+
+            },*/
+
             updateCalcMontantC6: function(event){
+
+                oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                aRecord = oDataSet.RowData().GetRecord();
 
                 var iMontantC6 = ( event.target.get('value') == null || event.target.get('value') == '' ? 0 : event.target.get('value') );
                 var iMontantC7 = ( aRecord.montant_c7 == null ? 0 : aRecord.montant_c7 );
@@ -78,6 +89,9 @@ YUI.add("frameformcalc", function(Y)
 
             updateCalcMontantD6: function(event){
 
+                oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                aRecord = oDataSet.RowData().GetRecord();
+
                 var iMontantC6 = ( aRecord.montant_c6 == null ? 0 : aRecord.montant_c6 );
                 var iMontantD6 = ( event.target.get('value') == null || event.target.get('value') == '' ? 0 : event.target.get('value') );
                 var iMontantD7 = ( aRecord.montant_d7 == null ? 0 : aRecord.montant_d7 );
@@ -94,6 +108,9 @@ YUI.add("frameformcalc", function(Y)
             },
 
             updateCalcMontantE6: function(event){
+
+                oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                aRecord = oDataSet.RowData().GetRecord();
 
                 var iMontantC6 = ( aRecord.montant_c6 == null ? 0 : aRecord.montant_c6 );
                 var iMontantE6 = ( event.target.get('value') == null || event.target.get('value') == '' ? 0 : event.target.get('value') );
@@ -112,6 +129,9 @@ YUI.add("frameformcalc", function(Y)
 
             updateCalcMontantF6: function(event){
 
+                oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                aRecord = oDataSet.RowData().GetRecord();
+
                 var iMontantC6 = ( aRecord.montant_c6 == null ? 0 : aRecord.montant_c6 );
                 var iMontantF6 = ( event.target.get('value') == null || event.target.get('value') == '' ? 0 : event.target.get('value') );
                 var iMontantF7 = ( aRecord.montant_f7 == null ? 0 : aRecord.montant_f7 );
@@ -129,6 +149,9 @@ YUI.add("frameformcalc", function(Y)
 
             updateCalcMontantG6: function(event){
 
+                oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                aRecord = oDataSet.RowData().GetRecord();
+
                 var iMontantC6 = ( aRecord.montant_c6 == null ? 0 : aRecord.montant_c6 );
                 var iMontantG6 = ( event.target.get('value') == null || event.target.get('value') == '' ? 0 : event.target.get('value') );
                 var iMontantG7 = ( aRecord.montant_g7 == null ? 0 : aRecord.montant_g7 );
@@ -145,6 +168,9 @@ YUI.add("frameformcalc", function(Y)
             },
 
             _setFieldValue: function( field, value ){
+
+                oDataSet = this.DataSetManager().DataSet( 'bdgt');
+                aRecord = oDataSet.RowData().GetRecord();
 
                 oDataSet.RowData().BackupCursor();
                 oDataSet.SelectRowFromPrimaryKey( aRecord.id_data );
