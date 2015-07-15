@@ -31,9 +31,13 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _save_save_afterCommit( Core_Library_Event_Context $context )
 	{
+		require $this->_getLibPath() . "/Record.php" ;
+		require $this->_getLibPath() . "/Schema.php" ;
 		require $this->_getLibPath() . "/Workflow.php" ;
 		require $this->_getLibPath() . "/Demande.php" ;
 		require $this->_getLibPath() . "/Depense.php" ;
+		require $this->_getLibPath() . "/Ub.php" ;
+		
 		$wf = new Copilote_Library_Workflow() ;
 		
 		$data = $context->get( 'oDataJson' )->GetJSON() ;
@@ -44,6 +48,15 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 				foreach( $dataset['rowdata'] as $row ) {
 					$wf->setDemande( new Copilote_Library_Demande( $row['id_demande'] ) ) ;
 					$wf->setValidation( $row['type_validation'] )->getDemande()->commit() ;
+					$wf->duplicate() ;
+				}
+			}
+			// arbitrage
+			if( $dataset['id'] == "bdgt" ) {
+				foreach( $dataset['rowdata'] as $row ) {
+					$wf->setDemande( new Copilote_Library_Demande( $row['id_demande'] ) ) ;
+					$wf->setBudget()->getDemande()->commit() ;
+					$wf->duplicate() ;
 				}
 			}
 			

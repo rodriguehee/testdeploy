@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  AE : autorisation d’engagement)
+ *  AE : autorisation d’engagement
  *  CP : crédit de paiement
  */
 class Copilote_Library_Depense

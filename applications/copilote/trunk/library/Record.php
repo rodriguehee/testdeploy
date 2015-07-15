@@ -134,7 +134,7 @@ class Copilote_Library_Record
 	}
 	
 	/**
-	 * @return Copilote_Library_Record
+	 * @return integer
 	 */
 	public function duplicate()
 	{
@@ -148,7 +148,6 @@ class Copilote_Library_Record
 		}
 		
 		$query = sprintf( "INSERT INTO %s SET %s ", $this->_tableName, implode( ", ", $sets ) ) ;
-		error_log( $query ) ;
 		$db->query( $query ) ;
 		$id = $db->lastInsertId() ;
 		
@@ -157,7 +156,7 @@ class Copilote_Library_Record
 			$child->duplicate() ;
 		}
 		
-		return $this ;
+		return $id ;
 	}
 	
 	/**

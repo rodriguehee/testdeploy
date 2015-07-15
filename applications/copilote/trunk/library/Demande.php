@@ -23,12 +23,25 @@ class Copilote_Library_Demande
 	protected $_attributes = array() ;
 	
 	/**
+	 * @var Copilote_Library_Ub
+	 */
+	protected $_ub ;
+	
+	/**
 	 * @param integer $idData
 	 */
 	public function __construct( $id )
 	{
 		$this->_id = (int) $id ;
 		$this->_setAttributes()->_setDepenses() ;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->_id ;
 	}
 	
 	/**
@@ -117,5 +130,19 @@ class Copilote_Library_Demande
 		}
 		$this->setAttribute( $field, $montant ) ;
 		return $this ;
+	}
+	
+	/**
+	 * @return Copilote_Library_Ub
+	 */
+	public function getUB()
+	{
+		if ( empty( $this->_ub ) ) {
+			$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
+			$sql = 'SELECT ub.id_data FROM cplt_ub_data ub JOIN cplt_sv_data sv ON sv.id_ub = ub.id_data WHERE sv.id_data = ?' ;
+			$id = (int) $db->fetchOne( $sql, $this->getAttribute( "id_suivi" ) ) ;
+			$this->_ub = new Copilote_Library_Ub( $id ) ;
+		}
+		return $this->_ub ;
 	}
 }
