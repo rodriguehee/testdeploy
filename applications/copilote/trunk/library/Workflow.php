@@ -70,11 +70,9 @@ class Copilote_Library_Workflow
 	 */
 	public function duplicate()
 	{
-		$schema = new Copilote_Library_Schema( Core_Library_Options::get( 'resources.db.params.dbname' ) ) ;
-		$schema->setConstraints() ;
-		$record = new Copilote_Library_Record( $schema, "cplt_dmnd_data", $this->_demande->getId() ) ;
+		$record = new Copilote_Library_Record( "cplt_dmnd_data", $this->_demande->getId() ) ;
 		$idDuplicat = $record->duplicate() ;
-		$demandeDupliquee = new Copilote_Library_Demande( $idDuplicat ) ;
+		$demandeDupliquee = new Copilote_Library_Record( "cplt_dmnd_data", $idDuplicat ) ;
 		$demandeDupliquee->setAttribute( "verrou", 10 )->commit() ;
 		return $this ;
 	}
