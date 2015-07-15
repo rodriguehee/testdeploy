@@ -10,17 +10,60 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	{
 		$aParams = $this->getRequest()->getParams() ;
 		$aDatasets = $oContext->get( 'aDatasets' ) ;
+        require $this->_getLibPath() . "/Record.php" ;
+        require $this->_getLibPath() . "/Depense.php" ;
+        require $this->_getLibPath() . "/Arbitrage.php" ;
 
 		foreach ( $aDatasets as $oDataset ) {
 			if ( $oDataset->Id() == 'validation' && isset( $aParams['type_validation'] ) ) {
 				$oDataset->GetMetaData()->OverrideFieldDefaultValue( 'type_validation', $aParams['type_validation'] ) ;
 				$oDataset->GetMetaData()->OverrideFieldDefaultValue( 'date_creation', date( 'Y-m-d H:i:s' ) ) ;
 			}
-		}
+
+            // Initialisation arbitrage
+            if ( $oDataset->Id() == 'bdgt' && isset( $aParams['id_demande'] ) ){
+
+                $oArbitrage = new Copilote_Library_Arbitrage();
+
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_c5', $oArbitrage->getMontantC5($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_d5', $oArbitrage->getMontantD5($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_e5', $oArbitrage->getMontantE5($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_f5', $oArbitrage->getMontantF5($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_g5', $oArbitrage->getMontantG5($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_h5',
+                    $oArbitrage->getMontantC5($aParams['id_demande']) +
+                    $oArbitrage->getMontantD5($aParams['id_demande']) +
+                    $oArbitrage->getMontantF5($aParams['id_demande'])
+                );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_i5',
+                    $oArbitrage->getMontantC5($aParams['id_demande']) +
+                    $oArbitrage->getMontantE5($aParams['id_demande']) +
+                    $oArbitrage->getMontantG5($aParams['id_demande'])
+                );
+
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_c7', $oArbitrage->getMontantC7($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_d7', $oArbitrage->getMontantD7($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_e7', $oArbitrage->getMontantE7($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_f7', $oArbitrage->getMontantF7($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_g7', $oArbitrage->getMontantG7($aParams['id_demande'])  );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_h7',
+                    $oArbitrage->getMontantC7($aParams['id_demande']) +
+                    $oArbitrage->getMontantD7($aParams['id_demande']) +
+                    $oArbitrage->getMontantF7($aParams['id_demande'])
+                );
+                $oDataset->GetMetaData()->OverrideFieldDefaultValue( 'montant_i7',
+                    $oArbitrage->getMontantC7($aParams['id_demande']) +
+                    $oArbitrage->getMontantE7($aParams['id_demande']) +
+                    $oArbitrage->getMontantG7($aParams['id_demande'])
+                );
+            }
+        }
 
 		$oContext->set( 'aDatasets',$aDatasets ) ;
 		$this->_get_afterExecute( $oContext ) ;
 	}
+
+
 	
 	/**
 	 * Mise à jour 

@@ -12,4 +12,7 @@
     <module name="widgetnotif" path="frame/layout/widget/widgetnotif-min.js">
         <require>widgetbase</require>
     </module>
+    <module name="frameformcalc" path="frame/layout/frameformcalc-min.js">
+        <require>frameform</require>
+    </module>
 </modules>
