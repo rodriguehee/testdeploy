@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<modules>
+    <module name="widgetgrid" path="frame/layout/widget/widgetgrid-min.js">
+        <require>widgetbase</require>
+    </module>
+    <module name="frameformnodialog" path="frame/frameformnodialog-min.js">
+        <require>frameform</require>
+    </module>
+    <module name="widgetselectout" path="frame/layout/widget/widgetselectout-min.js">
+        <require>widgetselect</require>
+    </module>
+    <module name="widgetnotif" path="frame/layout/widget/widgetnotif-min.js">
+        <require>widgetfield</require>
+    </module>
+    <module name="frameformcalc" path="frame/layout/frameformcalc-min.js">
+        <require>frameform</require>
+    </module>
+</modules>
