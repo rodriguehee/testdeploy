@@ -90,7 +90,7 @@ class Copilote_Library_Workflow
 		$record = new Copilote_Library_Record( $tableName, $this->_demande->getId() ) ;
 		$sql = sprintf( 'SELECT id_data FROM %s WHERE id_suivi = ? AND etat = ? AND verrou = 10 ', $tableName ) ;
 		$stmt = $db->query( $sql, array( $record->getAttribute( "id_suivi" ), $record->getAttribute( "etat" ) ) ) ;
-		if( empty( $stmt->fetchColumn( 0 ) ) ) {
+		if( ! ( $stmt->fetchColumn( 0 ) ) ) {
 			$idDuplicat = $record->duplicate() ;
 			$demandeDupliquee = new Copilote_Library_Record( $tableName, $idDuplicat ) ;
 			$demandeDupliquee->setAttribute( "verrou", 10 )->commit() ;
