@@ -22,6 +22,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 
             // Initialisation arbitrage
             if ( $oDataset->Id() == 'bdgt' && isset( $aParams['id_demande'] ) ){
+            	
+            	$oDataset->GetMetaData()->OverrideFieldDefaultValue( 'type_validation', $aParams['type_validation'] ) ;
 
                 $oArbitrage = new Copilote_Library_Arbitrage();
 
@@ -88,7 +90,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			if( $dataset['id'] == "validation" ) {
 				foreach( $dataset['rowdata'] as $row ) {
 					$wf->setDemande( new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_demande'] ) ) ;
-					$wf->setValidation( $row['type_validation'] )->getDemande()->commit() ;
+					$wf->setValidation()->getDemande()->commit() ;
 					$wf->duplicate() ;
 				}
 			}
@@ -96,7 +98,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			if( $dataset['id'] == "bdgt" ) {
 				foreach( $dataset['rowdata'] as $row ) {
 					$wf->setDemande( new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_demande'] ) ) ;
-					$wf->setBudget()->getDemande()->commit() ;
+					$wf->setValidation()->getDemande()->commit() ;
 					$wf->duplicate() ;
 				}
 			}

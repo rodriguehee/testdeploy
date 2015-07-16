@@ -31,7 +31,7 @@ class Copilote_Library_Demande extends Copilote_Library_Record
 		$sql = 'SELECT id_data FROM cplt_dpns_data WHERE id_demande = ?' ;
 		$stmt = $db->query( $sql, $this->_id ) ;
 		while( $idDepense = $stmt->fetchColumn( 0 ) ) {
-			$this->_depenses[] = new Copilote_Library_Depense( "cplt_dpns_data", $idDepense ) ;
+			$this->_depenses[] = new Copilote_Library_Depense( $idDepense ) ;
 		}
 		return $this ;
 	}
