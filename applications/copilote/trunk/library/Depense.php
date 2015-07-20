@@ -177,7 +177,7 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 	protected function _getMontantPersonnelScsp()
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-		return (float) $db->fetchOne( "SELECT SUM( rh_impscspmontant ) FROM cplt_rh_data WHERE id_depense = ?", $this->_id ) ;
+		return (float) $db->fetchOne( "SELECT SUM( rh_impscsptot ) FROM cplt_rh_data WHERE id_depense = ?", $this->_id ) ;
 	}
 	
 	/**
@@ -186,7 +186,7 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 	protected function _getMontantPersonnelConvention()
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-		return (float) $db->fetchOne( "SELECT SUM( COALESCE(rh_impc1montant, 0) + COALESCE(rh_impc2montant, 0) ) FROM cplt_rh_data WHERE id_depense = ?", $this->_id ) ;
+		return (float) $db->fetchOne( "SELECT SUM( COALESCE(rh_impc1tot, 0) + COALESCE(rh_impc2tot, 0) ) FROM cplt_rh_data WHERE id_depense = ?", $this->_id ) ;
 	}
 	
 	/**
