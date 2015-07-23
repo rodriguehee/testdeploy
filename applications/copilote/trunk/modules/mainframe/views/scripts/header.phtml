@@ -1,7 +1,7 @@
 <header class="row">
     <div class="col-xs-4 col-sm-2 col-md-2 ">
         <a id="logo" href="<?php echo Core_Library_Account::GetInstance()->GetCurrentProject()->GetURL(); ?>">
-            <img src="<?php echo $this->baseUrl(); ?>/images/logo.svg" alt="logo" />
+            <img src="<?php echo Core_Library_Options::get( 'voozanoo.baseurl' ) ?>/images/logo.svg" alt="logo" />
         </a>
     </div>
 
@@ -15,7 +15,7 @@
         <?php if(file_exists( 'images/logo_partn1.png' ) ): ?>
         <div class="col-xs-4 col-sm-6">
             <a class="logo-partn" href="http://ined.fr" target="_blank">
-                <img src="<?php echo $this->baseUrl(); ?>/images/logo_partn1.png" alt="logo" />
+                <img src="<?php echo Core_Library_Options::get( 'voozanoo.baseurl' ) ?>/images/logo_partn1.png" alt="logo" />
             </a>
         </div>
         <?php endif ?>
@@ -23,7 +23,7 @@
         <?php if(file_exists( 'images/logo_partn2.png' ) ): ?>
         <div class="col-xs-4 col-sm-6">
             <a class="logo-partn" href="http://ined.fr" target="_blank">
-                <img src="<?php echo $this->baseUrl(); ?>/images/logo_partn2.png" alt="logo" />
+                <img src="<?php echo Core_Library_Options::get( 'voozanoo.baseurl' ) ?>/images/logo_partn2.png" alt="logo" />
             </a>
         </div>
         <?php endif ?>

@@ -8,6 +8,7 @@ class Mainframe_IndexController extends Core_Library_Controller_MainFrame_Index
 		
 		$sGridUrl = Core_Library_Options::get( 'lib.grid.url' ) ;
 		
+		/*
 		$this->view->headLink()->prependStylesheet( $sGridUrl . 'styles/jqx.bootstrap.css' ) ;
 		$this->view->headLink()->prependStylesheet( $sGridUrl . 'styles/jqx.base.css' ) ;
 		
@@ -37,5 +38,6 @@ class Mainframe_IndexController extends Core_Library_Controller_MainFrame_Index
 		$this->view->headScript()->appendFile( $sGridUrl . 'jqxgrid.grouping.js' ) ;
 		$this->view->headScript()->appendFile( $sGridUrl . 'jqxgrid.export.js' ) ;
 		$this->view->headScript()->appendFile( $sGridUrl . 'jqxgrid.aggregates.js' ) ;
+		*/
 	}
 }
