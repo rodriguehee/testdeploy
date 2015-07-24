@@ -182,13 +182,26 @@ YUI.add("frameformcalc", function(Y)
                             }
                         }, this);
 
-//                        oTabView = Y.all('.yui3-tabview-content ul li a');
-//
-//                        oTabView.each(function ( node ) {
-//                            node.on('click', this.addEventsSTAImpC1Tot, this );
-//                            node.on('click', this.addEventsSTAImpC2Tot, this );
-//                            node.on('click', this.addEventsSTACoutTot, this );
-//                        }, this);
+                        nodeListSTACoutTot = Y.all('.sta_impscspduree input, .sta_impscspmontant input, .sta_impc1 select, .sta_typec1 input, .sta_impc1duree input, .sta_impc1montant input, .sta_impc2 select, .sta_typec2 input, .sta_impc2duree input, .sta_impc2montant input')
+
+                        nodeListSTACoutTot.each(function ( node ) {
+
+                            if(node.get('tagName') == 'SELECT'){
+                                node.on('change', this.updateCalcSTACoutTot, this );
+                            }
+
+                            if(node.get('tagName') == 'INPUT'){
+                                node.on('valuechange', this.updateCalcSTACoutTot, this );
+                            }
+                        }, this);
+
+                        oTabView = Y.all('.yui3-tabview-content ul li a');
+
+                        oTabView.each(function ( node ) {
+                            node.on('click', this.addEventsSTAImpC1Tot, this );
+                            node.on('click', this.addEventsSTAImpC2Tot, this );
+                            node.on('click', this.addEventsSTACoutTot, this );
+                        }, this);
 
                     }, this);
                 }
@@ -760,21 +773,101 @@ YUI.add("frameformcalc", function(Y)
                 if(isNaN(sta_impscspduree)) sta_impscspduree = 0;
                 if(isNaN(sta_impscspmontant)) sta_impscspmontant = 0;
 
-                sta_impscsptot = sta_impscspduree * sta_impscspmontant;
+                sta_impscsptot = sta_impscspduree * 540;
 
                 this._setFieldValue( 'sta', 'sta_impscsptot', sta_impscsptot );
             },
 
             updateCalcSTAImpC1Tot: function(event){
+                oDataSet = this.DataSetManager().DataSet( 'sta');
+                aRecord = oDataSet.RowData().GetRecord();
 
+                var sta_impc1tot;
+                var sta_impc1duree = parseFloat(0);
+                var sta_impc1montant = parseFloat(0);
+
+                if(event.target.ancestor(".field").hasClass('sta_impc1duree')){
+                    sta_impc1duree = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impc1duree = parseFloat(aRecord.sta_impc1duree);
+                }
+
+                if(event.target.ancestor(".field").hasClass('sta_impc1montant')){
+                    sta_impc1montant = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impc1montant = parseFloat(aRecord.sta_impc1montant);
+                }
+
+                if(isNaN(sta_impc1duree)) sta_impc1duree = 0;
+                if(isNaN(sta_impc1montant)) sta_impc1montant = 0;
+
+                sta_impc1tot = sta_impc1duree * 540;
+
+                this._setFieldValue( 'sta', 'sta_impc1tot', sta_impc1tot );
             },
 
             updateCalcSTAImpC2Tot: function(event){
+                oDataSet = this.DataSetManager().DataSet( 'sta');
+                aRecord = oDataSet.RowData().GetRecord();
 
+                var sta_impc2tot;
+                var sta_impc2duree = parseFloat(0);
+                var sta_impc2montant = parseFloat(0);
+
+                if(event.target.ancestor(".field").hasClass('sta_impc2duree')){
+                    sta_impc2duree = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impc2duree = parseFloat(aRecord.sta_impc2duree);
+                }
+
+                if(event.target.ancestor(".field").hasClass('sta_impc2montant')){
+                    sta_impc2montant = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impc2montant = parseFloat(aRecord.sta_impc2montant);
+                }
+
+                if(isNaN(sta_impc2duree)) sta_impc2duree = 0;
+                if(isNaN(sta_impc2montant)) sta_impc2montant = 0;
+
+                sta_impc2tot = sta_impc2duree * 540;
+
+                this._setFieldValue( 'sta', 'sta_impc2tot', sta_impc2tot );
             },
 
             updateCalcSTACoutTot: function(event){
+                oDataSet = this.DataSetManager().DataSet( 'sta');
+                aRecord = oDataSet.RowData().GetRecord();
 
+                var sta_couttot;
+                var sta_impscsptot = parseFloat(0);
+                var sta_impc1tot = parseFloat(0);
+                var sta_impc2tot = parseFloat(0);
+
+                if(event.target.ancestor(".field").hasClass('sta_impscsptot')){
+                    sta_impscsptot = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impscsptot = parseFloat(aRecord.sta_impscsptot);
+                }
+
+                if(event.target.ancestor(".field").hasClass('sta_impc1tot')){
+                    sta_impc1tot = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impc1tot = parseFloat(aRecord.sta_impc1tot);
+                }
+
+                if(event.target.ancestor(".field").hasClass('sta_impc2tot')){
+                    sta_impc2tot = parseFloat(event.target.get("value").replace(',', '.'));
+                }else{
+                    sta_impc2tot = parseFloat(aRecord.sta_impc2tot);
+                }
+
+                if(isNaN(sta_impscsptot)) sta_impscsptot = 0;
+                if(isNaN(sta_impc1tot)) sta_impc1tot = 0;
+                if(isNaN(sta_impc2tot)) sta_impc2tot = 0;
+
+                sta_couttot = sta_impscsptot + sta_impc1tot + sta_impc2tot;
+
+                this._setFieldValue( 'sta', 'sta_couttot', sta_couttot );
             },
 
             _setFieldValue: function( dataset, field, value ){
