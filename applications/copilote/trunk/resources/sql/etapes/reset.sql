@@ -1,3 +1,5 @@
+set @year := 2016 ;
+
 delete from cplt_vntl_deleted ;
 delete from cplt_vntl_data_group_mode ;
 delete from cplt_vntl_data_group ;
@@ -73,14 +75,13 @@ delete from cplt_sv_data_group_mode ;
 delete from cplt_sv_data_group ;
 delete from cplt_sv_data ;
 
-set @year := 2016 ;
-insert into cplt_sv_data (id_owner, id_ub, annee) select ub.id_group, ub.id_data, @year from cplt_ub_data ub where ub.id_data not in ( select distinct id_gub from cplt_ub_data where id_gub > 0 ) ;
+insert into cplt_sv_data (id_owner, id_ub, annee, fs_val) select ub.id_group, ub.id_data, @year, 489 from cplt_ub_data ub where ub.id_data not in ( select distinct id_gub from cplt_ub_data where id_gub > 0 ) ;
 insert into cplt_sv_data_group (id_data, id_group) select sv.id_data, sv.id_owner from cplt_sv_data sv ;
 insert into cplt_sv_data_group (id_data, id_group) select sv.id_data, 1 from cplt_sv_data sv ;
 insert into cplt_sv_data_group (id_data, id_group) select sv.id_data, gub.id_group from cplt_sv_data sv join cplt_ub_data ub on sv.id_ub = ub.id_data join cplt_ub_data gub on gub.id_data = ub.id_gub ;
 
-insert into cplt_dmnd_data (id_owner, id_suivi, montant, montant_scsp, montant_convention, date_creation, etat, verrou, budget) 
-select sv.id_owner, sv.id_data, 0, 0, 0, now(), 476, 11, 489 from cplt_sv_data sv ;
+insert into cplt_dmnd_data (id_owner, id_suivi, montant, montant_scsp, montant_convention, date_creation, etat, verrou) 
+select sv.id_owner, sv.id_data, 0, 0, 0, now(), 476, 11 from cplt_sv_data sv ;
 insert into cplt_dmnd_data_group (id_data, id_group) select d.id_data, d.id_owner from cplt_dmnd_data d ;
 insert into cplt_dmnd_data_group (id_data, id_group) select d.id_data, 1 from cplt_dmnd_data d ;
 insert into cplt_dmnd_data_group (id_data, id_group) select d.id_data, gub.id_group from cplt_dmnd_data d join cplt_sv_data sv on d.id_suivi = sv.id_data join cplt_ub_data ub on sv.id_ub = ub.id_data join cplt_ub_data gub on gub.id_data = ub.id_gub ;
