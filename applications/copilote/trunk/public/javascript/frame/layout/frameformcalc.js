@@ -605,7 +605,7 @@ YUI.add("frameformcalc", function(Y)
 
                 if(aRecord.rh_typerecrut == 33){
 
-                    if( rh_typec1 == "ANR" || rh_typec1 == "EU" ){
+                    if( rh_typec1 == "ANR" || rh_typec1 == "UE" ){
                         rh_impc1tot = rh_couttotmens * rh_impc1duree * parseFloat(1.1);
                     }else{
                         rh_impc1tot = rh_couttotmens * rh_impc1duree;
@@ -614,7 +614,7 @@ YUI.add("frameformcalc", function(Y)
 
                 if(aRecord.rh_typerecrut == 34){
 
-                    if( rh_typec1 == "ANR" || rh_typec1 == "EU" ){
+                    if( rh_typec1 == "ANR" || rh_typec1 == "UE" ){
                         rh_impc1tot = rh_impc1montant * 1.75;
                     }else{
                         rh_impc1tot = rh_impc1montant * 1.65;
@@ -660,7 +660,7 @@ YUI.add("frameformcalc", function(Y)
 
                 if(aRecord.rh_typerecrut == 33){
 
-                    if( rh_typec2 == "ANR" || rh_typec2 == "EU" ){
+                    if( rh_typec2 == "ANR" || rh_typec2 == "UE" ){
                         rh_impc2tot = rh_couttotmens * rh_impc2duree * parseFloat(1.1);
                     }else{
                         rh_impc2tot = rh_couttotmens * rh_impc2duree;
@@ -669,7 +669,7 @@ YUI.add("frameformcalc", function(Y)
 
                 if(aRecord.rh_typerecrut == 34){
 
-                    if( rh_typec2 == "ANR" || rh_typec2 == "EU" ){
+                    if( rh_typec2 == "ANR" || rh_typec2 == "UE" ){
                         rh_impc2tot = rh_impc2montant * 1.75;
                     }else{
                         rh_impc2tot = rh_impc2montant * 1.65;
