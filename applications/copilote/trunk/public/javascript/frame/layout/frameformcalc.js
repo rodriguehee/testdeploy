@@ -103,6 +103,32 @@ YUI.add("frameformcalc", function(Y)
                             node.on('click', this.addEventsRHImpC2Tot, this );
                             node.on('click', this.addEventsRHCoutTot, this );
                         }, this);
+						
+						nodeListRHImpC2Tot = Y.all('.rh_typerecrut select, .rh_impc2 select, .rh_typec2 input, .rh_impc2duree input, .rh_couttotmens input, .rh_catperso select, .rh_coutmenscharg input, .rh_primeinfo select, .rh_montantprime input, .rh_quotite select, .rh_impc2montant input');
+
+						nodeListRHImpC2Tot.each(function ( node ) {
+
+							if(node.get('tagName') == 'SELECT'){
+								node.on('change', this.updateCalcRHImpC2Tot, this );
+							}
+
+							if(node.get('tagName') == 'INPUT'){
+								node.on('valuechange', this.updateCalcRHImpC2Tot, this );
+							}
+						}, this);
+						
+						nodeListRHImpC1Tot = Y.all('.rh_typerecrut select, .rh_impc1 select, .rh_typec1 input, .rh_impc1duree input, .rh_couttotmens input, .rh_catperso select, .rh_coutmenscharg input, .rh_primeinfo select, .rh_montantprime input, .rh_quotite select, .rh_impc1montant input');
+
+						nodeListRHImpC1Tot.each(function ( node ) {
+
+							if(node.get('tagName') == 'SELECT'){
+								node.on('change', this.updateCalcRHImpC1Tot, this );
+							}
+
+							if(node.get('tagName') == 'INPUT'){
+								node.on('valuechange', this.updateCalcRHImpC1Tot, this );
+							}
+						}, this);
 
                         nodeListRHCoutTot = Y.all('.rh_typerecrut select, .rh_impc1 select, .rh_typec1 input, .rh_impc1duree input, .rh_impc2 select, .rh_typec2 input, .rh_impc2duree input, .rh_couttotmens input, .rh_catperso select, .rh_coutmenscharg input, .rh_primeinfo select, .rh_montantprime input, .rh_quotite select, .rh_impc1montant input, .rh_impc2montant input, .rh_impscspduree input, .rh_impscspmontant input');
 
@@ -181,19 +207,45 @@ YUI.add("frameformcalc", function(Y)
                                 node.on('valuechange', this.updateCalcSTAImpSCSPTot, this );
                             }
                         }, this);
+						
+						nodeListSTAImpC1Tot = Y.all('.sta_impc1 select, .sta_typec1 input, .sta_impc1duree input, .sta_impc1montant input');
 
-                        nodeListSTACoutTot = Y.all('.sta_impscspduree input, .sta_impscspmontant input, .sta_impc1 select, .sta_typec1 input, .sta_impc1duree input, .sta_impc1montant input, .sta_impc2 select, .sta_typec2 input, .sta_impc2duree input, .sta_impc2montant input')
+						nodeListSTAImpC1Tot.each(function ( node ) {
 
-                        nodeListSTACoutTot.each(function ( node ) {
+							if(node.get('tagName') == 'SELECT'){
+								node.on('change', this.updateCalcSTAImpC1Tot, this );
+							}
 
-                            if(node.get('tagName') == 'SELECT'){
-                                node.on('change', this.updateCalcSTACoutTot, this );
-                            }
+							if(node.get('tagName') == 'INPUT'){
+								node.on('valuechange', this.updateCalcSTAImpC1Tot, this );
+							}
+						}, this);
+						
+						nodeListSTAImpC2Tot = Y.all('.sta_impc2 select, .sta_typec2 input, .sta_impc2duree input, .sta_impc2montant input');
 
-                            if(node.get('tagName') == 'INPUT'){
-                                node.on('valuechange', this.updateCalcSTACoutTot, this );
-                            }
-                        }, this);
+						nodeListSTAImpC2Tot.each(function ( node ) {
+
+							if(node.get('tagName') == 'SELECT'){
+								node.on('change', this.updateCalcSTAImpC2Tot, this );
+							}
+
+							if(node.get('tagName') == 'INPUT'){
+								node.on('valuechange', this.updateCalcSTAImpC2Tot, this );
+							}
+						}, this);
+						
+						nodeListSTACoutTot = Y.all('.sta_impscspduree input, .sta_impscspmontant input, .sta_impc1 select, .sta_typec1 input, .sta_impc1duree input, .sta_impc1montant input, .sta_impc2 select, .sta_typec2 input, .sta_impc2duree input, .sta_impc2montant input')
+
+						nodeListSTACoutTot.each(function ( node ) {
+
+							if(node.get('tagName') == 'SELECT'){
+								node.on('change', this.updateCalcSTACoutTot, this );
+							}
+
+							if(node.get('tagName') == 'INPUT'){
+								node.on('valuechange', this.updateCalcSTACoutTot, this );
+							}
+						}, this);
 
                         oTabView = Y.all('.yui3-tabview-content ul li a');
 
