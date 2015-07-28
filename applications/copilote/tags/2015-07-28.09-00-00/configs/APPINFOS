@@ -1,0 +1,16 @@
+{
+        "PACKAGING": {
+                "INF_PACKAGE":"",
+                "INF_VERSION":"",
+                "INF_PRIORITY":"optional",
+                "INF_ARCHITECTURE":"all",
+                "INF_DEPENDS":"VOOZANOO4 (>= 1.0)",
+                "INF_SECTION":"base",
+                "INF_MAINTENER":"Team FrameWork <framework@epiconcept.fr>",
+                "INF_DESCRIPTION":"",
+                "INF_HOMEPAGE":""
+        },
+        "DEPENDENCIES":{
+                "VOOZANOO4":"20150720-02.15-151"
+        }
+}
