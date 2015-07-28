@@ -35,6 +35,10 @@ YUI.add("widgetselecttarget", function(Y)
 		sSource :
 		{
 			value : ''
+		},
+		sSourceDataSet :
+		{
+			value: ''
 		}
 	}
 
@@ -56,6 +60,9 @@ YUI.add("widgetselecttarget", function(Y)
 				if ( ! Y.Lang.isUndefined( oWidgetDef.options.source ) ) {
 					this.set( 'sSource', oWidgetDef.options.source ) ;
 				}
+				if ( ! Y.Lang.isUndefined( oWidgetDef.options.sourcedataset ) ) {
+					this.set( 'sSourceDataSet', oWidgetDef.options.sourcedataset ) ;
+				}
 			}
 		},
 		
@@ -75,7 +82,9 @@ YUI.add("widgetselecttarget", function(Y)
 					oWidgetDestination.Field().SetValue( null ) ;
 				}
 				else {
-					var oPrimaryKey = this.get('oDataSet').PrimaryKey() ;
+					var oDataSet = this.Layout().Frame().DataSetManager().DataSet( this.get( 'sSourceDataSet' ) ) ;
+					var oPrimaryKey = oDataSet.PrimaryKey() ;
+					oPrimaryKey.DataSet().RowData().BackupCursor();
 					oPrimaryKey.DataSet().RowData().First() ;
 					while( oPrimaryKey.DataSet().RowData().EoF( true ) == false ) {
 						if ( oPrimaryKey.GetValue() == sValue ) {
@@ -86,7 +95,6 @@ YUI.add("widgetselecttarget", function(Y)
 						oPrimaryKey.DataSet().RowData().Next() ;
 					}
 				}
-				
 				this.Update() ;
 				oWidgetDestination.Update() ;
 			}
