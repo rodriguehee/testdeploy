@@ -28,13 +28,19 @@ class Copilote_Library_Record
 	protected $_foreignKey = "" ;
 	
 	/**
+	 * @var string
+	 */
+	protected $_primaryKey = "" ;
+	
+	/**
 	 * @param string $tableName
 	 * @param integer $idData
 	 */
-	public function __construct( $tableName, $id )
+	public function __construct( $tableName, $id, $primaryKey = "id_data" )
 	{
 		$this->_tableName = (string) $tableName ;
 		$this->_id = (int) $id ;
+		$this->_primaryKey = (string) $primaryKey ;
 		$this->_setAttributes() ;
 		$this->_setChildren() ;
 	}
@@ -76,13 +82,13 @@ class Copilote_Library_Record
 	protected function _setAttributes()
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-		$query = sprintf( "SELECT * FROM %s WHERE id_data = %d", $this->_tableName, $this->_id ) ;
+		$query = sprintf( "SELECT * FROM %s WHERE %s = %d", $this->_tableName, $this->_primaryKey, $this->_id ) ;
 		$this->_attributes = $db->fetchRow( $query ) ;
 		
 		if ( ! is_array( $this->_attributes ) ) {
 			throw new LogicException( sprintf( "Record [%d] introuvable pour la table '%s'", $this->_id, $this->_tableName ) ) ;
 		}
-		unset( $this->_attributes['id_data'] ) ;
+		unset( $this->_attributes[$this->_primaryKey] ) ;
 		return $this ;
 	}
 	
@@ -248,7 +254,7 @@ class Copilote_Library_Record
 			}
 		}
 		
-		$query = sprintf( "UPDATE %s SET %s WHERE id_data = %d", $this->_tableName, implode( ", ", $sets ), $this->_id ) ;
+		$query = sprintf( "UPDATE %s SET %s WHERE %s = %d", $this->_tableName, implode( ", ", $sets ), $this->_primaryKey, $this->_id ) ;
 		$db->query( $query ) ;
 		return $this ;
 	}

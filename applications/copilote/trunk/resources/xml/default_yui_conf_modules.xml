@@ -21,4 +21,7 @@
 	<module name="widgetsearchtarget" path="frame/layout/widget/widgetsearchtarget-min.js">
         <require>widgetsearch</require>
     </module>
+	<module name="widgetdocuments" path="frame/layout/widget/widgetdocuments-min.js">
+        <require>widgettable</require>
+    </module>
 </modules>

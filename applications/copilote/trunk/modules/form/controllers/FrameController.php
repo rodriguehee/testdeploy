@@ -3,15 +3,45 @@
 class Form_FrameController extends Core_Library_Controller_Form_Frame
 {
 	/**
+	 * dans le cas où la ressource demandée est la demande
+	 *  on vérifie que la demande a un statut qui permet la modification de la demande
+	 *   sinon on redirige sur la demande en lecture seule
+	 */
+	protected function _getFormConfiguration()
+	{
+		require $this->_getLibPath() . "/Record.php" ;
+		require $this->_getLibPath() . "/Demande.php" ;
+		require $this->_getLibPath() . "/Depense.php" ;
+		
+		$user = Core_Library_Account::GetInstance()->GetCurrentUser() ;
+		$formId = $this->getRequest()->getParam( 'id', 0 ) ;
+		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
+		
+		if( 34 == $formId && $id > 0 ) {
+			if( $user->HasRole( "demandeur_simple" ) ) {
+				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
+				$etat = $demande->getAttribute( "etat" ) ;
+				$ok = array( 476, 481 ) ;
+				if ( ! in_array( $etat, $ok ) ) {
+					$this->getRequest()->setParam( 'id', 79 ) ; ;
+				}
+			}
+		}
+		
+		parent::_getFormConfiguration() ;
+		
+	}
+	/**
 	 * @see Core_Library_Controller_Form_Frame::_get_get_afterExecute
 	 * @param Core_Library_Event_Context $oContext
 	 */
 	protected function _get_get_afterExecute( Core_Library_Event_Context $oContext )
 	{
+		error_log( __METHOD__ ) ;
 		$aParams = $this->getRequest()->getParams() ;
 		$aDatasets = $oContext->get( 'aDatasets' ) ;
-		require $this->_getLibPath() . "/Record.php" ;
-		require $this->_getLibPath() . "/Depense.php" ;
+		//require $this->_getLibPath() . "/Record.php" ;
+		//require $this->_getLibPath() . "/Depense.php" ;
         require $this->_getLibPath() . "/Arbitrage.php" ;
 
 		foreach ( $aDatasets as $oDataset ) {
@@ -76,6 +106,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _save_save_afterCommit( Core_Library_Event_Context $context )
 	{
+		error_log( __METHOD__ ) ;
 		require $this->_getLibPath() . "/Record.php" ;
 		require $this->_getLibPath() . "/Workflow.php" ;
 		require $this->_getLibPath() . "/Demande.php" ;
@@ -124,6 +155,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _delete_delete_beforeDelete( Core_Library_Event_Context $context )
 	{
+		error_log( __METHOD__ ) ;
 		require $this->_getLibPath() . "/Record.php" ;
 		
 		$project = Core_Library_Account::GetInstance()->GetCurrentProject() ;
@@ -183,6 +215,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _delete_delete_afterDelete( Core_Library_Event_Context $context )
 	{
+		error_log( __METHOD__ ) ;
 		$notifier = new Core_Library_Project_Notifier() ;
 		$ids = $context->get( "aRecordsIds" ) ;
 		if( empty( $ids ) ) {
