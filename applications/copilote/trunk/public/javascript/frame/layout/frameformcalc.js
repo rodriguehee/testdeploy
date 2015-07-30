@@ -396,10 +396,10 @@ YUI.add("frameformcalc", function(Y)
                 var iMontantI6 = parseFloat( iMontantC6 ) + parseFloat( iMontantE6 ) + parseFloat( iMontantG6 );
                 var iMontantH8 = parseFloat( iMontantH6 ) + parseFloat( iMontantH7 );
 
-                this._setFieldValue( 'bdgt', 'montant_c8', iMontantC8 );
-                this._setFieldValue( 'bdgt', 'montant_h6', iMontantH6 );
-                this._setFieldValue( 'bdgt', 'montant_i6', iMontantI6 );
-                this._setFieldValue( 'bdgt', 'montant_h8', iMontantH8 );
+                this._setFieldValue( 'bdgt', 'montant_c8', Math.round(iMontantC8) );
+                this._setFieldValue( 'bdgt', 'montant_h6', Math.round(iMontantH6) );
+                this._setFieldValue( 'bdgt', 'montant_i6', Math.round(iMontantI6) );
+                this._setFieldValue( 'bdgt', 'montant_h8', Math.round(iMontantH8) );
             },
 
             updateCalcMontantD6: function(event){
@@ -417,9 +417,9 @@ YUI.add("frameformcalc", function(Y)
                 var iMontantH6 = parseFloat( iMontantC6 ) + parseFloat( iMontantD6 ) + parseFloat( iMontantF6 );
                 var iMontantH8 = parseFloat (iMontantH6 ) + parseFloat( iMontantH7 );
 
-                this._setFieldValue( 'bdgt', 'montant_d8', iMontantD8 );
-                this._setFieldValue( 'bdgt', 'montant_h6', iMontantH6 );
-                this._setFieldValue( 'bdgt', 'montant_h8', iMontantH8 );
+                this._setFieldValue( 'bdgt', 'montant_d8', Math.round(iMontantD8) );
+                this._setFieldValue( 'bdgt', 'montant_h6', Math.round(iMontantH6) );
+                this._setFieldValue( 'bdgt', 'montant_h8', Math.round(iMontantH8) );
             },
 
             updateCalcMontantE6: function(event){
@@ -437,9 +437,9 @@ YUI.add("frameformcalc", function(Y)
                 var iMontantI6 = parseFloat( iMontantC6 ) + parseFloat( iMontantE6 ) + parseFloat( iMontantG6 );
                 var iMontantI8 = iMontantI6 + iMontantI7;
 
-                this._setFieldValue( 'bdgt', 'montant_e8', iMontantE8 );
-                this._setFieldValue( 'bdgt', 'montant_i6', iMontantI6 );
-                this._setFieldValue( 'bdgt', 'montant_i8', iMontantI8 );
+                this._setFieldValue( 'bdgt', 'montant_e8', Math.round(iMontantE8) );
+                this._setFieldValue( 'bdgt', 'montant_i6', Math.round(iMontantI6) );
+                this._setFieldValue( 'bdgt', 'montant_i8', Math.round(iMontantI8) );
             },
 
             updateCalcMontantF6: function(event){
@@ -457,9 +457,9 @@ YUI.add("frameformcalc", function(Y)
                 var iMontantH6 = parseFloat( iMontantC6 ) + parseFloat( iMontantD6 ) + parseFloat( iMontantF6 );
                 var iMontantH8 = parseFloat (iMontantH6 ) + parseFloat( iMontantH7 );
 
-                this._setFieldValue( 'bdgt', 'montant_f8', iMontantF8 );
-                this._setFieldValue( 'bdgt', 'montant_h6', iMontantH6 );
-                this._setFieldValue( 'bdgt', 'montant_h8', iMontantH8 );
+                this._setFieldValue( 'bdgt', 'montant_f8', Math.round(iMontantF8) );
+                this._setFieldValue( 'bdgt', 'montant_h6', Math.round(iMontantH6) );
+                this._setFieldValue( 'bdgt', 'montant_h8', Math.round(iMontantH8) );
             },
 
             updateCalcMontantG6: function(event){
@@ -477,9 +477,9 @@ YUI.add("frameformcalc", function(Y)
                 var iMontantI6 = parseFloat( iMontantC6 ) + parseFloat( iMontantE6 ) + parseFloat( iMontantG6 );
                 var iMontantI8 = iMontantI6 + iMontantI7;
 
-                this._setFieldValue( 'bdgt', 'montant_g8', iMontantG8 );
-                this._setFieldValue( 'bdgt', 'montant_i6', iMontantI6 );
-                this._setFieldValue( 'bdgt', 'montant_i8', iMontantI8 );
+                this._setFieldValue( 'bdgt', 'montant_g8', Math.round(iMontantG8) );
+                this._setFieldValue( 'bdgt', 'montant_i6', Math.round(iMontantI6) );
+                this._setFieldValue( 'bdgt', 'montant_i8', Math.round(iMontantI8) );
             },
 
             updateCalcRHCoutTotMens: function(event){
@@ -522,7 +522,7 @@ YUI.add("frameformcalc", function(Y)
                     rh_couttotmens = (rh_coutmenscharg + 35 + rh_montantprime) * arh_quotite[rh_quotite];
                 }
 
-                this._setFieldValue( 'rh', 'rh_couttotmens', rh_couttotmens );
+                this._setFieldValue( 'rh', 'rh_couttotmens', Math.round(rh_couttotmens) );
 
             },
 
@@ -566,7 +566,7 @@ YUI.add("frameformcalc", function(Y)
                 }
 
 
-                this._setFieldValue( 'rh', 'rh_impscsptot', rh_impscsptot );
+                this._setFieldValue( 'rh', 'rh_impscsptot', Math.round(rh_impscsptot) );
             },
 
             updateCalcRHImpC1Tot: function(event){
@@ -621,7 +621,7 @@ YUI.add("frameformcalc", function(Y)
                     }
                 }
 
-                this._setFieldValue( 'rh', 'rh_impc1tot', Math.round(rh_impc1tot * 100) / 100 );
+                this._setFieldValue( 'rh', 'rh_impc1tot', Math.round(rh_impc1tot) );
             },
 
             updateCalcRHImpC2Tot: function(event){
@@ -676,7 +676,7 @@ YUI.add("frameformcalc", function(Y)
                     }
                 }
 
-                this._setFieldValue( 'rh', 'rh_impc2tot', Math.round(rh_impc2tot * 100) / 100 );
+                this._setFieldValue( 'rh', 'rh_impc2tot', Math.round(rh_impc2tot) );
             },
 
             updateCalcRHCoutTot: function(event){
@@ -711,7 +711,7 @@ YUI.add("frameformcalc", function(Y)
 
                 rh_couttot = rh_impscsptot + rh_impc1tot + rh_impc2tot;
 
-                this._setFieldValue( 'rh', 'rh_couttot', rh_couttot );
+                this._setFieldValue( 'rh', 'rh_couttot', Math.round(rh_couttot) );
             },
 
             updateCalcDTCouTot: function(event){
@@ -755,7 +755,7 @@ YUI.add("frameformcalc", function(Y)
 
                 dt_couttot = dt_montantij * dt_nbj + dt_couttrans + dt_coutdiv;
 
-                this._setFieldValue( 'dt', 'dt_couttot', dt_couttot );
+                this._setFieldValue( 'dt', 'dt_couttot', Math.round(dt_couttot) );
             },
 
             updateCalcDMPEJN1: function(event) {
@@ -799,7 +799,7 @@ YUI.add("frameformcalc", function(Y)
 
                 dmp_ejn1 = ec_ej_contractuel_n1 + ec_ej_prev_n1 + ec_diminution_ae + ec_diminution_cp;
 
-                this._setFieldValue( 'dmp', 'dmp_ejn1', dmp_ejn1 );
+                this._setFieldValue( 'dmp', 'dmp_ejn1', Math.round(dmp_ejn1) );
             },
 
             updateCalcSTAImpSCSPTot: function(event){
@@ -827,7 +827,7 @@ YUI.add("frameformcalc", function(Y)
 
                 sta_impscsptot = sta_impscspduree * 540;
 
-                this._setFieldValue( 'sta', 'sta_impscsptot', sta_impscsptot );
+                this._setFieldValue( 'sta', 'sta_impscsptot', Math.round(sta_impscsptot) );
             },
 
             updateCalcSTAImpC1Tot: function(event){
@@ -855,7 +855,7 @@ YUI.add("frameformcalc", function(Y)
 
                 sta_impc1tot = sta_impc1duree * 540;
 
-                this._setFieldValue( 'sta', 'sta_impc1tot', sta_impc1tot );
+                this._setFieldValue( 'sta', 'sta_impc1tot', Math.round(sta_impc1tot) );
             },
 
             updateCalcSTAImpC2Tot: function(event){
@@ -883,7 +883,7 @@ YUI.add("frameformcalc", function(Y)
 
                 sta_impc2tot = sta_impc2duree * 540;
 
-                this._setFieldValue( 'sta', 'sta_impc2tot', sta_impc2tot );
+                this._setFieldValue( 'sta', 'sta_impc2tot', Math.round(sta_impc2tot) );
             },
 
             updateCalcSTACoutTot: function(event){
@@ -919,7 +919,7 @@ YUI.add("frameformcalc", function(Y)
 
                 sta_couttot = sta_impscsptot + sta_impc1tot + sta_impc2tot;
 
-                this._setFieldValue( 'sta', 'sta_couttot', sta_couttot );
+                this._setFieldValue( 'sta', 'sta_couttot', Math.round(sta_couttot) );
             },
 
             _setFieldValue: function( dataset, field, value ){
