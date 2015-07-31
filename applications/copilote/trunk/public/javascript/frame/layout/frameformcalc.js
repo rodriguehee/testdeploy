@@ -152,7 +152,7 @@ YUI.add("frameformcalc", function(Y)
 
                     this.get( 'oLayout' ).on( 'layout:intialized', function() {
 
-                        nodeListDTCouTot = Y.all('.dt_lieudest input, .dt_montantij input, .dt_nbj input, .dt_couttrans input, .dt_coutdiv input');
+                        nodeListDTCouTot = Y.all('.dt_montantij input, .dt_nbj input, .dt_couttrans input, .dt_coutdiv input');
 
                         nodeListDTCouTot.each(function ( node ) {
 
@@ -164,6 +164,14 @@ YUI.add("frameformcalc", function(Y)
                                 node.on('valuechange', this.updateCalcDTCouTot, this );
                             }
                         }, this);
+
+                        Y.one('.dt_lieudest ul').on('click', this.updateCalcDTCouTot, this);
+                        Y.one('.dt_lieudest input').on('keyup', function (e) {
+                            if(e.keyCode == 13){
+                                this.updateCalcDTCouTot(e);
+                            }
+                        }, this);
+
 
                     }, this);
                 }
