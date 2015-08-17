@@ -614,18 +614,18 @@ YUI.add("frameformcalc", function(Y)
                 if(aRecord.rh_typerecrut == 33){
 
                     if( rh_typec1 == "ANR" || rh_typec1 == "UE" ){
-                        rh_impc1tot = rh_couttotmens * rh_impc1duree * parseFloat(1.1);
-                    }else{
                         rh_impc1tot = rh_couttotmens * rh_impc1duree;
+                    }else{
+                        rh_impc1tot = rh_couttotmens * rh_impc1duree * parseFloat(1.1);
                     }
                 }
 
                 if(aRecord.rh_typerecrut == 34){
 
                     if( rh_typec1 == "ANR" || rh_typec1 == "UE" ){
-                        rh_impc1tot = rh_impc1montant * 1.75;
-                    }else{
                         rh_impc1tot = rh_impc1montant * 1.65;
+                    }else{
+                        rh_impc1tot = rh_impc1montant * 1.75;
                     }
                 }
 
