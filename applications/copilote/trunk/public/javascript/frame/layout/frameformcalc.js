@@ -669,18 +669,18 @@ YUI.add("frameformcalc", function(Y)
                 if(aRecord.rh_typerecrut == 33){
 
                     if( rh_typec2 == "ANR" || rh_typec2 == "UE" ){
-                        rh_impc2tot = rh_couttotmens * rh_impc2duree * parseFloat(1.1);
-                    }else{
                         rh_impc2tot = rh_couttotmens * rh_impc2duree;
+                    }else{
+                        rh_impc2tot = rh_couttotmens * rh_impc2duree * parseFloat(1.1);
                     }
                 }
 
                 if(aRecord.rh_typerecrut == 34){
 
                     if( rh_typec2 == "ANR" || rh_typec2 == "UE" ){
-                        rh_impc2tot = rh_impc2montant * 1.75;
-                    }else{
                         rh_impc2tot = rh_impc2montant * 1.65;
+                    }else{
+                        rh_impc2tot = rh_impc2montant * 1.75;
                     }
                 }
 
@@ -805,7 +805,8 @@ YUI.add("frameformcalc", function(Y)
                 if(isNaN(ec_diminution_ae)) ec_diminution_ae = 0;
                 if(isNaN(ec_diminution_cp)) ec_diminution_cp = 0;
 
-                dmp_ejn1 = ec_ej_contractuel_n1 + ec_ej_prev_n1 + ec_diminution_ae + ec_diminution_cp;
+		/**                dmp_ejn1 = ec_ej_contractuel_n1 + ec_ej_prev_n1 + ec_diminution_ae + ec_diminution_cp;**/
+                dmp_ejn1 = ec_diminution_ae + ec_diminution_cp;
 
                 this._setFieldValue( 'dmp', 'dmp_ejn1', Math.round(dmp_ejn1) );
             },
