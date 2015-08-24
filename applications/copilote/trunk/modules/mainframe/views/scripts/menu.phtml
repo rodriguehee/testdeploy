@@ -23,14 +23,33 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) 
             <!-- Lien vers l'accueil (Ne pas supprimer) -->
             <li class="">
                 <a class="" href="#" onclick="Y.Voozanoo.backToHome();">
-                    <span class="glyphicon glyphicon-home"></span> Accueil
+                    <span class="glyphicon glyphicon-home"></span> &nbsp;Accueil
                 </a>
             </li>
-            <li class="">
-                 <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80')" href="#">
-                     <span class="glyphicon glyphicon-folder-open"></span> Documents
-                 </a>
+
+     <!-- Menu document -->
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Documents
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80' )" href="#">Documents téléchargeables</a></li>
+                    <li class="divider"></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/91' )" href="#">Liste des conventions</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/92' )" href="#">Liste des marchés</a></li>
+                  </ul>
             </li>
+        </ul>
+   
+     <!--li class="">
+        <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80')" href="#">
+             <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Documents
+        </a>
+     </li-->
+
+
             <!--
 <!--            <!-- Lien à personaliser -->
 <!--            <li class="">-->
