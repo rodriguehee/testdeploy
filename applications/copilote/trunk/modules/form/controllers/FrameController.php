@@ -178,13 +178,13 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		
 		$depenses = array() ;
-		if ( in_array( $varset->GetName(), array( "oc", "rh", "dt", "pe", "sta" ) ) ) {
+		if ( in_array( $varset->GetVarsetName(), array( "oc", "rh", "dt", "pe", "sta" ) ) ) {
 		 	foreach( $context->get( 'aRecordsIds' )as $id ) {
 		 		$record = new Copilote_Library_Record( $varset->DataTableName(), $id ) ;
 		 		$depenses[] = $record->getAttribute( "id_depense" ) ;
 			}
 		}
-		elseif ( "ventilation" == $varset->GetName() ) {
+		elseif ( "ventilation" == $varset->GetVarsetName() ) {
 		 	foreach( $context->get( 'aRecordsIds' )as $id ) {
 		 		$ventilation = new Copilote_Library_Record( $varset->DataTableName(), $id ) ;
 		 		$tableName = "" ;
@@ -226,7 +226,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		require $this->_getLibPath() . "/Demande.php" ;
 		require $this->_getLibPath() . "/Depense.php" ;
 		
-		foreach( $context->get( 'depenses' )as $idDepense ) {
+		foreach( $context->get( 'depenses' ) as $idDepense ) {
  			$depense = new Copilote_Library_Depense( "cplt_dpns_data", $idDepense ) ;
  			$depense->computeMontantConvention()->computeMontantSCSP()->computeMontant()->commit() ;
  			$depense->getDemande()->compute( "montant_scsp" )->compute( "montant_convention" )->compute( "montant" )->commit() ;
