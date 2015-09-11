@@ -2,6 +2,135 @@
 
 class Form_FrameController extends Core_Library_Controller_Form_Frame
 {
+
+    protected function _get_get_render( Core_Library_Event_Context $oContext )
+    {
+
+        $bShowButtonEndDemand = false;
+        $bShowButtonValidDemand = false;
+        $bShowButtonValidEstimatedBudget = false;
+        $bShowButtonVISA = false;
+        $bShowButtonArbitrate = false;
+        $bShowButtonEndEstimatedBudget = false;
+
+        $oUser = Core_Library_Account::GetInstance()->GetCurrentUser() ;
+
+        $aRolesByGroup = Core_Library_User_Manager::GetUserRolesByGroup( $oUser->GetUserName() );
+
+        //error_log('$aTest = ' . print_r($aRolesByGroup, true));
+
+        $oJson = $oContext->get( 'oResourceJSON' );
+
+        $aJson = $oJson->GetJSON();
+        if ( $aJson[ 'iFormId' ] == "34" )
+        {
+            foreach( $aJson[ 'aDataSets' ] as $aDataSets )
+            {
+                // validation demandeur && validation responsable && visée budgétaire
+                if( $aDataSets['id'] == "suivi" )
+                {
+                    $iIdGroupFiche = $aDataSets['rowdata'][0]['id_group'];
+                }
+            }
+
+            //error_log('$iIdGroupFiche = ' . print_r($iIdGroupFiche, true));
+
+            foreach ( $aRolesByGroup as $iIdGroupUser => $aGroup )
+            {
+                //error_log('$iIdGroupUser = ' . print_r($iIdGroupUser, true));
+                if( $iIdGroupFiche == $iIdGroupUser )
+                {
+                    foreach ($aGroup as $aRole)
+                    {
+                        //error_log('$aRole["name"] = ' . print_r($aRole['name'], true));
+                        if ( $aRole['name'] == 'demandeur' || $aRole['name'] == 'demandeur_simple' )
+                        {
+                            $bShowButtonEndDemand = true;
+                        }
+
+                        if ( $aRole['name'] == 'valideur' )
+                        {
+                            $bShowButtonValidDemand = true;
+                            $bShowButtonValidEstimatedBudget = true;
+                        }
+
+                        if ( $aRole['name'] == 'SB' )
+                        {
+                            $bShowButtonVISA = true;
+                            $bShowButtonArbitrate = true;
+                        }
+
+                        if ( $aRole['name'] == 'demandeur' )
+                        {
+                            $bShowButtonEndEstimatedBudget = true;
+                        }
+
+                    }
+                }
+            }
+
+//        error_log('$bShowButtonEndDemand = ' . print_r($bShowButtonEndDemand, true));
+//        error_log('$bShowButtonValidDemand = ' . print_r($bShowButtonValidDemand, true));
+//        error_log('$bShowButtonValidEstimatedBudget = ' . print_r($bShowButtonValidEstimatedBudget, true));
+//        error_log('$bShowButtonVISA = ' . print_r($bShowButtonVISA, true));
+//        error_log('$bShowButtonArbitrate = ' . print_r($bShowButtonArbitrate, true));
+//        error_log('$bShowButtonEndEstimatedBudget = ' . print_r($bShowButtonEndEstimatedBudget, true));
+
+            $i = 0;
+            foreach ( $aJson[ 'oLayout' ][ 'content' ] as $aWidget ) {
+
+                if ( isset( $aWidget[ 'id' ] ) ) {
+
+//                    error_log('******************************************************************************************************');
+//                    error_log('$aWidget_w = ' . print_r($aWidget['w'], true));
+//                    error_log('$aWidget_pid = ' . print_r($aWidget['pid'], true));
+//                    error_log('$aWidget_id = ' . print_r($aWidget['id'], true));
+
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'end-demand' && !$bShowButtonEndDemand ) {
+                        array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                        $i--;
+                    }
+
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'valid-demand' && !$bShowButtonValidDemand ) {
+                        array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                        $i--;
+                    }
+
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'valid-estimated-budget' && !$bShowButtonValidEstimatedBudget ) {
+                        array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                        $i--;
+                    }
+
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'visa' && !$bShowButtonVISA ) {
+//                        error_log('on cache bouton visa');
+//                        error_log('$i = ' . print_r($i, true));
+//                        error_log('$aJson[ "oLayout" ][ "content" ][ $i ] = ' . print_r($aJson[ 'oLayout' ][ 'content' ][ $i ], true));
+                        array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                        $i--;
+                    }
+
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'arbitrate' && !$bShowButtonArbitrate ) {
+                        array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                        $i--;
+                    }
+
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'end-estimated-budget' && !$bShowButtonEndEstimatedBudget ) {
+                        array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                        $i--;
+                    }
+                }
+                $i++;
+            }
+
+            //error_log('$aJson[ "oLayout" ][ "content" ] = ' . print_r($aJson[ 'oLayout' ][ 'content' ], true));
+
+
+        }
+        $oJson->SetJSON( $aJson );
+        parent::_get_render( $oContext );
+    }
+
+
 	/**
 	 * dans le cas où la ressource demandée est la demande
 	 *  on vérifie que la demande a un statut qui permet la modification de la demande
