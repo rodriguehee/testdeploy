@@ -25,3 +25,5 @@ defined('VOO4_APPBOOTSTRAPPER') || define( 'VOO4_APPBOOTSTRAPPER', getenv('VOO4_
 require_once( VOO4_APPBOOTSTRAPPER );
 
 Voo4_AppBootstrapper::runApplication( __DIR__ . '/..');
+
+error_log(getenv(PATH_VOO4_EXTLIB));

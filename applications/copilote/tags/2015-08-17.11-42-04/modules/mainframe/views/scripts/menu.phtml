@@ -23,14 +23,34 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) 
             <!-- Lien vers l'accueil (Ne pas supprimer) -->
             <li class="">
                 <a class="" href="#" onclick="Y.Voozanoo.backToHome();">
-                    <span class="glyphicon glyphicon-home"></span> Accueil
+                    <span class="glyphicon glyphicon-home"></span> &nbsp;Accueil
                 </a>
             </li>
-            <li class="">
-                 <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80')" href="#">
-                     <span class="glyphicon glyphicon-folder-open"></span> Documents
-                 </a>
+
+     <!-- Menu document -->
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Documents
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80' )" href="#">Documents téléchargeables</a></li>
+                    <li class="divider"></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/82' )" href="#">Liste de vos conventions</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/83' )" href="#">Liste de vos marchés</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/85' )" href="#">Liste de vos activités</a></li>
+                  </ul>
             </li>
+        </ul>
+   
+     <!--li class="">
+        <a class="" onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80')" href="#">
+             <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Documents
+        </a>
+     </li-->
+
+
             <!--
 <!--            <!-- Lien à personaliser -->
 <!--            <li class="">-->
@@ -112,6 +132,10 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) 
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/58' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Activités et sous-activités</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/61' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Conventions</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/67' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Identités</a></li>
+                    <li class="divider"></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/84' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Listing des connexions</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/86' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Liste des utilisateurs et droits</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/87' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Liste des demandes internes</a></li>
                 </ul>
             </li>
         </ul>
