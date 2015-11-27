@@ -12,12 +12,12 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
         $bShowButtonVISA = false;
         $bShowButtonArbitrate = false;
         $bShowButtonEndEstimatedBudget = false;
-
+        
         $oUser = Core_Library_Account::GetInstance()->GetCurrentUser() ;
-
-        $aRolesByGroup = Core_Library_User_Manager::GetUserRolesByGroup( $oUser->GetUserName() );
-
-        //error_log('$aTest = ' . print_r($aRolesByGroup, true));
+        
+        // Debug !!! PHP Strict Standards:  Non-static method Core_Library_User_Manager::GetUserRolesByGroup() should not be called statically !!!
+        $manager = Core_Library_Account::GetInstance()->GetCurrentProject()->UserManager() ;
+        $aRolesByGroup = $manager->GetUserRolesByGroup( $oUser->GetUserName() );
 
         $oJson = $oContext->get( 'oResourceJSON' );
 
@@ -45,7 +45,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
                         //error_log('$aRole["name"] = ' . print_r($aRole['name'], true));
                         if ( $aRole['name'] == 'demandeur' || $aRole['name'] == 'demandeur_simple' )
                         {
-                            $bShowButtonEndDemand = true;
+                            $bShowButtonEndDemand = true ;
                         }
 
                         if ( $aRole['name'] == 'valideur' )
@@ -118,6 +118,35 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
                         array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
                         $i--;
                     }
+                    
+                    // saisie du budget après passage en V0, V1 et V2
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'revision-v0' && !$bShowButtonEndDemand ) {
+                    	array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                    	$i--;
+                    }
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'revision-v1' && !$bShowButtonEndDemand ) {
+                    	array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                    	$i--;
+                    }
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'revision-v2' && !$bShowButtonEndDemand ) {
+                    	array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                    	$i--;
+                    }
+                    
+                    // arbitrage pour passage en V1, V2 et V3
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'arbitrate-v1' && !$bShowButtonArbitrate ) {
+                    	array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                    	$i--;
+                    }
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'arbitrate-v2' && !$bShowButtonArbitrate ) {
+                    	array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                    	$i--;
+                    }
+                    if ( $aWidget[ 'w' ] == 'WidgetButton' && $aWidget[ 'id' ] == 'arbitrate-v3' && !$bShowButtonArbitrate ) {
+                    	array_splice( $aJson[ 'oLayout' ][ 'content' ], $i, 1 );
+                    	$i--;
+                    }
+                    
                 }
                 $i++;
             }
@@ -152,7 +181,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 				$etat = $demande->getAttribute( "etat" ) ;
 				$ok = array( 476, 481 ) ;
 				if ( ! in_array( $etat, $ok ) ) {
-					$this->getRequest()->setParam( 'id', 79 ) ; ;
+					$this->getRequest()->setParam( 'id', 79 ) ; 
 				}
 			}
 		}
@@ -166,7 +195,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _get_get_afterExecute( Core_Library_Event_Context $oContext )
 	{
-		error_log( __METHOD__ ) ;
+		//error_log( __METHOD__ ) ;
 		$aParams = $this->getRequest()->getParams() ;
 		$aDatasets = $oContext->get( 'aDatasets' ) ;
 		//require $this->_getLibPath() . "/Record.php" ;
@@ -235,7 +264,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _save_save_afterCommit( Core_Library_Event_Context $context )
 	{
-		error_log( __METHOD__ ) ;
+		//error_log( __METHOD__ ) ;
 		require $this->_getLibPath() . "/Record.php" ;
 		require $this->_getLibPath() . "/Workflow.php" ;
 		require $this->_getLibPath() . "/Demande.php" ;
@@ -284,7 +313,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _delete_delete_beforeDelete( Core_Library_Event_Context $context )
 	{
-		error_log( __METHOD__ ) ;
+		//error_log( __METHOD__ ) ;
 		require $this->_getLibPath() . "/Record.php" ;
 		
 		$project = Core_Library_Account::GetInstance()->GetCurrentProject() ;
@@ -344,7 +373,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _delete_delete_afterDelete( Core_Library_Event_Context $context )
 	{
-		error_log( __METHOD__ ) ;
+		//error_log( __METHOD__ ) ;
 		$notifier = new Core_Library_Project_Notifier() ;
 		$ids = $context->get( "aRecordsIds" ) ;
 		if( empty( $ids ) ) {
