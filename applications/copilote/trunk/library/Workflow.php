@@ -31,7 +31,6 @@ class Copilote_Library_Workflow
 	public function setValidation()
 	{
 		$statut = $this->_demande->getAttribute( "etat" ) ;
-		$budget = $this->_demande->getAttribute( "budget" ) ;
 		$ub = $this->_demande->getUB() ;
 		
 		// validation demandeur avant arbitrage
@@ -52,13 +51,8 @@ class Copilote_Library_Workflow
 			$statut = 480 ;
 		}
 		// arbitrage initial
-		elseif( $statut == 480 && $budget == 489 ) {
+		elseif( $statut == 480 ) {
 			$statut = 481 ;
-		}
-		// arbitrage après constitution du budget V0
-		elseif( $statut == 480 && $budget >= 490 ) {
-			$statut = 476 ;
-			$budget++ ;
 		}
 		// validation demandeur apres arbitrage
 		elseif( $statut == 481 ) {
@@ -73,8 +67,31 @@ class Copilote_Library_Workflow
 		elseif( $statut == 483 ) {
 			$statut = 485 ;
 		}
+		// revision v0
+		elseif( $statut == 485 ) {
+			$statut = 499 ;
+		}
+		// arbitrage pour v1
+		elseif( $statut == 499 ) {
+			$statut = 500 ;
+		}
+		// revision v1
+		elseif( $statut == 500 ) {
+			$statut = 502 ;
+		}
+		// arbitrage pour v2
+		elseif( $statut == 502 ) {
+			$statut = 503 ;
+		}
+		// revision v2
+		elseif( $statut == 503 ) {
+			$statut = 505 ;
+		}
+		// arbitrage pour v3
+		elseif( $statut == 505 ) {
+			$statut = 506 ;
+		}
 		
-		$this->_demande->setAttribute( "budget", $budget ) ;
 		$this->_demande->setAttribute( "etat", $statut ) ;
 		return $this ;
 	}
