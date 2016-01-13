@@ -42,10 +42,11 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
                 {
                     foreach ($aGroup as $aRole)
                     {
-                        //error_log('$aRole["name"] = ' . print_r($aRole['name'], true));
-                        if ( $aRole['name'] == 'demandeur' || $aRole['name'] == 'demandeur_simple' )
+		      //error_log('$aRole["name"] = ' . print_r($aRole['name'], true));
+                        if ( $aRole['name'] == 'demandeur'  )
                         {
                             $bShowButtonEndDemand = true ;
+                            $bShowButtonEndEstimatedBudget = true;
                         }
 
                         if ( $aRole['name'] == 'valideur' )
@@ -60,8 +61,22 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
                             $bShowButtonArbitrate = true;
                         }
 
-                        if ( $aRole['name'] == 'demandeur' )
+
+                        if ( $aRole['name'] == 'admin')
                         {
+                            $bShowButtonEndDemand = true;
+                            $bShowButtonValidEstimatedBudget = true;
+                            $bShowButtonVISA = true;
+                            $bShowButtonArbitrate = true;
+                            $bShowButtonEndEstimatedBudget = true;
+                        }
+
+                        if ( $aRole['name'] == 'superuser')
+                        {
+                            $bShowButtonEndDemand = true;
+                            $bShowButtonValidEstimatedBudget = true;
+                            $bShowButtonVISA = true;
+                            $bShowButtonArbitrate = true;
                             $bShowButtonEndEstimatedBudget = true;
                         }
 
@@ -176,7 +191,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		
 		if( 34 == $formId && $id > 0 ) {
-			if( $user->HasRole( "demandeur_simple" ) ) {
+			if( $user->HasRole( "demandeur_simple" ) || $user->HasRole( "demandeur" ) || $user->HasRole( "valideur" ) ) {
 				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
 				$etat = $demande->getAttribute( "etat" ) ;
 				$ok = array( 476, 481 ) ;
