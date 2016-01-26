@@ -174,7 +174,6 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
         parent::_get_render( $oContext );
     }
 
-
 	/**
 	 * dans le cas où la ressource demandée est la demande
 	 *  on vérifie que la demande a un statut qui permet la modification de la demande
@@ -191,38 +190,52 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		
 		if( 34 == $formId && $id > 0 ) {
-		    if( $user->HasRole( "valideur" )  ) {
-				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
-				$etat = $demande->getAttribute( "etat" ) ;
-				$ok = array( 478, 483 ) ;
-				if ( ! in_array( $etat, $ok ) ) {
-					$this->getRequest()->setParam( 'id', 79 ) ; 
-				}
+			$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
+			if( ! $this->_allowEdit( $demande ) ) {
+				$this->getRequest()->setParam( 'id', 79 ) ;
 			}
-
-		   elseif( $user->HasRole( "demandeur_simple" ) || $user->HasRole( "demandeur" ) ) {
-				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
-				$etat = $demande->getAttribute( "etat" ) ;
-				$ok = array( 476, 481, 485, 500, 503 ) ;
-				if ( ! in_array( $etat, $ok ) ) {
-					$this->getRequest()->setParam( 'id', 79 ) ; 
-				}
-			}
-
-
-		     else
-		     {
-				
-				$this->getRequest()->setParam( 'id', 34 ) ; 
-				
-
-				}
-
 		}
 		
 		parent::_getFormConfiguration() ;
 		
 	}
+	
+	/**
+	 * @return boolean
+	 * @param integer $idDemande
+	 */
+	protected function _allowEdit( Copilote_Library_Demande $demande )
+	{
+		$user = Core_Library_Account::GetInstance()->GetCurrentUser() ;
+		$manager = Core_Library_Account::GetInstance()->GetCurrentProject()->UserManager() ;
+		$rolesByGroup = $manager->GetUserRolesByGroup( $user->GetUserName() ) ;
+	
+		$allowed = false ;
+		$pendingStatus = array( 478, 483 ) ;
+		$reportingStatus = array( 476, 481, 485, 500, 503 ) ;
+		$managers = array( "superuser", "admin", "SB" ) ;
+		$validators = array( "valideur" ) ;
+		$applicants = array( "demandeur", "demandeur_simple" ) ;
+	
+		foreach( $rolesByGroup as $idGroup => $roles ) {
+			foreach( $roles as $role ) {
+				if( $idGroup == $demande->getUB()->getAttribute( "id_group" ) ) {
+					if( in_array( $role['name'], $managers ) ) {
+						$allowed = true ;
+					}
+					if( in_array( $role['name'], $validators ) && in_array( $demande->getAttribute( "etat" ), $pendingStatus ) ) {
+						$allowed = true ;
+					}
+					if( in_array( $role['name'], $applicants ) && in_array( $demande->getAttribute( "etat" ), $reportingStatus ) ) {
+						$allowed = true ;
+					}
+				}
+			}
+		}
+	
+		return $allowed ;
+	}
+	
 	/**
 	 * @see Core_Library_Controller_Form_Frame::_get_get_afterExecute
 	 * @param Core_Library_Event_Context $oContext
@@ -298,19 +311,17 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _save_save_afterCommit( Core_Library_Event_Context $context )
 	{
-		//error_log( __METHOD__ ) ;
 		require $this->_getLibPath() . "/Record.php" ;
 		require $this->_getLibPath() . "/Workflow.php" ;
 		require $this->_getLibPath() . "/Demande.php" ;
 		require $this->_getLibPath() . "/Depense.php" ;
 		
 		$wf = new Copilote_Library_Workflow() ;
-		
 		$data = $context->get( 'oDataJson' )->GetJSON() ;
 		
 		foreach( $data['data'] as $dataset ) {
 			// validation demandeur && validation responsable && visée budgétaire
-			if( $dataset['id'] == "validation" ) {
+			if( $dataset['id'] == "validation" && $this->getRequest()->getParam( "wf" ) ) {
 				foreach( $dataset['rowdata'] as $row ) {
 					$wf->setDemande( new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_demande'] ) ) ;
 					$wf->setValidation()->getDemande()->commit() ;
@@ -321,7 +332,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 				}
 			}
 			// arbitrage
-			if( $dataset['id'] == "bdgt" ) {
+			if( $dataset['id'] == "bdgt" && $this->getRequest()->getParam( "wf" ) ) {
 				foreach( $dataset['rowdata'] as $row ) {
 					$wf->setDemande( new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_demande'] ) ) ;
 					$wf->setValidation()->getDemande()->commit() ;
