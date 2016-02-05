@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <modules>
-<!--    <module name="widgetsample" path="frame/layout/widget/widgetsample.js">
+    <module name="widgetgrid" path="frame/layout/widget/widgetgrid-min.js">
         <require>widgetbase</require>
-    </module>-->
-<!--	<module name="frameformsample" path="frame/frameformsample.js">
+    </module>
+    <module name="frameformnodialog" path="frame/frameformnodialog-min.js">
         <require>frameform</require>
-    </module>-->
+    </module>
 </modules>
