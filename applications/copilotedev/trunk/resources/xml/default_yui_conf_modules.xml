@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+<!--    <module name="widgetsample" path="frame/layout/widget/widgetsample.js">
+        <require>widgetbase</require>
+    </module>-->
+<!--	<module name="frameformsample" path="frame/frameformsample.js">
+        <require>frameform</require>
+    </module>-->
+</modules>
