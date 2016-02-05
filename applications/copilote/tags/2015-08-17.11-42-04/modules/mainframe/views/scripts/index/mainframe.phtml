@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo $this->sPageTitle ?></title>
-    <meta charset="utf-8" />
-    <?php
-    //Display Style markup
-    echo $this->headLink();
+	<title><?php echo $this->sPageTitle ?></title>
+	<meta charset="utf-8" />
+	<?php
+	//Display Style markup
+	echo $this->headLink();
 
-    echo "\n\n";
+	echo "\n\n";
 
-    //Display Script markup
-    echo $this->headScript();
+	//Display Script markup
+	echo $this->headScript();
 
-    echo $this->headMeta();
+	echo $this->headMeta();
 
-    //Get javscript code to initialize frames
-    echo $this->partial( 'frame/frame_loader.phtml', $this->getVars() );
+	//Get javscript code to initialize frames
+	echo $this->partial( 'frame/frame_loader.phtml', $this->getVars() );
 
-    ?>
+	?>
 
 </head>
 <body class="yui3-skin-sam  yui-skin-sam">
-<div id="page" class="container">
+	<div id="page" class="container">
 
-    <?php echo $this->partial( 'header.phtml', array('sPageTitle' => $this->sPageTitle) ); ?>
+        <?php echo $this->partial( 'header.phtml' ); ?>
 
-    <?php /*echo $this->partial( 'provider-consumer.phtml' ); */?>
-
-    <!-- Si le projet est en mode provider, on affiche la liste des consumers (avec les liens) -->
-    <?php
-    if ( $this->oProject->IsOAuthProvider() && $this->oProject->GetCurrentUser()->IsOAuthUser() )
-    {
-        echo $this->partial('oauth/oauth_provider_menu.phtml', array('aConsumers' => $this->oAuthConsumers()));
-    }
-    ?>
-
-    <!-- Si le projet est en mode consumer, on affiche le lien vers le provider -->
-    <?php
-    if ( $this->oProject->IsOAuthConsumer() && $this->oProject->GetCurrentUser()->IsOAuthUser() )
-    {
-        echo $this->partial('oauth/oauth_consumer_menu.phtml', array('sProviderUrl' => $this->oProject->GetProviderUrl()));
-    }
-    ?>
-
-    <div id="content">
+        <!-- Si le projet est en mode provider, on affiche la liste des consumers (avec les liens) -->
         <?php
-        //Display partial (one.phtml or two.phtml)
-        echo $this->partial( 'index/' . $this->partialType . '.phtml', $this->getVars() );
+        if ( $this->oProject->IsOAuthProvider() && $this->oProject->GetCurrentUser()->IsOAuthUser() )
+        {
+            echo $this->partial('oauth/oauth_provider_menu.phtml', array('aConsumers' => $this->oAuthConsumers()));
+        }
         ?>
-    </div>
 
-    <?php echo $this->partial( 'footer.phtml' ); ?>
-</div>
+        <!-- Si le projet est en mode consumer, on affiche le lien vers le provider -->
+        <?php
+        if ( $this->oProject->IsOAuthConsumer() && $this->oProject->GetCurrentUser()->IsOAuthUser() )
+        {
+            echo $this->partial('oauth/oauth_consumer_menu.phtml', array('sProviderUrl' => $this->oProject->GetProviderUrl()));
+        }
+        ?>
+
+		<div id="content">
+			<?php
+			//Display partial (one.phtml or two.phtml)
+			echo $this->partial( 'index/' . $this->partialType . '.phtml', $this->getVars() );
+			?>
+		</div>
+
+        <?php echo $this->partial( 'footer.phtml' ); ?>
+	</div>
 </body>
 </html>

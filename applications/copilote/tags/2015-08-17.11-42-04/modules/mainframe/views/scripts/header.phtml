@@ -1,15 +1,13 @@
 <header class="row">
     <div class="col-xs-4 col-sm-2 col-md-2 ">
         <a id="logo" href="<?php echo Core_Library_Account::GetInstance()->GetCurrentProject()->GetURL(); ?>">
-            <img src="<?php echo Core_Library_Options::get( 'voozanoo.baseurl' ) ?>images/logo.svg" alt="logo" />
+            <img src="<?php echo Core_Library_Account::GetInstance()->GetURL(); ?>/images/logo.svg" alt="logo" />
         </a>
     </div>
 
     <div class="col-xs-8 col-sm-4 col-md-6 title hidden-sm hidden-md hidden-lg">
-        <h1 class="hidden-xs hidden-sm"><?php echo $this->sPageTitle ?></h1>
-        <h2 class="hidden-xs hidden-sm">Application de collecte et de pilotage budgétaire</h2>
-        <h1 class="hidden-md hidden-lg"><?php echo $this->sPageTitle ?></h1>
-        <h2 class="hidden-md hidden-lg">Application de collecte et de pilotage budgétaire</h2>
+        <h1 class="hidden-xs hidden-sm">Collecte budgetaire</h1>
+        <h2 class="hidden-md hidden-lg">Collecte budgetaire</h2>
     </div>
 
     <div class="col-xs-10 col-sm-4 col-md-3 hidden-xs">
@@ -17,7 +15,7 @@
         <?php if(file_exists( 'images/logo_partn1.png' ) ): ?>
         <div class="col-xs-4 col-sm-6">
             <a class="logo-partn" href="http://ined.fr" target="_blank">
-                <img src="<?php echo Core_Library_Options::get( 'voozanoo.baseurl' ) ?>images/logo_partn1.png" alt="logo" />
+                <img src="<?php echo Core_Library_Account::GetInstance()->GetURL(); ?>/images/logo_partn1.png" alt="logo" />
             </a>
         </div>
         <?php endif ?>
@@ -25,7 +23,7 @@
         <?php if(file_exists( 'images/logo_partn2.png' ) ): ?>
         <div class="col-xs-4 col-sm-6">
             <a class="logo-partn" href="http://ined.fr" target="_blank">
-                <img src="<?php echo Core_Library_Options::get( 'voozanoo.baseurl' ) ?>images/logo_partn2.png" alt="logo" />
+                <img src="<?php echo Core_Library_Account::GetInstance()->GetURL(); ?>/images/logo_partn2.png" alt="logo" />
             </a>
         </div>
         <?php endif ?>
@@ -33,10 +31,8 @@
     </div>
 
     <div class="col-sm-4 col-md-6 title hidden-xs">
-        <h1 class="hidden-xs hidden-sm"><?php echo $this->sPageTitle ?></h1>
-        <h2 class="hidden-xs hidden-sm">Application de collecte et de pilotage budgétaire</h2>
-        <h1 class="hidden-md hidden-lg"><?php echo $this->sPageTitle ?></h1>
-        <h2 class="hidden-md hidden-lg">Application de collecte et de pilotage budgétaire</h2>
+        <h1 class="hidden-xs hidden-sm">Collecte budgetaire</h1>
+        <h2 class="hidden-md hidden-lg">Collecte budgetaire</h2>
     </div>
 
 
