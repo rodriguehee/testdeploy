@@ -42,7 +42,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
                 {
                     foreach ($aGroup as $aRole)
                     {
-		      //error_log('$aRole["name"] = ' . print_r($aRole['name'], true));
+                        //error_log('$aRole["name"] = ' . print_r($aRole['name'], true));
                         if ( $aRole['name'] == 'demandeur'  )
                         {
                             $bShowButtonEndDemand = true ;
@@ -191,33 +191,15 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		
 		if( 34 == $formId && $id > 0 ) {
-		    if( $user->HasRole( "valideur" )  ) {
+		  //if( $user->HasRole( "demandeur_simple" ) || $user->HasRole( "demandeur" ) || $user->HasRole( "valideur" ) ) {
+		  if( $user->HasRole( "demandeur_simple" ))  {
 				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
 				$etat = $demande->getAttribute( "etat" ) ;
-				$ok = array( 478, 483 ) ;
+				$ok = array( 476, 481, 483 ) ;
 				if ( ! in_array( $etat, $ok ) ) {
 					$this->getRequest()->setParam( 'id', 79 ) ; 
 				}
 			}
-
-		   elseif( $user->HasRole( "demandeur_simple" ) || $user->HasRole( "demandeur" ) ) {
-				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
-				$etat = $demande->getAttribute( "etat" ) ;
-				$ok = array( 476, 481, 485, 500, 503 ) ;
-				if ( ! in_array( $etat, $ok ) ) {
-					$this->getRequest()->setParam( 'id', 79 ) ; 
-				}
-			}
-
-
-		     else
-		     {
-				
-				$this->getRequest()->setParam( 'id', 34 ) ; 
-				
-
-				}
-
 		}
 		
 		parent::_getFormConfiguration() ;
