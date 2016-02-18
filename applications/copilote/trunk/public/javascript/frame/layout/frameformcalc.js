@@ -48,6 +48,7 @@ YUI.add("frameformcalc", function(Y)
              */
             initializer : function()
             {
+		// Traitement sur l'arbitrage
                 if( this.DataSetManager().DataSet( 'bdgt' ) ){
                     oDataSet = this.DataSetManager().DataSet( 'bdgt');
                     aRecord = oDataSet.RowData().GetRecord();
@@ -64,6 +65,7 @@ YUI.add("frameformcalc", function(Y)
                     }, this);
                 }
 
+		// Traitement sur les RH
                 if( this.DataSetManager().DataSet( 'rh' ) ){
                     oDataSet = this.DataSetManager().DataSet( 'rh');
                     aRecord = oDataSet.RowData().GetRecord();
@@ -146,6 +148,7 @@ YUI.add("frameformcalc", function(Y)
                     }, this);
                 }
 
+		// Traitement sur les missions
                 if( this.DataSetManager().DataSet( 'dt' ) ){
                     oDataSet = this.DataSetManager().DataSet( 'dt');
                     aRecord = oDataSet.RowData().GetRecord();
@@ -176,6 +179,7 @@ YUI.add("frameformcalc", function(Y)
                     }, this);
                 }
 
+		// Traitement sur les marchés
                 if( this.DataSetManager().DataSet( 'dmp' ) ){
                     oDataSet = this.DataSetManager().DataSet( 'dmp');
                     aRecord = oDataSet.RowData().GetRecord();
@@ -197,6 +201,7 @@ YUI.add("frameformcalc", function(Y)
                     }, this);
                 }
 
+		// Traitement sur les stagiaires
                 if( this.DataSetManager().DataSet( 'sta' ) ){
                     oDataSet = this.DataSetManager().DataSet( 'sta');
                     aRecord = oDataSet.RowData().GetRecord();
@@ -862,6 +867,7 @@ YUI.add("frameformcalc", function(Y)
                 if(isNaN(sta_impc1duree)) sta_impc1duree = 0;
                 if(isNaN(sta_impc1montant)) sta_impc1montant = 0;
 
+		//Montant de l'indemnité pour un stagiaire 540€
                 sta_impc1tot = sta_impc1duree * 540;
 
                 this._setFieldValue( 'sta', 'sta_impc1tot', Math.round(sta_impc1tot) );
@@ -890,6 +896,7 @@ YUI.add("frameformcalc", function(Y)
                 if(isNaN(sta_impc2duree)) sta_impc2duree = 0;
                 if(isNaN(sta_impc2montant)) sta_impc2montant = 0;
 
+		//Montant de l'indemnité pour un stagiaire 540€
                 sta_impc2tot = sta_impc2duree * 540;
 
                 this._setFieldValue( 'sta', 'sta_impc2tot', Math.round(sta_impc2tot) );

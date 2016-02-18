@@ -216,7 +216,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$managers = array( "superuser", "admin", "SB" ) ;
 		$validators = array( "valideur" ) ;
 		$applicants = array( "demandeur", "demandeur_simple" ) ;
-	
+
+
 		foreach( $rolesByGroup as $idGroup => $roles ) {
 			foreach( $roles as $role ) {
 				if( $idGroup == $demande->getUB()->getAttribute( "id_group" ) ) {
@@ -224,6 +225,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 						$allowed = true ;
 					}
 					if( in_array( $role['name'], $validators ) && in_array( $demande->getAttribute( "etat" ), $pendingStatus ) ) {
+					  
 						$allowed = true ;
 					}
 					if( in_array( $role['name'], $applicants ) && in_array( $demande->getAttribute( "etat" ), $reportingStatus ) ) {
@@ -234,6 +236,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		}
 	
 		return $allowed ;
+
 	}
 	
 	/**

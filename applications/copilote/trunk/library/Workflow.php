@@ -35,6 +35,7 @@ class Copilote_Library_Workflow
 		
 		// validation demandeur avant arbitrage
 		if( $statut == 476 ) {
+		  error_log ('Validation demandeur 1 : '.$statut);
 			// validée par le demandeur
 			$statut = 477 ;
 			// si l'UB fait partie d'une GUB => à valider par le responsable
@@ -92,6 +93,7 @@ class Copilote_Library_Workflow
 			$statut = 506 ;
 		}
 		
+		error_log ('Validation demandeur 2 : '.$statut);
 		$this->_demande->setAttribute( "etat", $statut ) ;
 		return $this ;
 	}
