@@ -374,7 +374,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$joins = $varset->GetJoinedData4Delete( $notifier, $user, $context->get( 'aRecordsIds' ) ) ;
 		if( count( $joins ) > 0 ) {
 			$context->set( "aRecordsIds", array() ) ;
-			$context->set( "sWarning", "La fiche est référencée par d'autres fiches" ) ;
+			//$context->set( "sWarning", "La fiche est référencée par d'autres fiches" ) ;
+			$context->set( "sWarning", "Attention, vous devez d'abord supprimer les dépenses" ) ;
 		}
 		
 		// il n'est pas possible de supprimer les dépenses sur marché
