@@ -472,21 +472,32 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				}
 			}
 			
+			/*
+			 * 
+				 = $demande->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
+				 = $demande->GetAutreMontant( $convention, "investissement", "ae" ) ;
+				 = $dem
+			 */
 			// Layout : Total si demande validée
 			if( $statutDemande > 1 ) {
 				$oBoxRow = $oDomDoc->createElement( "box" ) ;
 				$oBoxRow->setAttribute( "class", "row rowx2" ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "" ) ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "Total prévision" ) ) ;
-				$fTotalPerso = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "p_conv" ) ;
+				$fTotalPerso  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "p_conv" ) ;
+				$fTotalPerso += $fMontantPersonnel ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPerso ) ) ;
-				$fTotalFoncAE = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_ae" ) ;
+				$fTotalFoncAE  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_ae" ) ;
+				$fTotalFoncAE += $fMontantFonctAE ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFoncAE ) ) ;
-				$fTotalFoncCP = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_cp" ) ;
+				$fTotalFoncCP  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_cp" ) ;
+				$fMontantFonctCP += $fMontantFonctCP ; 
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFoncCP ) ) ;
-				$fTotalInvAE = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_ae" ) ;
+				$fTotalInvAE  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_ae" ) ;
+				$fTotalInvAE += $fMontantInvAE ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalInvAE ) ) ;
-				$fTotalInvCP = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_cp" ) ;
+				$fTotalInvCP  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_cp" ) ;
+				$fTotalInvCP += $fMontantInvCP ; 
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalInvCP ) ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPerso + $fTotalFoncAE + $fTotalInvAE ) ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPerso + $fTotalFoncCP + $fTotalInvCP ) ) ;
