@@ -491,7 +491,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$fTotalFoncAE += $fMontantFonctAE ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFoncAE ) ) ;
 				$fTotalFoncCP  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_cp" ) ;
-				$fMontantFonctCP += $fMontantFonctCP ; 
+				$fTotalFoncCP += $fMontantFonctCP ; 
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFoncCP ) ) ;
 				$fTotalInvAE  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_ae" ) ;
 				$fTotalInvAE += $fMontantInvAE ;
