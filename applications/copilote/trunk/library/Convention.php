@@ -20,12 +20,16 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		if( $this->getAttribute( "status_prog" ) == 529 ) {
 			$debut = 0 ;
 			$fin = 0 ;
-			if( ! empty( $this->getAttribute( "date_deb" ) ) ) {
-				$o = new DateTime( $this->getAttribute( "date_deb" ) ) ;
+			
+			$dateDebut = $this->getAttribute( "date_deb" ) ;
+			if( ! empty( $dateDebut ) ) {
+				$o = new DateTime( $dateDebut ) ;
 				$debut = $o->format( "Y" ) ;
 			}
-			if( ! empty( $this->getAttribute( "date_fin" ) ) ) {
-				$o = new DateTime( $this->getAttribute( "date_fin" ) ) ;
+			
+			$dateFin = $this->getAttribute( "date_fin" ) ;
+			if( ! empty( $dateFin ) ) {
+				$o = new DateTime( $dateFin ) ;
 				$fin = $o->format( "Y" ) ;
 			}
 			if( $debut > 0 && $fin > 0 ) {
