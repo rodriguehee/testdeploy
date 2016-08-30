@@ -120,6 +120,13 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				break ;
 			}
 		}
+		
+		$aOptions = $oDomDoc->getElementsByTagName( 'option' ) ;
+		foreach( $aOptions as $oOption ) {
+			if( "show_on" == $oOption->getAttribute( "option_name" ) ) {
+				break ;
+			}
+		}
 					
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		$convention = new Copilote_Library_Convention( "cplt_conv_data", $id ) ;
@@ -147,25 +154,6 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		) ;
 		$programmationAlias = "p" ;
 		
-		$suiviColumns = array(
-			"rb1_a_p_conv",
-			"rb2_a_p_conv",
-			"rb3_a_p_conv",
-			"rb1_a_f_conv_ae",
-			"rb2_a_f_conv_ae",
-			"rb3_a_f_conv_ae",
-			"rb1_a_f_conv_cp",
-			"rb2_a_f_conv_cp",
-			"rb3_a_f_conv_cp",
-			"rb1_a_i_conv_ae",
-			"rb2_a_i_conv_ae",
-			"rb3_a_i_conv_ae",
-			"rb1_a_i_conv_cp",
-			"rb2_a_i_conv_cp",
-			"rb3_a_i_conv_cp",
-		) ;
-		$suiviAlias = "sb" ;
-		
 		$convColumns = array(
 			"cout_personel_ant",
 			"cout_fonct_ae_ant",
@@ -179,6 +167,14 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$aFieldsAE = array() ;
 		$aFieldsAE[] = "{c.total_ae_ant}" ;
 		$aFieldsCP[] = "{c.total_cp_ant}" ;
+		
+		$fCurrentAE = 0.0 ;
+		$fCurrentCP = 0.0 ;
+		
+		$reference = Core_Library_Options::get( 'conv.pluri.ref' ) ;
+		if ( $reference  === false ) {
+			throw new Core_Library_Exception( 'Reference for programmation not found in ini file' );
+		}
 		
 		// anteriorite (dans le code à cause des droits)
 		$oBoxRow = $oDomDoc->createElement( "box" ) ;
@@ -285,83 +281,6 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$oDataQuery->appendChild( $oCondition ) ;
 			$oDataStructure->appendChild( $oDataQuery ) ;
 			
-			// DataStructure : suivi_bud si demande validée
-			/*if( $statutDemande > 1 ) {
-				$varset = $oProject->GetVarset( "suivi_bud" ) ;
-				
-				$oDataQuery = $oDomDoc->createElement( "dataquery" ) ;
-				$oDataQuery->setAttribute( "id", sprintf( "%s%d", $suiviAlias, $annee ) ) ;
-				$oDataQuery->setAttribute( "table_name", $varset->DataTableName() ) ;
-				$oDataQuery->setAttribute( "varset_name", $varset->GetVarsetName() ) ;
-				$oDataQuery->setAttribute( "table_alias", $suiviAlias ) ;
-				$oDataQuery->setAttribute( "mode", "r" ) ;
-	
-				foreach( $suiviColumns as $columnName ) {
-					$oColumn = $oDomDoc->createElement( "column_simple" ) ;
-					$oColumn->setAttribute( "field_name", $columnName ) ;
-					$oColumn->setAttribute( "table_name", $suiviAlias ) ;
-					$oDataQuery->appendChild( $oColumn ) ;
-				}
-				
-				foreach( range( 1, 3 ) as $indexAjustement ) {
-					$sMotif = "COALESCE({perso}, 0) + COALESCE({fonc}, 0) + COALESCE({invest}, 0)" ;
-					$oColumn = $oDomDoc->createElement( "column" ) ;
-					$oColumn->setAttribute( "sql", $sMotif ) ;
-					$oColumn->setAttribute( "alias", sprintf( "rb%d_total_ae", $indexAjustement ) ) ;
-					$oColumn->setAttribute( "type", "string" ) ;
-					$oField = $oDomDoc->createElement( "field" ) ;
-					$oField->setAttribute( "field_name", sprintf( "rb%d_a_p_conv", $indexAjustement ) ) ;
-					$oField->setAttribute( "table_name", $suiviAlias ) ;
-					$oField->setAttribute( "alias", "perso" ) ;
-					$oColumn->appendChild( $oField ) ;
-					$oField = $oDomDoc->createElement( "field" ) ;
-					$oField->setAttribute( "field_name", sprintf( "rb%d_a_f_conv_ae", $indexAjustement ) ) ;
-					$oField->setAttribute( "table_name", $suiviAlias ) ;
-					$oField->setAttribute( "alias", "fonc" ) ;
-					$oColumn->appendChild( $oField ) ;
-					$oField = $oDomDoc->createElement( "field" ) ;
-					$oField->setAttribute( "field_name", sprintf( "rb%d_a_i_conv_ae", $indexAjustement ) ) ;
-					$oField->setAttribute( "table_name", $suiviAlias ) ;
-					$oField->setAttribute( "alias", "invest" ) ;
-					$oColumn->appendChild( $oField ) ;
-					$oDataQuery->appendChild( $oColumn ) ;
-					
-					$oColumn = $oDomDoc->createElement( "column" ) ;
-					$oColumn->setAttribute( "sql", $sMotif ) ;
-					$oColumn->setAttribute( "alias", sprintf( "rb%d_total_cp", $indexAjustement ) ) ;
-					$oColumn->setAttribute( "type", "string" ) ;
-					$oField = $oDomDoc->createElement( "field" ) ;
-					$oField->setAttribute( "field_name", sprintf( "rb%d_a_p_conv", $indexAjustement ) ) ;
-					$oField->setAttribute( "table_name", $suiviAlias ) ;
-					$oField->setAttribute( "alias", "perso" ) ;
-					$oColumn->appendChild( $oField ) ;
-					$oField = $oDomDoc->createElement( "field" ) ;
-					$oField->setAttribute( "field_name", sprintf( "rb%d_a_f_conv_cp", $indexAjustement ) ) ;
-					$oField->setAttribute( "table_name", $suiviAlias ) ;
-					$oField->setAttribute( "alias", "fonc" ) ;
-					$oColumn->appendChild( $oField ) ;
-					$oField = $oDomDoc->createElement( "field" ) ;
-					$oField->setAttribute( "field_name", sprintf( "rb%d_a_i_conv_cp", $indexAjustement ) ) ;
-					$oField->setAttribute( "table_name", $suiviAlias ) ;
-					$oField->setAttribute( "alias", "invest" ) ;
-					$oColumn->appendChild( $oField ) ;
-					$oDataQuery->appendChild( $oColumn ) ;
-				}
-				
-				$oCondition = $oDomDoc->createElement( "condition" ) ;
-				$oField = $oDomDoc->createElement( "field" ) ;
-				$sFieldName = "id_demande" ;
-				$oField->setAttribute( "field_name", $sFieldName ) ;
-				$oField->setAttribute( "table_name", $suiviAlias ) ;
-				$sFieldAlias = sprintf( "%s.%s", $suiviAlias, $sFieldName ) ;
-				$oField->setAttribute( "alias", $sFieldAlias ) ;
-				$oCondition->setAttribute( "sql", sprintf( "{%s} = %d", $sFieldAlias, $demande->getId() ) ) ;
-				$oCondition->appendChild( $oField ) ;
-				$oDataQuery->appendChild( $oCondition ) ;
-				
-				$oDataStructure->appendChild( $oDataQuery ) ;
-			}*/
-			
 			// Layout : programmation
 			$oBoxRow = $oDomDoc->createElement( "box" ) ;
 			$oBoxRow->setAttribute( "class", "row rowx2" ) ;
@@ -412,6 +331,12 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$oBoxTable->appendChild( $oBoxRow ) ;
 			}
 			
+			$fTotalPersonnel = 0.0 ;
+			$fTotalFonctionnementAE = 0.0 ;
+			$fTotalFonctionnementCP = 0.0 ;
+			$fTotalInvestissementAE = 0.0 ;
+			$fTotalInvestissementCP = 0.0 ;
+				
 			// Layout : Prevision Initiale si demande validée
 			if ( $statutDemande > 1 ) {
 				$fMontantPersonnel = $demande->GetMontantPersonnel( $convention ) ;
@@ -434,74 +359,67 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalAE ) ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalCP ) ) ;
 				$oBoxTable->appendChild( $oBoxRow ) ;
+				
+				$fTotalPersonnel += $fMontantPersonnel ;
+				$fTotalFonctionnementAE += $fMontantFonctAE ;
+				$fTotalFonctionnementCP += $fMontantFonctCP ;
+				$fTotalInvestissementAE += $fMontantInvAE ;
+				$fTotalInvestissementCP += $fMontantInvCP ;
 			}
 			
 			// Layout : Ajustements t1, t2 et t3 si demande validée
 			if( $statutDemande > 1 ) {
-				$suiviBudgetaire = $demande->getSuiviBudgetaire() ;
-				
 				foreach( range( 1, 3 ) as $indexAjustement ) {
-					$oBoxRow = $oDomDoc->createElement( "box" ) ;
-					$oBoxRow->setAttribute( "class", "row rowx2" ) ;
-					$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "" ) ) ;
-					$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "Ajustement T" . $indexAjustement ) ) ;
-					$leftString = "rb" . $indexAjustement ;
-					$totalAE = 0.0 ;
-					$totalCP = 0.0 ;
+					$suiviBudgetaire = $demande->getSuiviBudgetaire( $convention, $indexAjustement ) ;
 					
-					foreach( $suiviColumns as $columnName ) {
-						if( $leftString == substr( $columnName, 0, 3 ) ) {
-							$textContent = $suiviBudgetaire->getAttribute( $columnName ) ;
-							if( substr( $columnName, -2 ) == "ae" ) {
-								$totalAE += (float) $textContent ;
-							} 
-							elseif( substr( $columnName, -2 ) == "cp" ) {
-								$totalCP += (float) $textContent ;
-							} 
-							else{
-								$totalAE += (float) $textContent ;
-								$totalCP += (float) $textContent ;
-							}
-							$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $textContent ) ) ;
-						}
+					if( $suiviBudgetaire instanceof Copilote_Library_Record ) {
+						$oBoxRow = $oDomDoc->createElement( "box" ) ;
+						$oBoxRow->setAttribute( "class", "row rowx2" ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "" ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "Ajustement T" . $indexAjustement ) ) ;
+						$fMontantPersonnel = (float) $suiviBudgetaire->getAttribute( "d_pers" ) ;
+						$fMontantFonctionnement = (float) $suiviBudgetaire->getAttribute( "d_fonct" ) ;
+						$fMontantInvestissement = (float) $suiviBudgetaire->getAttribute( "d_invest" ) ;
+						$fTotal = $fMontantPersonnel + $fMontantFonctionnement + $fMontantInvestissement ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fMontantPersonnel ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fMontantFonctionnement ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fMontantFonctionnement ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fMontantInvestissement ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fMontantInvestissement ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotal ) ) ;
+						$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotal ) ) ;
+						$oBoxTable->appendChild( $oBoxRow ) ;
+						
+						$fTotalPersonnel += $fMontantPersonnel ;
+						$fTotalFonctionnementAE += $fMontantFonctionnement ;
+						$fTotalFonctionnementCP += $fMontantFonctionnement ;
+						$fTotalInvestissementAE += $fMontantInvestissement ;
+						$fTotalInvestissementCP += $fMontantInvestissement ;
 					}
-					
-					$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $totalAE ) ) ;
-					$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $totalCP ) ) ;
-					$oBoxTable->appendChild( $oBoxRow ) ;
 				}
 			}
 			
-			/*
-			 * 
-				 = $demande->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
-				 = $demande->GetAutreMontant( $convention, "investissement", "ae" ) ;
-				 = $dem
-			 */
 			// Layout : Total si demande validée
 			if( $statutDemande > 1 ) {
 				$oBoxRow = $oDomDoc->createElement( "box" ) ;
 				$oBoxRow->setAttribute( "class", "row rowx2" ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "" ) ) ;
 				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, "Total prévision" ) ) ;
-				$fTotalPerso  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "p_conv" ) ;
-				$fTotalPerso += $fMontantPersonnel ;
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPerso ) ) ;
-				$fTotalFoncAE  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_ae" ) ;
-				$fTotalFoncAE += $fMontantFonctAE ;
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFoncAE ) ) ;
-				$fTotalFoncCP  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "f_conv_cp" ) ;
-				$fTotalFoncCP += $fMontantFonctCP ; 
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFoncCP ) ) ;
-				$fTotalInvAE  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_ae" ) ;
-				$fTotalInvAE += $fMontantInvAE ;
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalInvAE ) ) ;
-				$fTotalInvCP  = $this->getSubTotal( $suiviBudgetaire, $suiviColumns, "i_conv_cp" ) ;
-				$fTotalInvCP += $fMontantInvCP ; 
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalInvCP ) ) ;
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPerso + $fTotalFoncAE + $fTotalInvAE ) ) ;
-				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPerso + $fTotalFoncCP + $fTotalInvCP ) ) ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalPersonnel ) ) ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFonctionnementAE ) ) ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalFonctionnementCP ) ) ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalInvestissementAE ) ) ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalInvestissementCP ) ) ;
+				$fTotalAE = $fTotalPersonnel + $fTotalFonctionnementAE + $fTotalInvestissementAE ;
+				$fTotalCP = $fTotalPersonnel + $fTotalFonctionnementCP + $fTotalInvestissementCP ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalAE ) ) ;
+				$oBoxRow->appendChild( $this->getTextCell( $oDomDoc, $fTotalCP ) ) ;
 				$oBoxTable->appendChild( $oBoxRow ) ;
+				
+				if( $reference == $programmation->getAttribute( "annee_conv" ) ) {
+					$fCurrentAE += $fTotalAE ;
+					$fCurrentCP += $fTotalCP ;
+				}
 			}
 		}
 		
@@ -534,7 +452,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell = $oDomDoc->createElement( "box" ) ;
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
-		$sFormule = sprintf( "f({c.credits_ouvert} - %s)f", implode( " - ", $aFieldsAE ) ) ;
+		$sFormule = sprintf( "f({c.credits_ouvert} - %s + %f)f", implode( " - ", $aFieldsAE ), $fCurrentAE ) ;
 		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
@@ -569,35 +487,25 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell = $oDomDoc->createElement( "box" ) ;
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
-		$sFormule = sprintf( "f({c.credits_ouvert} - %s)f", implode( " - ", $aFieldsCP ) ) ;
+		$sFormule = sprintf( "f({c.credits_ouvert} - %s + %f)f", implode( " - ", $aFieldsCP ), $fCurrentCP ) ;
 		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
 		
 		$oBoxRecap->appendChild( $oBoxRow ) ;
 		
+		/* 
+		 * Condition d'affichage du bouton "save" 
+		 *  pour contraindre l'enregistrement d'un crédit solvable
+		 */
+		$aShowOnValue = array() ;
+		$sPattern = "( ( {c.credits_ouvert} - %s + %f ) >= 0 )" ;
+		$aShowOnValue[] = sprintf( $sPattern, implode( " - ", $aFieldsAE ), $fCurrentAE ) ; 
+		$aShowOnValue[] = sprintf( $sPattern, implode( " - ", $aFieldsCP ), $fCurrentCP ) ; 
+		$oOption->setAttribute( "value", implode( "&&", $aShowOnValue ) ) ;
+		
 		$oForm->SetContent( $oDomDoc->saveXML() ) ;
 		//error_log( $oDomDoc->saveXML() ) ;
-	}
-	
-	/**
-	 * @return float
-	 * @param Copilote_Library_Record $suiviBudgetaire
-	 * @param array $suiviColumns
-	 * @param string $suffixe
-	 */
-	public function getSubTotal( Copilote_Library_Record $suiviBudgetaire, array $suiviColumns, $suffixe )
-	{
-		$montant = 0.0 ;
-		$length = strlen( $suffixe ) ;
-		
-		foreach( $suiviColumns as $columnName ) {
-			if( substr( $columnName, - $length ) == $suffixe ) {
-				$montant += $suiviBudgetaire->getAttribute( $columnName ) ;
-			}
-		}
-		
-		return $montant ;
 	}
 	
 	/**

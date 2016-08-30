@@ -227,9 +227,14 @@
 		  </redirection>
 		</button>
 	  </box>
-	  <box class="col-xs-6 text-right">
-		<button action="save" label="Save" class="btn-primary"/>
-	  </box>
+	  <group class="col-xs-6">
+	    <!-- gérer la condition d'affichage via une formule -->
+	  	<option output="html" option_name="show_on" value="1 == 0" />
+	  	<option output="html" option_name="transparent_group" value="true" />
+		<box class="col-xs-12 text-right">
+		  <button action="save" label="Save" class="btn-primary"/>
+		</box>
+	  </group>
 	</form_row>
   </layout>
 </form>

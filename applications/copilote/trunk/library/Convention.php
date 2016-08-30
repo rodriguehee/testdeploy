@@ -25,6 +25,12 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 			if( ! empty( $dateDebut ) ) {
 				$o = new DateTime( $dateDebut ) ;
 				$debut = $o->format( "Y" ) ;
+				
+				$reference = Core_Library_Options::get( 'conv.pluri.ref' ) ;
+				if ( $reference  === false ) {
+					throw new Core_Library_Exception( 'Reference for programmation not found in ini file' );
+				}
+				$debut = max( $debut, $reference ) ;
 			}
 			
 			$dateFin = $this->getAttribute( "date_fin" ) ;

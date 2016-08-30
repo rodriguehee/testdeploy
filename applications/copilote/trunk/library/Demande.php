@@ -13,11 +13,6 @@ class Copilote_Library_Demande extends Copilote_Library_Record
 	protected $_ub ;
 	
 	/**
-	 * @var Copilote_Library_Record
-	 */
-	protected $_sb ;
-	
-	/**
 	 * @param string $tableName
 	 * @param integer $idData
 	 */
@@ -141,7 +136,7 @@ class Copilote_Library_Demande extends Copilote_Library_Record
 		}
 		
 		$prefixes = array( "pe", "dmp" ) ;
-		if( $nature == "fonctionnement" && $aspect == "ae" ) {
+		if( $nature == "fonctionnement" ) {
 			$prefixes[] = "oc" ;
 		}
 		
@@ -168,7 +163,7 @@ class Copilote_Library_Demande extends Copilote_Library_Record
 			}
 		}
 		
-		if( $nature == "fonctionnement" && $aspect == "ae" ) {
+		if( $nature == "fonctionnement" ) {
 			// sta 
 			foreach( range( 1, 2 ) as $index ) {
 				$query = sprintf( "
@@ -210,16 +205,18 @@ class Copilote_Library_Demande extends Copilote_Library_Record
 	}
 	
 	/**
-	 * @return Copilote_Library_SuiviBudgetaire
+	 * @return Copilote_Library_Record
+	 * @param Copilote_Library_Convention $convention
+	 * @param integer $index
 	 */
-	public function GetSuiviBudgetaire()
+	public function GetSuiviBudgetaire( Copilote_Library_Convention $convention, $index )
 	{
-		if( empty( $this->_sb ) ) {
-			$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-			$sql = 'SELECT id_data FROM cplt_sub_data WHERE id_demande = ?' ;
-			$id = (int) $db->fetchOne( $sql, $this->getId() ) ;
-			$this->_sb = new Copilote_Library_Record( "cplt_sub_data", $id ) ;
+		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
+		$sql = 'SELECT id_data FROM cplt_subc_data WHERE id_demande = ? AND id_conv = ? AND rb_num = ?' ;
+		$id = (int) $db->fetchOne( $sql, array( $this->getId(), $convention->getId(), $index ) ) ;
+		if( $id > 0 ) {
+			return new Copilote_Library_Record( "cplt_subc_data", $id ) ;
 		}
-		return $this->_sb ;
+		return null ;
 	}
 }
