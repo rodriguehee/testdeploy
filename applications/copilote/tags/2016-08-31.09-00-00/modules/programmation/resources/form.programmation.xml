@@ -222,7 +222,7 @@
 		<button action="exit" label="Retour à la liste des conventions">
 		  <redirection module="form" ctrl="frame" action="get">
 			<params>
-			  <value alias="id">61</value>
+			  <value alias="sid">liste_conv_prog</value>
 			</params>
 		  </redirection>
 		</button>
