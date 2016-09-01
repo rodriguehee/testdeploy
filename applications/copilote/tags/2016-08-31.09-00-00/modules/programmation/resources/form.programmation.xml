@@ -98,19 +98,19 @@
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="code_ined" />
-		<value dataset="c" field="code_ined" mode="rw" />
+		<value dataset="c" field="code_ined" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="libelle" />
-		<value dataset="c" field="libelle" mode="rw" />
+		<value dataset="c" field="libelle" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="bailleur" />
-		<value dataset="c" field="bailleur" mode="rw" />
+		<value dataset="c" field="bailleur" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="formule" />
-		<value dataset="c" field="formule" mode="rw" />
+		<value dataset="c" field="formule" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="date_deb" />
@@ -122,51 +122,51 @@
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="date_cloture" />
-		<value dataset="c" field="date_cloture" mode="rw" />
+		<value dataset="c" field="date_cloture" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="responsable_conv" />
-		<search search_param="search_string" search_dataset="search_identite" target_dataset="c" />
+		<search search_param="search_string" search_dataset="search_identite" target_dataset="c" mode="r"/>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="commentaires" />
-		<value dataset="c" field="commentaires" mode="rw" />
+		<value dataset="c" field="commentaires" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="nb_ave_avecif" />
-		<value dataset="c" field="nb_ave_avecif" mode="rw" />
+		<value dataset="c" field="nb_ave_avecif" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="nb_ave_sansif" />
-		<value dataset="c" field="nb_ave_sansif" mode="rw" />
+		<value dataset="c" field="nb_ave_sansif" mode="r" />
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="montant_ave_fin" />
-		<value dataset="c" field="montant_ave_fin" mode="rw">
+		<value dataset="c" field="montant_ave_fin" mode="r">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="montant_ae" />
-		<value dataset="c" field="montant_ae" mode="rw">
+		<value dataset="c" field="montant_ae" mode="r">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="montant_cp" />
-		<value dataset="c" field="montant_cp" mode="rw">
+		<value dataset="c" field="montant_cp" mode="r">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="montant_frais" />
-		<value dataset="c" field="montant_frais" mode="rw">
+		<value dataset="c" field="montant_frais" mode="r">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="credits_ouvert" />
-		<value dataset="c" field="credits_ouvert" mode="rw">
+		<value dataset="c" field="credits_ouvert" mode="r">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
