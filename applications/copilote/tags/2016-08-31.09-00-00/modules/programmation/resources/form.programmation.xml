@@ -111,10 +111,10 @@
 		<label dataset="c" field="bailleur" />
 		<value dataset="c" field="bailleur" mode="r"  class="col-md-10"/>
 	  </form_row>
-	  <form_row>
+	  <!--form_row>
 		<label dataset="c" field="formule"/>
 		<value dataset="c" field="formule" mode="r" />
-	  </form_row>
+	  </form_row-->
 	  <form_row>
 		<label dataset="c" field="date_deb" />
 		<value dataset="c" field="date_deb" mode="r" />
