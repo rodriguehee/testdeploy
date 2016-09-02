@@ -178,7 +178,7 @@
 		<value dataset="c" field="coti_chomage" mode="r" class="col-md-2 cplt-euro cplt-euro-right col-md-2">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
-		<statictext class="col-md-7 cplt-consigne">
+		<statictext class="col-md-7 cplt-consigne-bold">
 		  Ce montant correspond à 10% du coût global chargé du personnel ayant déjà conclu un contrat
 		</statictext>
 	    </form_row>
