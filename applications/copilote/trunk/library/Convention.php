@@ -123,4 +123,29 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		}
 		return new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_data'] ) ;
 	}
+	
+	/**
+	 * @return Copilote_Library_Demande | null
+	 */
+	public function GetDemandeValidee( $annee )
+	{
+		$query = sprintf( "
+			SELECT dmnd.id_data
+			FROM cplt_sv_data sv
+			JOIN cplt_dmnd_data dmnd
+			  ON sv.id_data = dmnd.id_suivi
+			WHERE dmnd.etat IN (477, 479)
+			  AND sv.annee = %d
+			  AND sv.id_ub = %d
+		", 	$annee,
+			$this->getAttribute( "id_ub" )
+		) ;
+		$project = Core_Library_Account::GetInstance()->GetCurrentProject() ;
+		$row = $project->Db()->fetchRow( $query ) ;
+	
+		if ( empty( $row ) ) {
+			return null ;
+		}
+		return new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_data'] ) ;
+	}
 }

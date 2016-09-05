@@ -221,6 +221,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			assert( $programmation instanceof Copilote_Library_Programmation ) ;
 			$annee = $programmation->getAttribute( "annee_conv" ) ;
 			$demande = $convention->GetDemande( $annee ) ;
+			$demandeValidee = null ;
 			
 			$aFieldsAE[] = sprintf( "{%s%d.total_ae}", $programmationAlias, $annee ) ;
 			$aFieldsCP[] = sprintf( "{%s%d.total_cp}", $programmationAlias, $annee ) ;
@@ -235,6 +236,10 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			if ( $demande instanceof Copilote_Library_Demande ) {
 				$dico = $oProject->DicoManager()->GetDico( "lg15" ) ;
 				$statutDemande = (int) $dico->id2Code( $demande->getAttribute( "etat" ) ) ;
+			}
+			
+			if( $statutDemande > 1 ) {
+				$demandeValidee = $convention->GetDemandeValidee( $annee ) ;
 			}
 			
 			// DataStructure : programmation
@@ -348,11 +353,16 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				
 			// Layout : Prevision Initiale si demande validée
 			if ( $statutDemande > 1 ) {
-				$fMontantPersonnel = $demande->GetMontantPersonnel( $convention ) ;
+				$fMontantPersonnel = $demandeValidee->GetMontantPersonnel( $convention ) ;
+				$fMontantFonctAE = $demandeValidee->GetAutreMontant( $convention, "fonctionnement", "ae" ) ;
+				$fMontantFonctCP = $demandeValidee->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
+				$fMontantInvAE = $demandeValidee->GetAutreMontant( $convention, "investissement", "ae" ) ;
+				$fMontantInvCP = $demandeValidee->GetAutreMontant( $convention, "investissement", "cp" ) ;
+				/*$fMontantPersonnel = $demande->GetMontantPersonnel( $convention ) ;
 				$fMontantFonctAE = $demande->GetAutreMontant( $convention, "fonctionnement", "ae" ) ;
 				$fMontantFonctCP = $demande->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
 				$fMontantInvAE = $demande->GetAutreMontant( $convention, "investissement", "ae" ) ;
-				$fMontantInvCP = $demande->GetAutreMontant( $convention, "investissement", "cp" ) ;
+				$fMontantInvCP = $demande->GetAutreMontant( $convention, "investissement", "cp" ) ;*/
 				$fTotalAE = $fMontantFonctAE + $fMontantInvAE + $fMontantPersonnel ;
 				$fTotalCP = $fMontantFonctCP + $fMontantInvCP + $fMontantPersonnel ;
 				
