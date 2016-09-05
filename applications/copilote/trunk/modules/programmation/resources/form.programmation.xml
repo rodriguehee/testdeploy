@@ -16,11 +16,12 @@
 	  <column_simple field_name="disponible_cp" table_name="c" />
 	  <column_simple field_name="date_deb" table_name="c" />
 	  <column_simple field_name="date_fin" table_name="c" />
-	  <column_simple field_name="date_cloture" table_name="c" />
+	  <!--column_simple field_name="date_cloture" table_name="c" /-->
 	  <column_simple field_name="responsable_conv" table_name="c" />
 	  <column_simple field_name="commentaires" table_name="c" />
-	  <column_simple field_name="nb_ave_avecif" table_name="c" />
-	  <column_simple field_name="nb_ave_sansif" table_name="c" />
+	  <!--column_simple field_name="nb_ave_avecif" table_name="c" /-->
+	  <!--column_simple field_name="nb_ave_sansif" table_name="c" /-->
+	  <column_simple field_name="coti_chomage" table_name="c" />
 	  <column_simple field_name="montant_ave_fin" table_name="c" />
 	  <column_simple field_name="montant_frais" table_name="c" />
 	  <column_simple field_name="montant_ae" table_name="c" />
@@ -33,6 +34,7 @@
 	  <column_simple field_name="cout_invest_cp_ant" table_name="c" />
 	  <column_simple field_name="total_ae_ant" table_name="c" />
 	  <column_simple field_name="total_cp_ant" table_name="c" />
+	  <column_simple field_name="date_maj" table_name="c" />
 	  <condition sql="{c.id_data}={param_id_data}">
 		<field field_name="id_data" table_name="c" alias="c.id_data" />
 		<variable alias="param_id_data" default="NULL">
@@ -90,10 +92,11 @@
 	
   </data_structure>
   
-  <layout title="Programmation pluriannuelle" disabled="false">
-	<group title="Données générales">
+  <layout title="Programmation pluriannuelle des conventions" disabled="false">
+	<group title="Convention">
+	 <group title="Données d'identification">
 	  <form_row>
-		<label dataset="c" field="id_ub" />
+		<label dataset="c" field="id_ub"/>
 		<value dataset="ub" field="name" mode="r" />
 	  </form_row>
 	  <form_row>
@@ -102,16 +105,16 @@
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="libelle" />
-		<value dataset="c" field="libelle" mode="r" />
+		<value dataset="c" field="libelle" mode="r" class="col-md-10"/>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="bailleur" />
-		<value dataset="c" field="bailleur" mode="r" />
+		<value dataset="c" field="bailleur" mode="r"  class="col-md-10"/>
 	  </form_row>
-	  <form_row>
-		<label dataset="c" field="formule" />
+	  <!--form_row>
+		<label dataset="c" field="formule"/>
 		<value dataset="c" field="formule" mode="r" />
-	  </form_row>
+	  </form_row-->
 	  <form_row>
 		<label dataset="c" field="date_deb" />
 		<value dataset="c" field="date_deb" mode="r" />
@@ -120,70 +123,94 @@
 		<label dataset="c" field="date_fin" />
 		<value dataset="c" field="date_fin" mode="r" />
 	  </form_row>
-	  <form_row>
+	  <!--form_row>
 		<label dataset="c" field="date_cloture" />
 		<value dataset="c" field="date_cloture" mode="r" />
-	  </form_row>
+	  </form_row-->
 	  <form_row>
 		<label dataset="c" field="responsable_conv" />
-		<search search_param="search_string" search_dataset="search_identite" target_dataset="c" mode="r"/>
+		<search search_param="search_string" search_dataset="search_identite" target_dataset="c" mode="r" class="col-md-5"/>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="commentaires" />
-		<value dataset="c" field="commentaires" mode="r" />
+		<value dataset="c" field="commentaires" mode="r" class="col-md-10" />
 	  </form_row>
-	  <form_row>
+	  <!--form_row>
 		<label dataset="c" field="nb_ave_avecif" />
 		<value dataset="c" field="nb_ave_avecif" mode="r" />
-	  </form_row>
-	  <form_row>
+	  </form_row-->
+	  <!--form_row>
 		<label dataset="c" field="nb_ave_sansif" />
 		<value dataset="c" field="nb_ave_sansif" mode="r" />
-	  </form_row>
-	  <form_row>
-		<label dataset="c" field="montant_ave_fin" />
-		<value dataset="c" field="montant_ave_fin" mode="r">
-		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
-		</value>
-	  </form_row>
+	  </form_row-->
+	 </group>
+	 <group title="Données financières">
 	  <form_row>
 		<label dataset="c" field="montant_ae" />
-		<value dataset="c" field="montant_ae" mode="r">
+		<value dataset="c" field="montant_ae" mode="r" class="cplt-euro cplt-euro-right col-md-2">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
 	  <form_row>
 		<label dataset="c" field="montant_cp" />
-		<value dataset="c" field="montant_cp" mode="r">
+		<value dataset="c" field="montant_cp" mode="r" class="cplt-euro cplt-euro-right col-md-2">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
+	  <form_row>
+		<label dataset="c" field="montant_ave_fin" />
+		<value dataset="c" field="montant_ave_fin" mode="r" class="cplt-euro cplt-euro-right col-md-2">
+		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
+		</value>
+	  </form_row>
+
 	  <form_row>
 		<label dataset="c" field="montant_frais" />
-		<value dataset="c" field="montant_frais" mode="r">
+		<value dataset="c" field="montant_frais" mode="r" class="cplt-euro cplt-euro-right col-md-2">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
+      <group>
+        <option output="html" option_name="transparent_group" value="true"/>
+	    <option output="html" option_name="show_on" value="{c.formule} == 'N'"/>
+	    <form_row>
+		  <label dataset="c" field="coti_chomage" />
+		  <value dataset="c" field="coti_chomage" mode="r" class="col-md-2 cplt-euro cplt-euro-right col-md-2">
+		    <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
+		  </value>
+		  <statictext class="col-md-7 cplt-consigne-bold">
+		    Ce montant correspond à 10% du coût global chargé du personnel ayant déjà conclu un contrat
+		  </statictext>
+	    </form_row>
+	  </group>
 	  <form_row>
 		<label dataset="c" field="credits_ouvert" />
-		<value dataset="c" field="credits_ouvert" mode="r">
+		<value dataset="c" field="credits_ouvert" mode="r" class="cplt-euro cplt-euro-right col-md-2">
 		  <option output="html" option_name="glyphicon_suffix" value="glyphicon-euro" />
 		</value>
 	  </form_row>
+	 </group>
 	</group>
-	
-	<box class="table" id="tableau_recap">
+
+	<group title="Données de programmation">	
+
+	  <statictext class="cplt-consigne-bold">
+	    Date de mise à jour des données issues des applications métier (SIREPA, RH...) : f(var d = new Date({c.date_maj});d.toLocaleDateString();)f 
+	  </statictext>
+	  <form_row />
+
+	 <box class="table" id="tableau_recap">
 	  <box class="row rowx2">
 	    <box class="cel-2 rowx2"><statictext></statictext></box>
 	    <box class="cel-2 rowx2"><statictext>Total crédit ouvert net</statictext></box>
 	    <box class="cel-2 rowx2"><statictext>Crédits consommés (C)</statictext></box>
 	    <box class="cel-2 rowx2"><statictext>Crédits disponibles pour programmation (V)</statictext></box>
 	  </box>
-	</box>
+	 </box>
 	
-	<form_row />
-	
-	<box class="table" id="tableau_previsionnel">
+	 <form_row />
+
+	 <box class="table" id="tableau_previsionnel">
 	  <box class="row rowx2">
 	    <box class="cel-1 rowx2">		
 		  <statictext>Période</statictext>
@@ -213,7 +240,8 @@
 		  <statictext>Total CP</statictext>
 		</box>		  
 	  </box>
-	</box>
+	 </box>
+	</group>
 	
 	<form_row />
 	
@@ -229,11 +257,19 @@
 	  </box>
 	  <group class="col-xs-6">
 	    <!-- gérer la condition d'affichage via une formule -->
-	  	<option output="html" option_name="show_on" value="1 == 0" />
+	  	<option output="html" option_name="show_on" value="false" />
 	  	<option output="html" option_name="transparent_group" value="true" />
 		<box class="col-xs-12 text-right">
 		  <button action="save" label="Save" class="btn-primary"/>
 		</box>
+	  </group>
+	  <group class="col-xs-6">
+	    <!-- gérer la condition d'affichage via une formule -->
+	  	<option output="html" option_name="hide_on" value="false" />
+	  	<option output="html" option_name="transparent_group" value="true" />
+		<statictext class="col-xs-12 text-right text-danger">
+		  Attention, le crédit disponible pour programmation ne peut être négatif
+		</statictext>
 	  </group>
 	</form_row>
   </layout>

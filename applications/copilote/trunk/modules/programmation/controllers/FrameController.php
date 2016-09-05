@@ -122,9 +122,18 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		
 		$aOptions = $oDomDoc->getElementsByTagName( 'option' ) ;
+		$oOptionBtn = null ;
+		$oOptionTxt = null ;
 		foreach( $aOptions as $oOption ) {
 			if( "show_on" == $oOption->getAttribute( "option_name" ) ) {
-				break ;
+				if( "false" == $oOption->getAttribute( "value" ) ) {
+					$oOptionBtn = $oOption ;
+				}
+			}
+			if( "hide_on" == $oOption->getAttribute( "option_name" ) ) {
+				if( "false" == $oOption->getAttribute( "value" ) ) {
+					$oOptionTxt = $oOption ;
+				}
 			}
 		}
 					
@@ -223,7 +232,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			 * @var integer
 			 */
 			$statutDemande = 0 ;
-			if( $demande instanceof Copilote_Library_Demande ) {
+			if ( $demande instanceof Copilote_Library_Demande ) {
 				$dico = $oProject->DicoManager()->GetDico( "lg15" ) ;
 				$statutDemande = (int) $dico->id2Code( $demande->getAttribute( "etat" ) ) ;
 			}
@@ -314,7 +323,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 					$oValue = $oDomDoc->createElement( "value" ) ;
 					$oValue->setAttribute( "dataset", sprintf( "%s%d", $programmationAlias, $annee ) ) ;
 					$oValue->setAttribute( "field", $columnName ) ;
-					$oValue->setAttribute( "mode", $mode ) ;
+					$oValue->setAttribute( "mode", "rw" ) ;
 					$oBoxCell->appendChild( $oValue ) ;
 					$oBoxRow->appendChild( $oBoxCell ) ;
 				}
@@ -452,7 +461,8 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell = $oDomDoc->createElement( "box" ) ;
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
-		$sFormule = sprintf( "f({c.credits_ouvert} - %s + %f)f", implode( " - ", $aFieldsAE ), $fCurrentAE ) ;
+		// arrondi à 2 decimales : Math.round(x * 100) / 100
+		$sFormule = sprintf( "f( Math.round(100 * ({c.credits_ouvert} - %s - %f) ) /100 )f", implode( " - ", $aFieldsAE ), $fCurrentAE ) ;
 		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
@@ -487,7 +497,8 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell = $oDomDoc->createElement( "box" ) ;
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
-		$sFormule = sprintf( "f({c.credits_ouvert} - %s + %f)f", implode( " - ", $aFieldsCP ), $fCurrentCP ) ;
+		// arrondi à 2 decimales : Math.round(x * 100) / 100
+		$sFormule = sprintf( "f( Math.round(100 * ({c.credits_ouvert} - %s - %f) ) /100 )f", implode( " - ", $aFieldsCP ), $fCurrentCP ) ;
 		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
@@ -499,10 +510,11 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		 *  pour contraindre l'enregistrement d'un crédit solvable
 		 */
 		$aShowOnValue = array() ;
-		$sPattern = "( ( {c.credits_ouvert} - %s + %f ) >= 0 )" ;
+		$sPattern = "( ( {c.credits_ouvert} - %s - %f ) >= 0 )" ;
 		$aShowOnValue[] = sprintf( $sPattern, implode( " - ", $aFieldsAE ), $fCurrentAE ) ; 
 		$aShowOnValue[] = sprintf( $sPattern, implode( " - ", $aFieldsCP ), $fCurrentCP ) ; 
-		$oOption->setAttribute( "value", implode( "&&", $aShowOnValue ) ) ;
+		$oOptionBtn->setAttribute( "value", implode( "&&", $aShowOnValue ) ) ;
+		$oOptionTxt->setAttribute( "value", implode( "&&", $aShowOnValue ) ) ;
 		
 		$oForm->SetContent( $oDomDoc->saveXML() ) ;
 		//error_log( $oDomDoc->saveXML() ) ;
