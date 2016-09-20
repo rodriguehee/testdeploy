@@ -329,7 +329,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 					$wf->setDemande( new Copilote_Library_Demande( "cplt_dmnd_data", $row['id_demande'] ) ) ;
 					$wf->setValidation()->getDemande()->commit() ;
 					// on lance la duplication sur certains statuts
-					if( in_array( $wf->getDemande()->getAttribute( "etat" ), array( 477, 478, 479, 480, 485 ) ) ) {
+					if( in_array( $wf->getDemande()->getAttribute( "etat" ), array( 477, 479,  485 ) ) ) {
 						$wf->duplicate() ;
 					}
 				}
