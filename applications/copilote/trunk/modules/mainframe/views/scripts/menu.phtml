@@ -5,6 +5,15 @@ $sProjectUrl = Core_Library_Account::GetInstance()->GetCurrentProject()->GetURL(
 //Si l'utilisateur à le role "1" il est considéré comme admin, sinon non
 $bIsSuperUser = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 1 ) ? true : false;
 $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) ? true : false;
+$bIsSms = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 168 ) ? true : false;
+$bIsSisi = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 27 ) ? true : false;
+$bIsDrip = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 169 ) ? true : false;
+$bIsSj = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 158 ) ? true : false;
+$bIsSes = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 163 ) ? true : false;
+$bIsEdit = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 167 ) ? true : false;
+$bIsDircom = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 165 ) ? true : false;
+$bIsDoc = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 166 ) ? true : false;
+$bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 ) ? true : false;
 ?>
 <nav class="navbar navbar-default col-xs-12" role="navigation">
 
@@ -23,7 +32,7 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) 
             <!-- Lien vers l'accueil (Ne pas supprimer) -->
             <li class="">
                 <a class="" href="#" onclick="Y.Voozanoo.backToHome();">
-                    <span class="glyphicon glyphicon-home"></span> &nbsp;Accueil
+                    <span class="glyphicon glyphicon-home"></span> &nbsp;Budget 2017
                 </a>
             </li>
 
@@ -40,7 +49,9 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) 
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/91' )" href="#">Liste de vos conventions</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/92' )" href="#">Liste de vos marchés</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/94' )" href="#">Liste de vos activités</a></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/95' )" href="#">Liste de vos demandes internes</a></li>
+<?php if ($bIsSms || $bIsSisi || $bIsDrip || $bIsSj || $bIsSes || $bIsEdit || $bIsDircom || $bIsDoc || $bIsPlp || $bIsSuperUser || $bIsAdmin): ?>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_demandes_support' )" href="#">Liste de vos demandes de support</a></li>
+        <?php endif; ?>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/96' )" href="#">Liste des droits utilisateurs</a></li>
                   </ul>
             </li>
@@ -141,7 +152,7 @@ $bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) 
                     <li class="divider"></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/75' )" href="#">Notifications</a></li>
                     <li class="divider"></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/29' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Unités Budgétaires</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_ub' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Unités Budgétaires</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/33' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Demandes</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/39' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Pays</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/58' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Activités et sous-activités</a></li>

@@ -358,11 +358,14 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$fMontantFonctCP = $demandeValidee->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
 				$fMontantInvAE = $demandeValidee->GetAutreMontant( $convention, "investissement", "ae" ) ;
 				$fMontantInvCP = $demandeValidee->GetAutreMontant( $convention, "investissement", "cp" ) ;
-				/*$fMontantPersonnel = $demande->GetMontantPersonnel( $convention ) ;
+				
+				// à commenter
+				$fMontantPersonnel = $demande->GetMontantPersonnel( $convention ) ;
 				$fMontantFonctAE = $demande->GetAutreMontant( $convention, "fonctionnement", "ae" ) ;
 				$fMontantFonctCP = $demande->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
 				$fMontantInvAE = $demande->GetAutreMontant( $convention, "investissement", "ae" ) ;
-				$fMontantInvCP = $demande->GetAutreMontant( $convention, "investissement", "cp" ) ;*/
+				$fMontantInvCP = $demande->GetAutreMontant( $convention, "investissement", "cp" ) ;
+				
 				$fTotalAE = $fMontantFonctAE + $fMontantInvAE + $fMontantPersonnel ;
 				$fTotalCP = $fMontantFonctCP + $fMontantInvCP + $fMontantPersonnel ;
 				
@@ -463,8 +466,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell = $oDomDoc->createElement( "box" ) ;
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
-		$sFormule = sprintf( "f(-(-%s))f", implode( " - ", $aFieldsAE ) ) ;
-		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
+		$oText->appendChild( $oDomDoc->createTextNode( "f({c.total_ae_ant})f" ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
 		
@@ -472,7 +474,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
 		// arrondi à 2 decimales : Math.round(x * 100) / 100
-		$sFormule = sprintf( "f( Math.round(100 * ({c.credits_ouvert} - %s - %f) ) /100 )f", implode( " - ", $aFieldsAE ), $fCurrentAE ) ;
+		$sFormule = sprintf( "f( Math.round(100 * ({c.credits_ouvert} - {c.total_%s_ant} - %f) ) /100 )f", "ae", $fCurrentAE ) ;
 		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
@@ -499,8 +501,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell = $oDomDoc->createElement( "box" ) ;
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
-		$sFormule = sprintf( "f(-(-%s))f", implode( " - ", $aFieldsCP ) ) ;
-		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
+		$oText->appendChild( $oDomDoc->createTextNode( "f({c.total_cp_ant})f" ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
 		
@@ -508,7 +509,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$oBoxCell->setAttribute( "class", "cel-2 rowx2" ) ;
 		$oText = $oDomDoc->createElement( "statictext" ) ;
 		// arrondi à 2 decimales : Math.round(x * 100) / 100
-		$sFormule = sprintf( "f( Math.round(100 * ({c.credits_ouvert} - %s - %f) ) /100 )f", implode( " - ", $aFieldsCP ), $fCurrentCP ) ;
+		$sFormule = sprintf( "f( Math.round(100 * ({c.credits_ouvert} - {c.total_%s_ant} - %f) ) /100 )f", "cp", $fCurrentCP ) ;
 		$oText->appendChild( $oDomDoc->createTextNode( $sFormule ) ) ;
 		$oBoxCell->appendChild( $oText ) ;
 		$oBoxRow->appendChild( $oBoxCell ) ;
@@ -520,9 +521,9 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		 *  pour contraindre l'enregistrement d'un crédit solvable
 		 */
 		$aShowOnValue = array() ;
-		$sPattern = "( ( {c.credits_ouvert} - %s - %f ) >= 0 )" ;
-		$aShowOnValue[] = sprintf( $sPattern, implode( " - ", $aFieldsAE ), $fCurrentAE ) ; 
-		$aShowOnValue[] = sprintf( $sPattern, implode( " - ", $aFieldsCP ), $fCurrentCP ) ; 
+		$sPattern = "( ( {c.credits_ouvert} - {c.total_%s_ant} - %f) >= 0 )" ;
+		$aShowOnValue[] = sprintf( $sPattern, "ae", $fCurrentAE ) ; 
+		$aShowOnValue[] = sprintf( $sPattern, "cp", $fCurrentCP ) ; 
 		$oOptionBtn->setAttribute( "value", implode( "&&", $aShowOnValue ) ) ;
 		$oOptionTxt->setAttribute( "value", implode( "&&", $aShowOnValue ) ) ;
 		
