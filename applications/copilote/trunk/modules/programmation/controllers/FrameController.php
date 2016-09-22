@@ -359,12 +359,13 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$fMontantInvAE = $demandeValidee->GetAutreMontant( $convention, "investissement", "ae" ) ;
 				$fMontantInvCP = $demandeValidee->GetAutreMontant( $convention, "investissement", "cp" ) ;
 				
-				// à commenter
+				/*
 				$fMontantPersonnel = $demande->GetMontantPersonnel( $convention ) ;
 				$fMontantFonctAE = $demande->GetAutreMontant( $convention, "fonctionnement", "ae" ) ;
 				$fMontantFonctCP = $demande->GetAutreMontant( $convention, "fonctionnement", "cp" ) ;
 				$fMontantInvAE = $demande->GetAutreMontant( $convention, "investissement", "ae" ) ;
 				$fMontantInvCP = $demande->GetAutreMontant( $convention, "investissement", "cp" ) ;
+				*/
 				
 				$fTotalAE = $fMontantFonctAE + $fMontantInvAE + $fMontantPersonnel ;
 				$fTotalCP = $fMontantFonctCP + $fMontantInvCP + $fMontantPersonnel ;
