@@ -31,7 +31,8 @@ abstract class Copilote_Library_Programmation_Formula
 	 */
 	public function render() 
 	{
-		return sprintf("f(parseFloat(%s).toFixed(2))f", $this->getFormula());
+		$renderEngine = new Copilote_Library_RenderEngine($this->getFormula());
+		return $renderEngine->getContent();
 	}
 	
 	/**

@@ -290,6 +290,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		require $libPath . "/Demande.php";
 		require $libPath . "/Depense.php";
 		require $libPath . "/Convention.php";
+		require $libPath . "/RenderEngine.php";
 		require $libPath . "/Programmation.php";
 		require $libPath . "/Programmation/Formula.php";
 		require $libPath . "/Programmation/ProvisionChomage.php";
