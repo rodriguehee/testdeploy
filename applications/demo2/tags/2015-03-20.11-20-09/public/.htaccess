@@ -1,0 +1,14 @@
+# fichier généré, il sera écrasé, ne pas modifier
+
+SetEnv APPLICATION_ENV staging
+SetEnv VOO4_APPBOOTSTRAPPER "/home/rodrigue/workspace/workdata/deploy/base/cores//20161115-02.20-33//src/tools/Voo4_AppBootstrapper.php"
+SetEnv PATH_FARM "/home/rodrigue/workspace/workdata/deploy/base/confs/preprod/"
+SetEnv PATH_VOO4_CORE "/home/rodrigue/workspace/workdata/deploy/base/cores//20161115-02.20-33//src/"
+SetEnv PATH_VOO4_EXTLIB  "/home/rodrigue/workspace/workdata/deploy/base/cores//20161115-02.20-33//libs/"
+SetEnv PATH_ZF "/home/rodrigue/workspace/workdata/deploy/base/ZendFramework/"
+
+ExpiresActive On
+ExpiresByType image/* "access plus 1 month"
+
+ExpiresActive On
+ExpiresByType text/javascript "access plus 2 week"
