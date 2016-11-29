@@ -80,18 +80,6 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 */
 	public function hasTotalSchedule($statut)
 	{
-		$statut = $this->_getStatus($statut);
-		
-		if ($this->getAttribute("annee_conv") > $this->_convention->getReference()) {
-			return false;
-		}
-		
-		if ($this->getAttribute("annee_conv") == $this->_convention->getReference()) {
-			if ($statut < 10) {
-				return false;
-			}
-		}
-		
 		return true;
 	}
 	

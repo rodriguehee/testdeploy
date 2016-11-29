@@ -29,13 +29,25 @@ class Copilote_Library_Programmation_ProvisionChomage extends Copilote_Library_P
 	 */
 	public function getFormula()
 	{
-		//$formule  = "f(parseFloat(";
+		if (empty($this->_coefficient)) {
+			return "0.0";
+		}
+		
 		$formule = sprintf("%f*(", $this->_coefficient);
 		foreach ($this->_fields as $field) {
 			$formule .= sprintf('+ (1*{%s}) ', $field);
 		}
 		$formule .= ")";
-		//$formule .= ").toFixed(2))f";
 		return $formule;
+	}
+	
+	/**
+	 * @param Copilote_Library_Programmation_Formula $formula
+	 */
+	public function attachFrom(Copilote_Library_Programmation_Addition $formula)
+	{
+		foreach ($formula->getFields() as $field) {
+			$this->attach($field);
+		}
 	}
 }

@@ -77,6 +77,14 @@ class Copilote_Library_Record
 	}
 	
 	/**
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return $this->_attributes;
+	}
+	
+	/**
 	 * @return Copilote_Library_Record
 	 */
 	protected function _setAttributes()

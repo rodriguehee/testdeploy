@@ -5,15 +5,15 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 	/**
 	 * @var integer
 	 */
-	protected $_iConventionId = 0 ;
+	protected $_iConventionId = 0;
 	
 	/**
 	 * Affichage du formulaire
 	 */
 	public function getAction()
 	{
-		$this->_retrieveIdData() ;
-		parent::_getFormConfiguration() ;
+		$this->_retrieveIdData();
+		parent::_getFormConfiguration();
 	}
 	
 	/**
@@ -21,8 +21,8 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	public function getdatasetAction()
 	{
-		$this->_retrieveIdData() ;
-		parent::_getDataset() ;
+		$this->_retrieveIdData();
+		parent::_getDataset();
 	}
 	
 	/**
@@ -31,11 +31,11 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _retrieveIdData()
 	{
-		$iId = $this->getRequest()->getParam( 'id_data' ) ;
-		if ( ! $iId ) {
-			throw new InvalidArgumentException( 'Parameter "id_data" required' );
+		$iId = $this->getRequest()->getParam('id_data');
+		if (! $iId) {
+			throw new InvalidArgumentException('Parameter "id_data" required');
 		}
-		$this->_iConventionId = $iId ;
+		$this->_iConventionId = $iId;
 	}
 	
 	/**
@@ -44,11 +44,12 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 	protected function _retrieveForm( Core_Library_Event_Context $oCtx )
 	{
 		
-		$form = new Core_Library_Resource_XML_Frame_Form() ;
-		$form->LoadFromFile( sprintf( '%s/modules/programmation/resources/form.programmation.xml', APPLICATION_PATH ) ) ;
-		$form->SetProject( Core_Library_Account::GetInstance()->GetCurrentProject() ) ;
-		$this->_hydrateForm( $form ) ;
-		$oCtx->add( 'oForm', $form ) ;
+		$form = new Core_Library_Resource_XML_Frame_Form();
+		$filename = sprintf('%s/modules/programmation/resources/form.programmation.xml', APPLICATION_PATH);
+		$form->LoadFromFile($filename);
+		$form->SetProject(Core_Library_Account::GetInstance()->GetCurrentProject());
+		$this->_hydrateForm($form);
+		$oCtx->add('oForm', $form);
 	}
 	
 	/**
@@ -103,6 +104,12 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$document->getDataStructureElement()->appendChild($dataQuery);
 			$datasetName = sprintf("%s%d", $dataqueryFabric->getAlias(), $annee);
 			
+			$formulePerso = new Copilote_Library_Programmation_Addition();
+			$formuleFoncAE = new Copilote_Library_Programmation_Addition();
+			$formuleFoncCP = new Copilote_Library_Programmation_Addition();
+			$formuleInvAE = new Copilote_Library_Programmation_Addition();
+			$formuleInvCP = new Copilote_Library_Programmation_Addition();
+				
 			$rowSchedule = $rowFabric->getElement();
 			$rowSchedule->appendChild($cellFabric->getStaticText("Année " . $annee));
 			$rowSchedule->appendChild($cellFabric->getStaticText("Prévision initiale"));
@@ -123,6 +130,11 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$rowSchedule->appendChild($cellFabric->getStaticText($formulePrevAE->render()));
 				$rowSchedule->appendChild($cellFabric->getStaticText($formulePrevCP->render()));
 				$document->getBoxElement("tableau_previsionnel")->appendChild($rowSchedule);
+				$formulePerso->attach($datasetName . ".cout_personnel_prev");
+				$formuleFoncAE->attach($datasetName . ".cout_fonct_ae_prev");
+				$formuleFoncCP->attach($datasetName . ".cout_fonct_cp_prev");
+				$formuleInvAE->attach($datasetName . ".cout_invest_ae_prev");
+				$formuleInvCP->attach($datasetName . ".cout_invest_cp_prev");
 			}
 			else { 
 				$montantPersonnel = $demandeValidee->GetMontantPersonnel($convention);
@@ -139,6 +151,11 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$rowSchedule->appendChild($cellFabric->getStaticText($montantInvCP));
 				$rowSchedule->appendChild($cellFabric->getStaticText($totalAE));
 				$rowSchedule->appendChild($cellFabric->getStaticText($totalCP));
+				$formulePerso->increment($montantPersonnel);
+				$formuleFoncAE->increment($montantFonctAE);
+				$formuleFoncCP->increment($montantFonctCP);
+				$formuleInvAE->increment($montantInvAE);
+				$formuleInvCP->increment($montantInvCP);
 			}
 			$document->getBoxElement("tableau_previsionnel")->appendChild($rowSchedule);
 			
@@ -161,30 +178,38 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 						$rowCorrection->appendChild($cellFabric->getStaticText($total));
 						$rowCorrection->appendChild($cellFabric->getStaticText($total));
 						$document->getBoxElement("tableau_previsionnel")->appendChild($rowCorrection);
+						$formulePerso->increment($montantPersonnel);
+						$formuleFoncAE->increment($montantFonctionnement);
+						$formuleFoncCP->increment($montantFonctionnement);
+						$formuleInvAE->increment($montantInvestissement);
+						$formuleInvCP->increment($montantInvestissement);
 					}
 				}
 			}
 			
-			if ($programmation->hasTotalSchedule($demandeValidee->getAttribute("etat"))) {
-				$rowSum = $rowFabric->getElement();
-				$rowSum->appendChild($cellFabric->getStaticText(""));
-				$rowSum->appendChild($cellFabric->getStaticText("Total prévision"));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_pers_co", true));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_fonc_ae_co", true));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_fonc_cp_co", true));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_invest_ae_co", true));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_invest_cp_co", true));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_ae_co", true));
-				$rowSum->appendChild($cellFabric->getInputText($datasetName, "total_cp_co", true));
-				$document->getBoxElement("tableau_previsionnel")->appendChild($rowSum);
-				$formuleZAE->attach($datasetName . ".total_pers_co");
-				$formuleZAE->attach($datasetName . ".total_fonc_ae_co");
-				$formuleZAE->attach($datasetName . ".total_invest_ae_co");
-				$formuleZCP->attach($datasetName . ".total_pers_co");
-				$formuleZCP->attach($datasetName . ".total_fonc_cp_co");
-				$formuleZCP->attach($datasetName . ".total_invest_cp_co");
-			}
-			
+			// TotalSchedule
+			$formuleTotalAE = new Copilote_Library_Programmation_Addition();
+			$formuleTotalCP = new Copilote_Library_Programmation_Addition();
+			$formuleTotalAE->attachFrom($formulePerso);
+			$formuleTotalAE->attachFrom($formuleFoncAE);
+			$formuleTotalAE->attachFrom($formuleInvAE);
+			$formuleTotalCP->attachFrom($formulePerso);
+			$formuleTotalCP->attachFrom($formuleFoncCP);
+			$formuleTotalCP->attachFrom($formuleInvCP);
+			$formuleZAE->attachFrom($formuleTotalAE);
+			$formuleZCP->attachFrom($formuleTotalCP);
+			$rowSum = $rowFabric->getElement();
+			$rowSum->appendChild($cellFabric->getStaticText(""));
+			$rowSum->appendChild($cellFabric->getStaticText("Total prévision"));
+			$rowSum->appendChild($cellFabric->getStaticText($formulePerso->render()));
+			$rowSum->appendChild($cellFabric->getStaticText($formuleFoncAE->render()));
+			$rowSum->appendChild($cellFabric->getStaticText($formuleFoncCP->render()));
+			$rowSum->appendChild($cellFabric->getStaticText($formuleInvAE->render()));
+			$rowSum->appendChild($cellFabric->getStaticText($formuleInvCP->render()));
+			$rowSum->appendChild($cellFabric->getStaticText($formuleTotalAE->render()));
+			$rowSum->appendChild($cellFabric->getStaticText($formuleTotalCP->render()));
+			$document->getBoxElement("tableau_previsionnel")->appendChild($rowSum);
+		
 			$formuleCCAEx = new Copilote_Library_Programmation_Addition();
 			$formuleCCAEx->attach($datasetName . ".cout_personnel_total");
 			$formuleCCAEx->attach($datasetName . ".cout_fonct_ae_total");
@@ -212,11 +237,14 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		
 		$formuleAPE = new Copilote_Library_Programmation_ProvisionChomage();
-		foreach ($formulePx->getFields() as $field) {
-			$formuleAPE->attach($field);
-		}
-		if ($convention->hasComputedAPE()) {
+		if ($convention->getAttribute("formule") == "ANR") {
+			$formuleAPE->setCoefficient(0.0);
+		} elseif ($convention->hasComputedAPE()) {
 			$formuleAPE->setCoefficient(0.1);
+			$formuleAPE->attachFrom($formulePx);
+		} else {
+			$formuleAPE->setCoefficient(1.0);
+			$formuleAPE->attach("c.recap_ape_ae");
 		}
 		
 		$rowAE = $rowFabric->getElement() ;
@@ -231,14 +259,17 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$formuleFDGAE->attach("c.montant_ae");
 			$formuleFDGAE->attach("c.pourcentage_fdg");
 			$rowAE->appendChild($cellFabric->getStaticText($formuleFDGAE->render()));
-		}
-		else {
+		} else {
 			$formuleFDGAE->attach("c.recap_fdg_ae");
 			$rowAE->appendChild($cellFabric->getInputText("c", "recap_fdg_ae"));
 		}
 		$rowAE->appendChild($cellFabric->getStaticText($formuleOAE->render()));
 		$rowAE->appendChild($cellFabric->getStaticText($formuleCAE->render()));
-		$rowAE->appendChild($cellFabric->getStaticText($formuleAPE->render()));
+		if ($formuleAPE->getCoefficient() == 1) {
+			$rowAE->appendChild($cellFabric->getInputText("c", "recap_ape_ae"));
+		} else {
+			$rowAE->appendChild($cellFabric->getStaticText($formuleAPE->render()));
+		}
 		$formuleVAE = new Copilote_Library_Programmation_CreditDisponible();
 		$formuleVAE->setCreditConsomme($formuleCAE);
 		$formuleVAE->setCreditOuvert($formuleOAE);
@@ -266,7 +297,11 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		$rowCP->appendChild($cellFabric->getStaticText($formuleOCP->render()));
 		$rowCP->appendChild($cellFabric->getStaticText($formuleCCP->render()));
-		$rowCP->appendChild($cellFabric->getStaticText($formuleAPE->render()));
+		if ($formuleAPE->getCoefficient() == 1) {
+			$rowCP->appendChild($cellFabric->getInputText("c", "recap_ape_ae"));
+		} else {
+			$rowCP->appendChild($cellFabric->getStaticText($formuleAPE->render()));
+		}
 		$formuleVCP = new Copilote_Library_Programmation_CreditDisponible();
 		$formuleVCP->setCreditConsomme($formuleCCP);
 		$formuleVCP->setCreditOuvert($formuleOCP);

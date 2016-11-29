@@ -8,7 +8,6 @@ abstract class Copilote_Library_Programmation_Formula
 	protected $_fields = array();
 	
 	/**
-	 * @return void
 	 * @param string
 	 */
 	public function attach($field)
