@@ -236,15 +236,21 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$formulePx->attach($datasetName . ".cout_personnel_total");
 		}
 		
-		$formuleAPE = new Copilote_Library_Programmation_ProvisionChomage();
+		$formuleAPEAE = new Copilote_Library_Programmation_ProvisionChomage();
+		$formuleAPECP = new Copilote_Library_Programmation_ProvisionChomage();
 		if ($convention->getAttribute("formule") == "ANR") {
-			$formuleAPE->setCoefficient(0.0);
+			$formuleAPEAE->setCoefficient(0.0);
+			$formuleAPECP->setCoefficient(0.0);
 		} elseif ($convention->hasComputedAPE()) {
-			$formuleAPE->setCoefficient(0.1);
-			$formuleAPE->attachFrom($formulePx);
+			$formuleAPEAE->setCoefficient(0.1);
+			$formuleAPEAE->attachFrom($formulePx);
+			$formuleAPECP->setCoefficient(0.1);
+			$formuleAPECP->attachFrom($formulePx);
 		} else {
-			$formuleAPE->setCoefficient(1.0);
-			$formuleAPE->attach("c.recap_ape_ae");
+			$formuleAPEAE->setCoefficient(1.0);
+			$formuleAPEAE->attach("c.recap_ape_ae");
+			$formuleAPECP->setCoefficient(1.0);
+			$formuleAPECP->attach("c.recap_ape_cp");
 		}
 		
 		$rowAE = $rowFabric->getElement() ;
@@ -265,15 +271,15 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		$rowAE->appendChild($cellFabric->getStaticText($formuleOAE->render()));
 		$rowAE->appendChild($cellFabric->getStaticText($formuleCAE->render()));
-		if ($formuleAPE->getCoefficient() == 1) {
+		if ($formuleAPEAE->getCoefficient() == 1) {
 			$rowAE->appendChild($cellFabric->getInputText("c", "recap_ape_ae"));
 		} else {
-			$rowAE->appendChild($cellFabric->getStaticText($formuleAPE->render()));
+			$rowAE->appendChild($cellFabric->getStaticText($formuleAPEAE->render()));
 		}
 		$formuleVAE = new Copilote_Library_Programmation_CreditDisponible();
 		$formuleVAE->setCreditConsomme($formuleCAE);
 		$formuleVAE->setCreditOuvert($formuleOAE);
-		$formuleVAE->setProvisionChomage($formuleAPE);
+		$formuleVAE->setProvisionChomage($formuleAPEAE);
 		$formuleVAE->setPrevisionsAnnuelle($formuleZAE);
 		$rowAE->appendChild($cellFabric->getStaticText($formuleVAE->render()));
 		$document->getBoxElement("tableau_recap")->appendChild($rowAE);
@@ -297,15 +303,15 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		$rowCP->appendChild($cellFabric->getStaticText($formuleOCP->render()));
 		$rowCP->appendChild($cellFabric->getStaticText($formuleCCP->render()));
-		if ($formuleAPE->getCoefficient() == 1) {
-			$rowCP->appendChild($cellFabric->getInputText("c", "recap_ape_ae"));
+		if ($formuleAPECP->getCoefficient() == 1) {
+			$rowCP->appendChild($cellFabric->getInputText("c", "recap_ape_cp"));
 		} else {
-			$rowCP->appendChild($cellFabric->getStaticText($formuleAPE->render()));
+			$rowCP->appendChild($cellFabric->getStaticText($formuleAPECP->render()));
 		}
 		$formuleVCP = new Copilote_Library_Programmation_CreditDisponible();
 		$formuleVCP->setCreditConsomme($formuleCCP);
 		$formuleVCP->setCreditOuvert($formuleOCP);
-		$formuleVCP->setProvisionChomage($formuleAPE);
+		$formuleVCP->setProvisionChomage($formuleAPECP);
 		$formuleVCP->setPrevisionsAnnuelle($formuleZCP);
 		$rowCP->appendChild($cellFabric->getStaticText($formuleVCP->render()));
 		$document->getBoxElement("tableau_recap")->appendChild($rowCP);
