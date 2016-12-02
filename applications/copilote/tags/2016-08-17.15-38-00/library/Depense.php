@@ -48,7 +48,7 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 		  /*$this->getMontant( "fonctionnement", "pe", "cp", "scsp" ) +
 			$this->getMontant( "investissement", "pe", "cp", "scsp" ) +
 			$this->getMontant( "fonctionnement", "dmp", "cp", "scsp" ) +
-			$this->getMontant( "investissement", "dmp", "cp", "scsp" )*/ ;
+			$this->getMontant( "investissement", "dmp", "cp", "scsp" ) */;
 		return $this->setAttribute( "montant_scsp", $montant ) ;
 	}
 	
@@ -64,9 +64,9 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 			$this->getMontant( "fonctionnement", "oc", "ae", "convention" ) +
 			$this->getMontant( "fonctionnement", "pe", "ae", "convention" ) +
 			$this->getMontant( "investissement", "pe", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "dmp", "ae", "convention" ) +
-			$this->getMontant( "investissement", "dmp", "ae", "convention" ) 
-		  /*$this->getMontant( "fonctionnement", "pe", "cp", "convention" ) +
+			$this->getMontant( "fonctionnement", "dmp", "ae", "convention" ) 
+		  /*$this->getMontant( "investissement", "dmp", "ae", "convention" ) 
+			$this->getMontant( "fonctionnement", "pe", "cp", "convention" ) +
 			$this->getMontant( "investissement", "pe", "cp", "convention" ) +
 			$this->getMontant( "fonctionnement", "dmp", "cp", "convention" ) +
 			$this->getMontant( "investissement", "dmp", "cp", "convention" ) */;

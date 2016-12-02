@@ -59,8 +59,7 @@ body {
     position: relative;
     padding-top: 0
 }
-
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3:not(.panel-title), h4, h5, h6 {
     color: #212d3a;
     font-family: "open_sansbold";
     line-height: 1.422em;
@@ -314,7 +313,7 @@ footer > div > a {
     background: #d2322d !important
 }
 
-h3, .h3 {
+.statictext h3, .statictext.h3 {
     font-size: 24px !important;
 }
 
@@ -425,6 +424,14 @@ font-weight: bold !important;
 color: #31708F;
 }
 
+
+.cplt-consigne-bold-red {
+font-size: 8px;
+font-style: italic;
+font-weight: bold !important;
+color: #DE3831;
+}
+
 .cplt-euro:after {
 content: ' €';
 }
@@ -443,3 +450,15 @@ padding-right: 20px !important;
 text-align: right;
 padding-right: 60px !important;
 }
+
+.cplt-quest-bold {
+font-size: 8px;
+font-weight: bold !important;
+color: #31708F !important;
+}
+
+.filled.yui3-tab a {
+   background-color: #F8AA24 !important;
+    /*  background-color: #90ee90 !important;*/
+   color: #000000 !important;
+  }
