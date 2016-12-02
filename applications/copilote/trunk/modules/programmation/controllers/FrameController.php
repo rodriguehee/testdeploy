@@ -196,8 +196,10 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$formuleTotalCP->attachFrom($formulePerso);
 			$formuleTotalCP->attachFrom($formuleFoncCP);
 			$formuleTotalCP->attachFrom($formuleInvCP);
-			$formuleZAE->attachFrom($formuleTotalAE);
-			$formuleZCP->attachFrom($formuleTotalCP);
+			if ($annee >= $convention->getReference()) {
+				$formuleZAE->attachFrom($formuleTotalAE);
+				$formuleZCP->attachFrom($formuleTotalCP);
+			}
 			$rowSum = $rowFabric->getElement();
 			$rowSum->appendChild($cellFabric->getStaticText(""));
 			$rowSum->appendChild($cellFabric->getStaticText("Total prévision"));
