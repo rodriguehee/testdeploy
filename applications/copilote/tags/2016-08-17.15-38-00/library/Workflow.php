@@ -70,27 +70,27 @@ class Copilote_Library_Workflow
 		}
 		// revision v0
 		elseif( $statut == 485 ) {
-			$statut = 499 ;
+			$statut = 542 ;
 		}
 		// arbitrage pour v1
-		elseif( $statut == 499 ) {
-			$statut = 500 ;
+		elseif( $statut == 542 ) {
+			$statut = 543 ;
 		}
 		// revision v1
-		elseif( $statut == 500 ) {
-			$statut = 502 ;
+		elseif( $statut == 543 ) {
+			$statut = 544 ;
 		}
 		// arbitrage pour v2
-		elseif( $statut == 502 ) {
-			$statut = 503 ;
+		elseif( $statut == 544 ) {
+			$statut = 545 ;
 		}
 		// revision v2
-		elseif( $statut == 503 ) {
-			$statut = 505 ;
+		elseif( $statut == 545 ) {
+			$statut = 546 ;
 		}
 		// arbitrage pour v3
-		elseif( $statut == 505 ) {
-			$statut = 506 ;
+		elseif( $statut == 546 ) {
+			$statut = 547 ;
 		}
 		
 		error_log ('Validation demandeur 2 : '.$statut);

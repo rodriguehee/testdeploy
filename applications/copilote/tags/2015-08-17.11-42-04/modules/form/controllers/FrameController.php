@@ -190,30 +190,10 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		
 		if( 34 == $formId && $id > 0 ) {
-
 			$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
 			if( ! $this->_allowEdit( $demande ) ) {
 				$this->getRequest()->setParam( 'id', 79 ) ;
 			}
-
-		   elseif( $user->HasRole( "demandeur_simple" ) || $user->HasRole( "demandeur" ) ) {
-				$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
-				$etat = $demande->getAttribute( "etat" ) ;
-				$ok = array( 476, 481, 485, 500, 503 ) ;
-				if ( ! in_array( $etat, $ok ) ) {
-					$this->getRequest()->setParam( 'id', 79 ) ; 
-				}
-			}
-
-
-		     else
-		     {
-				
-				$this->getRequest()->setParam( 'id', 34 ) ; 
-				
-
-				}
-
 		}
 		
 		parent::_getFormConfiguration() ;
@@ -334,7 +314,6 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _save_save_afterCommit( Core_Library_Event_Context $context )
 	{
-
 		require $this->_getLibPath() . "/Record.php" ;
 		require $this->_getLibPath() . "/Workflow.php" ;
 		require $this->_getLibPath() . "/Demande.php" ;
