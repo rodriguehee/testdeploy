@@ -3,9 +3,14 @@
 class Copilote_Library_Convention extends Copilote_Library_Record
 {
 	/**
-	 * @var array
+	 * @var Copilote_Library_Programmation[]
 	 */
 	protected $_programmations = array() ;
+	
+	/**
+	 * @var Copilote_Library_Record[]
+	 */
+	protected $_suivis = array();
 	
 	/**
 	 * @param string $tableName
@@ -15,6 +20,7 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 	{
 		parent::__construct( $tableName, $idData ) ;
 		$this->_setProgrammations() ;
+		$this->_setSuivisBudgetaires();
 		
 		/* generation des programmations */
 		if( $this->getAttribute( "status_prog" ) == 529 ) {
@@ -93,6 +99,30 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		}
 		return $this ;
 	}	
+	
+	/**
+	 * @return Copilote_Library_Convention
+	 */
+	protected function _setSuivisBudgetaires()
+	{
+		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
+		$sql = 'SELECT id_data FROM cplt_subc_data WHERE id_conv = ?' ;
+		$stmt = $db->query( $sql, $this->_id ) ;
+		while( $id = $stmt->fetchColumn( 0 ) ) {
+			$record = new Copilote_Library_Record( "cplt_subc_data", $id );
+			$key = $record->getAttribute( "rb_num" ) ;
+			$this->_suivis[$key] = $record;
+		}
+		return $this ;
+	}
+	
+	/**
+	 * @return Copilote_Library_Record[]
+	 */
+	public function getSuivisBudgetaires()
+	{
+		return $this->_suivis;
+	}
 	
 	/**
 	 * @return Copilote_Library_Convention
@@ -188,39 +218,41 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 	 */
 	public function computeFraisGestion($aspect)
 	{
-		$project = Core_Library_Account::GetInstance()->GetCurrentProject() ;
-		$dico = $project->DicoManager()->GetDico("lg01");
+		$attribute = "recap_fdg_" . $aspect;
 		
-		if ($dico->id2code($this->getAttribute("fdg_statut")) == "1") {
-			$commit = true;
+		if ($this->hasComputedFDG()) {
 			$pourcentage = (float) $this->getAttribute("pourcentage_fdg");
 			$montant = (float) $this->getAttribute("montant_" . $aspect);
-			$attribute = "recap_fdg_" . $aspect;
 			$this->setAttribute($attribute, ($pourcentage * $montant) / 100);
-			$this->commit();
 		}
 	}
 	
 	/**
 	 * @return void
-	 * @param float $cumul
 	 * @param string $aspect
 	 */
-	public function computeProvisionChomage($cumul, $aspect)
+	public function computeProvisionChomage($aspect)
 	{
-		$project = Core_Library_Account::GetInstance()->GetCurrentProject() ;
-		$dico = $project->DicoManager()->GetDico("lg01");
+		$attribute = "recap_ape_" . $aspect;
 		
-		$provision = 0.0;
-		
-		if ($dico->id2code($this->getAttribute("ape_statut")) == "1") {
-		 	$pourcentage = 0.1;
-		 	$provision = $pourcentage * (float) $cumul;
+		if ($this->getAttribute("formule") == "ANR") {
+			$this->setAttribute($attribute, 0.0);
+		} 
+		elseif ($this->hasComputedAPE()) {
+			$this->setAttribute($attribute, 0.1 * $this->getSommePersonnel());
 		}
-		
-		$attribute = sprintf("recap_ape_%s", $aspect);
-		$this->setAttribute($attribute, $provision);
-		$this->commit();
+	}
+	
+	/**
+	 * @return float
+	 */
+	public function getSommePersonnel()
+	{
+		$somme = (float) $this->getAttribute("cout_personel_ant");
+		foreach ($this->_programmations as $programmation) {
+			$somme += (float) $programmation->getAttribute("cout_personnel_total");
+		}
+		return $somme;
 	}
 	
 	/**
@@ -232,36 +264,41 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		$fraisGestion = (float) $this->getAttribute("recap_fdg_" . $aspect);
 		$attribute = sprintf("recap_credouv_%s", $aspect);
 		$this->setAttribute($attribute, $montant - $fraisGestion);
-		$this->commit();
 	}
 	
 	/**
 	 * @param string $aspect
-	 * @param float $credits
 	 * @return void
 	 */
-	public function setCreditConsomme($aspect, $credits)
+	public function computeCreditConsomme($aspect)
 	{
 		$attribute = sprintf("recap_conso_%s", $aspect);
+		$credits = (float) $this->getAttribute(sprintf("total_%s_ant", $aspect));
+		foreach ($this->_programmations as $programmation) {
+			if ($programmation->isElapsed()) {
+				$credits += (float) $programmation->getAttribute(sprintf("total_%s", $aspect));
+			}
+		}
 		$this->setAttribute($attribute, $credits);
-		$this->commit();
 	}
 	
 	/**
 	 * @param string $aspect
-	 * @param float $prevision
 	 * @return void
 	 */
-	public function setCreditDisponible($aspect, $prevision)
+	public function computeCreditDisponible($aspect)
 	{
-		$prevision = (float) $prevision;
 		$credits = (float) $this->getAttribute("recap_credouv_" . $aspect);
 		$conso = (float) $this->getAttribute("recap_conso_" . $aspect);
 		$chomage = (float) $this->getAttribute("recap_ape_" . $aspect);
-		$dispo = $credits - $prevision - $conso - $chomage;
+		$dispo = $credits - $conso - $chomage;
+		foreach ($this->_programmations as $programmation) {
+			if (! $programmation->isElapsed()) {
+				$dispo -= $programmation->getAttribute(sprintf("total_%s_co", $aspect));
+			}
+		}
 		$attribute = sprintf("recap_dispo_%s", $aspect);
 		$this->setAttribute($attribute, $dispo);
-		$this->commit();
 	}
 	
 	/**
@@ -275,7 +312,6 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		$anteriority += (float) $this->getAttribute(sprintf("cout_invest_%s_ant", $aspect));
 		$attribute = sprintf("total_%s_ant", $aspect);
 		$this->setAttribute($attribute, $anteriority);
-		$this->commit();
 	}
 	
 	/**
@@ -296,5 +332,19 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		$project = Core_Library_Account::GetInstance()->GetCurrentProject();
 		$dicoLg01 = $project->DicoManager()->GetDico("lg01");
 		return ($this->getAttribute("ape_statut") == $dicoLg01->code2id("1"));
+	}
+	
+	/**
+	 * 
+	 */
+	public function computeProgrammations()
+	{
+		foreach ($this->_programmations as $programmation) {
+			assert($programmation instanceof Copilote_Library_Programmation);
+			$programmation->computeTotal("ae");
+			$programmation->computeTotal("cp");
+			$programmation->computePrevisions();
+			$programmation->commit();
+		}
 	}
 }

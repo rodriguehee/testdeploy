@@ -126,52 +126,6 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 }
 	 
 	 /**
-	  * @param Copilote_Library_Demande $demande
-	  * @return void
-	  */
-	 public function computeTotalSchedule(Copilote_Library_Demande $demande)
-	 {
-	 	$demandeValidee = $this->getDemandeValidee($demande);
-	 	
-	 	$montantPersonnel = $demandeValidee->GetMontantPersonnel($this->_convention);
-	 	$montantFonctAE = $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae" );
-	 	$montantFonctCP = $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp" );
-	 	$montantInvAE = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae" );
-	 	$montantInvCP = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp" );
-	 	$totalAE = $montantFonctAE + $montantInvAE + $montantPersonnel;
-	 	$totalCP = $montantFonctCP + $montantInvCP + $montantPersonnel;
-	 	
-	 	foreach (range(1, 3) as $indexCorrection) {
-	 		$suiviBudgetaire = $demande->getSuiviBudgetaire($this->_convention, $indexCorrection);
-	 		if ($suiviBudgetaire instanceof Copilote_Library_Record) {
-	 			$montantPersonnelSuivi = (float) $suiviBudgetaire->getAttribute("d_pers");
-	 			$montantPersonnel += $montantPersonnelSuivi;
-	 			$montantFonctionnementSuivi = (float) $suiviBudgetaire->getAttribute("d_fonct");
-	 			$montantFonctAE += $montantFonctionnementSuivi;
-	 			$montantFonctCP += $montantFonctionnementSuivi;
-	 			$montantInvestissementSuivi = (float) $suiviBudgetaire->getAttribute("d_invest");
-	 			$montantInvAE += $montantInvestissementSuivi;
-	 			$montantInvCP += $montantInvestissementSuivi;
-	 			$totalAE += $montantPersonnelSuivi + $montantFonctionnementSuivi + $montantInvestissementSuivi;
-	 			$totalCP += $montantPersonnelSuivi + $montantFonctionnementSuivi + $montantInvestissementSuivi;
-	 		}
-	 	}
-	 	
-	 	$data = array( 
-	 		"total_pers_co" => $montantPersonnel, 
-	 		"total_fonc_ae_co" => $montantFonctAE, 
-	 		"total_fonc_cp_co" => $montantFonctCP, 
-	 		"total_invest_ae_co" => $montantInvAE, 
-	 		"total_invest_cp_co" => $montantInvCP, 
-	 		"total_ae_co" => $totalAE, 
-	 		"total_cp_co" => $totalCP
-	 	);
-	 	
-	 	$project = Core_Library_Account::GetInstance()->GetCurrentProject();
-	 	$project->GetVarset("programmation")->SimpleUpdateData($data, (int) $this->_id);
-	 }
-	 
-	 /**
 	  * @return boolean
 	  */
 	 public function isElapsed()
@@ -185,6 +139,39 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 
 	 /**
 	  * @return void
+	  */
+	 public function computePrevisions()
+	 {
+	 	$totalPersonnel  = (float) $this->getAttribute("cout_personnel_prev");
+	 	$totalFonctAE = (float) $this->getAttribute("cout_fonct_ae_total");
+	 	$totalFonctCP = (float) $this->getAttribute("cout_fonct_cp_total");
+	 	$totalInvestAE = (float) $this->getAttribute("cout_invest_ae_total");
+	 	$totalInvestCP = (float) $this->getAttribute("cout_invest_cp_total");
+	 	
+	 	foreach ($this->_convention->getSuivisBudgetaires() as $suiviBudgetaire) {
+	 		assert($suiviBudgetaire instanceof Copilote_Library_Record);
+	 		$demande = new Copilote_Library_Demande("cplt_dmnd_data", $suiviBudgetaire->getAttribute("id_demande"));
+	 		$suiviAnnuel = new Copilote_Library_Record("cplt_sv_data", $demande->getAttribute("id_suivi"));
+	 		if ($suiviAnnuel->getAttribute("annee") == $this->getAttribute("annee_conv")) {
+		 		$totalPersonnel += (float) $suiviBudgetaire->getAttribute("d_pers");
+		 		$totalFonctAE += (float) $suiviBudgetaire->getAttribute("d_fonct");
+		 		$totalFonctCP += (float) $suiviBudgetaire->getAttribute("d_fonct");
+		 		$totalInvestAE += (float) $suiviBudgetaire->getAttribute("d_invest");
+		 		$totalInvestCP += (float) $suiviBudgetaire->getAttribute("d_invest");
+	 		}
+	 	}
+	 	
+	 	$this->setAttribute("total_pers_co", $totalPersonnel);
+	 	$this->setAttribute("total_pers_co", $totalFonctAE);
+	 	$this->setAttribute("total_pers_co", $totalFonctCP);
+	 	$this->setAttribute("total_pers_co", $totalInvestAE);
+	 	$this->setAttribute("total_pers_co", $totalInvestCP);
+	 	$this->setAttribute("total_ae_co", $totalFonctAE + $totalInvestAE + $totalPersonnel);
+	 	$this->setAttribute("total_cp_co", $totalFonctCP + $totalInvestCP + $totalPersonnel);
+	 }
+	 
+	 /**
+	  * @return void
 	  * @param string $aspect
 	  */
 	 public function computeTotal($aspect)
@@ -193,6 +180,5 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 	$total += (float) $this->getAttribute(sprintf("cout_fonct_%s_total", $aspect));
 	 	$total += (float) $this->getAttribute(sprintf("cout_invest_%s_total", $aspect));
 	 	$this->setAttribute(sprintf("total_%s", $aspect), $total);
-	 	$this->commit();
 	 }
 }

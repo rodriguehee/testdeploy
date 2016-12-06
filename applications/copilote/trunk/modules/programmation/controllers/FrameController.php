@@ -26,6 +26,40 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 	}
 	
 	/**
+	 * @see Core_Library_Controller_Action::_save_beforeCommit()
+	 * @param Core_Library_Event_Context $oContext
+	 */
+	protected function _save_afterCommit(Core_Library_Event_Context $oContext)
+	{
+		$this->_includeClasses();
+		
+		$json = $oContext->get('oDataJson');
+		assert($json instanceof Core_Library_Resource_JSON);
+		$content = json_decode($json->GetContent());
+		$convention = null;
+		
+		foreach ($content->data as $object) {
+			if ($object->id == "c") {
+				$row = current($object->rowdata);
+				$convention = new Copilote_Library_Convention("cplt_conv_data", $row->id_data);
+			}
+		}
+		
+		if ($convention instanceof Copilote_Library_Convention) {
+			$convention->computeProgrammations();
+			foreach (array("ae", "cp") as $aspect) {
+				$convention->computeAnteriority($aspect);
+				$convention->computeFraisGestion($aspect);
+				$convention->computeCreditOuvert($aspect);
+				$convention->computeCreditConsomme($aspect);
+				$convention->computeProvisionChomage($aspect);
+				$convention->computeCreditDisponible($aspect);
+			}
+			$convention->commit();
+		}
+	}
+	
+	/**
 	 * @return void
 	 * @throws InvalidArgumentException
 	 */

@@ -3,6 +3,7 @@
   <config>
     <display_path>programmation/frame/get</display_path>
     <getdataset_path>programmation/frame/getdataset/id_data/{id_data}</getdataset_path>
+    <save_path>programmation/frame/save</save_path>
   </config>
   <data_structure>
 	<dataquery id="c" table_name="{pj}_conv_data" varset_name="convention" table_alias="c">
@@ -184,13 +185,7 @@
 	  	<option output="html" option_name="show_on" value="false" />
 	  	<option output="html" option_name="transparent_group" value="true" />
 		<box class="col-xs-12 text-right">
-		  <button action="save" label="Save" class="btn-primary">
-		    <redirection module="programmation" ctrl="frame" action="get">
-		      <params>
-		        <dataset dataset_name="c" field="id_data" alias="id_data"/>
-		      </params>
-		    </redirection>
-		  </button>
+		  <button action="save" label="Save" class="btn-primary" />
 		</box>
 	  </group>
 	</form_row>
