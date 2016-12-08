@@ -53,6 +53,26 @@ class Copilote_Library_Programmation_Document
 	
 	/**
 	 * @return DOMElement
+	 * @throws LogicException
+	 */
+	public function getSubmitOptionElement()
+	{
+		$boxElt = $this->getBoxElement("submit-box");
+		$optionElt = null;
+		foreach ($boxElt->getElementsByTagName("option") as $optionElt) {
+			assert($optionElt instanceof DOMElement);
+			if ($optionElt->getAttribute("option_name") == "show_on") {
+				break;
+			}
+		}
+		if (! $optionElt instanceof DOMElement) {
+			throw new LogicException("Element introuvable");
+		}
+		return $optionElt;
+	}
+	
+	/**
+	 * @return DOMElement
 	 * @param string $boxId
 	 * @throws LogicException
 	 */

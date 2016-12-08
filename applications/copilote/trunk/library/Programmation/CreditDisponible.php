@@ -61,13 +61,16 @@ class Copilote_Library_Programmation_CreditDisponible
 	/**
 	 * @return string
 	 */
-	public function render()
+	public function render($engine = true)
 	{
 		$formule  = sprintf("+ (%s)", $this->_creditOuvert->getFormula());
 		$formule .= sprintf("- (%s)", $this->_creditConsomme->getFormula());
 		$formule .= sprintf("- (%s)", $this->_provisionChomage->getFormula());
 		$formule .= sprintf("- (%s)", $this->_previsionsAnnuelles->getFormula());
-		$renderEngine = new Copilote_Library_RenderEngine($formule);
-		return $renderEngine->getContent();
+		if ($engine) {
+			$renderEngine = new Copilote_Library_RenderEngine($formule);
+			return $renderEngine->getContent();
+		}
+		return $formule;
 	}
 }

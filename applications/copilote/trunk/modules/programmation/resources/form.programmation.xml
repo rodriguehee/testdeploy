@@ -181,13 +181,13 @@
 		  </redirection>
 		</button>
 	  </box>
-	  <group class="col-xs-6">
-	  	<option output="html" option_name="show_on" value="false" />
-	  	<option output="html" option_name="transparent_group" value="true" />
-		<box class="col-xs-12 text-right">
+      <box class="col-xs-6 text-right" id="submit-box">
+	    <group>
+	  	  <option output="html" option_name="transparent_group" value="true" />
+  	      <option output="html" option_name="show_on" value="0" />
 		  <button action="save" label="Save" class="btn-primary" />
-		</box>
-	  </group>
+	    </group>
+	  </box>
 	</form_row>
   </layout>
 </form>

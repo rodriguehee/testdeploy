@@ -352,6 +352,12 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$rowCP->appendChild($cellFabric->getStaticText($formuleVCP->render()));
 		$document->getBoxElement("tableau_recap")->appendChild($rowCP);
 		
+		$submitFormula = new Copilote_Library_Programmation_SubmitFormula();
+		$submitFormula->setCreditDisponible("ae", $formuleVAE);
+		$submitFormula->setCreditDisponible("cp", $formuleVCP);
+		$option = $document->getSubmitOptionElement();
+		$option->setAttribute("value", $submitFormula->render());
+		
 		$form->SetContent($document->getDomDocument()->saveXML());
 	}
 	
@@ -370,6 +376,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		require $libPath . "/RenderEngine.php";
 		require $libPath . "/Programmation.php";
 		require $libPath . "/Programmation/Formula.php";
+		require $libPath . "/Programmation/SubmitFormula.php";
 		require $libPath . "/Programmation/ProvisionChomage.php";
 		require $libPath . "/Programmation/CreditOuvert.php";
 		require $libPath . "/Programmation/CreditConsomme.php";
