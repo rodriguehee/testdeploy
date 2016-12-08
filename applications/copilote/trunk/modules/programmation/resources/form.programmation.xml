@@ -152,6 +152,13 @@
 	    </box>
 	    <!-- code PHP dynamique -->
 	  </box>
+	  <box class="col-xs-12" id="top-message">
+	    <group>
+	  	  <option output="html" option_name="transparent_group" value="true" />
+  	      <option output="html" option_name="show_on" value="0" />
+		  <statictext class="text-danger bold">Attention, les crédits disponibles doivent être compris entre -0.5% et +0.5% des montants de la convention.</statictext>
+	    </group>	  
+	  </box>
 	  <form_row />
 	  <box class="table" id="tableau_previsionnel">
 	    <box class="row rowx2">
@@ -166,6 +173,13 @@
 	      <box class="cel-1 rowx2"><statictext>total CP</statictext>></box>
 	    </box>
 	    <!-- code PHP dynamique -->
+	  </box>
+	  <box class="col-xs-12" id="bottom-message">
+	    <group>
+	  	  <option output="html" option_name="transparent_group" value="true" />
+  	      <option output="html" option_name="show_on" value="0" />
+		  <statictext class="text-danger bold">Attention, les crédits disponibles doivent être compris entre -0.5% et +0.5% des montants de la convention.</statictext>
+	    </group>	  
 	  </box>
 	</group>
 	

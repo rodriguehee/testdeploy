@@ -6,6 +6,7 @@ putenv("PATH_VOO4_EXTLIB=/home/rodrigue/workspace/libs/voozanoo4/2.20/libs");
 putenv("APPLICATION_ENV=dev_rhe");
 putenv("PATH_FARM=/home/rodrigue/workspace/workdata/glass");
 putenv("PATH_ZF=/home/rodrigue/workspace/libs/ZendFramework/library");
+
 defined('VOO4_APPBOOTSTRAPPER' ) || 
     define('VOO4_APPBOOTSTRAPPER', getenv('VOO4_APPBOOTSTRAPPER') ? getenv('VOO4_APPBOOTSTRAPPER') : null);
 require_once(VOO4_APPBOOTSTRAPPER);

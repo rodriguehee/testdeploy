@@ -18,12 +18,13 @@ class Copilote_Library_Programmation_SubmitFormula
 	
 	/**
 	 * @return string
+	 * @param string $operator
 	 */
-	public function render()
+	public function render($operator)
 	{
 		$formules = array();
 		foreach ($this->credits as $aspect => $credit) {
-			$formules[] = sprintf("(Math.abs(%s) <= ((1 * {c.montant_%s})/200))", $credit->render(false), $aspect);
+			$formules[] = sprintf("(Math.abs(%s) %s  ((1 * {c.montant_%s})/200))", $credit->render(false), $operator, $aspect);
 		}
 		return implode(" && ", $formules);
 	}

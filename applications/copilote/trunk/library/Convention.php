@@ -347,4 +347,25 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 			$programmation->commit();
 		}
 	}
+	
+	/**
+	 * 
+	 */
+	public function computeFromDemande()
+	{
+		$annee = $this->getReference();
+		if(! array_key_exists($annee, $this->_programmations)) {
+			return;
+		}
+		$programmation = $this->_programmations[$annee];
+		$demande = $this->GetDemande($annee);
+		$demandeValidee = $programmation->getDemandeValidee($demande);
+		if ($demandeValidee instanceof Copilote_Library_Demande) {
+			$programmation->setAttribute("cout_personnel_prev", $demandeValidee->GetMontantPersonnel($this));
+			$programmation->setAttribute("cout_fonct_ae_total", $demandeValidee->GetAutreMontant($this, "fonctionnement", "ae"));
+			$programmation->setAttribute("cout_fonct_cp_total", $demandeValidee->GetAutreMontant($this, "investissement", "cp"));
+			$programmation->setAttribute("cout_invest_ae_total", $demandeValidee->GetAutreMontant($this, "fonctionnement", "ae"));
+			$programmation->setAttribute("cout_invest_cp_total", $demandeValidee->GetAutreMontant($this, "investissement", "cp"));
+		}
+	}
 }

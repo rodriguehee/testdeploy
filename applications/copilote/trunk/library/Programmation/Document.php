@@ -55,9 +55,9 @@ class Copilote_Library_Programmation_Document
 	 * @return DOMElement
 	 * @throws LogicException
 	 */
-	public function getSubmitOptionElement()
+	public function getOptionElement($boxElementId)
 	{
-		$boxElt = $this->getBoxElement("submit-box");
+		$boxElt = $this->getBoxElement($boxElementId);
 		$optionElt = null;
 		foreach ($boxElt->getElementsByTagName("option") as $optionElt) {
 			assert($optionElt instanceof DOMElement);

@@ -355,8 +355,12 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$submitFormula = new Copilote_Library_Programmation_SubmitFormula();
 		$submitFormula->setCreditDisponible("ae", $formuleVAE);
 		$submitFormula->setCreditDisponible("cp", $formuleVCP);
-		$option = $document->getSubmitOptionElement();
-		$option->setAttribute("value", $submitFormula->render());
+		$optionSubmit = $document->getOptionElement("submit-box");
+		$optionSubmit->setAttribute("value", $submitFormula->render("<="));
+		$optionTopMsg = $document->getOptionElement("top-message");
+		$optionTopMsg->setAttribute("value", $submitFormula->render(">"));
+		$optionBottomMsg = $document->getOptionElement("bottom-message");
+		$optionBottomMsg->setAttribute("value", $submitFormula->render(">"));
 		
 		$form->SetContent($document->getDomDocument()->saveXML());
 	}

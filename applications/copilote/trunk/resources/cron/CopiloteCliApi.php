@@ -17,7 +17,8 @@ class CopiloteCliApi extends CliApi
 	public function computeProgrammations()
 	{
 		try {
-			$message = "Fin des calculs";
+			$endOfLine = "\n";
+			$endMessage = "Fin des calculs";
 			
 			$libPath = Core_Library_Options::get('lib.path');
 			require $libPath . "/Record.php";
@@ -26,7 +27,8 @@ class CopiloteCliApi extends CliApi
 			require $libPath . "/Depense.php";
 			require $libPath . "/Convention.php";
 			require $libPath . "/Programmation.php";
-			
+			require $libPath . "/Mock.php";
+				
 			$project = Core_Library_Account::GetInstance()->GetCurrentProject();
 			$user = $project->UserManager()->CreateSysUser();
 			$project->Account()->SetCurrentUser($user);
@@ -43,8 +45,10 @@ class CopiloteCliApi extends CliApi
 			
 			$statement = $dataQuery->ToZendDbSelect()->query() ;
 			while ($row = $statement->fetch()) {
-				echo sprintf("Calculs pour la convention '%s: %s'\n", $row['code_ined'], $row['libelle']);
+				echo sprintf("Calculs pour la convention '%s: %s'%s", $row['code_ined'], $row['libelle'], $endOfLine);
+				
 				$convention = new Copilote_Library_Convention("cplt_conv_data", $row['id_data']);
+				$convention->computeFromDemande();
 				$convention->computeProgrammations();
 				foreach (array("ae", "cp") as $aspect) {
 					$convention->computeAnteriority($aspect);
@@ -58,10 +62,10 @@ class CopiloteCliApi extends CliApi
 			}
 		}
 		catch( Exception $ex ) {
-			$message = $ex->GetMessage();
+			$endMessage = $ex->GetMessage();
 		}
 		finally {
-			echo sprintf("%s\n", $message);
+			echo sprintf("%s%s", $endMessage, $endOfLine);
 		}
 	}
 }
