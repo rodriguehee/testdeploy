@@ -159,7 +159,7 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 		$totalInvestAE += (float) $this->getAttribute("cout_invest_ae_prev");
 	 		$totalInvestCP += (float) $this->getAttribute("cout_invest_cp_prev");
 	 	}
-	 	else {
+	 	elseif ($demandeValidee instanceof Copilote_Library_Demande) {
 	 		$totalPersonnel += $demandeValidee->GetMontantPersonnel($this->_convention);
 	 		$totalFonctAE += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
 	 		$totalFonctCP += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
