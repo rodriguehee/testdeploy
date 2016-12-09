@@ -294,7 +294,8 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		$dispo = $credits - $conso - $chomage;
 		foreach ($this->_programmations as $programmation) {
 			if (! $programmation->isElapsed()) {
-				$dispo -= $programmation->getAttribute(sprintf("total_%s_co", $aspect));
+				$total = $programmation->getAttribute(sprintf("total_%s_co", $aspect));
+				$dispo -= $total;
 			}
 		}
 		$attribute = sprintf("recap_dispo_%s", $aspect);
@@ -362,10 +363,10 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		$demandeValidee = $programmation->getDemandeValidee($demande);
 		if ($demandeValidee instanceof Copilote_Library_Demande) {
 			$programmation->setAttribute("cout_personnel_prev", $demandeValidee->GetMontantPersonnel($this));
-			$programmation->setAttribute("cout_fonct_ae_total", $demandeValidee->GetAutreMontant($this, "fonctionnement", "ae"));
-			$programmation->setAttribute("cout_fonct_cp_total", $demandeValidee->GetAutreMontant($this, "investissement", "cp"));
-			$programmation->setAttribute("cout_invest_ae_total", $demandeValidee->GetAutreMontant($this, "fonctionnement", "ae"));
-			$programmation->setAttribute("cout_invest_cp_total", $demandeValidee->GetAutreMontant($this, "investissement", "cp"));
+			$programmation->setAttribute("cout_fonct_ae_prev", $demandeValidee->GetAutreMontant($this, "fonctionnement", "ae"));
+			$programmation->setAttribute("cout_fonct_cp_prev", $demandeValidee->GetAutreMontant($this, "investissement", "cp"));
+			$programmation->setAttribute("cout_invest_ae_prev", $demandeValidee->GetAutreMontant($this, "fonctionnement", "ae"));
+			$programmation->setAttribute("cout_invest_cp_prev", $demandeValidee->GetAutreMontant($this, "investissement", "cp"));
 		}
 	}
 }

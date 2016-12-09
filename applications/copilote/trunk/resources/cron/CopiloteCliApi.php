@@ -48,7 +48,7 @@ class CopiloteCliApi extends CliApi
 				echo sprintf("Calculs pour la convention '%s: %s'%s", $row['code_ined'], $row['libelle'], $endOfLine);
 				
 				$convention = new Copilote_Library_Convention("cplt_conv_data", $row['id_data']);
-				$convention->computeFromDemande();
+				//$convention->computeFromDemande();
 				$convention->computeProgrammations();
 				foreach (array("ae", "cp") as $aspect) {
 					$convention->computeAnteriority($aspect);
