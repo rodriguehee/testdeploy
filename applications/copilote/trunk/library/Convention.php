@@ -72,6 +72,44 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 	}
 	
 	/**
+	 * @return boolean
+	 */
+	public function isOutOfBounds()
+	{
+		$aspects = array("ae", "cp");
+		
+		foreach ($aspects as $aspect) {
+			$dispo = "recap_dispo_" . $aspect;
+			$montant = "montant_" . $aspect;
+			
+			if ($this->getAttribute($dispo) > ($this->getAttribute($montant)/200)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 
+	 */
+	public function computes()
+	{
+		$this->computeProgrammations();
+		
+		foreach (array("ae", "cp") as $aspect) {
+			$this->computeAnteriority($aspect);
+			$this->computeFraisGestion($aspect);
+			$this->computeCreditOuvert($aspect);
+			$this->computeCreditConsomme($aspect);
+			$this->computeProvisionChomage($aspect);
+			$this->computeCreditDisponible($aspect);
+		}
+		
+		$this->commit();
+	}
+	
+	/**
 	 * @return Copilote_Library_Convention
 	 * @param Copilote_Library_Programmation $programmation
 	 */

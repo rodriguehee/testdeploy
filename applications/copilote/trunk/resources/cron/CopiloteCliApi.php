@@ -46,19 +46,8 @@ class CopiloteCliApi extends CliApi
 			$statement = $dataQuery->ToZendDbSelect()->query() ;
 			while ($row = $statement->fetch()) {
 				echo sprintf("Calculs pour la convention '%s: %s'%s", $row['code_ined'], $row['libelle'], $endOfLine);
-				
 				$convention = new Copilote_Library_Convention("cplt_conv_data", $row['id_data']);
-				//$convention->computeFromDemande();
-				$convention->computeProgrammations();
-				foreach (array("ae", "cp") as $aspect) {
-					$convention->computeAnteriority($aspect);
-					$convention->computeFraisGestion($aspect);
-					$convention->computeCreditOuvert($aspect);
-					$convention->computeCreditConsomme($aspect);
-					$convention->computeProvisionChomage($aspect);
-					$convention->computeCreditDisponible($aspect);
-				}
-				$convention->commit();
+				$convention->computes();
 			}
 		}
 		catch( Exception $ex ) {

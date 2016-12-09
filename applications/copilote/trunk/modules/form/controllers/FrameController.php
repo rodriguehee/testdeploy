@@ -185,7 +185,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		require $this->_getLibPath() . "/Demande.php" ;
 		require $this->_getLibPath() . "/Depense.php" ;
 		
-		$user = Core_Library_Account::GetInstance()->GetCurrentUser() ;
+		$project = Core_Library_Account::GetInstance()->GetCurrentProject();
+		$user = Core_Library_Account::GetInstance()->GetCurrentUser();
 		$formId = $this->getRequest()->getParam( 'id', 0 ) ;
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		
@@ -193,6 +194,23 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
 			if( ! $this->_allowEdit( $demande ) ) {
 				$this->getRequest()->setParam( 'id', 79 ) ;
+			}
+		}
+		
+		// Validation d'une demande ... à partir de quel statut ? ...
+		if (54 == $formId) {
+			$idDemande = $this->getRequest()->getParam('id_demande', 0);
+			$demande = new Copilote_Library_Demande("cplt_dmnd_data", $idDemande);
+			$redirect = false;
+			foreach ($demande->getConventions() as $convention) {
+				$convention->computes();
+				if ($convention->isOutOfBounds()) {
+					$redirect = true;
+				}
+			}
+			if ($redirect) {
+				$form = $project->GetFormFromSId("validation.warning");
+				$this->getRequest()->setParam('id', $form->GetDBIdentifier());
 			}
 		}
 		

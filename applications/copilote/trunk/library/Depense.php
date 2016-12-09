@@ -12,6 +12,45 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 	protected $_demande ;
 	
 	/**
+	 * @return Copilote_Library_Record[]
+	 */
+	public function getVentilations()
+	{
+		$ventilations = array();
+		
+		$foreignKey = $this->getForeignKeyVentilation();
+		if (empty($foreignKey)) {
+			return $ventilations;
+		}
+		
+		$tableName = "cplt_vntl_data";
+		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db();
+		$query = sprintf( "SELECT id_data FROM %s WHERE %s = ?", $tableName, $foreignKey);
+		$stmt = $db->query($query, $this->_id);
+		while ($id = $stmt->fetchColumn(0)) {
+			$ventilations[] = new Copilote_Library_Record($tableName, $id);
+		}
+		return $ventilations;
+	}
+	
+	/**
+	 * @return string
+	 */
+	protected function getForeignKeyVentilation()
+	{
+		$contexts = array("dmp", "pe", "oc");
+		$mask = "cplt_%s_data";
+		
+		foreach ($contexts as $context) {
+			if (sprintf($mask, $context) == $this->_tableName) {
+				return "id_" . $context;
+			}
+		}
+		
+		return "";
+	}
+	
+	/**
 	 * @return Copilote_Library_Demande
 	 */
 	public function getDemande()

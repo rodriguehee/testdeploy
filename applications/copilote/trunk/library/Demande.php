@@ -3,7 +3,7 @@
 class Copilote_Library_Demande extends Copilote_Library_Record
 {
 	/**
-	 * @var array
+	 * @var Copilote_Library_Depense[]
 	 */
 	protected $_depenses = array() ;
 	
@@ -20,6 +20,40 @@ class Copilote_Library_Demande extends Copilote_Library_Record
 	{
 		parent::__construct( $tableName, $id ) ;
 		$this->_setDepenses() ;
+	}
+	
+	/**
+	 * @return Copilote_Library_Convention[]
+	 */
+	public function getConventions()
+	{
+		$foreignKeys = array(
+			"dt_numconv" => "dt",
+			"rh_impc1" => "rh",
+			"rh_impc2" => "rh",
+			"sta_impc1" => "sta",
+			"sta_impc2" => "sta",
+		);
+		$ids = array();
+		
+		foreach ($this->_depenses as $depense) {
+			foreach ($depense->getVentilations() as $ventilation) {
+				if ($ventilation->getAttribute("convention") > 0) {
+					$ids[] = (int) $ventilation->getAttribute("convention");
+				}
+			}
+			foreach ($foreignKeys as $key => $ref) {
+				if ($depense->hasAttribute($key) && $depense->getAttribute($key) > 0) {
+					$ids[] = (int) $depense->getAttribute($key);
+				}
+			}
+		}
+		
+		$conventions = array();
+		foreach (array_unique($ids) as $id) {
+			$conventions[] = new Copilote_Library_Convention("cplt_conv_data", $id);
+		}
+		return $conventions;
 	}
 	
 	/**

@@ -65,12 +65,21 @@ class Copilote_Library_Record
 	}
 	
 	/**
+	 * @return boolean
+	 * @param unknown $key
+	 */
+	public function hasAttribute($key)
+	{
+		return array_key_exists($key, $this->_attributes);
+	}
+	
+	/**
 	 * @param string $key
 	 * @return string
 	 */
 	public function getAttribute( $key )
 	{
-		if( array_key_exists( $key, $this->_attributes ) ) {
+		if($this->hasAttribute($key)) {
 			return $this->_attributes[$key] ;
 		}
 		throw new DomainException( sprintf( "Attribut '%s' introuvable", $key ) ) ;
