@@ -20,12 +20,13 @@ class Copilote_Library_Programmation_SubmitFormula
 	 * @return string
 	 * @param string $operator
 	 */
-	public function render($operator)
+	public function render($comparator, $operator)
 	{
 		$formules = array();
 		foreach ($this->credits as $aspect => $credit) {
-			$formules[] = sprintf("(Math.abs(%s) %s  ((1 * {c.montant_%s})/200))", $credit->render(false), $operator, $aspect);
+			$formules[] = sprintf("(Math.abs(%s) %s  ((1 * {c.montant_%s})/200))", $credit->render(false), $comparator, $aspect);
 		}
-		return implode(" && ", $formules);
+		
+		return implode(sprintf(" %s ", $operator), $formules);
 	}
 }
