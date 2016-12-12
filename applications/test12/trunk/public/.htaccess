@@ -1,12 +1,14 @@
-# Même s'il est possible d'utiliser ce fichier htaccess pour spécifier des directives Apache,
-# il est fortement déconseillé, consultez la documentation.
-# Il est recommandé de placer ces directives dans le VHost (Directory par exemple)
+# fichier gÃ©nÃ©rÃ©, il sera Ã©crasÃ©, ne pas modifier
 
-SetEnv APPLICATION_ENV production
+SetEnv APPLICATION_ENV development
+SetEnv VOO4_APPBOOTSTRAPPER "/home/web/sites/cores//20160817-02.18-14//src/tools/Voo4_AppBootstrapper.php"
+SetEnv PATH_FARM "/home/web/sites/confs/dev/"
+SetEnv PATH_VOO4_CORE "/home/web/sites/cores//20160817-02.18-14//src/"
+SetEnv PATH_VOO4_EXTLIB  "/home/web/sites/cores//20160817-02.18-14//libs/"
+SetEnv PATH_ZF "/home/web/sites/ZendFramework/"
 
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} -s [OR]
-RewriteCond %{REQUEST_FILENAME} -l [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^.*$ - [NC,L]
-RewriteRule ^.*$ index.php [NC,L]
+ExpiresActive On
+ExpiresByType image/* "access plus 1 month"
+
+ExpiresActive On
+ExpiresByType text/javascript "access plus 2 week"
