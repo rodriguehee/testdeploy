@@ -110,14 +110,6 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 {
 	 	$statut = $this->_getStatus($statut);
 	 	
-	 	if ($this->getAttribute("annee_conv") > $this->_convention->getReference()) {
-	 		return true;
-	 	}
-	 	
-	 	if ($this->getAttribute("annee_conv") < $this->_convention->getReference()) {
-	 		return false;
-	 	}
-	 	
 	 	if ($statut < 2) {
 	 		return true;
 	 	}
@@ -146,26 +138,11 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 	$demande = $this->_convention->GetDemande($annee);
 	 	$demandeValidee = $this->getDemandeValidee($demande);
 	 	
-	 	$totalPersonnel = 0;
-	 	$totalFonctAE = 0;
-	 	$totalFonctCP = 0;
-	 	$totalInvestAE = 0;
-	 	$totalInvestCP = 0;
-	 	
-	 	if ($this->isEditableStartSchedule($demandeValidee->getAttribute("etat"))) {
-	 		$totalPersonnel += (float) $this->getAttribute("cout_personnel_prev");
-	 		$totalFonctAE += (float) $this->getAttribute("cout_fonct_ae_prev");
-	 		$totalFonctCP += (float) $this->getAttribute("cout_fonct_cp_prev");
-	 		$totalInvestAE += (float) $this->getAttribute("cout_invest_ae_prev");
-	 		$totalInvestCP += (float) $this->getAttribute("cout_invest_cp_prev");
-	 	}
-	 	elseif ($demandeValidee instanceof Copilote_Library_Demande) {
-	 		$totalPersonnel += $demandeValidee->GetMontantPersonnel($this->_convention);
-	 		$totalFonctAE += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
-	 		$totalFonctCP += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
-	 		$totalInvestAE += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae");
-	 		$totalInvestCP = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp");
-	 	}
+		$totalPersonnel = $demandeValidee->GetMontantPersonnel($this->_convention);
+	 	$totalFonctAE = $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
+	 	$totalFonctCP = $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
+	 	$totalInvestAE = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae");
+	 	$totalInvestCP = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp");
 	 	
 	 	if ($this->hasCorrections($demandeValidee->getAttribute("etat"))) {
 	 		foreach (range( 1, 3 ) as $indexCorrection) {
