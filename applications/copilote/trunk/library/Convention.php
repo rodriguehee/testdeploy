@@ -31,7 +31,7 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 			if( ! empty( $dateDebut ) ) {
 				$o = new DateTime( $dateDebut ) ;
 				$debut = (int) $o->format("Y") ;
-				$debut = max($debut, $this->getReference()) ;
+				$debut = max($debut, self::getReference()) ;
 			}
 			
 			$dateFin = $this->getAttribute( "date_fin" ) ;
@@ -54,7 +54,7 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 	 * @return integer
 	 * @throws Core_Library_Exception
 	 */
-	public function getReference()
+	public static function getReference()
 	{
 		$reference = Core_Library_Options::get( 'conv.pluri.ref' ) ;
 		if ( $reference  === false ) {
@@ -392,7 +392,7 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 	 */
 	public function computeFromDemande()
 	{
-		$annee = $this->getReference();
+		$annee = self::getReference();
 		if(! array_key_exists($annee, $this->_programmations)) {
 			return;
 		}

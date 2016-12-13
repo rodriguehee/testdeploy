@@ -197,7 +197,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			}
 		}
 		
-		// Validation d'une demande ... à partir de quel statut ? ...
+		// Validation d'une demande
 		if (54 == $formId) {
 			$idDemande = $this->getRequest()->getParam('id_demande', 0);
 			$demande = new Copilote_Library_Demande("cplt_dmnd_data", $idDemande);

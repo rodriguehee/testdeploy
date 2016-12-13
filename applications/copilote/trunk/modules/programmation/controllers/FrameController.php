@@ -230,7 +230,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$formuleTotalCP->attachFrom($formulePerso);
 			$formuleTotalCP->attachFrom($formuleFoncCP);
 			$formuleTotalCP->attachFrom($formuleInvCP);
-			if ($annee >= $convention->getReference()) {
+			if ($annee >= Copilote_Library_Convention::getReference()) {
 				$formuleZAE->attachFrom($formuleTotalAE);
 				$formuleZCP->attachFrom($formuleTotalCP);
 			}

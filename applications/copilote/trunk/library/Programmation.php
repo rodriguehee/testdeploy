@@ -91,7 +91,7 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	{
 		$statut = $this->_getStatus($statut);
 		
-		if ($this->getAttribute("annee_conv") != $this->_convention->getReference()) {
+		if ($this->getAttribute("annee_conv") != Copilote_Library_Convention::getReference()) {
 			return false;
 		}
 		
@@ -122,7 +122,7 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	  */
 	 public function isElapsed()
 	 {
-	 	if ($this->getAttribute("annee_conv") < $this->_convention->getReference()) {
+	 	if ($this->getAttribute("annee_conv") < Copilote_Library_Convention::getReference()) {
 	 		return true;
 	 	}
 	 	
@@ -138,23 +138,31 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 	$demande = $this->_convention->GetDemande($annee);
 	 	$demandeValidee = $this->getDemandeValidee($demande);
 	 	
-		$totalPersonnel = $demandeValidee->GetMontantPersonnel($this->_convention);
-	 	$totalFonctAE = $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
-	 	$totalFonctCP = $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
-	 	$totalInvestAE = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae");
-	 	$totalInvestCP = $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp");
+	 	$totalPersonnel = 0.0;
+	 	$totalFonctAE = 0.0;
+	 	$totalFonctCP = 0.0;
+	 	$totalInvestAE = 0.0;
+	 	$totalInvestCP = 0.0;
 	 	
-	 	if ($this->hasCorrections($demandeValidee->getAttribute("etat"))) {
-	 		foreach (range( 1, 3 ) as $indexCorrection) {
-	 			$suiviBudgetaire = $demande->getSuiviBudgetaire($this->_convention, $indexCorrection);
-	 			if ($suiviBudgetaire instanceof Copilote_Library_Record) {
-			 		$totalPersonnel += (float) $suiviBudgetaire->getAttribute("d_pers");
-			 		$totalFonctAE += (float) $suiviBudgetaire->getAttribute("d_fonct");
-			 		$totalFonctCP += (float) $suiviBudgetaire->getAttribute("d_fonct");
-			 		$totalInvestAE += (float) $suiviBudgetaire->getAttribute("d_invest");
-			 		$totalInvestCP += (float) $suiviBudgetaire->getAttribute("d_invest");
-	 			}
-	 		}
+	 	if ($demandeValidee instanceof Copilote_Library_Demande) {
+			$totalPersonnel += $demandeValidee->GetMontantPersonnel($this->_convention);
+		 	$totalFonctAE += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
+		 	$totalFonctCP += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
+		 	$totalInvestAE += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae");
+		 	$totalInvestCP += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp");
+		 	
+		 	if ($this->hasCorrections($demandeValidee->getAttribute("etat"))) {
+		 		foreach (range( 1, 3 ) as $indexCorrection) {
+		 			$suiviBudgetaire = $demande->getSuiviBudgetaire($this->_convention, $indexCorrection);
+		 			if ($suiviBudgetaire instanceof Copilote_Library_Record) {
+				 		$totalPersonnel += (float) $suiviBudgetaire->getAttribute("d_pers");
+				 		$totalFonctAE += (float) $suiviBudgetaire->getAttribute("d_fonct");
+				 		$totalFonctCP += (float) $suiviBudgetaire->getAttribute("d_fonct");
+				 		$totalInvestAE += (float) $suiviBudgetaire->getAttribute("d_invest");
+				 		$totalInvestCP += (float) $suiviBudgetaire->getAttribute("d_invest");
+		 			}
+		 		}
+		 	}
 	 	}
 	 	
 	 	$this->setAttribute("total_pers_co", $totalPersonnel);
