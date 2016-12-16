@@ -46,16 +46,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		}
 		
 		if ($convention instanceof Copilote_Library_Convention) {
-			$convention->computeProgrammations();
-			foreach (array("ae", "cp") as $aspect) {
-				$convention->computeAnteriority($aspect);
-				$convention->computeFraisGestion($aspect);
-				$convention->computeCreditOuvert($aspect);
-				$convention->computeCreditConsomme($aspect);
-				$convention->computeProvisionChomage($aspect);
-				$convention->computeCreditDisponible($aspect);
-			}
-			$convention->commit();
+			$convention->computes();
 		}
 	}
 	

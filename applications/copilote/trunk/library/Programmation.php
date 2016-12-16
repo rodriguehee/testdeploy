@@ -144,25 +144,32 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 	$totalInvestAE = 0.0;
 	 	$totalInvestCP = 0.0;
 	 	
-	 	if ($demandeValidee instanceof Copilote_Library_Demande) {
-			$totalPersonnel += $demandeValidee->GetMontantPersonnel($this->_convention);
-		 	$totalFonctAE += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
-		 	$totalFonctCP += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
-		 	$totalInvestAE += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae");
-		 	$totalInvestCP += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp");
-		 	
-		 	if ($this->hasCorrections($demandeValidee->getAttribute("etat"))) {
-		 		foreach (range( 1, 3 ) as $indexCorrection) {
-		 			$suiviBudgetaire = $demande->getSuiviBudgetaire($this->_convention, $indexCorrection);
-		 			if ($suiviBudgetaire instanceof Copilote_Library_Record) {
-				 		$totalPersonnel += (float) $suiviBudgetaire->getAttribute("d_pers");
-				 		$totalFonctAE += (float) $suiviBudgetaire->getAttribute("d_fonct");
-				 		$totalFonctCP += (float) $suiviBudgetaire->getAttribute("d_fonct");
-				 		$totalInvestAE += (float) $suiviBudgetaire->getAttribute("d_invest");
-				 		$totalInvestCP += (float) $suiviBudgetaire->getAttribute("d_invest");
-		 			}
-		 		}
-		 	}
+	 	if ($this->isEditableStartSchedule($demandeValidee->getAttribute("etat"))) {
+	 		$totalPersonnel += $this->getAttribute("cout_personnel_prev");
+	 		$totalFonctAE += $this->getAttribute("cout_fonct_ae_prev");
+	 		$totalFonctCP += $this->getAttribute("cout_fonct_cp_prev");
+	 		$totalInvestAE += $this->getAttribute("cout_invest_ae_prev");
+	 		$totalInvestCP += $this->getAttribute("cout_invest_cp_prev");
+	 	}
+	 	else {
+	 		$totalPersonnel += $demandeValidee->GetMontantPersonnel($this->_convention);
+	 		$totalFonctAE += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "ae");
+	 		$totalFonctCP += $demandeValidee->GetAutreMontant($this->_convention, "fonctionnement", "cp");
+	 		$totalInvestAE += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "ae");
+	 		$totalInvestCP += $demandeValidee->GetAutreMontant($this->_convention, "investissement", "cp");
+	 	}
+	 	
+	 	if ($this->hasCorrections($demandeValidee->getAttribute("etat"))) {
+	 		foreach (range( 1, 3 ) as $indexCorrection) {
+	 			$suiviBudgetaire = $demande->getSuiviBudgetaire($this->_convention, $indexCorrection);
+	 			if ($suiviBudgetaire instanceof Copilote_Library_Record) {
+			 		$totalPersonnel += (float) $suiviBudgetaire->getAttribute("d_pers");
+			 		$totalFonctAE += (float) $suiviBudgetaire->getAttribute("d_fonct");
+			 		$totalFonctCP += (float) $suiviBudgetaire->getAttribute("d_fonct");
+			 		$totalInvestAE += (float) $suiviBudgetaire->getAttribute("d_invest");
+			 		$totalInvestCP += (float) $suiviBudgetaire->getAttribute("d_invest");
+	 			}
+	 		}
 	 	}
 	 	
 	 	$this->setAttribute("total_pers_co", $totalPersonnel);
@@ -172,6 +179,24 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 	$this->setAttribute("total_invest_cp_co", $totalInvestCP);
 	 	$this->setAttribute("total_ae_co", $totalFonctAE + $totalInvestAE + $totalPersonnel);
 	 	$this->setAttribute("total_cp_co", $totalFonctCP + $totalInvestCP + $totalPersonnel);
+	 }
+	 
+	 /**
+	  * @param Copilote_Library_Demande $demande
+	  */
+	 public function computePrevision(Copilote_Library_Demande $demande)
+	 {
+	 	$personnel = $demande->GetMontantPersonnel($this->_convention);
+	 	$fonctionnementAE = $demande->GetAutreMontant($this->_convention, "fonctionnement", "ae");
+	 	$fonctionnementCP = $demande->GetAutreMontant($this->_convention, "fonctionnement", "cp");
+	 	$investissementAE = $demande->GetAutreMontant($this->_convention, "investissement", "ae");
+	 	$investissementCP = $demande->GetAutreMontant($this->_convention, "investissement", "cp");
+	 	$this->setAttribute("cout_personnel_prev", $personnel);
+	 	$this->setAttribute("cout_fonct_ae_prev", $fonctionnementAE);
+	 	$this->setAttribute("cout_fonct_cp_prev", $fonctionnementCP);
+	 	$this->setAttribute("cout_invest_ae_prev", $investissementAE);
+	 	$this->setAttribute("cout_invest_cp_prev", $investissementCP);
+	 	$this->commit();
 	 }
 	 
 	 /**

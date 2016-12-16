@@ -15,7 +15,6 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
         
         $oUser = Core_Library_Account::GetInstance()->GetCurrentUser() ;
         
-        // Debug !!! PHP Strict Standards:  Non-static method Core_Library_User_Manager::GetUserRolesByGroup() should not be called statically !!!
         $manager = Core_Library_Account::GetInstance()->GetCurrentProject()->UserManager() ;
         $aRolesByGroup = $manager->GetUserRolesByGroup( $oUser->GetUserName() );
 
@@ -203,6 +202,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 			$demande = new Copilote_Library_Demande("cplt_dmnd_data", $idDemande);
 			$redirect = false;
 			foreach ($demande->getConventions() as $convention) {
+				$convention->computeCurrentPrevision($demande);
 				$convention->computes();
 				if ($convention->isOutOfBounds()) {
 					$redirect = true;
@@ -263,11 +263,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _get_get_afterExecute( Core_Library_Event_Context $oContext )
 	{
-		//error_log( __METHOD__ ) ;
 		$aParams = $this->getRequest()->getParams() ;
 		$aDatasets = $oContext->get( 'aDatasets' ) ;
-		//require $this->_getLibPath() . "/Record.php" ;
-		//require $this->_getLibPath() . "/Depense.php" ;
         require $this->_getLibPath() . "/Arbitrage.php" ;
 
 		foreach ( $aDatasets as $oDataset ) {
@@ -379,7 +376,6 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _delete_delete_beforeDelete( Core_Library_Event_Context $context )
 	{
-		//error_log( __METHOD__ ) ;
 		require $this->_getLibPath() . "/Record.php" ;
 		
 		$project = Core_Library_Account::GetInstance()->GetCurrentProject() ;
@@ -392,7 +388,6 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$joins = $varset->GetJoinedData4Delete( $notifier, $user, $context->get( 'aRecordsIds' ) ) ;
 		if( count( $joins ) > 0 ) {
 			$context->set( "aRecordsIds", array() ) ;
-			//$context->set( "sWarning", "La fiche est référencée par d'autres fiches" ) ;
 			$context->set( "sWarning", "Attention, vous devez d'abord supprimer les dépenses" ) ;
 		}
 		
@@ -440,7 +435,6 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 */
 	protected function _delete_delete_afterDelete( Core_Library_Event_Context $context )
 	{
-		//error_log( __METHOD__ ) ;
 		$notifier = new Core_Library_Project_Notifier() ;
 		$ids = $context->get( "aRecordsIds" ) ;
 		if( empty( $ids ) ) {

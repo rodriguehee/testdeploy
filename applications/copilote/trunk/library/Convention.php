@@ -81,7 +81,6 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		foreach ($aspects as $aspect) {
 			$dispo = "recap_dispo_" . $aspect;
 			$montant = "montant_" . $aspect;
-			
 			if ($this->getAttribute($dispo) > ($this->getAttribute($montant)/200)) {
 				return true;
 			}
@@ -107,6 +106,18 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		}
 		
 		$this->commit();
+	}
+	
+	/**
+	 * @param Copilote_Library_Demande $demande
+	 */
+	public function computeCurrentPrevision(Copilote_Library_Demande $demande)
+	{
+		foreach ($this->_programmations as $programmation) {
+			if ($programmation->getAttribute("annee_conv") == self::getReference()) {
+				$programmation->computePrevision($demande);
+			}
+		}
 	}
 	
 	/**
