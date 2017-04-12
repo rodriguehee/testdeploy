@@ -44,15 +44,15 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/80' )" href="#">Documents téléchargeables</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_doc' )" href="#">Documents téléchargeables</a></li>
                     <li class="divider"></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/91' )" href="#">Liste de vos conventions</a></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/92' )" href="#">Liste de vos marchés</a></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/94' )" href="#">Liste de vos activités</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_conv_user' )" href="#">Liste de vos conventions</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_marche_user' )" href="#">Liste de vos marchés</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_activites_user' )" href="#">Liste de vos activités</a></li>
 <?php if ($bIsSms || $bIsSisi || $bIsDrip || $bIsSj || $bIsSes || $bIsEdit || $bIsDircom || $bIsDoc || $bIsPlp || $bIsSuperUser || $bIsAdmin): ?>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_demandes_support' )" href="#">Liste de vos demandes de support</a></li>
         <?php endif; ?>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/96' )" href="#">Liste des droits utilisateurs</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_droits_user' )" href="#">Liste des droits utilisateurs</a></li>
                   </ul>
             </li>
         </ul>
@@ -153,7 +153,7 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/75' )" href="#">Notifications</a></li>
                     <li class="divider"></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_ub' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Unités Budgétaires</a></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/33' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Demandes</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_sv' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Demandes</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/39' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Pays</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/58' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Activités et sous-activités</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/id/61' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Conventions</a></li>
