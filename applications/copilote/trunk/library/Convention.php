@@ -23,7 +23,14 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 		$this->_setSuivisBudgetaires();
 		
 		/* generation des programmations */
-		if( $this->getAttribute( "status_prog" ) == 529 ) {
+
+		//if( $this->getAttribute( "status_prog" ) == 529 ) {
+
+		  $project = Core_Library_Account::GetInstance()->GetCurrentProject();
+		  $status = $project->DicoManager()->id2Code("actif_inactif", $this->getAttribute("status_prog"));
+
+		  if( $status == 1 ) {
+
 			$debut = 0 ;
 			$fin = 0 ;
 			
