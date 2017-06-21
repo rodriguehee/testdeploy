@@ -137,7 +137,7 @@
 
 	<group title="Données de programmation">	
 	  <statictext class="cplt-consigne-bold">
-	    Date de mise à jour des données issues des applications métier (SIREPA, RH...) : f(var d = new Date({c.date_maj});d.toLocaleDateString();)f 
+	    Date de mise à jour des données issues des applications métier (SIREPA, RH...) : ~var d = new Date({c.date_maj});d.toLocaleDateString();~ 
 	  </statictext>
 	  <form_row />
 	  <box class="table" id="tableau_recap">
