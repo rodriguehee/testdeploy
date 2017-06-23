@@ -20,6 +20,6 @@ class Copilote_Library_RenderEngine
 	 */
 	public function getContent()
 	{
-		return sprintf("f(parseFloat(%s).toFixed(2))f", $this->_formula);
+		return sprintf("~(parseFloat(%s).toFixed(2))~", $this->_formula);
 	}
 }

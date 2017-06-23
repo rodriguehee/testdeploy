@@ -54,7 +54,7 @@ class Copilote_Library_Programmation_CellFabric
 		}
 		
 		if( $readonly ) {
-  		        $formula =  sprintf( "f({%s.%s})f", $datasetName, $fieldName ) ;
+  		    $formula =  sprintf( "~({%s.%s})~", $datasetName, $fieldName ) ;
 			return $this->getStaticText( $formula ) ;
 		}
 		
