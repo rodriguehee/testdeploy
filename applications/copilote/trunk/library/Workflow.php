@@ -53,10 +53,11 @@ class Copilote_Library_Workflow
 		}
 		// arbitrage initial
 		elseif( $statut == 480 ) {
-			$statut = 481 ;
+		  //$statut = 481 ;
+			$statut = 485 ;
 		}
 		// validation demandeur apres arbitrage
-		elseif( $statut == 481 ) {
+		/*elseif( $statut == 481 ) {
 			// validée par le demandeur
 			$statut = 485 ;
 			// si l'UB fait partie d'une GUB => à valider par le responsable
@@ -67,7 +68,7 @@ class Copilote_Library_Workflow
 		// validation par le responsable apres arbitrage
 		elseif( $statut == 483 ) {
 			$statut = 485 ;
-		}
+			}*/
 		// revision v0
 		elseif( $statut == 485 ) {
 			$statut = 499 ;
