@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form id="programmation">
+  <config>
+    <display_path>programmation/frame/get</display_path>
+    <getdataset_path>programmation/frame/getdataset/id_data/{id_data}</getdataset_path>
+    <save_path>programmation/frame/save</save_path>
+  </config>
+  <data_structure>
+	<dataquery id="c" table_name="{pj}_conv_data" varset_name="convention" table_alias="c">
+	  <column_simple field_name="id_data" table_name="c" />
+	  <column_simple field_name="id_ub" table_name="c" />
+	  <column_simple field_name="code_ined" table_name="c" />
+	  <column_simple field_name="libelle" table_name="c" />
+	  <column_simple field_name="bailleur" table_name="c" />
+	  <column_simple field_name="formule" table_name="c" />
+	  <column_simple field_name="date_deb" table_name="c" />
+	  <column_simple field_name="date_fin" table_name="c" />
+	  <column_simple field_name="responsable_conv" table_name="c" />
+	  <column_simple field_name="commentaires" table_name="c" />
+	  <column_simple field_name="coti_chomage" table_name="c" />
+	  <column_simple field_name="montant_ave_fin" table_name="c" />
+	  <column_simple field_name="montant_frais_ae" table_name="c" />
+	  <column_simple field_name="montant_frais_cp" table_name="c" />
+	  <column_simple field_name="montant_ae" table_name="c" />
+	  <column_simple field_name="montant_cp" table_name="c" />
+	  <column_simple field_name="cout_personel_ant" table_name="c" />
+	  <column_simple field_name="cout_fonct_ae_ant" table_name="c" />
+	  <column_simple field_name="cout_fonct_cp_ant" table_name="c" />
+	  <column_simple field_name="cout_invest_ae_ant" table_name="c" />
+	  <column_simple field_name="cout_invest_cp_ant" table_name="c" />
+	  <column_simple field_name="total_ae_ant" table_name="c" />
+	  <column_simple field_name="total_cp_ant" table_name="c" />
+	  <column_simple field_name="date_maj" table_name="c" />
+	  <column_simple field_name="recap_fdg_ae" table_name="c" />
+	  <column_simple field_name="recap_fdg_cp" table_name="c" />
+	  <column_simple field_name="recap_credouv_ae" table_name="c" />
+	  <column_simple field_name="recap_credouv_cp" table_name="c" />
+	  <column_simple field_name="recap_conso_ae" table_name="c" />
+	  <column_simple field_name="recap_conso_cp" table_name="c" />
+	  <column_simple field_name="recap_ape_ae" table_name="c" />
+	  <column_simple field_name="recap_ape_cp" table_name="c" />
+	  <column_simple field_name="recap_dispo_ae" table_name="c" />
+	  <column_simple field_name="recap_dispo_cp" table_name="c" />
+	  <column_simple field_name="pourcentage_fdg" table_name="c" />
+	  <condition sql="{c.id_data}={param_id_data}">
+		<field field_name="id_data" table_name="c" alias="c.id_data" />
+		<variable alias="param_id_data" default="NULL">
+		  <entry type="param" name="id_data" />
+		  <entry type="dataset" name="c" field="id_data" row="current" />
+		</variable>
+	  </condition>
+	</dataquery>
+	
+	<dataquery id="ub" table_name="{pj}_ub_data" varset_name="ub" table_alias="ub" mode="r">
+	  <column_simple field_name="id_data" table_name="ub" />
+	  <column_simple field_name="name" table_name="g" />
+	  <join detail_table="{pj}_pj_group" detail_alias="g" sql="{ub.id_group}={g.id_group}" type="inner">
+		<field table_name="g" field_name="id_group" alias="g.id_group" />
+		<field table_name="ub" field_name="id_group" alias="ub.id_group"/>
+	  </join>
+	  <condition sql="{c.id_ub} = {ub.id_data}">
+	    <variable alias="c.id_ub" default="NULL">
+		  <entry type="dataset" name="c" field="id_ub" row="current" />
+		</variable>
+	    <field field_name="id_data" table_name="ub" alias="ub.id_data" />
+	  </condition>
+	</dataquery>
+	
+	<dataquery id="search_identite" table_name="{pj}_id_data" table_alias="d">
+      <!-- Critère de recherche -->
+      <match sql="{d.label} LIKE '%{search_string}%'" optional="true">
+          <field field_name="label" table_name="d" alias="d.label"/>
+          <field field_name="dico_name" table_name="d" alias="d.dico_name"/>
+          <variable alias="search_string" default="NULL" type="search">
+              <entry type="param" name="search_string"/>
+          </variable>
+      </match>
+      <!-- Rendu de la recherche dans la listbox -->
+      <column sql="{d.label}" alias="body" type="string" length="255">
+          <field table_name="d" field_name="label" alias="d.label"/>
+      </column>
+      <!-- Rendu dans le champ input -->
+      <column sql="{d.label}" alias="field_value">
+          <field table_name="d" field_name="label" alias="d.label"/>
+      </column>
+      <!-- Critère de remplissage au chargement de la page -->
+      <condition sql="{d.id_data}={param_id_data}">
+          <field field_name="id_data" table_name="d" alias="d.id_data"/>
+          <variable alias="param_id_data" default="NULL">
+              <entry type="dataset" name="c" field="responsable_conv" row="current" />
+          </variable>
+      </condition>
+      <!-- Affectation de la valeur dans le dataset de destination -->
+      <column sql="{d.id_data}" alias="responsable_conv">
+          <field table_name="d" field_name="id_data" alias="d.id_data"/>
+      </column>
+    </dataquery>
+	
+	
+  </data_structure>
+  
+  <layout title="Programmation pluriannuelle des conventions" disabled="false">
+
+      <form_row>
+	  <statictext class="col-md-12 cplt-consigne"> Les conventions dont le statut est au rouge doivent faire l'objet d'une programmation pluriannuelle.</statictext>
+	    <statictext class="col-md-12 cplt-consigne-bold"> Tant que cet indicateur n'est pas au vert, la demande budgétaire pour l'année à venir ne pourra pas être validée. </statictext>
+	  <statictext class="col-md-12 cplt-consigne"> Pour procéder à la programmation, édite la convention en début de ligne.</statictext>
+      </form_row>
+
+	<group title="Données générales">
+	  <form_row>
+		<label dataset="c" field="id_ub"/>
+		<value dataset="ub" field="name" mode="r" />
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="code_ined" />
+		<value dataset="c" field="code_ined" mode="r" />
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="libelle" />
+		<value dataset="c" field="libelle" mode="r" class="col-md-10"/>
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="bailleur" />
+		<value dataset="c" field="bailleur" mode="r"  class="col-md-10"/>
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="date_deb" />
+		<value dataset="c" field="date_deb" mode="r" />
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="date_fin" />
+		<value dataset="c" field="date_fin" mode="r" />
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="responsable_conv" />
+		<search search_param="search_string" search_dataset="search_identite" target_dataset="c" mode="r" class="col-md-5"/>
+	  </form_row>
+	  <form_row>
+		<label dataset="c" field="commentaires" />
+		<value dataset="c" field="commentaires" mode="r" class="col-md-10" />
+	  </form_row>
+	</group>
+
+	<group title="Données de programmation">	
+	  <statictext class="cplt-consigne-bold">
+	    Date de mise à jour des données issues des applications métier (SIREPA, RH...) : ~var d = new Date({c.date_maj});d.toLocaleDateString();~ 
+	  </statictext>
+	  <form_row />
+	  <box class="table" id="tableau_recap">
+	    <box class="row rowx2">
+	      <box class="cel-1 rowx2"><statictext/></box>
+	      <box class="cel-1 rowx2"><statictext>Montant de la convention</statictext></box>
+	      <box class="cel-1 rowx2"><statictext>Frais de gestion</statictext></box>
+	      <box class="cel-1 rowx2"><statictext>Crédit ouvert net</statictext></box>
+	      <box class="cel-1 rowx2"><statictext>Crédits consommés</statictext></box>
+	      <box class="cel-1 rowx2"><statictext>Provision chômage</statictext></box>
+	      <box class="cel-1 rowx2"><statictext>Reste à programmer</statictext></box>
+	    </box>
+	    <!-- code PHP dynamique -->
+	  </box>
+	  <box class="col-xs-12" id="top-message">
+	    <group>
+	  	  <option output="html" option_name="transparent_group" value="true" />
+  	      <option output="html" option_name="show_on" value="0" />
+		  <statictext class="text-danger bold">Pour pouvoir enregistrer votre programmation  pluriannuelle de la convention, le "reste à programmer" en AE et CP doit être compris entre -0.5% et +0.5% des montants d'AE et CP de la convention.</statictext>
+	    </group>	  
+	  </box>
+	  <form_row />
+	  <box class="table" id="tableau_previsionnel">
+	    <box class="row rowx2">
+	      <box class="cel-1 rowx2"><statictext>Période</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>Prévision de dépenses</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>Personnel</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>Fonctionnement AE</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>Fonctionnement CP</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>Investissement AE</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>Investissement CP</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>total AE</statictext>></box>
+	      <box class="cel-1 rowx2"><statictext>total CP</statictext>></box>
+	    </box>
+	    <!-- code PHP dynamique -->
+	  </box>
+	  <box class="col-xs-12" id="bottom-message">
+	    <group>
+	  	  <option output="html" option_name="transparent_group" value="true" />
+  	      <option output="html" option_name="show_on" value="0" />
+		  <statictext class="text-danger bold">Attention, les crédits disponibles doivent être compris entre -0.5% et +0.5% des montants de la convention.</statictext>
+	    </group>	  
+	  </box>
+	</group>
+	
+	<form_row />
+	
+	<form_row>
+	  <box class="col-xs-6">
+		<button action="exit" label="Retour à la liste des conventions">
+		  <redirection module="form" ctrl="frame" action="get">
+			<params>
+			  <value alias="sid">liste_conv_prog</value>
+			</params>
+		  </redirection>
+		</button>
+	  </box>
+      <box class="col-xs-6 text-right" id="submit-box">
+	    <group>
+	  	  <option output="html" option_name="transparent_group" value="true" />
+  	      <option output="html" option_name="show_on" value="0" />
+		  <button action="save" label="Save" class="btn-primary" />
+	    </group>
+	  </box>
+	</form_row>
+  </layout>
+</form>
