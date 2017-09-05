@@ -155,7 +155,7 @@
 	      <box class="cel-1 rowx2"><statictext>Crédit ouvert net</statictext></box>
 	      <box class="cel-1 rowx2"><statictext>Crédits consommés</statictext></box>
 	      <box class="cel-1 rowx2"><statictext>Provision chômage</statictext></box>
-	      <box class="cel-1 rowx2"><statictext>Crédits dispo programmation</statictext></box>
+	      <box class="cel-1 rowx2"><statictext>Reste à programmer</statictext></box>
 	    </box>
 	    <!-- code PHP dynamique -->
 	  </box>
@@ -163,7 +163,7 @@
 	    <group>
 	  	  <option output="html" option_name="transparent_group" value="true" />
   	      <option output="html" option_name="show_on" value="0" />
-		  <statictext class="text-danger bold">Attention, les crédits disponibles doivent être compris entre -0.5% et +0.5% des montants de la convention.</statictext>
+		  <statictext class="text-danger bold">Pour pouvoir enregistrer votre programmation  pluriannuelle de la convention, le "reste à programmer" en AE et CP doit être compris entre -0.5% et +0.5% des montants d'AE et CP de la convention.</statictext>
 	    </group>	  
 	  </box>
 	  <form_row />
