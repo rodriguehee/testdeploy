@@ -100,6 +100,13 @@
   </data_structure>
   
   <layout title="Programmation pluriannuelle des conventions" disabled="false">
+
+      <form_row>
+	  <statictext class="col-md-12 cplt-consigne"> Les conventions dont le statut est au rouge doivent faire l'objet d'une programmation pluriannuelle.</statictext>
+	    <statictext class="col-md-12 cplt-consigne-bold"> Tant que cet indicateur n'est pas au vert, la demande budgétaire pour l'année à venir ne pourra pas être validée. </statictext>
+	  <statictext class="col-md-12 cplt-consigne"> Pour procéder à la programmation, édite la convention en début de ligne.</statictext>
+      </form_row>
+
 	<group title="Données générales">
 	  <form_row>
 		<label dataset="c" field="id_ub"/>
