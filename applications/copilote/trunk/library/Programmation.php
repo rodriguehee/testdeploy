@@ -38,8 +38,14 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 		
 		assert($demande instanceof Copilote_Library_Demande);
 		$annee = $this->getAttribute("annee_conv");
-		$statutDemande = (int) $this->_getStatus($demande->getAttribute("etat"));
 		
+		// sur une saisie en cours on prend la demande active
+		if ($annee == $this->_convention->getReference()) {
+		    return $demande;
+		}
+		
+		// pour l'historique cela dépend du statut
+		$statutDemande = (int) $this->_getStatus($demande->getAttribute("etat"));
 		if ($statutDemande >= 10) {
 			$demandeValidee = $this->_convention->GetDemandeValidee($annee, "10");
 		}
