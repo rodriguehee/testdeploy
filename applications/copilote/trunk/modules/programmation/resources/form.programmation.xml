@@ -42,6 +42,7 @@
 	  <column_simple field_name="recap_dispo_ae" table_name="c" />
 	  <column_simple field_name="recap_dispo_cp" table_name="c" />
 	  <column_simple field_name="pourcentage_fdg" table_name="c" />
+	  <column_simple field_name="prog_comment" table_name="c" />
 	  <condition sql="{c.id_data}={param_id_data}">
 		<field field_name="id_data" table_name="c" alias="c.id_data" />
 		<variable alias="param_id_data" default="NULL">
@@ -186,7 +187,14 @@
 	  	  <option output="html" option_name="transparent_group" value="true" />
   	      <option output="html" option_name="show_on" value="0" />
 		  <statictext class="text-danger bold">Attention, les crédits disponibles doivent être compris entre -0.5% et +0.5% des montants de la convention.</statictext>
-	    </group>	  
+
+	    </group>
+  	    <form_row></form_row>	  
+  	    <form_row>
+		<label dataset="c" field="prog_comment" class="col-md-3"/>
+		<value dataset="c" field="prog_comment" mode="rw" class="col-md-9" />
+	    </form_row>
+
 	  </box>
 	</group>
 	
