@@ -265,6 +265,21 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 			return "rw" ;
 		}
 		
+		// valideur
+		if( $user->HasRole( 4 ) ) {
+		    return "rw" ;
+		}
+		
+		// demandeur
+		if( $user->HasRole( 5 ) ) {
+		    return "rw" ;
+		}
+		
+		// demandeur simple
+		if( $user->HasRole( 8 ) ) {
+		    return "rw" ;
+		}
+		
 		return "r" ;
 	}
 	

@@ -138,7 +138,8 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$rowSchedule = $rowFabric->getElement();
 			$rowSchedule->appendChild($cellFabric->getStaticText("Année " . $annee));
 			$rowSchedule->appendChild($cellFabric->getStaticText("Prévision initiale"));
-			if ($programmation->isEditableStartSchedule($demandeValidee->getAttribute("etat"))) { 
+			
+			if ($programmation->isEditableStartSchedule($demandeValidee)) { 
 				$formulePrevAE = new Copilote_Library_Programmation_Addition();
 				$formulePrevAE->attach($datasetName . ".cout_personnel_prev");
 				$formulePrevAE->attach($datasetName . ".cout_fonct_ae_prev");

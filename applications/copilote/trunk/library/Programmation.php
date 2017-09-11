@@ -39,11 +39,6 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 		assert($demande instanceof Copilote_Library_Demande);
 		$annee = $this->getAttribute("annee_conv");
 		
-		// sur une saisie en cours on prend la demande active
-		if ($annee == $this->_convention->getReference()) {
-		    return $demande;
-		}
-		
 		// pour l'historique cela dépend du statut
 		$statutDemande = (int) $this->_getStatus($demande->getAttribute("etat"));
 		if ($statutDemande >= 10) {
@@ -110,17 +105,11 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	
 	/**
 	 * @return boolean
-	 * @param integer $statut
+	 * @param mixed $demande (Copilote_Library_Mock|Copilote_Library_Demande)
 	 */
-	 public function isEditableStartSchedule($statut)
+	 public function isEditableStartSchedule($demande)
 	 {
-	 	$statut = $this->_getStatus($statut);
-	 	
-	 	if ($statut < 2) {
-	 		return true;
-	 	}
-	 	
-	 	return false;
+	     return ($demande instanceof Copilote_Library_Mock);
 	 }
 	 
 	 /**
@@ -150,7 +139,7 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 	$totalInvestAE = 0.0;
 	 	$totalInvestCP = 0.0;
 	 	
-	 	if ($this->isEditableStartSchedule($demandeValidee->getAttribute("etat"))) {
+	 	if ($this->isEditableStartSchedule($demandeValidee)) {
 	 		$totalPersonnel += $this->getAttribute("cout_personnel_prev");
 	 		$totalFonctAE += $this->getAttribute("cout_fonct_ae_prev");
 	 		$totalFonctCP += $this->getAttribute("cout_fonct_cp_prev");
