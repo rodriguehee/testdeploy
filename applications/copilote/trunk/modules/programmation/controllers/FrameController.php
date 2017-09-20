@@ -89,6 +89,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$document->setDatasetPath($this->_iConventionId);
 		$convention = new Copilote_Library_Convention("cplt_conv_data", $this->_iConventionId);
 		$cellFabric = new Copilote_Library_Programmation_CellFabric($document->getDomDocument(), $convention->getModeProgrammation());
+		$cellFabricRw = new Copilote_Library_Programmation_CellFabric($document->getDomDocument(), "rw");
 		$rowFabric = new Copilote_Library_Programmation_RowFabric($document->getDomDocument());
 		$dataqueryFabric = new Copilote_Library_Programmation_DataqueryFabric($document->getDomDocument());
 		
@@ -98,6 +99,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 		$formuleZAE = new Copilote_Library_Programmation_Addition();
 		$formuleZCP = new Copilote_Library_Programmation_Addition();
 		
+		// Antériorité | Crédits consommés
 		$formuleCCAE = new Copilote_Library_Programmation_Addition();
 		$formuleCCAE->attach("c.cout_personel_ant");
 		$formuleCCAE->attach("c.cout_fonct_ae_ant");
@@ -125,7 +127,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$annee = $programmation->getAttribute("annee_conv");
 			$demande = $convention->GetDemande($annee);
 			$demandeValidee = $programmation->getDemandeValidee($demande);
-			$dataQuery = $dataqueryFabric->getElement($annee, $convention->getModeProgrammation());
+			$dataQuery = $dataqueryFabric->getElement($annee, "rw");
 			$document->getDataStructureElement()->appendChild($dataQuery);
 			$datasetName = sprintf("%s%d", $dataqueryFabric->getAlias(), $annee);
 			
@@ -134,7 +136,8 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$formuleFoncCP = new Copilote_Library_Programmation_Addition();
 			$formuleInvAE = new Copilote_Library_Programmation_Addition();
 			$formuleInvCP = new Copilote_Library_Programmation_Addition();
-				
+			
+			// Anéee XXXX | Prévision initiale
 			$rowSchedule = $rowFabric->getElement();
 			$rowSchedule->appendChild($cellFabric->getStaticText("Année " . $annee));
 			$rowSchedule->appendChild($cellFabric->getStaticText("Prévision initiale"));
@@ -148,13 +151,13 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				$formulePrevCP->attach($datasetName . ".cout_personnel_prev");
 				$formulePrevCP->attach($datasetName . ".cout_fonct_cp_prev");
 				$formulePrevCP->attach($datasetName . ".cout_invest_cp_prev");
-				$rowSchedule->appendChild($cellFabric->getInputText($datasetName, "cout_personnel_prev"));
-				$rowSchedule->appendChild($cellFabric->getInputText($datasetName, "cout_fonct_ae_prev"));
-				$rowSchedule->appendChild($cellFabric->getInputText($datasetName, "cout_fonct_cp_prev"));
-				$rowSchedule->appendChild($cellFabric->getInputText($datasetName, "cout_invest_ae_prev"));
-				$rowSchedule->appendChild($cellFabric->getInputText($datasetName, "cout_invest_cp_prev"));
-				$rowSchedule->appendChild($cellFabric->getStaticText($formulePrevAE->render()));
-				$rowSchedule->appendChild($cellFabric->getStaticText($formulePrevCP->render()));
+				$rowSchedule->appendChild($cellFabricRw->getInputText($datasetName, "cout_personnel_prev"));
+				$rowSchedule->appendChild($cellFabricRw->getInputText($datasetName, "cout_fonct_ae_prev"));
+				$rowSchedule->appendChild($cellFabricRw->getInputText($datasetName, "cout_fonct_cp_prev"));
+				$rowSchedule->appendChild($cellFabricRw->getInputText($datasetName, "cout_invest_ae_prev"));
+				$rowSchedule->appendChild($cellFabricRw->getInputText($datasetName, "cout_invest_cp_prev"));
+				$rowSchedule->appendChild($cellFabricRw->getStaticText($formulePrevAE->render()));
+				$rowSchedule->appendChild($cellFabricRw->getStaticText($formulePrevCP->render()));
 				$document->getBoxElement("tableau_previsionnel")->appendChild($rowSchedule);
 				$formulePerso->attach($datasetName . ".cout_personnel_prev");
 				$formuleFoncAE->attach($datasetName . ".cout_fonct_ae_prev");
@@ -185,6 +188,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			}
 			$document->getBoxElement("tableau_previsionnel")->appendChild($rowSchedule);
 			
+			// Anéee XXXX | Ajustements
 			if ($programmation->hasCorrections($demandeValidee->getAttribute("etat"))) {
 				foreach (range( 1, 3 ) as $indexCorrection) {
 					$suiviBudgetaire = $demande->getSuiviBudgetaire($convention, $indexCorrection);
@@ -213,7 +217,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 				}
 			}
 			
-			// TotalSchedule
+			// Année XXXX | Total Prévision
 			$formuleTotalAE = new Copilote_Library_Programmation_Addition();
 			$formuleTotalCP = new Copilote_Library_Programmation_Addition();
 			$formuleTotalAE->attachFrom($formulePerso);
@@ -238,6 +242,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$rowSum->appendChild($cellFabric->getStaticText($formuleTotalCP->render()));
 			$document->getBoxElement("tableau_previsionnel")->appendChild($rowSum);
 		
+			// Année XXXX | Crédits consommés
 			$formuleCCAEx = new Copilote_Library_Programmation_Addition();
 			$formuleCCAEx->attach($datasetName . ".cout_personnel_total");
 			$formuleCCAEx->attach($datasetName . ".cout_fonct_ae_total");
@@ -264,6 +269,7 @@ class Programmation_FrameController extends Core_Library_Controller_Form_Frame
 			$formulePx->attach($datasetName . ".cout_personnel_total");
 		}
 		
+		// Recap Convention
 		$formuleAPEAE = new Copilote_Library_Programmation_ProvisionChomage();
 		$formuleAPECP = new Copilote_Library_Programmation_ProvisionChomage();
 		if ($convention->getAttribute("formule") == "ANR") {

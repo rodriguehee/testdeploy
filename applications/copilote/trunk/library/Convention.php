@@ -63,11 +63,11 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 	 */
 	public static function getReference()
 	{
-		$reference = Core_Library_Options::get( 'conv.pluri.ref' ) ;
-		if ( $reference  === false ) {
-			$reference = date("Y") ;
+		$reference = Core_Library_Options::get('conv.pluri.ref');
+		if ($reference  === false) {
+			$reference = date("Y");
 		}
-		return (int) $reference ;
+		return (int) $reference;
 	}
 	
 	/**
@@ -265,18 +265,8 @@ class Copilote_Library_Convention extends Copilote_Library_Record
 			return "rw" ;
 		}
 		
-		// valideur
-		if( $user->HasRole( 4 ) ) {
-		    return "rw" ;
-		}
-		
-		// demandeur
-		if( $user->HasRole( 5 ) ) {
-		    return "rw" ;
-		}
-		
-		// demandeur simple
-		if( $user->HasRole( 8 ) ) {
+		// service budgétaire
+		if( $user->HasRole( 7 ) ) {
 		    return "rw" ;
 		}
 		

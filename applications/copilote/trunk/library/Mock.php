@@ -30,4 +30,24 @@ class Copilote_Library_Mock
 		}
 		throw new DomainException(sprintf( "Attribut '%s' introuvable", $key));
 	}
+	
+	/**
+	 * @return integer
+	 * @param Copilote_Library_Convention $convention
+	 */
+	public function GetMontantPersonnel(Copilote_Library_Convention $convention)
+	{
+	    return 0;
+	}
+	
+	/**
+	 * @return float
+	 * @param Copilote_Library_Convention $convention
+	 * @param string $nature
+	 * @param string $aspect
+	 */
+	public function GetAutreMontant(Copilote_Library_Convention $convention, $nature, $aspect)
+	{
+	    return 0.0 ;
+	}
 }

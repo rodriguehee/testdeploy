@@ -109,6 +109,11 @@ class Copilote_Library_Programmation extends Copilote_Library_Record
 	 */
 	 public function isEditableStartSchedule($demande)
 	 {
+	     $anneePlusUn = Copilote_Library_Convention::getReference() + 1;
+	     if ($this->getAttribute("annee_conv") <= $anneePlusUn) {
+	         return false;
+	     }
+	     
 	     return ($demande instanceof Copilote_Library_Mock);
 	 }
 	 
