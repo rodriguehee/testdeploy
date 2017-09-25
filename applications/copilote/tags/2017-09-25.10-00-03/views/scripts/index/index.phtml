@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<title><?php echo $this->sPageTitle; ?></title>
+		<?php
+		echo $this->headLink();
+		?>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<div id="page">
+			<div id="header">
+				<div id="logo">
+					<h1>
+						<a href="<?php echo $this->sProjectUrl; ?>"></a>
+					</h1>
+				</div>
+			</div>
+
+			<!-- Si le projet est en mode provider, on affiche la liste des consumers (avec les liens) -->
+			<?php
+			if ( $this->oProject->IsOAuthProvider() && $this->oProject->GetCurrentUser()->IsOAuthUser() )
+			{
+				echo $this->partial('oauth/oauth_provider_menu.phtml', array('aConsumers' => $this->oAuthConsumers()));
+			}
+			?>
+
+			<!-- Si le projet est en mode consumer, on affiche le lien vers le provider -->
+			<?php
+			if ( $this->oProject->IsOAuthConsumer() && $this->oProject->GetCurrentUser()->IsOAuthUser() )
+			{
+				echo $this->partial('oauth/oauth_consumer_menu.phtml', array('sProviderUrl' => $this->oProject->GetProviderUrl()));
+			}
+			?>
+
+			<div id="content">
+				<h3>Administration</h3>
+				<ul>
+					<li><a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'project_role_getroles')); ?>">Gestion des rôles</a></li>
+					<li><a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'project_user_getusers')); ?>">Gestion des utilisateurs</a></li>
+					<li><a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'project_group_getgroups')); ?>">Gestion des groupes</a></li>
+				</ul>
+
+				<ul>
+					<li><a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'project_index_index')); ?>">Paramétrage module PSSI</a></li>
+					<li><a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'dmcp_patient_index')); ?>">Module PSSI</a></li>
+				</ul>
+
+				<?php if ( $this->oCPS->ApacheConfOk() && $this->oCPS->CPSConnEnabled() ) : ?>
+				<ul>
+					<li>
+						<a href="<?php echo $this->url(array( 'module' => 'settings', 'controller' => 'cps', 'action' => 'index')); ?>">Paramétrage CPS/CPA</a>
+					</li>
+				</ul>
+				<?php endif; ?>
+
+
+				<ul>
+					<li><a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'query_index_index')); ?>">Liste des "queries"</a></li>
+				</ul>
+
+				<?php if (	$this->oProject->IsOAuthProvider() == true &&
+							(	$this->isAllowed( 'project/oauth/getconsumers' ) == true ||
+								$this->isAllowed( 'project/oauth/getuserconsumer' ) == true ) ) : ?>
+				<h4>Provider</h4>
+				<ul>
+					<?php if ( $this->isAllowed( 'project/oauth/getconsumers' ) == true ) : ?>
+					<li>
+						<a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'project_oauth_getconsumers')); ?>">Déclarer un consumer</a>
+					</li>
+					<?php endif; ?>
+					<?php if ( $this->isAllowed( 'project/oauth/getuserconsumer' ) == true ) : ?>
+					<li>
+						<a href="<?php echo $this->url(array( 'module' => 'mainframe', 'controller' => 'index', 'action' => 'one', 'dp' => 'project_oauth_getuserconsumer')); ?>">Déclarer un utilisateur</a>
+					</li>
+					<?php endif; ?>
+				</ul>
+				<?php endif; ?>
+
+				<?php if ( $this->oProject->IsOAuthConsumer() == true && $this->isAllowed( 'oauth/consumer/provideruserlist' ) == true ) : ?>
+				<h4>Consumer</h4>
+				<ul>
+					<li>
+						<a href="<?php echo $this->url(array( 'module' => 'oauth', 'controller' => 'consumer', 'action' => 'provideruserlist')); ?>">Récupérer les utilisateurs du provider</a>
+					</li>
+				</ul>
+				<?php endif; ?>
+
+				<ul>
+					<li><a href="<?php echo $this->url(array( 'module' => 'auth', 'controller' => 'index', 'action' => 'disconnect')); ?>">D&eacute;connexion</a></li>
+				</ul>
+			</div>
+
+			<footer>
+
+			</footer>
+
+		</div>
+	</body>
+</html>
