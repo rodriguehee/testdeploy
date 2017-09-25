@@ -1,0 +1,82 @@
+Précisions préliminaires :
+- L'exemple fourni propose un bouton sur la page d'une UB (Menu admin > Gestion des Unités Budgétaires > Editer une UB)
+- Ce bouton appelle une tâche mailmerge existante sur la préproduction de mailmerge installée sur l'infrastructure EpiConcept 
+- url : https://mailmerge.preprod.voozanoo.net
+- login : ined
+- mdp : HB9uq4JC
+- Les scripts fourni n'est présent qu'à finalité de tests : il affiche le groupe et le label d'une UB, et l'année et montant des demandes associées. 
+Il n'y a aucune réflexion métier derrière cet exemple.
+
+
+Initialisation :
+1) Mise à jour de l'appli sur la dernière version (pour avoir le module mailmerge à manipuler)
+2) Vérifier qu'il existe un utilisateur spécifique à l'application sur mailmerge ou en créer un 
+3) Vérifier que les directives suivantes soient bien présentes dans le fichier application.ini avec le compte précédemment créé :
+- mailmerge.url
+- mailmerge.login
+- mailmerge.password
+
+
+Procédure :
+1) Création du document mailmerge
+2) Connexion à l'application mailmerge avec les mêmes identifiants que ceux renseignés dans le application.ini
+3) Création d'une tâche mailmerge : cf capture d'écran
+- Nom : libellé de la tâche mailmerge dans le listing
+- Mots clés -optionnel- : mots (séparés par des espaces) qui peuvent servir à retrouver la tâche plus facilement
+- Utilisation d'un provider : Non (faire attention à ce que la case passe en rouge)
+- Type de modèle : Fichier externe
+- Uploader le fichier .docx dans "Sélectionner un modèle de document".
+- Attention à ne pas uploader plusieurs document, la tâche ne fonctionnerait plus
+4) Noter l'identifiant de la tâche mailmerge nouvellement créée
+5) Ajouter le bouton qui servira à lancer la génération du document dans le formulaire XML :
+
+<button label="Mailmerge" action="save" class="btn-primary col-xs-6 col-xs-offset-3">
+	<option output="html" option_name="widget" value="WidgetButtonMailmerge"/>
+	<redirection module="mailmerge" ctrl="index" action="exec">
+	  <params>
+		<value alias="id_mm">330</value>
+		<value alias="class">Test</value>
+		<dataset dataset_name="ub" field="id_data" alias="id_ub"/>
+	  </params>
+	</redirection>
+</button>
+
+Les éléments paramétrables sont :
+- Dans la balise <button> :
+	- label : contient le texte qui sera affiché sur le bouton
+	- class : classes CSS appliquées au bouton
+- Balise <param> : Il est possible d'ajouter autant d'enfants <value> et <dataset> que souhaité. Chaque enfant sera un paramètre qui pourra être exploité par le script PHP créé dans les étapes suivantes.
+	- <value> : 
+		- Pour définir un paramètre "fixe". 
+		- Les <value> obligatoires sont :
+			- <value alias="id_mm">#id#</value> : Remplacer #id# par l'identifiant de la tâche mailmerge.
+			- <value alias="class">#Name#</value> : Le nom de la classe PHP qui sera utilisée (de préférence qui soit en accord avec l'objet du document). Attention, il ne faut utiliser qu'un mot, et il doit commencer par une virgule.
+	- <dataset>
+		- Pour définir un paramètre provenant d'une variable présente dans un des dataquery de la page
+		- Dans l'exemple présenté, on récupère la variable "id_data" du dataquery "ub", et on appelle ce paramètre "id_ub"
+
+Développement PHP :
+6) Copier le script d'exemple library/Mailmerge/Test.php dans le même répertoire
+7) Renommer le fichier avec le nom passé en paramètre dans la balise "<value alias="class">" précédemment citée. 
+Par exemple, si vous avez défini la balise "<value alias="class">Demo</value>", renommez le fichier "Demo.php"
+8) Dans le script, modifiez le nom de la classe de la même façon :
+remplacez 
+class Mailmerge_Test extends Mailmerge_Mailing {
+par
+class Mailmerge_Demo extends Mailmerge_Mailing {
+9) La gestion de la récupération données qui seront envoyées au document mailmerge se fait dans la fonction "_getData". C'est le contenu de cette fonction qu'il faudra modifier pour envoyer le contenu souhaité au document mailmerge.
+- Le code est aussi détaillé que possible dans les commentaires
+- Les étapes de base à respecter sont :
+	- Vérification des paramètres reçus
+	- Récupération des données via des requêtes SQL (écrites à la main ou générées par un dataquery)
+	- Exécution des requêtes et stockage des résultats
+	- Génération du tableau à renvoyer à partir des résultats stockés précédemment
+
+
+Procédure simplifiée :
+1) Créer le fichier.docx avec les champs souhaités
+2) Se connecter à mailmerge avec le bon utilisateur et ajouter le document
+3) Récupérer l'identifiant de la tâche
+4) Ajouter le widget XML dans la ressource cible avec les paramètres souhaités
+5) Dupliquer le script php d'exemple library/Mailmerge/Test.php et le renommer correctement
+6) Modifier la fonction _getData pour récupérer les informations à envoyer au document mailmerge
