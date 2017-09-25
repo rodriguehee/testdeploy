@@ -24,4 +24,7 @@
 	<module name="widgetdocuments" path="frame/layout/widget/widgetdocuments-min.js">
         <require>widgettable</require>
     </module>
+	<module name="widgetbuttonmailmerge" path="frame/layout/widget/widgetbuttonmailmerge-min.js">
+		<require>widgetbutton</require>
+	</module>
 </modules>
