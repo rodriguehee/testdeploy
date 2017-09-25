@@ -48,9 +48,9 @@ Les éléments paramétrables sont :
 - Balise <param> : Il est possible d'ajouter autant d'enfants <value> et <dataset> que souhaité. Chaque enfant sera un paramètre qui pourra être exploité par le script PHP créé dans les étapes suivantes.
 	- <value> : 
 		- Pour définir un paramètre "fixe". 
-		- Les <value> obligatoires sont :
+		- Les <value> obligatoires (alias uniques) sont :
 			- <value alias="id_mm">#id#</value> : Remplacer #id# par l'identifiant de la tâche mailmerge.
-			- <value alias="class">#Name#</value> : Le nom de la classe PHP qui sera utilisée (de préférence qui soit en accord avec l'objet du document). Attention, il ne faut utiliser qu'un mot, et il doit commencer par une virgule.
+			- <value alias="class">#Name#</value> : Le nom de la classe PHP qui sera utilisée (de préférence qui soit en accord avec l'objet du document). Attention, il ne faut utiliser qu'un mot, et il doit commencer par une majuscule.
 	- <dataset>
 		- Pour définir un paramètre provenant d'une variable présente dans un des dataquery de la page
 		- Dans l'exemple présenté, on récupère la variable "id_data" du dataquery "ub", et on appelle ce paramètre "id_ub"
