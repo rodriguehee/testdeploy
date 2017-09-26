@@ -203,10 +203,7 @@
 	<form_row>
 	  <box class="col-xs-6">
 		<button action="exit" label="Retour à la liste des conventions">
-		  <redirection module="form" ctrl="frame" action="get">
-			<params>
-			  <value alias="sid">liste_conv_prog</value>
-			</params>
+		  <redirection module="form" ctrl="frame" action="back">
 		  </redirection>
 		</button>
 	  </box>
