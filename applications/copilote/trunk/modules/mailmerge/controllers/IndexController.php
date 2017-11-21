@@ -1,6 +1,6 @@
 <?php
 
-class Mailmerge_IndexController extends Core_Library_Controller_Action
+class Mailmerge_IndexController extends Core_Library_Controller_Mailmerge_Index
 {
 	public function execAction()
 	{
