@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema 
+    targetNamespace="http://tempuri.org/XMLSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"   
+    id="ESisMailingDataExchange" 
+    version="1">
+  
+  <xs:complexType name="FieldType" mixed="true">
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="MailType">
+    <xs:sequence>
+      <xs:element name="Field" type="FieldType" minOccurs="1" maxOccurs="unbounded"></xs:element>
+      <xs:element name="Table" type="TableType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+      <xs:element name="Image" type="ImageType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:decimal"/>
+  </xs:complexType>
+
+  <xs:complexType name="MailingType">
+    <xs:sequence>
+      <xs:element name="Mail" type="MailType" minOccurs="1" maxOccurs="unbounded"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:decimal"/>
+    <xs:attribute name="batchId" type="xs:decimal"/>    
+  </xs:complexType>
+
+  <xs:complexType name="TableType">
+    <xs:sequence>
+      <xs:element name="TableRow" type="TableRowType" minOccurs="1" maxOccurs="unbounded"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="TableRowType">
+    <xs:sequence>
+      <xs:element name="Field" type="FieldType" minOccurs="1" maxOccurs="unbounded"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="rowId" type="xs:int"/>
+  </xs:complexType>
+
+  <xs:complexType name="ImageType" mixed="true">
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:element name="Mailing" type="MailingType">
+  </xs:element>
+  
+</xs:schema>
