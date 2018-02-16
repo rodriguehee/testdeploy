@@ -40,11 +40,11 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Documents
+                    <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Infos & Docs
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_doc' )" href="#">Documents téléchargeables</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_doc' )" href="#">Vos documents budgétaires</a></li>
                     <li class="divider"></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_conv_user' )" href="#">Liste de vos conventions</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_marche_user' )" href="#">Liste de vos marchés</a></li>
@@ -53,8 +53,15 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_demandes_support' )" href="#">Liste de vos demandes de support</a></li>
         <?php endif; ?>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_droits_user' )" href="#">Liste des droits utilisateurs</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_contrats/edit_contrat/0' )" href="#">Liste des contrats en cours</a></li>
                   </ul>
             </li>
+     <li class="">
+        <a class="" href="https://dev.collecte.ined.fr/copilote/doc/html/index.html" target="_blank">
+             <span class="glyphicon glyphicon-folder-open"></span> &nbsp;Aide 
+        </a>
+     </li>
+
         </ul>
    
 
@@ -117,7 +124,6 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
         </a>
      </li>
 
-
         </ul>
 
 
@@ -145,12 +151,16 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'resource/list/index' )" href="#">Ressources</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'dico/list/index' )" href="#">Dictionnaires</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'query/index/index' )" href="#">Tests de cohérence</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'filter/index/display' )" href="#">Filtres</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'export/home/display' )" href="#">Exports</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'listing/index/getlisting' )" href="#">Listings</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'query/calculatedvar/index' )" href="#">Variables calculées</a></li>
                     <li class="divider"></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/group/getgroups' )" href="#">Groupes</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/role/getroles' )" href="#">Rôles</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'project/user/getusers' )" href="#">Utilisateurs</a></li>
                     <li class="divider"></li>
-                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/notifications' )" href="#">Notifications</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/notif-liste' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span>Gestion des messages d'accueil</a></li>
                     <li class="divider"></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_ub' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Unités Budgétaires</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_sv' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des Demandes</a></li>
@@ -162,6 +172,7 @@ $bIsPlp = Core_Library_Account::GetInstance()->GetCurrentUser()->HasGroup( 161 )
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_sp' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des sous-projets</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_doc_adm' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des documents</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_ca' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des codes analytiques</a></li>
+                    <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_catsp1' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Gestion des catégories de personnel</a></li>
                     <li class="divider"></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_connexions' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Listing des connexions</a></li>
                     <li><a onclick="Y.Voozanoo.oMainFrame.goToFrame( 'form/frame/get/sid/liste_droits_user' )" href="#"><span class="glyphicon glyphicon-triangle-right"></span> Liste des utilisateurs et droits</a></li>
