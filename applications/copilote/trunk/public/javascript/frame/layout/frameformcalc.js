@@ -848,6 +848,13 @@ Y.FrameFormCalc = Y.extend(FrameFormCalc, Y.FrameForm,
 	},
 
 	updateCalcSTAImpSCSPTot: function(event){
+
+		oDataSet = this.DataSetManager().DataSet( 'sta_mnt');
+		aRecord = oDataSet.RowData().GetRecord();
+		var sta_mnt = parseFloat(0);
+		sta_mnt= parseFloat(aRecord.code);
+
+
 		oDataSet = this.DataSetManager().DataSet( 'sta');
 		aRecord = oDataSet.RowData().GetRecord();
 
@@ -870,12 +877,20 @@ Y.FrameFormCalc = Y.extend(FrameFormCalc, Y.FrameForm,
 		if(isNaN(sta_impscspduree)) sta_impscspduree = 0;
 		if(isNaN(sta_impscspmontant)) sta_impscspmontant = 0;
 
-		sta_impscsptot = sta_impscspduree * 540;
+		sta_impscsptot = sta_impscspduree * sta_mnt;
 
 		this._setFieldValue( 'sta', 'sta_impscsptot', Math.round(sta_impscsptot) );
 	},
 
 	updateCalcSTAImpC1Tot: function(event){
+
+		//Montant de l'indemnité pour un stagiaire est définie dans le dictionnaire RH_stagiaire
+		oDataSet = this.DataSetManager().DataSet( 'sta_mnt');
+		aRecord = oDataSet.RowData().GetRecord();
+		var sta_mnt = parseFloat(0);
+		sta_mnt= parseFloat(aRecord.code);
+
+
 		oDataSet = this.DataSetManager().DataSet( 'sta');
 		aRecord = oDataSet.RowData().GetRecord();
 
@@ -898,13 +913,22 @@ Y.FrameFormCalc = Y.extend(FrameFormCalc, Y.FrameForm,
 		if(isNaN(sta_impc1duree)) sta_impc1duree = 0;
 		if(isNaN(sta_impc1montant)) sta_impc1montant = 0;
 
-//Montant de l'indemnité pour un stagiaire 540€
-		sta_impc1tot = sta_impc1duree * 540;
+
+		sta_impc1tot = sta_impc1duree * sta_mnt;
+
 
 		this._setFieldValue( 'sta', 'sta_impc1tot', Math.round(sta_impc1tot) );
 	},
 
 	updateCalcSTAImpC2Tot: function(event){
+		//Montant de l'indemnité pour un stagiaire est définie dans le dictionnaire RH_stagiaire
+
+		oDataSet = this.DataSetManager().DataSet( 'sta_mnt');
+		aRecord = oDataSet.RowData().GetRecord();
+		var sta_mnt = parseFloat(0);
+		sta_mnt= parseFloat(aRecord.code);
+
+
 		oDataSet = this.DataSetManager().DataSet( 'sta');
 		aRecord = oDataSet.RowData().GetRecord();
 
@@ -927,8 +951,8 @@ Y.FrameFormCalc = Y.extend(FrameFormCalc, Y.FrameForm,
 		if(isNaN(sta_impc2duree)) sta_impc2duree = 0;
 		if(isNaN(sta_impc2montant)) sta_impc2montant = 0;
 
-//Montant de l'indemnité pour un stagiaire 540€
-		sta_impc2tot = sta_impc2duree * 540;
+
+		sta_impc2tot = sta_impc2duree * sta_mnt;
 
 		this._setFieldValue( 'sta', 'sta_impc2tot', Math.round(sta_impc2tot) );
 	},
