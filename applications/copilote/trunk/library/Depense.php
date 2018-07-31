@@ -64,53 +64,117 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 	/**
 	 * @return Copilote_Library_Depense
 	 */
-	public function computeMontant()
+
+	public function computeTotal_AE_SCSP()
 	{
-		$montant = (float) $this->getAttribute( "montant_scsp" ) + (float) $this->getAttribute( "montant_convention" ) ;
-		return $this->setAttribute( "montant", $montant ) ;
+		$montant = (float) $this->getAttribute( "montant_perso_scsp" ) + (float) $this->getAttribute( "montant_fonc_ae_scsp" )+ (float) $this->getAttribute( "montant_inves_ae_scsp" ) ;
+		return $this->setAttribute( "montant_total_ae_scsp", $montant ) ;
 	}
-	
-	/**
-	 * @see fichier docx de Nadia relatif au découpage des montants
-	 * @return Copilote_Library_Depense
-	 */
-	public function computeMontantSCSP()
+
+	public function computeTotal_CP_SCSP()
 	{
-		$montant = $this->getMontant( "personnel", "rh", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dt", "ae", "scsp" ) +
+		$montant = (float) $this->getAttribute( "montant_perso_scsp" ) + (float) $this->getAttribute( "montant_fonc_cp_scsp" )+ (float) $this->getAttribute( "montant_inves_cp_scsp" ) ;
+		return $this->setAttribute( "montant_total_cp_scsp", $montant ) ;
+	}
+	public function computeTotal_AE_CONV()
+	{
+		$montant = (float) $this->getAttribute( "montant_perso_conv" ) + (float) $this->getAttribute( "montant_fonc_ae_conv" )+ (float) $this->getAttribute( "montant_inves_ae_conv" ) ;
+		return $this->setAttribute( "montant_total_ae_conv", $montant ) ;
+	}
+
+	public function computeTotal_CP_CONV()
+	{
+		$montant = (float) $this->getAttribute( "montant_perso_conv" ) + (float) $this->getAttribute( "montant_fonc_cp_conv" )+ (float) $this->getAttribute( "montant_inves_cp_conv" ) ;
+		return $this->setAttribute( "montant_total_cp_conv", $montant ) ;
+	}
+
+
+	
+
+	public function computePersoSCSP()
+	{
+	  $montant = $this->getMontant( "personnel", "rh", "ae", "scsp" );
+		return $this->setAttribute( "montant_perso_scsp", $montant ) ;
+	}
+
+
+	public function computePersoConv()
+	{
+	  $montant = $this->getMontant( "personnel", "rh", "ae", "convention" );
+		return $this->setAttribute( "montant_perso_conv", $montant ) ;
+	}
+
+
+	public function computeFonc_AE_SCSP()
+	{
+		$montant = $this->getMontant( "fonctionnement", "dt", "ae", "scsp" ) +
 			$this->getMontant( "fonctionnement", "sta", "ae", "scsp" ) +
 			$this->getMontant( "fonctionnement", "oc", "ae", "scsp" ) +
 			$this->getMontant( "fonctionnement", "pe", "ae", "scsp" ) +
-			$this->getMontant( "investissement", "pe", "ae", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dmp", "ae", "scsp" ) +
-			$this->getMontant( "investissement", "dmp", "ae", "scsp" ) 
-		  /*$this->getMontant( "fonctionnement", "pe", "cp", "scsp" ) +
-			$this->getMontant( "investissement", "pe", "cp", "scsp" ) +
-			$this->getMontant( "fonctionnement", "dmp", "cp", "scsp" ) +
-			$this->getMontant( "investissement", "dmp", "cp", "scsp" )*/ ;
-		return $this->setAttribute( "montant_scsp", $montant ) ;
+		  $this->getMontant( "fonctionnement", "dmp", "ae", "scsp" ) ;
+			return $this->setAttribute( "montant_fonc_ae_scsp", $montant ) ;
 	}
-	
-	/**
-	 * @see fichier docx de Nadia relatif au découpage des montants
-	 * @return Copilote_Library_Depense
-	 */
-	public function computeMontantConvention()
+
+
+	public function computeFonc_CP_SCSP()
 	{
-		$montant = $this->getMontant( "personnel", "rh", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "dt", "ae", "convention" ) +
+		$montant = $this->getMontant( "fonctionnement", "dt", "cp", "scsp" ) +
+			$this->getMontant( "fonctionnement", "sta", "cp", "scsp" ) +
+			$this->getMontant( "fonctionnement", "oc", "cp", "scsp" ) +
+			$this->getMontant( "fonctionnement", "pe", "cp", "scsp" ) +
+		  $this->getMontant( "fonctionnement", "dmp", "cp", "scsp" ) ;
+			return $this->setAttribute( "montant_fonc_cp_scsp", $montant ) ;
+	}
+
+	public function computeFonc_AE_CONV()
+	{
+		$montant = $this->getMontant( "fonctionnement", "dt", "ae", "convention" ) +
 			$this->getMontant( "fonctionnement", "sta", "ae", "convention" ) +
 			$this->getMontant( "fonctionnement", "oc", "ae", "convention" ) +
 			$this->getMontant( "fonctionnement", "pe", "ae", "convention" ) +
-			$this->getMontant( "investissement", "pe", "ae", "convention" ) +
-			$this->getMontant( "fonctionnement", "dmp", "ae", "convention" ) +
-			$this->getMontant( "investissement", "dmp", "ae", "convention" ) 
-		  /*$this->getMontant( "fonctionnement", "pe", "cp", "convention" ) +
-			$this->getMontant( "investissement", "pe", "cp", "convention" ) +
-			$this->getMontant( "fonctionnement", "dmp", "cp", "convention" ) +
-			$this->getMontant( "investissement", "dmp", "cp", "convention" ) */;
-		return $this->setAttribute( "montant_convention", $montant ) ;
+		  $this->getMontant( "fonctionnement", "dmp", "ae", "convention" ) ;
+			return $this->setAttribute( "montant_fonc_ae_conv", $montant ) ;
 	}
+
+
+	public function computeFonc_CP_CONV()
+	{
+		$montant = $this->getMontant( "fonctionnement", "dt", "cp", "convention" ) +
+			$this->getMontant( "fonctionnement", "sta", "cp", "convention" ) +
+			$this->getMontant( "fonctionnement", "oc", "cp", "convention" ) +
+			$this->getMontant( "fonctionnement", "pe", "cp", "convention" ) +
+		  $this->getMontant( "fonctionnement", "dmp", "cp", "convention" ) ;
+			return $this->setAttribute( "montant_fonc_cp_conv", $montant ) ;
+	}
+
+
+	public function computeInves_AE_SCSP()
+	{
+		$montant = $this->getMontant( "investissement", "pe", "ae", "scsp" ) +
+		         $this->getMontant( "investissement", "dmp", "ae", "scsp" ) ;
+			return $this->setAttribute( "montant_inves_ae_scsp", $montant ) ;
+	}
+	public function computeInves_CP_SCSP()
+        {
+		$montant = $this->getMontant( "investissement", "pe", "cp", "scsp" ) +
+		         $this->getMontant( "investissement", "dmp", "cp", "scsp" ) ;
+			return $this->setAttribute( "montant_inves_cp_scsp", $montant ) ;
+	}
+
+	public function computeInves_AE_CONV()
+	{
+		$montant = $this->getMontant( "investissement", "pe", "ae", "convention" ) +
+		         $this->getMontant( "investissement", "dmp", "ae", "convention" ) ;
+			return $this->setAttribute( "montant_inves_ae_conv", $montant ) ;
+	}
+	public function computeInves_CP_CONV()
+	{
+		$montant = $this->getMontant( "investissement", "pe", "cp", "convention" ) +
+		         $this->getMontant( "investissement", "dmp", "cp", "convention" ) ;
+			return $this->setAttribute( "montant_inves_cp_conv", $montant ) ;
+	}
+
+
 	
 	/**
 	 * @return float
@@ -141,19 +205,25 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 		}
 		
 		if ( "fonctionnement" == $nature && "sta" == $typeDepense && "scsp" == $imputation ) {
-			return $this->_getMontantFonctionnementStaScsp() ;
+			return $this->_getMontantFonctionnementStaScspae() ;
 		}
+
 		if ( "fonctionnement" == $nature && "sta" == $typeDepense && "convention" == $imputation ) {
 			return $this->_getMontantFonctionnementStaConvention() ;
 		}
 		
-		if ( "fonctionnement" == $nature && "oc" == $typeDepense && "scsp" == $imputation ) {
-			return $this->_getMontantOc( 28 ) ;
+		if ( "fonctionnement" == $nature && "oc" == $typeDepense && "scsp" == $imputation && "ae"==$aspect ) {
+		  return $this->_getMontantOc( "cout",11,28 ) ;
 		}
-		if ( "fonctionnement" == $nature && "oc" == $typeDepense && "convention" == $imputation ) {
-			return $this->_getMontantOc( 29 ) ;
+		if ( "fonctionnement" == $nature && "oc" == $typeDepense && "scsp" == $imputation && "cp"==$aspect ) {
+		  return $this->_getMontantOc( "cout_cp",11,28 ) ;
 		}
-		
+		if ( "fonctionnement" == $nature && "oc" == $typeDepense && "convention" == $imputation && "ae"==$aspect ) {
+		  return $this->_getMontantOc("cout",11, 29 ) ;
+		}
+		if ( "fonctionnement" == $nature && "oc" == $typeDepense && "convention" == $imputation && "cp"==$aspect ) {
+		  return $this->_getMontantOc("cout_cp",11, 29 ) ;
+		}
 		if ( "fonctionnement" == $nature && "pe" == $typeDepense && "scsp" == $imputation && "ae" == $aspect) {
 			return $this->_getMontantPe( "cout", 11, 28 ) ;
 		}
@@ -249,12 +319,12 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 	/**
 	 * @return float
 	 */
-	protected function _getMontantFonctionnementStaScsp()
+	protected function _getMontantFonctionnementStaScspae()
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
 		return (float) $db->fetchOne( "SELECT SUM( sta_impscsptot ) FROM cplt_sta_data WHERE id_depense = ?", $this->_id ) ;
 	}
-	
+
 	/**
 	 * @return float
 	 */
@@ -265,12 +335,17 @@ class Copilote_Library_Depense extends Copilote_Library_Record
 	}
 	
 	/**
+	 * @param string $field "cout" | "cout_cp"
+	 * @param integer $invest fonctionnemenent => 11 | investissement => 10
+	 * @param integer $typeImputation SCSP => 28 | Convention => 29
 	 * @return float
-	 */
-	protected function _getMontantOc( $typeImputation )
+	*/
+	protected function _getMontantOc( $field, $invest, $typeImputation )
 	{
 		$db = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
-		return (float) $db->fetchOne( "SELECT SUM( v.cout ) FROM cplt_oc_data oc JOIN cplt_vntl_data v ON oc.id_data = v.id_oc WHERE v.typeinput = ? AND id_depense = ?", array( $typeImputation, $this->_id ) ) ;
+		$query=sprintf( "SELECT SUM( v.%s ) FROM cplt_oc_data oc JOIN cplt_vntl_data v ON oc.id_data = v.id_oc WHERE v.typeinput = ? AND v.invest = ? AND id_depense = ?",$field);
+		return (float) $db->fetchOne( $query, array( $typeImputation, $invest, $this->_id ) ) ;
+	
 	}
 	
 	/**
