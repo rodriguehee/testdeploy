@@ -178,7 +178,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 	 *  on vérifie que la demande a un statut qui permet la modification de la demande
 	 *   sinon on redirige sur la demande en lecture seule
 	 */
-	protected function _getFormConfiguration()
+	 protected function _getFormConfiguration()
 	{
 		require $this->_getLibPath() . "/Record.php" ;
 		require $this->_getLibPath() . "/Demande.php" ;
@@ -190,8 +190,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		
 		if( 34 == $formId && $id > 0 ) {
-			$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
-			if( ! $this->_allowEdit( $demande ) ) {
+		$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
+		if( ! $this->_allowEdit( $demande ) ) {
 				$this->getRequest()->setParam( 'id', 79 ) ;
 			}
 		}
@@ -363,8 +363,8 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 				foreach( $dataset['rowdata'] as $row ) {
 					if( array_key_exists( "id_depense", $row ) ) {
 						$depense = new Copilote_Library_Depense( "cplt_dpns_data", $row['id_depense'] ) ;
-						$depense->computeMontantConvention()->computeMontantSCSP()->computeMontant()->commit() ;
-						$depense->getDemande()->compute( "montant_scsp" )->compute( "montant_convention" )->compute( "montant" )->commit() ;
+						$depense->computePersoSCSP()->computePersoConv()->computeFonc_AE_SCSP()->computeFonc_CP_SCSP()->computeFonc_AE_CONV()->computeFonc_CP_CONV()->computeInves_AE_SCSP()->computeInves_CP_SCSP()->computeInves_AE_CONV()->computeInves_CP_CONV()->computetotal_AE_SCSP()->computeTotal_CP_SCSP()->computeTotal_AE_CONV()->computeTotal_CP_CONV()->commit() ;
+						$depense->getDemande()->compute("montant_perso_scsp")->compute("montant_perso_conv")->compute("montant_fonc_ae_scsp")->compute("montant_fonc_cp_scsp")->compute("montant_fonc_ae_conv")->compute("montant_fonc_cp_conv")->compute("montant_inves_ae_scsp")->compute("montant_inves_cp_scsp")->compute("montant_inves_ae_conv")->compute("montant_inves_cp_conv")->compute("montant_total_ae_scsp")->compute("montant_total_cp_scsp")->compute("montant_total_ae_conv")->compute("montant_total_cp_conv")->commit() ;
 					}
 				}
 			}
@@ -447,9 +447,9 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		
 		foreach( $context->get( 'depenses' ) as $idDepense ) {
  			$depense = new Copilote_Library_Depense( "cplt_dpns_data", $idDepense ) ;
- 			$depense->computeMontantConvention()->computeMontantSCSP()->computeMontant()->commit() ;
- 			$depense->getDemande()->compute( "montant_scsp" )->compute( "montant_convention" )->compute( "montant" )->commit() ;
-	 	}
+ 			$depense->computePersoSCSP()->computePersoConv()->computeFonc_AE_SCSP()->computeFonc_CP_SCSP()->computeFonc_AE_CONV()->computeFonc_CP_CONV()->computeInves_AE_SCSP()->computeInves_CP_SCSP()->computeInves_AE_CONV()->computeInves_CP_CONV()->computeTotal_AE_SCSP()->computeTotal_CP_SCSP()->computeTotal_AE_CONV()->computeTotal_CP_CONV()->commit() ;
+			$depense->getDemande()->compute("montant_perso_scsp")->compute("montant_perso_conv")->compute("montant_fonc_ae_scsp")->compute("montant_fonc_cp_scsp")->compute("montant_fonc_ae_conv")->compute("montant_fonc_cp_conv")->compute("montant_inves_ae_scsp")->compute("montant_inves_cp_scsp")->compute("montant_inves_ae_conv")->compute("montant_inves_cp_conv")->compute("montant_total_ae_scsp")->compute("montant_total_cp_scsp")->compute("montant_total_ae_conv")->compute("montant_total_cp_conv")->commit() ;
+ 			}
 	}	
 	
 	/**
