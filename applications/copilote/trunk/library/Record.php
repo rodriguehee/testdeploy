@@ -275,4 +275,17 @@ class Copilote_Library_Record
 		$db->query( $query ) ;
 		return $this ;
 	}
+
+	/**
+	 * @Return 
+	 */
+	public function get_parametres( $parametre )
+	{
+  	   $dbo = Core_Library_Account::GetInstance()->GetCurrentProject()->Db() ;
+	   $sql = "SELECT ".$parametre." FROM cplt_parametres_data" ;
+	   $paramr  = $dbo->fetchOne( $sql, $parametre ) ;
+	   return $paramr;
+	}
+
 }
+
