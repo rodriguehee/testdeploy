@@ -16,7 +16,7 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
         $oUser = Core_Library_Account::GetInstance()->GetCurrentUser() ;
         
         $manager = Core_Library_Account::GetInstance()->GetCurrentProject()->UserManager() ;
-        $aRolesByGroup = $manager->GetUserRolesByGroup( $oUser->GetUserName() );
+        $aRolesByGroup  = $manager->GetUserRolesByGroup( $oUser->GetUserName() );
 
         $oJson = $oContext->get( 'oResourceJSON' );
 
@@ -198,11 +198,16 @@ class Form_FrameController extends Core_Library_Controller_Form_Frame
 		$id = $this->getRequest()->getParam( 'id_data', 0 ) ;
 		$colonoff = Copilote_Library_Record::get_parametres('collect_on_off');
 
-		error_log($colonoff);
+
+		$bIsSuperUser = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 1 ) ? true : false;
+		$bIsAdmin = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 2 ) ? true : false;
+		$bIsSB = Core_Library_Account::GetInstance()->GetCurrentUser()->HasRole( 7 ) ? true : false;
+
+
 
 		if( 34 == $formId && $id > 0 ) {
 		$demande = new Copilote_Library_Demande( "cplt_dmnd_data", $id ) ;
-		if( ! $this->_allowEdit( $demande ) || 10 == $colonoff  ) {
+		if(( ! $this->_allowEdit( $demande ) || 10 == $colonoff) && (! $bIsSuperUser && ! $bIsAdmin && ! $bIsSB ) ) {
 				$this->getRequest()->setParam( 'id', 79 ) ;
 			}
 		}
